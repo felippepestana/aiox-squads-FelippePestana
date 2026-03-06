@@ -48,7 +48,7 @@ Este é o repositório oficial da comunidade para compartilhar, descobrir e cont
   <tr>
     <td align="center"><strong>Funciona<br/>com</strong></td>
     <td align="center"><img src="https://cdn.simpleicons.org/anthropic/181818/FFFFFF" width="28" alt="Claude Code" /><br/><sub>Claude Code</sub></td>
-    <td align="center"><img src="https://cdn.simpleicons.org/openai/181818/FFFFFF" width="28" alt="Codex CLI" /><br/><sub>Codex CLI</sub></td>
+    <td align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/openai/white"><img src="https://cdn.simpleicons.org/openai" width="28" alt="Codex CLI" /></picture><br/><sub>Codex CLI</sub></td>
     <td align="center"><img src="https://cdn.simpleicons.org/google/181818/FFFFFF" width="28" alt="Gemini CLI" /><br/><sub>Gemini CLI</sub></td>
     <td align="center"><img src="https://cdn.simpleicons.org/cursor/181818/FFFFFF" width="28" alt="Cursor" /><br/><sub>Cursor</sub></td>
   </tr>
