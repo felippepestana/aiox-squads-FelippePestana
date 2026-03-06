@@ -153,7 +153,7 @@ Squads available in this repository.
 
 | Squad | What it does | Status |
 |-------|-------------|--------|
-| [**squad-creator-pro**](../squads/squad-creator-pro/) | Upgrade pack for the base Squad Creator — mind cloning, model routing, 3 specialist agents, axioma assessment | Coming soon |
+| [**squad-creator-pro**](../squads/squad-creator-pro/) | Upgrade pack for the base Squad Creator — mind cloning, model routing, 3 specialist agents, axioma assessment | Paid |
 
 > Have a squad ready? [Open a PR](#contributing) and share it with the community.
 

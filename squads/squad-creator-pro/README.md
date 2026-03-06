@@ -194,7 +194,7 @@ squads/squad-creator-pro/
 └── assessments/           # Axioma assessments
 ```
 
-> Este diretório está vazio por enquanto. O conteúdo completo do Squad Creator Pro será publicado em breve.
+> O Squad Creator Pro é um produto pago. Este README documenta suas capacidades. Para adquirir, entre em contato via [GitHub Discussions](https://github.com/SynkraAI/aiox-squads/discussions).
 
 ---
 
