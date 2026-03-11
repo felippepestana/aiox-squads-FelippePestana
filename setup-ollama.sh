@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
-# setup-ollama.sh — Configures Ollama + Claude Code integration
+# setup-ollama.sh — Installs and configures Ollama + Claude Code + AIOX
 # Based on: https://docs.ollama.com/claude-code
+#
+# What this script does:
+#   1. Installs Ollama (binary from GitHub releases)
+#   2. Installs Claude Code CLI
+#   3. Configures environment variables for Ollama ↔ Claude Code
+#   4. Installs aiox-core npm package globally
+#   5. Starts Ollama service
+#   6. Offers to pull a recommended model
 
 set -euo pipefail
 
@@ -148,11 +156,24 @@ See: https://docs.ollama.com/context-length
 EOF
 }
 
+# ── Install AIOX Core ─────────────────────────────────────────────────────────
+install_aiox() {
+  if command -v aiox-core &>/dev/null; then
+    echo "✓ aiox-core already installed: $(aiox-core --version 2>/dev/null || true)"
+    return
+  fi
+
+  echo "→ Installing aiox-core globally..."
+  npm install -g aiox-core
+  echo "✓ aiox-core installed: $(aiox-core --version 2>/dev/null || true)"
+}
+
 # ── Main ──────────────────────────────────────────────────────────────────────
 main() {
-  echo "=== Ollama + Claude Code Setup ==="
+  echo "=== Ollama + Claude Code + AIOX Setup ==="
   install_ollama
   install_claude_code
+  install_aiox
   configure_env
   start_ollama
   pull_models
