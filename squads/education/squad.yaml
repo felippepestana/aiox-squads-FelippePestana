@@ -1,0 +1,105 @@
+name: education
+version: 1.0.0
+status: OPERATIONAL
+description: >-
+  Transform domain expertise into pedagogically sound, legally compliant online courses
+  using evidence-based instructional design. Clones 11 elite educational minds
+  (Bloom, Mayer, Rosenshine, Bjork, etc.) with MEC compliance for Brazilian market.
+slashPrefix: education
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+automation_boundary:
+  deterministic:
+    - "Bloom taxonomy classification"
+    - "Learning objective generation (template-driven)"
+    - "MEC compliance checklist (15 mandatory gates)"
+    - "FSRS spaced repetition scheduling"
+  probabilistic:
+    - "Domain expertise elicitation (LLM)"
+    - "Course structure design (LLM)"
+    - "Pedagogical framework application (LLM)"
+    - "Assessment generation (LLM)"
+  autonomy_level: 2
+  autonomy_rationale: "Planning is LLM-driven; compliance gates are deterministic blockers."
+
+commands:
+  - name: "*create-course {domain}"
+    description: "Full course creation pipeline — research → design → lessons → validate"
+  - name: "*design-curriculum {objectives}"
+    description: "Design curriculum structure with learning objectives"
+  - name: "*create-lesson {topic}"
+    description: "Create individual lesson with multimedia design"
+  - name: "*create-assessments"
+    description: "Generate formative and summative assessments"
+  - name: "*validate"
+    description: "Run all 15 pedagogical + MEC compliance gates"
+  - name: "*generate-ppc"
+    description: "Generate PPC (Projeto Pedagógico de Curso) for MEC"
+
+components:
+  agents:
+    - education-chief.md
+    - bloom-diagnostician.md
+    - wiggins-architect.md
+    - keller-motivator.md
+    - sweller-analyst.md
+    - mayer-presenter.md
+    - rosenshine-teacher.md
+    - bjork-engineer.md
+    - moore-filter.md
+    - clark-validator.md
+    - merrill-designer.md
+    - novak-mapper.md
+    - thalheimer-assessor.md
+    - ericsson-coach.md
+    - fsrs-scheduler.md
+    - mec-compliance.md
+  tasks:
+    - research-domain.md
+    - design-curriculum.md
+    - create-learning-objectives.md
+    - design-course-structure.md
+    - create-lesson.md
+    - design-assessments.md
+    - apply-spaced-practice.md
+    - design-engagement.md
+    - validate-pedagogy.md
+    - validate-mec.md
+    - generate-ppc.md
+    - create-course-outline.md
+    - design-activities.md
+    - create-study-guide.md
+    - generate-glossary.md
+    - finalize-course.md
+    - audit-accessibility.md
+    - create-instructor-guide.md
+    - generate-marketing-copy.md
+    - create-preview-lesson.md
+    - publish-checklist.md
+  workflows:
+    - wf-full-pipeline.yaml
+    - wf-research-planning.yaml
+    - wf-lesson-creation.yaml
+    - wf-validation.yaml
+
+metrics:
+  agents: 16
+  minds: 11
+  quality_gates: 15
+  workflows: 4
+  compliance: "MEC Brazil"
+  frameworks:
+    - "Bloom's Taxonomy"
+    - "UbD (Understanding by Design)"
+    - "Mayer's 12 Multimedia Principles"
+    - "Rosenshine's 10 Principles"
+    - "Bjork's Desirable Difficulties"
+    - "ARCS Motivation"
+    - "CLT (Cognitive Load Theory)"
+    - "LTEM (Learning Transfer Evaluation Model)"
+    - "FSRS (Free Spaced Repetition Scheduler)"
+    - "Action Mapping (Cathy Moore)"
+    - "First Principles of Instruction (Merrill)"

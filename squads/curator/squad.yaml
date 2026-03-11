@@ -1,0 +1,77 @@
+name: curator
+version: 3.4.0
+status: OPERATIONAL
+description: >-
+  Content curation squad for mining, structuring, and formatting video content.
+  Mines transcripts via ATHENA-MEK, scores moments via MQR rubric, builds narrative
+  arcs, and delivers editor-ready cut scripts. Zero invention — only real content.
+slashPrefix: curator
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+automation_boundary:
+  deterministic:
+    - "Timestamp extraction and cataloging"
+    - "MQR scoring (Hook, Emotion, Shareability, Clarity)"
+    - "Template rendering for cut scripts and guides"
+    - "Quality gate validation (blocking gates)"
+  probabilistic:
+    - "Narrative arc construction (LLM)"
+    - "Content assembly and format adaptation (LLM)"
+    - "Social clip selection (LLM)"
+  autonomy_level: 2
+  autonomy_rationale: "Mining is deterministic; narrative and format adaptation require LLM."
+
+commands:
+  - name: "*mine"
+    description: "Mine transcript — ATHENA 3-pass extraction with MQR scoring"
+  - name: "*catalog"
+    description: "Create timestamp catalog from mined moments"
+  - name: "*narrative"
+    description: "Build narrative arc from cataloged moments"
+  - name: "*format"
+    description: "Format content into target output (long, shorts, multi)"
+  - name: "*cut-script"
+    description: "Generate editor-ready cut script (YAML + guide)"
+  - name: "*validate"
+    description: "Run all 5 quality gates (blocking)"
+
+components:
+  agents:
+    - curator-chief.md
+    - content-miner-pro.md
+    - timestamp-cataloger.md
+    - data-curator.md
+    - ken-burns.md
+    - walter-murch.md
+    - matthew-dicks.md
+    - robert-mckee.md
+    - brendan-kane.md
+    - jonah-berger.md
+    - mrbeast.md
+    - ffmpeg-cutter.md
+  tasks:
+    - mine-content.md
+    - catalog-timestamps.md
+    - build-narrative.md
+    - format-content.md
+    - generate-cut-script.md
+    - generate-guide.md
+    - curate-data.md
+    - validate-output.md
+    - run-pipeline.md
+  workflows:
+    - wf-mine-to-cut.yaml
+    - wf-shorts.yaml
+    - wf-longform.yaml
+    - wf-longform-simple.yaml
+    - wf-multi-format.yaml
+
+metrics:
+  agents: 12
+  minds: 8
+  quality_gates: 5
+  workflows: 5
+  principle: "Zero invention — only real content from real timestamps"
