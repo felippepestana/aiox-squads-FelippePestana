@@ -1,0 +1,64 @@
+{
+  "project": "MeuApp",
+  "branchName": "ralph/task-priority",
+  "description": "Sistema de Prioridade de Tasks — Adicionar níveis de prioridade às tasks",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Adicionar campo de prioridade ao banco de dados",
+      "description": "Como desenvolvedor, preciso armazenar a prioridade da task para que persista entre sessões.",
+      "acceptanceCriteria": [
+        "Adicionar coluna priority na tabela tasks: 'high' | 'medium' | 'low' (default 'medium')",
+        "Gerar e executar migration com sucesso",
+        "Typecheck passa"
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-002",
+      "title": "Exibir indicador de prioridade nos cards de task",
+      "description": "Como usuário, quero ver a prioridade da task de relance para saber o que precisa de atenção primeiro.",
+      "acceptanceCriteria": [
+        "Cada card de task exibe badge colorido de prioridade (vermelho=high, amarelo=medium, cinza=low)",
+        "Prioridade visível sem hover ou clique",
+        "Typecheck passa",
+        "Verificar no browser usando skill dev-browser"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-003",
+      "title": "Adicionar seletor de prioridade na edição de task",
+      "description": "Como usuário, quero mudar a prioridade de uma task ao editá-la.",
+      "acceptanceCriteria": [
+        "Dropdown de prioridade no modal de edição de task",
+        "Mostra a prioridade atual como selecionada",
+        "Salva imediatamente ao mudar seleção",
+        "Typecheck passa",
+        "Verificar no browser usando skill dev-browser"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-004",
+      "title": "Filtrar tasks por prioridade",
+      "description": "Como usuário, quero filtrar a lista de tasks para ver apenas itens de alta prioridade quando estou focado.",
+      "acceptanceCriteria": [
+        "Dropdown de filtro com opções: Todos | High | Medium | Low",
+        "Filtro persiste nos URL params",
+        "Mensagem de estado vazio quando nenhuma task corresponde ao filtro",
+        "Typecheck passa",
+        "Verificar no browser usando skill dev-browser"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}

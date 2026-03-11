@@ -1,0 +1,58 @@
+name: ralph
+version: "1.0.0"
+title: "Ralph — Autonomous AI Development Loop"
+description: >-
+  Squad de automação de desenvolvimento autônomo baseado no framework Ralph (snarktank/ralph).
+  Executa ciclos iterativos de codificação usando Claude Code como motor, consumindo PRDs
+  estruturados e implementando user stories de forma autônoma até conclusão.
+  Orquestrador: @ralph-chief — gerencia PRDs, execução e progresso.
+  Integra com AIOX: handoffs nativos, quality gates e composição com outros squads.
+author: "FelippePestana via AIOX"
+upstream: "https://github.com/snarktank/ralph"
+entry_agent: ralph-chief
+slashPrefix: ralph
+
+settings:
+  activation:
+    show_greeting: true
+    show_quick_commands: true
+
+workspace_integration:
+  level: read_write
+  rationale: >-
+    Ralph lê PRDs, escreve progress.txt, arquiva runs anteriores e executa
+    scripts shell para automação de desenvolvimento autônomo.
+  read_paths:
+    - squads/ralph/
+    - squads/ralph/archive/
+  write_paths:
+    - squads/ralph/prd.json
+    - squads/ralph/progress.txt
+    - squads/ralph/archive/
+
+metadata:
+  version: "1.0.0"
+  type: "automation"
+  score: 9.0
+  upstream_version: "ralph@main"
+  stats:
+    agents: 1
+    tasks: 5
+    scripts: 1
+    data_files: 1
+
+commands:
+  setup:
+    - "*ralph-prd {feature} — Gerar PRD para uma nova feature"
+    - "*ralph-convert — Converter PRD markdown em prd.json"
+    - "*ralph-status — Ver status atual do prd.json e progress.txt"
+  execution:
+    - "*ralph-run — Executar loop autônomo (usa scripts/ralph.sh)"
+    - "*ralph-run --iterations {n} — Executar com limite de iterações"
+  management:
+    - "*ralph-archive — Arquivar run atual e resetar para nova feature"
+
+activation:
+  greetingEnabled: true
+  quickCommandsEnabled: true
+  claudeMdPath: "squads/ralph/CLAUDE.md"

@@ -153,7 +153,7 @@ Squads publicados pela comunidade neste repositório.
 
 | Squad | O que faz | Status |
 |-------|-----------|--------|
-| _Nenhum squad publicado ainda_ | Seja o primeiro a contribuir! | — |
+| [**ralph**](squads/ralph/) | Loop autônomo de desenvolvimento — implementa features via PRD iterativo com Claude Code. Baseado em [snarktank/ralph](https://github.com/snarktank/ralph). | 🟢 OPERATIONAL |
 
 > Tem um squad pronto? [Abra um PR](#contribuindo) e compartilhe com a comunidade.
 

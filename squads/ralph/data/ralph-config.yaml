@@ -1,0 +1,54 @@
+# Ralph Squad — Configurações e Defaults
+# Adaptado de snarktank/ralph para AIOX
+
+defaults:
+  tool: claude          # Tool padrão: claude ou amp
+  max_iterations: 10    # Máximo de iterações por run
+  pause_between: 2      # Segundos entre iterações
+
+paths:
+  prd: "squads/ralph/prd.json"
+  progress: "squads/ralph/progress.txt"
+  archive: "squads/ralph/archive/"
+  claude_md: "squads/ralph/CLAUDE.md"
+  scripts: "squads/ralph/scripts/"
+
+completion_signal: "<promise>COMPLETE</promise>"
+
+commit_format: "feat: {story_id} - {story_title}"
+
+quality_checks:
+  required:
+    - typecheck
+  optional:
+    - lint
+    - tests
+    - browser_verification
+
+aiox_integration:
+  handoff_dir: ".aios/handoffs/"
+  post_completion:
+    frontend_stories:
+      suggest: "@apex *apex-review"
+      reason: "Revisão visual de frontend após implementação"
+    deploy:
+      suggest: "@devops *push"
+      reason: "Criar PR e fazer deploy"
+  compatible_squads:
+    - apex       # Frontend review pós-implementação
+    - devops     # Deploy e criação de PR
+    - squad-creator  # Geração de PRD antes da execução
+
+story_size_guidelines:
+  max_lines_changed: 200
+  max_files: 5
+  description: "Stories devem ser implementáveis em um único context window"
+  examples_right_size:
+    - "Adicionar coluna + migration ao banco"
+    - "Criar componente de UI em página existente"
+    - "Atualizar server action com nova lógica"
+    - "Adicionar filtro dropdown a lista existente"
+  examples_too_large:
+    - "Construir dashboard inteiro"
+    - "Adicionar autenticação completa"
+    - "Refatorar API toda"
