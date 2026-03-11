@@ -151,9 +151,17 @@ cp -r aiox-squads/squads/copy ./squads/copy
 
 Squads published by the community in this repository.
 
-| Squad | What it does | Status |
-|-------|-------------|--------|
-| _No squads published yet_ | Be the first to contribute! | — |
+| Squad | What it does | Agents | Status |
+|-------|-------------|--------|--------|
+| [**apex**](../squads/apex/) | Frontend Ultra-Premium — 84 tasks, 8 workflows, 7 discovery tools and 31 design presets with DNA from elite frontend minds worldwide | 15 | 🟢 |
+| [**curator**](../squads/curator/) | Video content curation — mining, structuring and formatting with MQR scoring (Hook, Emotion, Shareability, Clarity) | 11 | 🟢 |
+| [**deep-research**](../squads/deep-research/) | Evidence-based research pipeline — from question formulation to bias-audited synthesis, every conclusion earns its confidence level | 11 | 🟢 |
+| [**dispatch**](../squads/dispatch/) | Parallel execution engine — decomposes stories/PRDs into atomic sub-tasks, optimizes into DAG-based waves and runs via subagents (43–58x cheaper) | 5 | 🟢 |
+| [**education**](../squads/education/) | Transforms domain expertise into pedagogically sound, legally compliant online courses using evidence-based instructional design | 16 | 🟢 |
+| [**kaizen**](../squads/kaizen/) | Monitors and improves all other squads — weekly audit across 6 dimensions, redundancy detection and gap analysis | 7 | 🟢 |
+| [**seo**](../squads/seo/) | Post-design SEO optimization — evaluates, optimizes and reports like Yoast/RankMath but as intelligent agents (0–100 score) | 8 | 🟢 |
+| [**squad-creator**](../squads/squad-creator/) | Creates high-quality squads based on real elite minds — guided 6-phase workflow with automatic validation | 1 | 🟢 |
+| [**squad-creator-pro**](../squads/squad-creator-pro/) | Squad Creator upgrade pack — adds mind cloning, model routing and 3 specialist agents without replacing the base | 3 | 🟢 |
 
 > Have a squad ready? [Open a PR](#contributing) and share it with the community.
 
