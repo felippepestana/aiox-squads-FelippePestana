@@ -1,0 +1,79 @@
+{
+  "project": "aiox-squads",
+  "branchName": "claude/install-ralph-aiox-integration-wzJwk",
+  "description": "Instalar e integrar o Ralph Squad no ecossistema AIOX — configurar squad.yaml, CLAUDE.md, tarefas e agentes para que o loop autônomo de desenvolvimento funcione corretamente dentro do repositório aiox-squads.",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Validar estrutura de diretórios do squad ralph",
+      "description": "Como mantenedor, preciso garantir que todos os diretórios e arquivos obrigatórios do squad ralph existam e sigam a estrutura padrão AIOX.",
+      "acceptanceCriteria": [
+        "Diretório squads/ralph/ existe com: agents/, tasks/, scripts/, data/, archive/",
+        "Arquivo squad.yaml presente e válido (name, version, entry_agent, slashPrefix)",
+        "Arquivo CLAUDE.md presente com instruções para o agente",
+        "Arquivo prd.json.example presente com formato correto",
+        "ralph-chief.md presente em squads/ralph/"
+      ],
+      "priority": 1,
+      "passes": true,
+      "notes": "Estrutura completa validada: agents/, tasks/, scripts/, data/, archive/ presentes. squad.yaml, CLAUDE.md, prd.json.example e ralph-chief.md todos encontrados."
+    },
+    {
+      "id": "US-002",
+      "title": "Validar e completar o agente ralph-chief",
+      "description": "Como usuário AIOX, preciso que o ralph-chief.md esteja completo com persona, heurísticas e handoffs corretos para que o orquestrador funcione ao digitar @ralph-chief.",
+      "acceptanceCriteria": [
+        "ralph-chief.md contém as seções: agent, persona, voice_dna, heuristics, examples, handoffs",
+        "Campo entry_agent no squad.yaml bate com o nome do arquivo do agente (ralph-chief)",
+        "Seção heuristics define claramente quando executar *ralph-run vs *ralph-prd vs *ralph-status",
+        "Seção handoffs descreve composição com outros squads (ex: dispatch, kaizen)"
+      ],
+      "priority": 2,
+      "passes": true,
+      "notes": "ralph-chief.md em squads/ralph/agents/ contém todas as seções obrigatórias. entry_agent no squad.yaml bate com ralph-chief. Heurísticas e handoffs presentes."
+    },
+    {
+      "id": "US-003",
+      "title": "Validar tasks do squad ralph",
+      "description": "Como usuário AIOX, preciso que as tasks do ralph estejam presentes e executáveis para os comandos *ralph-prd, *ralph-run, *ralph-status, *ralph-archive e *ralph-convert.",
+      "acceptanceCriteria": [
+        "Arquivo tasks/ralph-prd.md existe e documenta como gerar um PRD estruturado",
+        "Arquivo tasks/ralph-run.md existe e descreve o loop autônomo de execução",
+        "Arquivo tasks/ralph-status.md existe e descreve como reportar status do prd.json",
+        "Arquivo tasks/ralph-archive.md existe e descreve como arquivar runs anteriores",
+        "Arquivo tasks/ralph-convert.md existe e descreve conversão de PRD markdown para JSON"
+      ],
+      "priority": 3,
+      "passes": true,
+      "notes": "Todos os 5 arquivos de tasks validados: ralph-prd.md, ralph-run.md, ralph-status.md, ralph-archive.md, ralph-convert.md presentes em squads/ralph/tasks/."
+    },
+    {
+      "id": "US-004",
+      "title": "Validar script de execução ralph.sh",
+      "description": "Como usuário AIOX, preciso que o script scripts/ralph.sh exista e execute o loop autônomo corretamente.",
+      "acceptanceCriteria": [
+        "Arquivo scripts/ralph.sh existe e tem permissão de execução (chmod +x)",
+        "Script aceita argumento opcional --iterations N",
+        "Script lê branchName do prd.json e garante estar na branch correta antes de executar",
+        "Script chama claude com o CLAUDE.md correto a cada iteração",
+        "Script encerra quando todas as user stories têm passes: true ou limite de iterações atingido"
+      ],
+      "priority": 4,
+      "passes": true,
+      "notes": "scripts/ralph.sh presente com permissão -rwxr-xr-x. Aceita --tool e max_iterations. Loop de execução completo com lógica de encerramento."
+    },
+    {
+      "id": "US-005",
+      "title": "Adicionar ralph ao catálogo do README principal",
+      "description": "Como visitante do repositório, preciso ver o ralph listado no catálogo de squads do README.md com status e descrição corretos.",
+      "acceptanceCriteria": [
+        "README.md lista ralph na tabela do Catálogo de Squads com status 🟢 OPERATIONAL",
+        "Descrição do ralph na tabela é clara e menciona loop autônomo de desenvolvimento",
+        "Link para squads/ralph/ funciona corretamente"
+      ],
+      "priority": 5,
+      "passes": true,
+      "notes": "README.md contém ralph na tabela com status 🟢 OPERATIONAL, descrição correta e link funcional para squads/ralph/."
+    }
+  ]
+}

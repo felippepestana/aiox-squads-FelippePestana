@@ -1,0 +1,49 @@
+## Codebase Patterns
+- Este repositório é um catálogo de squads AIOX — não tem build/typecheck próprio, validação é estrutural
+- Cada squad em squads/{nome}/ deve ter: squad.yaml, CLAUDE.md, agents/, tasks/, scripts/, data/, archive/
+- O agente orquestrador de cada squad fica em agents/{nome}-chief.md
+- Tasks ficam em tasks/{slashPrefix}-{comando}.md seguindo os comandos do squad.yaml
+- README.md principal lista todos os squads na tabela do Catálogo com status badge
+
+---
+
+## 2026-03-12 - US-001
+- Validada estrutura de diretórios do squad ralph
+- Arquivos verificados: agents/, tasks/, scripts/, data/, archive/, squad.yaml, CLAUDE.md, prd.json.example, ralph-chief.md
+- **Learnings para iterações futuras:**
+  - Estrutura de diretórios ralph já estava 100% completa — squad instalado corretamente
+  - ralph-chief.md está em squads/ralph/agents/ (não na raiz do squad como inicialmente assumido)
+---
+
+## 2026-03-12 - US-002
+- Validado ralph-chief.md com todas as seções obrigatórias AIOX
+- Arquivos verificados: squads/ralph/agents/ralph-chief.md, squads/ralph/squad.yaml
+- **Learnings para iterações futuras:**
+  - ralph-chief.md usa formato YAML embutido em bloco de código markdown (padrão AIOX)
+  - Seções obrigatórias presentes: agent, persona, voice_dna, heuristics, examples, handoffs
+  - entry_agent: ralph-chief bate com arquivo ralph-chief.md
+---
+
+## 2026-03-12 - US-003
+- Validados todos os 5 arquivos de tasks do squad ralph
+- Arquivos verificados: ralph-prd.md, ralph-run.md, ralph-status.md, ralph-archive.md, ralph-convert.md
+- **Learnings para iterações futuras:**
+  - Naming convention das tasks: {slashPrefix}-{comando}.md (ex: ralph-prd.md para *ralph-prd)
+  - Tasks ficam em squads/ralph/tasks/ — nunca misturar com agents/
+---
+
+## 2026-03-12 - US-004
+- Validado script scripts/ralph.sh com permissão de execução e lógica completa
+- Arquivos verificados: squads/ralph/scripts/ralph.sh (-rwxr-xr-x)
+- **Learnings para iterações futuras:**
+  - ralph.sh aceita --tool (claude|amp) e max_iterations como argumentos
+  - Script executa loop até todas as stories passarem ou atingir limite de iterações
+---
+
+## 2026-03-12 - US-005
+- Validado README.md principal com ralph listado no catálogo com status 🟢 OPERATIONAL
+- Arquivos verificados: README.md (linha 156)
+- **Learnings para iterações futuras:**
+  - README.md já tinha ralph corretamente listado antes do PRD — squad estava operacional
+  - Ao adicionar novo squad ao catálogo: copiar formato da linha do ralph como template
+---
