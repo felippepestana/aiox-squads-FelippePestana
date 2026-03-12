@@ -2,10 +2,15 @@
 from __future__ import annotations
 
 import json
+import logging
 import re
+from pathlib import Path
 from typing import Any
 
+import anthropic
+
 from .chat_manager import chat_manager
+from .config import AGENTS_DIR, ANTHROPIC_API_KEY, ANTHROPIC_MODEL
 from .document_store import document_store
 from .models import (
     AgentInfo,
@@ -14,6 +19,27 @@ from .models import (
     MessageRole,
     SessionPhase,
 )
+
+logger = logging.getLogger(__name__)
+
+# Anthropic client (lazy-initialized)
+_client: anthropic.Anthropic | None = None
+
+
+def _get_client() -> anthropic.Anthropic | None:
+    """Get or create the Anthropic client. Returns None if no API key."""
+    global _client
+    if _client is None and ANTHROPIC_API_KEY:
+        _client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    return _client
+
+
+def _load_agent_prompt(agent_id: str) -> str:
+    """Load the full agent prompt from its markdown definition file."""
+    agent_file = AGENTS_DIR / f"{agent_id}.md"
+    if agent_file.exists():
+        return agent_file.read_text(encoding="utf-8")
+    return ""
 
 
 # Agent routing rules based on intent detection
@@ -134,32 +160,26 @@ async def process_message(
     )
 
 
-async def _generate_agent_response(
-    session: Any,
-    intent: str,
-    agent_id: str,
-    references: list[DocumentReference] | None = None,
-) -> str:
-    """Generate contextual agent response.
-
-    In production this calls the Anthropic API with agent prompts.
-    For V1, returns structured template responses based on intent and context.
-    """
-
-    # Build document context
+def _build_document_context(session: Any) -> str:
+    """Build document context string from session documents."""
     doc_context = ""
     if session.documents:
         for doc in session.documents:
             pages = document_store.get_pages(doc.doc_id)
-            preview = ""
-            if pages:
-                preview = pages[0].text[:500]
             doc_context += f"\n**Doc. ID {doc.doc_id}** - {doc.filename}\n"
             doc_context += f"Processo: {doc.process_number or 'N/I'} | "
             doc_context += f"Tribunal: {doc.court or 'N/I'} | "
             doc_context += f"Partes: {', '.join(doc.extracted_parties) or 'N/I'}\n"
+            # Include full text of first 5 pages for context
+            if pages:
+                for page in pages[:5]:
+                    doc_context += f"\n--- Pagina {page.page_number} ---\n"
+                    doc_context += page.text[:2000] + "\n"
+    return doc_context
 
-    # Reference context
+
+def _build_reference_context(references: list[DocumentReference] | None) -> str:
+    """Build reference context string from document references."""
     ref_context = ""
     if references:
         for ref in references:
@@ -167,8 +187,131 @@ async def _generate_agent_response(
             remissao = document_store.build_remissao_text(ref)
             if resolved.get("content"):
                 ref_context += f"\n{remissao}:\n{resolved['content'][:1000]}\n"
+    return ref_context
 
-    # Generate response based on intent
+
+def _build_conversation_history(session: Any) -> list[dict[str, str]]:
+    """Build conversation history for the API call (last 20 messages)."""
+    messages = []
+    recent = session.messages[-20:] if session.messages else []
+    for msg in recent:
+        role = "user" if msg.role == MessageRole.USER else "assistant"
+        messages.append({"role": role, "content": msg.content})
+    return messages
+
+
+async def _generate_agent_response(
+    session: Any,
+    intent: str,
+    agent_id: str,
+    references: list[DocumentReference] | None = None,
+) -> str:
+    """Generate agent response via Anthropic API. Falls back to templates if no API key."""
+
+    doc_context = _build_document_context(session)
+    ref_context = _build_reference_context(references)
+
+    # Try API call first
+    client = _get_client()
+    if client:
+        try:
+            return await _call_anthropic_api(
+                client=client,
+                session=session,
+                intent=intent,
+                agent_id=agent_id,
+                doc_context=doc_context,
+                ref_context=ref_context,
+            )
+        except Exception as e:
+            logger.error("Anthropic API call failed, falling back to template: %s", e)
+
+    # Fallback to template responses
+    return _fallback_template_response(session, intent, doc_context, ref_context)
+
+
+async def _call_anthropic_api(
+    client: anthropic.Anthropic,
+    session: Any,
+    intent: str,
+    agent_id: str,
+    doc_context: str,
+    ref_context: str,
+) -> str:
+    """Call Anthropic API with agent-specific system prompt and context."""
+
+    # Load agent definition as system prompt
+    agent_prompt = _load_agent_prompt(agent_id)
+
+    system_parts = [
+        "Voce e um agente do Legal Analyst Squad — sistema de analise juridica processual.",
+        "Responda em portugues brasileiro. Seja preciso, fundamentado e estruturado.",
+        "",
+        "## Principios Imutaveis",
+        "- JURISPRUDENCIA > OPINIAO: Toda analise fundamentada em julgados reais",
+        "- CPC Art. 489 par. 1o: Fundamentacao qualificada obrigatoria",
+        "- CNJ-COMPLIANT: Resolucoes do CNJ sao gates obrigatorios",
+        "- PRECEDENTE E LEI: Sistema de precedentes do CPC (Art. 926-928)",
+    ]
+
+    if agent_prompt:
+        system_parts.append("")
+        system_parts.append("## Definicao do Agente")
+        system_parts.append(agent_prompt)
+
+    if doc_context:
+        system_parts.append("")
+        system_parts.append("## Documentos Carregados")
+        system_parts.append(doc_context)
+
+    if ref_context:
+        system_parts.append("")
+        system_parts.append("## Recortes Referenciados")
+        system_parts.append(ref_context)
+
+    if session.considerations:
+        system_parts.append("")
+        system_parts.append("## Consideracoes do Advogado")
+        system_parts.append(session.considerations)
+
+    system_prompt = "\n".join(system_parts)
+
+    # Build message history
+    history = _build_conversation_history(session)
+
+    # If no history (or just the current message), create a user message from intent
+    if not history:
+        history = [{"role": "user", "content": f"*{intent}"}]
+
+    # Ensure messages alternate properly (API requirement)
+    clean_messages = []
+    last_role = None
+    for msg in history:
+        if msg["role"] == last_role:
+            # Merge consecutive same-role messages
+            clean_messages[-1]["content"] += "\n\n" + msg["content"]
+        else:
+            clean_messages.append(msg)
+            last_role = msg["role"]
+
+    # Ensure first message is from user
+    if clean_messages and clean_messages[0]["role"] != "user":
+        clean_messages.insert(0, {"role": "user", "content": f"*{intent}"})
+
+    response = client.messages.create(
+        model=ANTHROPIC_MODEL,
+        max_tokens=4096,
+        system=system_prompt,
+        messages=clean_messages,
+    )
+
+    return response.content[0].text
+
+
+def _fallback_template_response(
+    session: Any, intent: str, doc_context: str, ref_context: str,
+) -> str:
+    """Fallback to template responses when API is unavailable."""
     if intent == "intake":
         return _response_intake(session, doc_context)
     elif intent == "relatorio":
