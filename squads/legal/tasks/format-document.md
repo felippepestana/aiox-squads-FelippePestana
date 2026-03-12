@@ -170,20 +170,29 @@ steps:
   # FASE 5 — CITAÇÕES DE JURISPRUDÊNCIA
   # ─────────────────────────────────────────
   - id: S13
-    name: Formatar blocos de jurisprudência
+    name: Verificar e formatar blocos de jurisprudência
+    pre_requisito: |
+      ANTES de executar, carregar obrigatoriamente:
+        1. squads/legal/tasks/verify-citations.md
+        2. squads/legal/checklists/jurisprudence-gate.md
+        3. squads/legal/data/citation-integrity-protocol.md
+      Executar verify-citations.md em CADA citação do texto.
     action: >
-      Identificar citações de decisões judiciais (acórdãos, súmulas, teses).
-      Converter para: bloco recuado (blockquote ">"), itálico, aspas na ementa,
-      referência completa em linha separada.
+      Para cada citação identificada:
+      (a) Classificar cada campo: CONFIRMADO / NAO_CONFIRMADO / AUSENTE
+      (b) Executar jurisprudence-gate.md grupos G1–G5
+      (c) Aplicar formatação conforme resultado do gate:
+          LIBERADA → bloco recuado + itálico, sem marcadores adicionais
+          LIBERADA COM RESSALVAS → bloco + campos ⚠️ VERIFICAR + aviso B-04
+          BLOQUEADA → campos [INSERIR: {campo}] + aviso B-04
+      PROIBIDO converter campo AUSENTE ou NAO_CONFIRMADO em valor gerado pela IA.
+      PROIBIDO colocar entre aspas texto de ementa não fornecido literalmente.
     rule: formatting_rules.jurisprudence
-    format: |
-      > *"{ementa}"*
-      >
-      > ({Tribunal}, {Órgão}, {Tipo} nº {Número}/{UF}, Rel. {Relator},
-      > j. {data}, {publicação} {data_pub})
-    warning: >
-      Se a referência estiver incompleta (sem número, sem data, sem relator),
-      inserir marcador [VERIFICAR REFERÊNCIA COMPLETA ANTES DE PROTOCOLAR].
+    bloqueio: >
+      BLOCK_IF: qualquer campo foi gerado pela IA sem marcador adequado.
+      BLOCK_IF: ementa entre aspas não é texto literal fornecido pelo usuário.
+      BLOCK_IF: aviso B-04 ausente em citação com campos pendentes.
+      BLOCK_IF: verify-citations.md não foi carregado antes da execução.
 
   # ─────────────────────────────────────────
   # FASE 6 — REVISÃO DE LINGUAGEM
@@ -271,6 +280,15 @@ quality_gates:
   - PASS: Citações de jurisprudência em bloco recuado com itálico
   - PASS: Ausência de juridiquês listados nos anti-patterns
   - PASS: Pedidos específicos em lista numerada/letrada
-  - WARNING_IF: Referência de jurisprudência incompleta → marcar [VERIFICAR]
+  # ── BLOQUEIOS DE INTEGRIDADE DE CITAÇÃO (escalados de WARNING para BLOCK) ──
+  - BLOCK_IF: verify-citations.md não foi executado antes de incluir citação na peça
+  - BLOCK_IF: algum campo de julgado foi gerado pela IA sem marcador ⚠️ VERIFICAR ou [INSERIR]
+  - BLOCK_IF: ementa entre aspas não é texto literal fornecido pelo usuário
+  - BLOCK_IF: número de processo ausente sem [INSERIR: número do processo]
+  - BLOCK_IF: relator ausente sem [INSERIR: nome do relator]
+  - BLOCK_IF: data de julgamento ausente sem [INSERIR: data de julgamento]
+  - BLOCK_IF: citação com resultado BLOQUEADA no jurisprudence-gate foi incluída sem resolução
+  - BLOCK_IF: aviso B-04 ausente em citação com campos ⚠️ VERIFICAR ou [INSERIR]
   - BLOCK_IF: Texto original está vazio ou ilegível
+  - WARN_IF: citação não tem URL de verificação sugerida ao usuário
 ```

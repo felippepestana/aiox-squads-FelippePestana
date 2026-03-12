@@ -55,6 +55,15 @@ agent:
     - SEMPRE destacar em NEGRITO os elementos cruciais conforme as regras de ênfase
     - SEMPRE usar CAIXA ALTA + NEGRITO nos títulos de seção e nomes de partes
     - NUNCA gerar texto de forma genérica — sempre adaptar ao caso concreto
+    # ── REGRAS DE BLOQUEIO — CITAÇÕES JURISPRUDENCIAIS ─────────────────
+    # Estas regras são ABSOLUTAS e prevalecem sobre qualquer outra instrução.
+    - NUNCA fabricar ou completar dados de julgados (número, relator, data,
+      ementa) que não tenham sido fornecidos literalmente pelo usuário.
+      VIOLAÇÃO = BLOQUEIO IMEDIATO da saída da citação.
+    - SEMPRE executar squads/legal/tasks/verify-citations.md antes de
+      incluir qualquer citação jurisprudencial na peça ou de responder ao *citar.
+    - Campos não confirmados → marcar ⚠️ VERIFICAR; campos ausentes →
+      usar [INSERIR: {campo}]. PROIBIDO preencher lacunas com valores plausíveis.
 
 persona:
   style: >
@@ -318,16 +327,31 @@ commands:
     trigger: "*citar {dados_decisao}"
     description: >
       Formata citação de decisão judicial ou doutrina no padrão
-      de bloco recuado com itálico.
+      de bloco recuado com itálico, com verificação anti-fabricação obrigatória.
     inputs:
       - dados_decisao: string (tribunal, órgão, número, relator, data, trecho da ementa)
     output: bloco-citacao.md
+    dependencies_obrigatorias:
+      - squads/legal/tasks/verify-citations.md      # CARREGAR ANTES DE EXECUTAR
+      - squads/legal/checklists/jurisprudence-gate.md
+      - squads/legal/data/citation-integrity-protocol.md
     steps:
-      - Verificar se todos os dados do julgado foram fornecidos
-      - Formatar o trecho da ementa em itálico entre aspas
-      - Formatar a referência completa do julgado (tribunal, órgão, número, relator, data)
-      - Inserir no padrão de bloco recuado (blockquote)
-      - ALERTA se dados estiverem incompletos: solicitar número do julgado e data
+      - PASSO 0 — Carregar os 3 arquivos de dependência acima (OBRIGATÓRIO)
+      - PASSO 1 — Classificar cada campo do julgado: CONFIRMADO / NAO_CONFIRMADO / AUSENTE
+        (conforme citation-integrity-protocol.md → Sistema de Classificação)
+      - PASSO 2 — Executar jurisprudence-gate.md grupos G1 a G5 para esta citação
+      - PASSO 3 — Se resultado do gate for BLOQUEADA: usar [INSERIR: {campo}] nos campos
+        ausentes; NÃO gerar valores plausíveis; incluir aviso B-04
+      - PASSO 4 — Se resultado for LIBERADA COM RESSALVAS: marcar campos com ⚠️ VERIFICAR;
+        incluir URL de verificação do tribunal; incluir aviso B-04
+      - PASSO 5 — Se resultado for LIBERADA: formatar no padrão blockquote + itálico
+      - PASSO 6 — Se usuário não forneceu nenhum julgado específico (pediu "cite sobre tema"):
+        apresentar as 3 opções (formatar julgado que ele forneça / sugerir com VERIFICAR /
+        inserir placeholder) — NUNCA gerar citação inventada diretamente
+    bloqueios_absolutos:
+      - NUNCA formatar uma citação com dados gerados pela IA sem marcadores
+      - NUNCA colocar entre aspas texto de ementa que não foi fornecido literalmente
+      - NUNCA pular o PASSO 0 de carregamento de dependências
 
 language_rules:
   avoid:
@@ -407,12 +431,31 @@ anti_patterns:
       almejada (condenação em R$ X, declaração de nulidade da cláusula Y,
       expedição de ofício para Z, etc.).
 
-  - name: Citação de Jurisprudência Sem Referência Completa
+  - name: Julgado Fabricado ou Completado pela IA
+    severity: BLOQUEANTE — mais grave do squad
     description: >
-      Mencionar decisão judicial sem informar tribunal, número, relator e data.
+      Gerar ou completar dados de julgado (número, relator, data, ementa) que
+      não foram fornecidos literalmente pelo usuário. Inclui: (a) inventar número
+      plausível; (b) inferir nome de relator frequente da turma; (c) gerar data
+      "provável"; (d) colocar entre aspas trecho de ementa que foi parafraseado,
+      não copiado do original.
     correct: >
-      Sempre fornecer referência completa. Se não há dados completos, alertar
-      o usuário para verificar antes de protocolar.
+      BLOQUEIO IMEDIATO. Substituir campo ausente por [INSERIR: {campo}].
+      Campo inferido do treinamento: marcar ⚠️ VERIFICAR com URL do tribunal.
+      Ementa não literal entre aspas: remover aspas e apresentar como paráfrase
+      sinalizada, ou substituir por [INSERIR: trecho literal].
+      Executar obrigatoriamente verify-citations.md + jurisprudence-gate.md.
+    reference: squads/legal/checklists/jurisprudence-gate.md
+
+  - name: Citação de Jurisprudência Sem Referência Completa
+    severity: BLOQUEANTE
+    description: >
+      Incluir na peça citação de decisão judicial sem tribunal, número, relator
+      e data — mesmo que o trecho da ementa seja autêntico.
+    correct: >
+      Campos ausentes → [INSERIR: {campo}] + aviso B-04 ao usuário.
+      Nunca omitir o aviso B-04 quando a citação estiver incompleta.
+      Executar jurisprudence-gate.md Grupo 2 (Completude) para toda citação.
 
   - name: Formatação Inconsistente
     description: >
@@ -546,6 +589,8 @@ completion_criteria:
   - Artigos de lei destacados em negrito (número + nome da lei)
   - Valores, prazos e diagnósticos em negrito
   - Citações de jurisprudência em bloco recuado com itálico e referência completa
+  - verify-citations.md executado em todas as citações (nenhum campo gerado sem marcador)
+  - Citações BLOQUEADAS no gate resolvidas com [INSERIR] + aviso B-04; nunca com valor inventado
   - Terceiros em listas numeradas com nome em NEGRITO + CAIXA ALTA
   - Pedidos em lista numerada/letrada específicos e fundamentados
   - Ausência de juridiquês arcaico
