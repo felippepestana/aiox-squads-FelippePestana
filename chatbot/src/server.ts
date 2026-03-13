@@ -8,7 +8,7 @@
  *  - API REST para listagem de agentes e sessões
  */
 
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import multer from "multer";
 import path from "path";
 import os from "os";
@@ -22,6 +22,7 @@ import { ChatSession } from "./chat";
 // ── Config ─────────────────────────────────────────────────────────────────────
 const PORT = parseInt(process.env.PORT ?? "3000", 10);
 const API_KEY = process.env.ANTHROPIC_API_KEY ?? "";
+const IS_PROD = process.env.NODE_ENV === "production";
 
 // ── State ──────────────────────────────────────────────────────────────────────
 const client = new Anthropic({ apiKey: API_KEY });
@@ -52,6 +53,33 @@ const upload = multer({ dest: os.tmpdir() });
 // ── App ────────────────────────────────────────────────────────────────────────
 const app = express();
 app.use(express.json());
+
+// ── CORS ───────────────────────────────────────────────────────────────────────
+app.use((req: Request, res: Response, next: NextFunction) => {
+  const origin = req.headers.origin ?? "*";
+  // In development allow the Vite dev server; in production allow any origin
+  const allowedOrigin = IS_PROD ? "*" : (origin || "http://localhost:5173");
+  res.setHeader("Access-Control-Allow-Origin", allowedOrigin);
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,DELETE,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
+  if (req.method === "OPTIONS") {
+    res.sendStatus(204);
+    return;
+  }
+  next();
+});
+
+// ── Request logging ────────────────────────────────────────────────────────────
+app.use((req: Request, _res: Response, next: NextFunction) => {
+  const ts = new Date().toISOString();
+  console.log(`[${ts}] ${req.method} ${req.path}`);
+  next();
+});
+
+// ── Health check ───────────────────────────────────────────────────────────────
+app.get("/health", (_req: Request, res: Response) => {
+  res.json({ ok: true, squads: squads.length, agents: agents.length });
+});
 
 // ── API: listar squads/agentes ─────────────────────────────────────────────────
 app.get("/api/agents", (_req: Request, res: Response) => {
@@ -191,10 +219,37 @@ app.delete("/api/session/:id", async (req: Request, res: Response) => {
   res.json({ ok: true });
 });
 
-// ── Frontend HTML ──────────────────────────────────────────────────────────────
+// ── Frontend static files (production) ────────────────────────────────────────
+if (IS_PROD) {
+  const publicDir = path.join(__dirname, "public");
+  if (fs.existsSync(publicDir)) {
+    app.use(express.static(publicDir));
+    // SPA fallback — let the frontend router handle all non-API routes
+    app.get(/^\/(?!api|health).*/, (_req: Request, res: Response) => {
+      res.sendFile(path.join(publicDir, "index.html"));
+    });
+  }
+}
+
+// ── Frontend HTML (development built-in UI) ────────────────────────────────────
 app.get("/", (_req: Request, res: Response) => {
+  if (IS_PROD) {
+    // Already handled by static middleware above; this is a safety fallback
+    const publicIndex = path.join(__dirname, "public", "index.html");
+    if (fs.existsSync(publicIndex)) {
+      res.sendFile(publicIndex);
+      return;
+    }
+  }
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.send(HTML_UI);
+});
+
+// ── Global error handler ───────────────────────────────────────────────────────
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+  const ts = new Date().toISOString();
+  console.error(`[${ts}] Unhandled error:`, err);
+  res.status(500).json({ error: err?.message ?? "Internal server error" });
 });
 
 // ── Start ──────────────────────────────────────────────────────────────────────
