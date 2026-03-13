@@ -1,0 +1,172 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# WORKFLOW: Story Development Cycle (SDC)
+# ID: wf-story-development-cycle
+# Version: 3.0.0
+# Purpose: Complete 4-phase workflow for all development work in AIOX
+# Constitution: Articles II, III, V enforced at every gate
+# ═══════════════════════════════════════════════════════════════════════════
+
+name: Story Development Cycle
+id: wf-story-development-cycle
+version: "3.0.0"
+description: |
+  The PRIMARY workflow for all development work in AIOX.
+  Every feature, fix, or enhancement starts here.
+  4 phases: Create → Validate → Implement → QA Gate.
+
+trigger:
+  - manual: "@sm *create-story"
+  - manual: "@pm *execute-epic"
+  - auto: "new story needed for epic"
+
+constitution_gates:
+  - article: III
+    check: "story file created before any code"
+    enforcement: NON-NEGOTIABLE
+  - article: II
+    check: "push only via @devops"
+    enforcement: NON-NEGOTIABLE
+  - article: V
+    check: "quality gate passes before merge"
+    enforcement: MUST
+
+phases:
+  - id: phase-1
+    name: "Create Story"
+    agent: "@sm (River)"
+    task: ".aiox-core/development/tasks/create-next-story.md"
+    input:
+      - epic_file: "path to epic/PRD"
+      - story_number: "next story number in epic"
+    output:
+      - story_file: ".aiox/stories/{epic}.{number}.story.md"
+      - status: "Draft"
+    gate:
+      - story_file_exists: true
+      - has_user_story: true
+      - has_acceptance_criteria: true
+      - ac_count_min: 2
+    on_fail: "HALT — SM must fix story structure"
+    handoff_to: "@po"
+
+  - id: phase-2
+    name: "Validate Story"
+    agent: "@po (Pax)"
+    task: ".aiox-core/development/tasks/validate-next-story.md"
+    checklist: ".aiox-core/development/checklists/story-validation-checklist.md"
+    input:
+      - story_file: "from phase-1 output"
+    output:
+      - validation_score: "0-10"
+      - verdict: "GO | NO-GO"
+      - status: "Ready (if GO)"
+    gate:
+      - score_min: 7
+      - verdict: "GO"
+    on_pass:
+      - update_status: "Ready"
+      - handoff_to: "@dev"
+    on_fail:
+      - return_to: "@sm"
+      - with_feedback: "list of specific fixes required"
+      - max_iterations: 3
+
+  - id: phase-3
+    name: "Implement Story"
+    agent: "@dev (Dex)"
+    task: ".aiox-core/development/tasks/dev-develop-story.md"
+    input:
+      - story_file: "from phase-2 (status=Ready)"
+    modes:
+      yolo:
+        description: "Autonomous — 0-1 prompts to user"
+        default: true
+      interactive:
+        description: "Collaborative — 5-10 prompts to user"
+      preflight:
+        description: "Planning only — no code written"
+    output:
+      - code: "implemented acceptance criteria"
+      - tests: "unit/integration tests written"
+      - story_file: "updated (File List, AC checkboxes)"
+      - status: "InProgress → ReadyForReview"
+    self_critique_checkpoints:
+      - step: "3.5"
+        checklist: ".aiox-core/development/checklists/self-critique-checklist.md"
+      - step: "5.5"
+        checklist: ".aiox-core/development/checklists/self-critique-checklist.md"
+    dod_gate:
+      checklist: ".aiox-core/development/checklists/story-dod-checklist.md"
+      required_before: "ReadyForReview"
+    coderabbit:
+      enabled: true
+      max_iterations: 2
+      fix_critical_only: true
+    on_complete:
+      - update_status: "ReadyForReview"
+      - handoff_to: "@qa"
+    blocking_conditions:
+      - "3+ failures on same implementation approach → HALT, escalate to @aiox-master"
+      - "Ambiguous AC after re-reading → HALT, ask @po for clarification"
+      - "Unapproved dependencies needed → HALT, confirm with user"
+
+  - id: phase-4
+    name: "QA Gate"
+    agent: "@qa (Quinn)"
+    task: ".aiox-core/development/tasks/qa-gate.md"
+    checklist: ".aiox-core/development/checklists/qa-gate-checklist.md"
+    input:
+      - story_file: "from phase-3 (status=ReadyForReview)"
+      - code_changes: "git diff since story started"
+    output:
+      - verdict: "PASS | NEEDS_WORK | FAIL"
+      - qa_report: "written to story file QA Results section"
+      - fix_request: ".aiox/qa/fix-request-{story_id}.md (if NEEDS_WORK)"
+    on_pass:
+      - update_status: "Done"
+      - handoff_to: "@devops (for push)"
+    on_needs_work:
+      - create_fix_request: true
+      - handoff_to: "@dev"
+      - enter_qa_loop: true
+      - max_iterations: 5
+    on_fail:
+      - update_status: "Blocked"
+      - escalate_to: "@aiox-master"
+
+qa_loop:
+  description: "Iterative review-fix cycle after initial QA gate"
+  max_iterations: 5
+  steps:
+    - agent: "@qa"
+      action: "review → verdict"
+    - agent: "@dev"
+      action: "apply fixes (if NEEDS_WORK)"
+  exit_conditions:
+    - "verdict: PASS → mark Done, proceed to @devops"
+    - "verdict: BLOCKED → escalate to @aiox-master"
+    - "max_iterations reached → escalate to @aiox-master"
+
+handoff_chain:
+  "@sm → @po": "create-next-story → validate-next-story"
+  "@po → @dev": "validate-next-story → dev-develop-story"
+  "@dev → @qa": "dev-develop-story → qa-gate"
+  "@qa → @devops": "qa-gate PASS → devops-push"
+  "@qa → @dev": "qa-gate NEEDS_WORK → apply-qa-fixes"
+
+artifacts:
+  - ".aiox/stories/{epic}.{story}.story.md"
+  - ".aiox/qa/fix-request-{story_id}.md"
+  - "code changes (git tracked)"
+
+estimated_duration:
+  simple_story: "2-4 hours"
+  standard_story: "4-8 hours"
+  complex_story: "1-3 days"
+
+metrics:
+  track:
+    - lead_time: "story created → story done"
+    - review_cycles: "how many QA iterations"
+    - rework_rate: "NEEDS_WORK / total stories"
+  dashboard: "kaizen squad analyzes weekly"

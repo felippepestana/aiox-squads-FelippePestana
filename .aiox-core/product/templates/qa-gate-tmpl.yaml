@@ -1,0 +1,149 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# QA Gate Template — AIOX
+# Version: 1.0.0
+# Usage: Used by @qa (qa-gate.md) to record QA review results.
+#        QA gate results are appended to the story file under ## QA Results.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ─── INSTRUCTIONS FOR @qa ────────────────────────────────────────────────────
+# 1. Fill all fields with real values
+# 2. Replace ## QA Results section in the story file with the completed template
+# 3. Update story status based on verdict
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ─── FIELD DEFINITIONS ───────────────────────────────────────────────────────
+
+fields:
+  verdict:
+    values: ["PASS", "NEEDS_WORK", "FAIL", "WAIVED"]
+    rules:
+      PASS: "All critical checks passed. Story done."
+      NEEDS_WORK: "Non-critical issues found. @dev must fix and resubmit."
+      FAIL: "Critical issues found. Story blocked. @dev must fix before any deployment."
+      WAIVED: "Minor issues found but acceptable given context. Document reason."
+
+  story_status_after_verdict:
+    PASS: "Done"
+    NEEDS_WORK: "InProgress"  # Returns to @dev
+    FAIL: "InProgress"         # Returns to @dev (critical fixes required)
+    WAIVED: "Done"             # Accepted with documented exceptions
+
+  issue_severity:
+    CRITICAL: "Blocks all users, data corruption risk, security vulnerability, broken AC"
+    MAJOR: "Affects significant user flow, incorrect behavior, missing required feature"
+    MINOR: "Edge case, UX improvement, code quality, non-blocking performance"
+
+# ─── QA GATE RESULT FORMAT ───────────────────────────────────────────────────
+# Replace the ## QA Results section in the story file with this
+
+qa_gate_format: |
+  ## QA Results
+
+  **Reviewer:** @qa (Quinn)
+  **Date:** {YYYY-MM-DD}
+  **Story:** {story_id} — {story_title}
+  **Verdict:** {PASS|NEEDS_WORK|FAIL|WAIVED}
+
+  ### Checklist Results
+
+  #### Functional Quality
+  - [{pass/fail}] AC1 — {AC1 text}: {result or PASS}
+  - [{pass/fail}] AC2 — {AC2 text}: {result or PASS}
+  - [{pass/fail}] AC3 — {AC3 text}: {result or PASS}
+
+  #### Code Quality
+  - [{pass/fail}] No linting errors
+  - [{pass/fail}] No TypeScript errors (if applicable)
+  - [{pass/fail}] Follows project conventions
+  - [{pass/fail}] No TODO/FIXME comments left in code
+
+  #### Testing
+  - [{pass/fail}] Tests exist for new functionality
+  - [{pass/fail}] All tests pass
+  - [{pass/fail}] Edge cases covered
+
+  #### Security
+  - [{pass/fail}] Input validation in place
+  - [{pass/fail}] Auth checks present for protected routes
+  - [{pass/fail}] No secrets hardcoded
+
+  #### Performance
+  - [{pass/fail}] No obvious N+1 queries or blocking operations
+  - [{pass/fail}] Assets optimized (if applicable)
+
+  ### Issues Found
+
+  #### Critical
+  {List critical issues, or "None"}
+  - [ ] CRITICAL: {description} — File: {path}, Line: {N}
+
+  #### Major
+  {List major issues, or "None"}
+  - [ ] MAJOR: {description} — File: {path}
+
+  #### Minor
+  {List minor issues, or "None"}
+  - [ ] MINOR: {description} — Suggestion: {recommendation}
+
+  ### Fix Request
+
+  {If NEEDS_WORK or FAIL:}
+  **@dev fix required for:** {story_id}
+  **Priority fixes:**
+  1. {most important fix}
+  2. {second fix}
+  **Fix path:** `.aiox/stories/{story_id}.story.md`
+
+  {If WAIVED:}
+  **Waiver reason:** {why issues are acceptable}
+  **Follow-up:** {story_id or "None" — create follow-up story if needed}
+
+  ### Next Action
+
+  {PASS}: Story is Done. @devops can push and create PR.
+  {NEEDS_WORK}: @dev fixes issues, marks story InReview again for re-review.
+  {FAIL}: @dev fixes critical issues before any deployment. Re-review required.
+  {WAIVED}: Story is Done. Document follow-up if applicable.
+
+# ─── VERDICT DECISION GUIDE ──────────────────────────────────────────────────
+
+verdict_guide:
+  PASS:
+    conditions:
+      - "All Acceptance Criteria pass"
+      - "Zero CRITICAL issues"
+      - "Zero MAJOR issues"
+      - "MINOR issues: 0-2 (acceptable)"
+    status_transition: "InReview → Done"
+
+  NEEDS_WORK:
+    conditions:
+      - "All Acceptance Criteria pass OR 1 minor AC partially fails"
+      - "Zero CRITICAL issues"
+      - "1-3 MAJOR issues that are fixable quickly"
+    status_transition: "InReview → InProgress (for fixes)"
+
+  FAIL:
+    conditions:
+      - "Any Acceptance Criterion fails"
+      - "1+ CRITICAL issues"
+      - "4+ MAJOR issues"
+      - "Security vulnerability found"
+    status_transition: "InReview → InProgress (blocked until fixed)"
+
+  WAIVED:
+    conditions:
+      - "Story is PASS-equivalent but has known exceptions"
+      - "Exception is documented and accepted by PO"
+      - "Never waive CRITICAL issues"
+    status_transition: "InReview → Done (with documented exceptions)"
+
+# ─── QA LOOP CONFIG ──────────────────────────────────────────────────────────
+
+qa_loop:
+  max_iterations: 5
+  escalation_triggers:
+    - "max_iterations_reached"
+    - "verdict_FAIL persists after 3 iterations"
+    - "CRITICAL issue cannot be resolved"
+  escalation_target: "@architect or @po"

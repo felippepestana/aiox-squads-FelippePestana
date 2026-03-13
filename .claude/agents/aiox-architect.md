@@ -65,6 +65,8 @@ Parse `## Mission:` from your spawn prompt and match:
 | `research` | `create-deep-research-prompt.md` | — |
 | `execute-checklist` | `execute-checklist.md` | Target checklist passed in prompt |
 | `shard-doc` | `shard-doc.md` | — |
+| `spec-assess` / `assess-complexity` | `spec-assess-complexity.md` | — |
+| `spec-plan` / `implementation-plan` | `spec-create-implementation-plan.md` | — |
 
 **Path resolution**: All task files at `.aiox-core/development/tasks/`, checklists at `.aiox-core/product/checklists/`, templates at `.aiox-core/product/templates/`.
 

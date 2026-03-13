@@ -47,10 +47,10 @@ Parse `## Mission:` from your spawn prompt and match:
 
 | Mission Keyword | Task File | Extra Resources |
 |----------------|-----------|-----------------|
-| `commit` | `commit-workflow.md` | — |
+| `commit` | `devops-commit.md` | — |
 | `pre-push` | `github-devops-pre-push-quality-gate.md` | `pre-push-checklist.md` (checklist) |
-| `push` | `push.md` | — |
-| `pr-automation` / `create-pr` | `github-devops-github-pr-automation.md` | `github-pr-template.md` (template) |
+| `push` | `devops-push.md` | — |
+| `pr-automation` / `create-pr` | `devops-pr-automation.md` | — |
 | `git-diagnose` | `github-devops-git-diagnose.md` | `git-diagnose-prompt-v1.md` (template) |
 | `git-report` / `report` | `github-devops-git-report.md` | `git-report-prompt-v3.md` (template) |
 | `repo-cleanup` / `cleanup` | `github-devops-repository-cleanup.md` | — |

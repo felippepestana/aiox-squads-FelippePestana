@@ -1,0 +1,81 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# WORKFLOW: QA Loop
+# ID: wf-qa-loop
+# Version: 3.0.0
+# Purpose: Automated review-fix cycle after initial QA gate
+# ═══════════════════════════════════════════════════════════════════════════
+
+name: QA Loop
+id: wf-qa-loop
+version: "3.0.0"
+description: |
+  Iterative review-fix cycle triggered when @qa returns NEEDS_WORK verdict.
+  Max 5 iterations before escalation to @aiox-master.
+
+trigger:
+  - auto: "@qa verdict == NEEDS_WORK"
+  - manual: "*qa-loop {story_id}"
+
+config:
+  max_iterations: 5
+  escalation_after: 5
+  state_file: ".aiox/qa/loop-status-{story_id}.json"
+
+iteration_cycle:
+  step_1:
+    agent: "@qa (Quinn)"
+    action: "Review implementation against AC and fix request"
+    task: ".aiox-core/development/tasks/qa-gate.md"
+    output:
+      verdict: "APPROVE | REJECT | BLOCKED"
+      issues: "list of remaining issues (if REJECT)"
+
+  step_2_if_reject:
+    agent: "@dev (Dex)"
+    action: "Apply fixes from QA review"
+    task: ".aiox-core/development/tasks/apply-qa-fixes.md"
+    input:
+      fix_request: ".aiox/qa/fix-request-{story_id}.md"
+    output:
+      fixes_applied: "list of fixes"
+      ready_for_review: true
+
+exit_conditions:
+  APPROVE:
+    action:
+      - update_story_status: "Done"
+      - handoff_to: "@devops"
+      - command: "@devops *push {branch}"
+    message: "✅ QA Loop APPROVED — story complete, ready for push"
+
+  BLOCKED:
+    action:
+      - update_story_status: "Blocked"
+      - escalate_to: "@aiox-master"
+      - document_blocker: true
+    message: "⛔ QA Loop BLOCKED — escalating to @aiox-master"
+
+  max_iterations_reached:
+    action:
+      - update_story_status: "Blocked"
+      - escalate_to: "@aiox-master"
+      - include_history: "all iterations"
+    message: "⚠️ QA Loop max iterations reached — human review needed"
+
+commands:
+  start: "*qa-loop {story_id}"
+  review: "*qa-loop-review"
+  fix: "*qa-loop-fix"
+  stop: "*stop-qa-loop"
+  resume: "*resume-qa-loop"
+  escalate: "*escalate-qa-loop"
+
+state_tracking:
+  file: ".aiox/qa/loop-status-{story_id}.json"
+  fields:
+    - iteration: "current iteration (1-5)"
+    - last_verdict: "APPROVE | REJECT | BLOCKED"
+    - issues_history: "issues found per iteration"
+    - fixes_applied: "fixes applied per iteration"
+    - started_at: "timestamp"
+    - last_updated: "timestamp"

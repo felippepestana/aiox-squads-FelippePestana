@@ -1,0 +1,153 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# WORKFLOW: Spec Pipeline
+# ID: wf-spec-pipeline
+# Version: 3.0.0
+# Purpose: Transform informal requirements into executable spec before SDC
+# Use when: complex feature (score >= 9) needs formal specification
+# ═══════════════════════════════════════════════════════════════════════════
+
+name: Spec Pipeline
+id: wf-spec-pipeline
+version: "3.0.0"
+description: |
+  Transforms informal requirements into a validated, executable specification.
+  Runs BEFORE Story Development Cycle for STANDARD and COMPLEX features.
+  Constitution Article IV (No Invention) enforced at every phase.
+
+trigger:
+  - manual: "@pm *create-spec {feature}"
+  - auto: "complexity score >= 9 detected by @architect"
+
+complexity_routing:
+  simple:
+    score: "≤ 8"
+    phases: [gather, spec, critique]
+    skip: [assess, research, plan]
+    direct_to_sdc: true
+  standard:
+    score: "9-15"
+    phases: [gather, assess, research, spec, critique, plan]
+  complex:
+    score: "≥ 16"
+    phases: [gather, assess, research, spec, critique, plan, revision_cycle]
+
+complexity_dimensions:
+  - name: Scope
+    description: "How many files/components affected"
+    scale: "1 (1-2 files) → 5 (10+ files or new module)"
+  - name: Integration
+    description: "External APIs or services required"
+    scale: "1 (none) → 5 (3+ new integrations)"
+  - name: Infrastructure
+    description: "Infrastructure changes needed"
+    scale: "1 (no changes) → 5 (new DB, new service)"
+  - name: Knowledge
+    description: "Team familiarity with domain"
+    scale: "1 (well known) → 5 (new technology)"
+  - name: Risk
+    description: "Criticality and blast radius"
+    scale: "1 (isolated) → 5 (core system, high risk)"
+
+phases:
+  - id: phase-1
+    name: "Gather Requirements"
+    agent: "@pm (Morgan)"
+    task: ".aiox-core/development/tasks/spec-gather-requirements.md"
+    output:
+      - requirements_file: ".aiox/specs/{feature}/requirements.json"
+      - fr_count: "number of functional requirements"
+      - nfr_count: "number of non-functional requirements"
+    constitution_gate:
+      article: IV
+      check: "all FRs traceable to user input, not invented"
+
+  - id: phase-2
+    name: "Assess Complexity"
+    agent: "@architect (Aria)"
+    task: ".aiox-core/development/tasks/spec-assess-complexity.md"
+    skip_if: "source=simple"
+    input:
+      - requirements_file: "from phase-1"
+    output:
+      - complexity_file: ".aiox/specs/{feature}/complexity.json"
+      - total_score: "5-25"
+      - complexity_class: "SIMPLE | STANDARD | COMPLEX"
+
+  - id: phase-3
+    name: "Research Dependencies"
+    agent: "@analyst (Alex)"
+    task: ".aiox-core/development/tasks/spec-research.md"
+    skip_if: "complexity_class == SIMPLE"
+    input:
+      - requirements_file: "from phase-1"
+      - complexity_file: "from phase-2"
+    output:
+      - research_file: ".aiox/specs/{feature}/research.json"
+      - libraries_found: "relevant libraries/frameworks"
+      - patterns_found: "relevant architectural patterns"
+
+  - id: phase-4
+    name: "Write Spec"
+    agent: "@pm (Morgan)"
+    task: ".aiox-core/development/tasks/spec-write.md"
+    input:
+      - requirements_file: "from phase-1"
+      - complexity_file: "from phase-2 (if present)"
+      - research_file: "from phase-3 (if present)"
+    output:
+      - spec_file: ".aiox/specs/{feature}/spec.md"
+    constitution_gate:
+      article: IV
+      check: "every statement traces to FR-*, NFR-*, CON-*, or research finding"
+      failure: "BLOCK — spec rejected, fix traceability"
+
+  - id: phase-5
+    name: "Critique Spec"
+    agent: "@qa (Quinn)"
+    task: ".aiox-core/development/tasks/spec-critique.md"
+    input:
+      - spec_file: "from phase-4"
+      - requirements_file: "from phase-1"
+    scoring:
+      dimensions:
+        - "Completeness (1-5)"
+        - "Clarity (1-5)"
+        - "Testability (1-5)"
+        - "Feasibility (1-5)"
+        - "Traceability (1-5)"
+      average_required: 4.0
+    verdicts:
+      APPROVED:
+        score: "≥ 4.0"
+        next: "phase-6 (Plan)"
+      NEEDS_REVISION:
+        score: "3.0-3.9"
+        next: "phase-5b (Revise)"
+        max_revisions: 2
+      BLOCKED:
+        score: "< 3.0"
+        next: "escalate to @architect"
+
+  - id: phase-6
+    name: "Create Implementation Plan"
+    agent: "@architect (Aria)"
+    task: ".aiox-core/development/tasks/spec-create-implementation-plan.md"
+    skip_if: "verdict == APPROVED with score >= 4.5 and complexity == SIMPLE"
+    input:
+      - spec_file: "from phase-4"
+    output:
+      - implementation_file: ".aiox/specs/{feature}/implementation.yaml"
+      - epic_structure: "epics and stories ready for @sm"
+    handoff_to: "@sm"
+    handoff_message: "Spec approved. Create stories from implementation.yaml"
+
+artifacts:
+  - ".aiox/specs/{feature}/requirements.json"
+  - ".aiox/specs/{feature}/complexity.json"
+  - ".aiox/specs/{feature}/research.json"
+  - ".aiox/specs/{feature}/spec.md"
+  - ".aiox/specs/{feature}/implementation.yaml"
+
+post_pipeline:
+  action: "Enter Story Development Cycle"
+  trigger: "@sm *create-story from implementation.yaml"
