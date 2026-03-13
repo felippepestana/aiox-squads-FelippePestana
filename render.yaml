@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: aiox-legal-api
+    env: node
+    rootDir: chatbot
+    buildCommand: npm ci && npm run build
+    startCommand: node dist/server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: PORT
+        value: 3000
