@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #3b4252 transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: #3b4252;
+    border-radius: 3px;
+  }
+
+  ::selection {
+    background: rgba(92, 124, 250, 0.3);
+    color: white;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-legal-slate/60 backdrop-blur-xl border border-white/5 rounded-xl;
+  }
+
+  .glass-panel-light {
+    @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-lg;
+  }
+
+  .btn-primary {
+    @apply px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg
+           font-medium text-sm transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-brand-500/50
+           active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-white/5 hover:bg-white/10 text-gray-200 rounded-lg
+           font-medium text-sm border border-white/10 transition-all duration-200
+           focus:outline-none focus:ring-2 focus:ring-white/20
+           active:scale-[0.98];
+  }
+
+  .btn-gold {
+    @apply px-4 py-2 bg-legal-gold/20 hover:bg-legal-gold/30 text-legal-gold
+           rounded-lg font-medium text-sm border border-legal-gold/30
+           transition-all duration-200 focus:outline-none
+           focus:ring-2 focus:ring-legal-gold/30;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg
+           text-gray-100 placeholder:text-gray-500 text-sm
+           focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500/40
+           transition-all duration-200;
+  }
+
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full;
+  }
+
+  .badge-gold {
+    @apply badge bg-legal-gold/15 text-legal-gold border border-legal-gold/20;
+  }
+
+  .badge-blue {
+    @apply badge bg-brand-500/15 text-brand-300 border border-brand-500/20;
+  }
+
+  .badge-green {
+    @apply badge bg-emerald-500/15 text-emerald-300 border border-emerald-500/20;
+  }
+
+  .badge-gray {
+    @apply badge bg-white/10 text-gray-400 border border-white/10;
+  }
+
+  .agent-avatar {
+    @apply w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold
+           bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-lg shadow-brand-500/20;
+  }
+
+  .markdown-body h1 { @apply text-xl font-bold mt-4 mb-2 text-white; }
+  .markdown-body h2 { @apply text-lg font-semibold mt-3 mb-2 text-white; }
+  .markdown-body h3 { @apply text-base font-semibold mt-2 mb-1 text-gray-200; }
+  .markdown-body p { @apply mb-2 text-gray-300 leading-relaxed; }
+  .markdown-body ul { @apply list-disc pl-5 mb-2 text-gray-300; }
+  .markdown-body ol { @apply list-decimal pl-5 mb-2 text-gray-300; }
+  .markdown-body li { @apply mb-1; }
+  .markdown-body code { @apply px-1.5 py-0.5 bg-white/10 rounded text-brand-300 text-sm font-mono; }
+  .markdown-body pre { @apply p-3 bg-black/30 rounded-lg overflow-x-auto mb-2; }
+  .markdown-body pre code { @apply bg-transparent p-0; }
+  .markdown-body blockquote { @apply border-l-2 border-legal-gold/50 pl-3 italic text-gray-400 my-2; }
+  .markdown-body table { @apply w-full text-sm mb-2; }
+  .markdown-body th { @apply text-left p-2 border-b border-white/10 text-gray-300 font-medium; }
+  .markdown-body td { @apply p-2 border-b border-white/5 text-gray-400; }
+  .markdown-body strong { @apply text-white font-semibold; }
+  .markdown-body hr { @apply border-white/10 my-3; }
+  .markdown-body a { @apply text-brand-400 hover:text-brand-300 underline; }
+}
