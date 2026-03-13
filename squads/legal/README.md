@@ -1,108 +1,129 @@
-# Squad Legal — Redação e Formatação de Peças Processuais
+# Squad Legal — Analistas Processuais v2.0.0
 
-> **Squad:** legal
-> **Versão:** 1.0.0
-> **Agente principal:** processual-writer
+**Status:** Produção · **Atualizado:** 2026-03-13 · **Agentes:** 10
 
----
-
-## Visão Geral
-
-O **Squad Legal** é especializado na redação, formatação e revisão de peças processuais. Aplica um padrão rigoroso de formatação jurídica que combina hierarquia visual clara com linguagem técnica sóbria — sem juridiquês arcaico — e forte carga argumentativa.
+Sistema multi-agente para análise, estratégia, pesquisa jurisprudencial, redação e formatação de peças processuais no direito brasileiro (CPC/2015).
 
 ---
 
-## Agente
+## Arquitetura
 
-### `processual-writer` — Redator Processual
-
-Especialista em geração e formatação de peças processuais. Aplica automaticamente as diretrizes de formatação a qualquer tipo de peça: petições iniciais, contestações, recursos, impugnações, incidentes processuais e manifestações.
-
-**Comandos:**
-
-| Comando | Descrição |
-|---------|-----------|
-| `*redigir {tipo} {fatos}` | Redige peça completa com formatação aplicada |
-| `*formatar {texto}` | Aplica padrão de formatação a texto existente |
-| `*revisar {texto}` | Revisa linguagem, argumentação e formatação |
-| `*qualificar {parte} {dados}` | Gera bloco de qualificação da parte |
-| `*citar {decisao}` | Formata citação de jurisprudência em bloco recuado |
-
----
-
-## Diretrizes de Formatação
-
-### 1. Estrutura e Alinhamento
-
-| Elemento | Estilo | Alinhamento |
-|----------|--------|-------------|
-| Endereçamento (capa) | **NEGRITO + CAIXA ALTA** | Justificado |
-| Informações do processo | Rótulos em negrito | Esquerda |
-| Nome da parte | **NEGRITO + CAIXA ALTA** | — |
-| Texto de qualificação | Normal | Justificado |
-| Corpo do texto | Normal | Justificado |
-
-### 2. Hierarquia de Títulos
-
-| Nível | Formato | Alinhamento | Exemplo |
-|-------|---------|-------------|---------|
-| Título da peça | **NEGRITO + CAIXA ALTA** | Justificado | `**PETIÇÃO INICIAL**` |
-| Seção (Nível 1) | **NEGRITO + CAIXA ALTA** + numeral romano | Centralizado | `**I. DOS FATOS**` |
-| Subseção (Nível 2) | **Negrito + Title Case** | Esquerda | `**I.A. Da Qualificação**` |
-
-### 3. Destaques no Texto (negrito intensivo)
-
-| Elemento | Estilo |
-|----------|--------|
-| Artigos de lei (número + nome) | **negrito** |
-| Valores monetários | **negrito** |
-| Prazos e datas críticas | **negrito** |
-| Doenças e diagnósticos | **NEGRITO + CAIXA ALTA** |
-| Nomes de terceiros em listas | **NEGRITO + CAIXA ALTA** |
-| Conclusões jurídicas | **negrito** |
-
-### 4. Citações de Jurisprudência
-
-```markdown
-> *"Trecho da ementa."*
->
-> (Tribunal, Órgão, Tipo nº Número/UF, Rel. Nome, j. DD.MM.AAAA, DJe DD.MM.AAAA)
+```
+             ┌──────────────────────────────┐
+             │        @legal-chief          │
+             │  Orquestrador & Roteamento   │
+             └────────────┬─────────────────┘
+                          │
+          ┌───────────────┼───────────────┐
+          ▼               ▼               ▼
+  @case-analyst   @jurisprudence-   @metric-validator
+  Diagnóstico     researcher        Probabilidade
+  Case Brief      Anti-fabricação   Estratégia
+          │               │
+          └───────┬────────┘
+                  ▼
+    ┌─────────────────────────────────┐
+    │        REDATORES                │
+    │  @processual-writer  (petições) │
+    │  @appellate-specialist(recursos)│
+    │  @execution-specialist(execução)│
+    └──────────────┬──────────────────┘
+                   │
+          ┌────────┴────────┐
+          ▼                 ▼
+  @legal-strategy        @ralph
+  Precedentes hier.     Qualidade
+  Ganchos ao julgador   Auditoria
 ```
 
 ---
 
-## Estrutura do Squad
+## Agentes (10)
+
+| ID | Nome | Tier | Função Principal |
+|----|------|------|-----------------|
+| `legal-chief` | Chefe Jurídico | chief | Orquestra e roteia casos |
+| `case-analyst` | Analista Processual | 0 | Case Brief + estratégia |
+| `jurisprudence-researcher` | Pesquisador Jurisprudencial | 1 | Jurisprudência verificada |
+| `processual-writer` | Redator Processual | 0 | Petições, contestações, manifestações |
+| `appellate-specialist` | Especialista em Recursos | 1 | Apelação, AI, ED, REsp, RE |
+| `execution-specialist` | Especialista em Execução | 1 | Cumprimento de sentença, execução |
+| `legal-strategy` | Estrategista Jurídico | 1 | Cadeia hierárquica + ganchos ao julgador |
+| `metric-validator` | Validador Métrico | 1 | Probabilidade de êxito (%) |
+| `ralph` | Ralph — Guardião | guardian | Auditoria de qualidade (score 0-10) |
+| `devops` | DevOps | infra | Infraestrutura e deploy |
+
+---
+
+## Fluxo do Ciclo Processual
+
+```
+Fatos brutos → @case-analyst (*analisar)
+                    │ Case Brief
+                    ▼
+              @jurisprudence-researcher (*pesquisar)
+                    │ Blocos verificados
+                    ▼
+         ┌──────────┼──────────┐
+    petição     recurso     execução
+         │          │          │
+  @processual @appellate @execution
+   -writer   -specialist -specialist
+         └──────────┼──────────┘
+                    │
+              @legal-strategy (opcional — casos complexos)
+                    │ Seção argumentativa com precedentes hierárquicos
+                    ▼
+              @ralph (*qualidade)
+                    │ Quality Report
+                    ▼
+              PEÇA VALIDADA
+```
+
+---
+
+## Comandos Principais
+
+| Agente | Comando | O que entrega |
+|--------|---------|---------------|
+| `@legal-chief` | `*analisar {fatos}` | Ciclo completo automatizado |
+| `@case-analyst` | `*analisar {fatos}` | Case Brief estruturado |
+| `@jurisprudence-researcher` | `*pesquisar {tema} {tribunal}` | Blocos de jurisprudência verificados |
+| `@processual-writer` | `*redigir {tipo} {fatos}` | Peça completa formatada |
+| `@appellate-specialist` | `*apelar {sentenca}` | Apelação completa |
+| `@execution-specialist` | `*executar {titulo}` | Cumprimento de sentença |
+| `@legal-strategy` | `*cadeia-hierarquica {caso}` | Cadeia de precedentes + ganchos |
+| `@metric-validator` | `*probabilidade {caso}` | Estimativa de êxito (%) com intervalo |
+| `@ralph` | `*qualidade {peca}` | Score multidimensional (0-10 por eixo) |
+
+---
+
+## Regra Anti-Fabricação (TODOS os agentes — ABSOLUTA)
+
+- ❌ **NUNCA** inventar número de processo, relator, data ou ementa não fornecidos pelo usuário
+- ✅ Dados não confirmados: `⚠️ VERIFICAR`
+- ✅ Campos ausentes: `[INSERIR: {campo}]`
+- ✅ Permitido: referenciar tendências gerais sem dados específicos
+
+---
+
+## Estrutura de Arquivos
 
 ```
 squads/legal/
-├── README.md                          # Este arquivo
-├── agents/
-│   └── processual-writer.md           # Agente principal (redação + formatação)
-├── tasks/
-│   └── format-document.md             # Task de formatação passo a passo
-├── templates/
-│   └── peca-processual-tmpl.md        # Template base para peças processuais
-└── checklists/
-    └── formatting-checklist.md        # Checklist de validação (33 itens)
+├── agents/        (10 agentes)
+├── tasks/         (6 workflows)
+├── templates/     (3 templates)
+├── checklists/    (3 checklists — 64+ itens no QA final)
+├── data/          (legal-kb.md — CPC, prazos, súmulas)
+└── docs/          (PRD)
 ```
 
 ---
 
-## Como Usar
+## Changelog
 
-1. Carregue o agente `processual-writer` no chatbot
-2. Use `*redigir` para gerar uma nova peça ou `*formatar` para formatar um texto existente
-3. O agente aplicará automaticamente todas as diretrizes de formatação
-4. Ao final, o checklist de 33 itens é executado para validação
-5. Qualquer referência de jurisprudência incompleta é marcada como `[VERIFICAR ANTES DE PROTOCOLAR]`
-
----
-
-## Anti-patterns (O que este agente NUNCA faz)
-
-- ❌ "Vem mui respeitosamente à presença de Vossa Excelência"
-- ❌ "DD. Juiz" / "MM. Juiz"
-- ❌ "data venia", "nesta senda", "dessarte", "mister", "hialino", "cediço"
-- ❌ Citar jurisprudência sem referência completa (número + relator + data)
-- ❌ Pedidos vagos ("tudo o mais que de direito" sem especificação)
-- ❌ Afirmações jurídicas sem fundamento legal ou jurisprudencial
+| Versão | Data | Descrição |
+|--------|------|-----------|
+| 2.0.0 | 2026-03-13 | Squad completo: 10 agentes, 6 tasks, 3 templates, 3 checklists, KB |
+| 1.0.0 | 2026-03-12 | Squad inicial: processual-writer + formatação |

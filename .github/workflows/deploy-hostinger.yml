@@ -1,0 +1,184 @@
+name: Deploy to Hostinger VPS
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deploy environment'
+        required: true
+        default: 'production'
+        type: choice
+        options: [production, staging]
+
+env:
+  DEPLOY_PATH: ${{ secrets.HOSTINGER_DEPLOY_PATH || '/var/www/aiox-legal' }}
+  APP_NAME: aiox-legal
+
+jobs:
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: |
+            chatbot/package-lock.json
+            frontend/package-lock.json
+
+      - name: Build backend
+        run: |
+          cd chatbot
+          npm ci
+          npm run build
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm ci
+          npm run build
+        env:
+          VITE_API_URL: ''
+
+      - name: Copy frontend build to backend static folder
+        run: |
+          mkdir -p chatbot/dist/public
+          cp -r frontend/dist/* chatbot/dist/public/
+
+      - name: Create deployment archive
+        run: |
+          tar -czf deploy.tar.gz \
+            chatbot/dist/ \
+            chatbot/package.json \
+            chatbot/package-lock.json \
+            squads/ \
+            docker-compose.yml \
+            Dockerfile \
+            .env.example
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-package
+          path: deploy.tar.gz
+          retention-days: 5
+
+  deploy:
+    name: Deploy to Hostinger VPS
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: production
+      url: ${{ secrets.HOSTINGER_APP_URL }}
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: deploy-package
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.HOSTINGER_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.HOSTINGER_SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Upload archive to VPS
+        run: |
+          scp -o StrictHostKeyChecking=no \
+            deploy.tar.gz \
+            ${{ secrets.HOSTINGER_SSH_USER }}@${{ secrets.HOSTINGER_SSH_HOST }}:/tmp/aiox-deploy.tar.gz
+
+      - name: Deploy on VPS
+        run: |
+          ssh -o StrictHostKeyChecking=no \
+            ${{ secrets.HOSTINGER_SSH_USER }}@${{ secrets.HOSTINGER_SSH_HOST }} << 'SSHEOF'
+
+          set -e
+
+          DEPLOY_PATH="${{ env.DEPLOY_PATH }}"
+          APP_NAME="${{ env.APP_NAME }}"
+
+          echo "==> Criando estrutura de diretórios..."
+          mkdir -p "$DEPLOY_PATH"
+          mkdir -p "$DEPLOY_PATH/releases"
+          RELEASE_DIR="$DEPLOY_PATH/releases/$(date +%Y%m%d_%H%M%S)"
+          mkdir -p "$RELEASE_DIR"
+
+          echo "==> Extraindo pacote..."
+          tar -xzf /tmp/aiox-deploy.tar.gz -C "$RELEASE_DIR"
+          rm /tmp/aiox-deploy.tar.gz
+
+          echo "==> Instalando dependências de produção..."
+          cd "$RELEASE_DIR/chatbot"
+          npm ci --only=production
+
+          echo "==> Copiando arquivo .env..."
+          if [ -f "$DEPLOY_PATH/current/.env" ]; then
+            cp "$DEPLOY_PATH/current/.env" "$RELEASE_DIR/.env"
+          elif [ -f "$DEPLOY_PATH/.env" ]; then
+            cp "$DEPLOY_PATH/.env" "$RELEASE_DIR/.env"
+          else
+            echo "AVISO: Arquivo .env não encontrado. Crie em $DEPLOY_PATH/.env"
+          fi
+
+          echo "==> Atualizando symlink current..."
+          ln -sfn "$RELEASE_DIR" "$DEPLOY_PATH/current"
+
+          echo "==> Reiniciando aplicação..."
+          if command -v pm2 &> /dev/null; then
+            cd "$DEPLOY_PATH/current/chatbot"
+            pm2 describe "$APP_NAME" > /dev/null 2>&1 && \
+              pm2 reload "$APP_NAME" --update-env || \
+              pm2 start dist/server.js \
+                --name "$APP_NAME" \
+                --env production \
+                -i 1 \
+                --max-memory-restart 512M
+            pm2 save
+          elif command -v docker &> /dev/null && command -v docker-compose &> /dev/null; then
+            cd "$DEPLOY_PATH/current"
+            docker-compose up -d --build
+          else
+            echo "AVISO: Nenhum gerenciador de processo encontrado (PM2 ou Docker)."
+            echo "Inicie manualmente com: NODE_ENV=production node chatbot/dist/server.js"
+          fi
+
+          echo "==> Limpando releases antigas (mantendo as 5 últimas)..."
+          ls -dt "$DEPLOY_PATH/releases"/*/ | tail -n +6 | xargs rm -rf 2>/dev/null || true
+
+          echo "==> Deploy concluído com sucesso!"
+          echo "    Release: $RELEASE_DIR"
+          echo "    Current: $DEPLOY_PATH/current"
+
+          SSHEOF
+
+      - name: Health check
+        run: |
+          sleep 10
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            "${{ secrets.HOSTINGER_APP_URL }}/health" 2>/dev/null || echo "000")
+          if [ "$STATUS" = "200" ]; then
+            echo "✅ Health check OK — aplicação respondendo em ${{ secrets.HOSTINGER_APP_URL }}"
+          else
+            echo "⚠️  Health check retornou HTTP $STATUS"
+            echo "    Verifique manualmente: ${{ secrets.HOSTINGER_APP_URL }}/health"
+          fi
+
+      - name: Notify deployment
+        if: always()
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "✅ Deploy para Hostinger concluído com sucesso"
+            echo "   URL: ${{ secrets.HOSTINGER_APP_URL }}"
+            echo "   Commit: ${{ github.sha }}"
+          else
+            echo "❌ Deploy falhou. Verifique os logs acima."
+          fi
