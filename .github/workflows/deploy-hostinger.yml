@@ -162,14 +162,15 @@ jobs:
 
       - name: Health check
         run: |
-          sleep 10
+          sleep 15
+          APP_URL="${{ secrets.HOSTINGER_APP_URL || 'https://pesnatana.app' }}"
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            "${{ secrets.HOSTINGER_APP_URL }}/health" 2>/dev/null || echo "000")
+            "$APP_URL/health" 2>/dev/null || echo "000")
           if [ "$STATUS" = "200" ]; then
-            echo "✅ Health check OK — aplicação respondendo em ${{ secrets.HOSTINGER_APP_URL }}"
+            echo "✅ Health check OK — $APP_URL/health"
           else
             echo "⚠️  Health check retornou HTTP $STATUS"
-            echo "    Verifique manualmente: ${{ secrets.HOSTINGER_APP_URL }}/health"
+            echo "    Verifique manualmente: $APP_URL/health"
           fi
 
       - name: Notify deployment
