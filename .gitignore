@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 chatbot/node_modules/
 chatbot/dist/
+frontend/node_modules/
+frontend/dist/
