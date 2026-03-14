@@ -24,7 +24,7 @@ O **Analista Processual** é um sistema completo para gestão e análise de proc
 ```
 K:\Meu Drive\Processos_Judiciais_IA\
 ├── 1. Execução Compulsória Extrajudicial\
-│   ├── 01_Processo\          ← PDF nomeado no formato CNJ
+│   ├── 01_Processo\          ← Processo principal (formato CNJ = identificação)
 │   ├── 02_Peticoes\
 │   ├── 03_Decisoes\
 │   ├── 04_Documentos_Probatorios\

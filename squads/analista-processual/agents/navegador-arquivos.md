@@ -76,8 +76,13 @@ heuristics:
     name: "Listagem Incremental"
     rule: "Listar 10 por padrão. Se usuário pedir mais, aumentar em blocos de 10 até exibir todas. Nunca despejar lista completa sem solicitação."
   - id: "NAV_003"
-    name: "Formato CNJ para Processo"
-    rule: "O arquivo principal do processo DEVE seguir o formato NNNNNNN-DD.AAAA.J.TT.OOOO. Se não encontrado nesse formato, alertar usuário antes de prosseguir."
+    name: "Identificação do Processo pelo Formato CNJ"
+    rule: |
+      O formato NNNNNNN-DD.AAAA.J.TT.OOOO serve apenas para IDENTIFICAR que um arquivo é o processo judicial principal.
+      TODOS os demais arquivos presentes na pasta — independente do nome — devem ser listados e considerados
+      para análise (peças, documentos probatórios, certidões, contratos, etc.).
+      Se nenhum arquivo no formato CNJ for encontrado: alertar que o processo principal não foi identificado,
+      mas prosseguir listando todos os arquivos disponíveis para análise.
   - id: "NAV_004"
     name: "Acesso Cruzado Documentado"
     rule: "Quando acessar subpastas correlatas ou documentos de outras demandas, SEMPRE registrar no relatório quais fontes foram consultadas além da pasta ativa."
@@ -148,17 +153,32 @@ output_demanda_ativa: |
   **Caminho:** K:\Meu Drive\Processos_Judiciais_IA\{pasta}
   **Subpasta ativa:** {subpasta ou "—"}
 
-  ### Arquivos encontrados
-  | Arquivo | Tipo | Tamanho | Data |
-  |---------|------|---------|------|
-  | {NNNNNNN-DD.AAAA.J.TT.OOOO.pdf} | Processo principal | {tam} | {data} |
+  ### Arquivos disponíveis para análise
+
+  ⚖️ **Processo principal identificado:**
+  | Arquivo | Identificação |
+  |---------|--------------|
+  | {NNNNNNN-DD.AAAA.J.TT.OOOO.pdf} | Formato CNJ — processo judicial |
+
+  📁 **Demais arquivos (todos considerados para análise):**
+  | Arquivo | Pasta | Data | Observação |
+  |---------|-------|------|-----------|
+  | {nome_arquivo} | {subpasta} | {data} | {tipo inferido pelo agente} |
+  | {contrato_prestacao_servicos.pdf} | 04_Documentos_Probatorios | {data} | Documento probatório |
+  | {notificacao_extrajudicial.pdf} | 09_Correspondencias | {data} | Correspondência |
+  | {decisao_liminar_2024.pdf} | 03_Decisoes | {data} | Decisão judicial |
   | ... | | | |
+
+  > Todos os arquivos acima serão analisados pelo squad conforme relevância para cada tarefa.
+  > O formato CNJ apenas identifica o processo principal — demais arquivos têm igual valor analítico.
 
   ### Subpastas correlatas disponíveis
   {lista ou "Nenhuma"}
+  (Acessíveis como contexto complementar para análise)
 
   ---
   ✅ Squad configurado para trabalhar com: **{nome da demanda}**
+  📄 {N} arquivo(s) disponível(is) para análise
 ```
 
 ---

@@ -47,7 +47,7 @@ file_system:
   convencao_pastas:
     demanda_principal: "{N}. {Nome da Demanda}"
     demanda_correlata: "{N}.{S} {Nome da Demanda Correlata}"
-    arquivo_processo: "NNNNNNN-DD.AAAA.J.TT.OOOO.pdf"
+    arquivo_processo: "NNNNNNN-DD.AAAA.J.TT.OOOO.pdf  ← formato para IDENTIFICAÇÃO apenas; demais arquivos da pasta também são analisados"
     minuta: "{tipo}_v{N}_{YYYY-MM-DD}.md"
 
   subpastas_demanda:

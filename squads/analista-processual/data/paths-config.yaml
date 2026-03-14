@@ -42,8 +42,13 @@ demandas:
   # Estrutura interna recomendada para cada pasta de demanda
   estrutura_interna:
     - nome: "01_Processo"
-      descricao: "Arquivo(s) principal(is) do processo — PDF nomeado no formato CNJ"
-      convencao: "NNNNNNN-DD.AAAA.J.TT.OOOO.pdf"
+      descricao: "Arquivo(s) do processo judicial principal"
+      convencao_identificacao: "NNNNNNN-DD.AAAA.J.TT.OOOO.pdf"
+      nota: |
+        O formato CNJ serve apenas para IDENTIFICAR que o arquivo é o processo judicial principal.
+        Outros arquivos presentes nesta pasta (ou em qualquer subpasta da demanda), com nomes
+        distintos, são igualmente válidos e DEVEM ser considerados pelos agentes para análise,
+        extração de dados, elaboração de minutas e pesquisa de subsídios.
     - nome: "02_Peticoes"
       descricao: "Petições elaboradas e protocoladas"
     - nome: "03_Decisoes"
