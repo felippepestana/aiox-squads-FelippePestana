@@ -6,3 +6,4 @@ __pycache__/
 .mcp.json
 node_modules/
 dist/
+**/backend/static/
