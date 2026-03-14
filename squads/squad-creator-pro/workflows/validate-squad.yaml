@@ -1,0 +1,45 @@
+# Pro: Squad Validation Workflow
+# Overrides base validate-squad command when squad-creator-pro is active.
+# Adds: 10-axioma assessment, modernization scoring, remediation planning.
+
+workflow:
+  id: validate-squad
+  name: Squad Validation (Pro)
+  version: 1.0.0
+  description: >-
+    Pro validation pipeline applying 10-axioma framework, modernization scoring,
+    and remediation planning. Overrides base validate-squad.yaml in pro mode.
+    Delegates to @pedro-valerio for full assessment.
+  type: validation
+  override_base: squads/squad-creator/workflows/validate-squad.yaml
+
+  agent_mapping:
+    orchestrator: squad-chief
+    assessor: pedro-valerio
+
+  phases:
+    axioma_assessment:
+      agent: pedro-valerio
+      description: "Apply all 10 axiomas, score each, identify FAILs"
+      task: squads/squad-creator-pro/tasks/axioma-assessment.md
+      model: sonnet
+
+    modernization_check:
+      agent: pedro-valerio
+      description: "Check squad against current AIOX framework version"
+      command: "*score-modernization {squad_name}"
+      model: haiku
+
+    final_report:
+      agent: squad-chief
+      description: "Compile full validation report with deployment recommendation"
+      model: haiku
+
+  quality_gates:
+    publish_threshold:
+      axioma_score_min: 7.0    # DEVELOPING status
+      critical_fails: 0
+    operational_threshold:
+      axioma_score_min: 9.0    # OPERATIONAL status
+      critical_fails: 0
+      modernization_score_min: 7.0

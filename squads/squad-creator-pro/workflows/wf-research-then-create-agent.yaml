@@ -1,0 +1,65 @@
+# Pro: Research Then Create Agent Workflow
+# Overrides base create-agent command when squad-creator-pro is active.
+# Adds: automated source research, DNA extraction, positioning validation.
+
+workflow:
+  id: wf-research-then-create-agent
+  name: Research-Driven Agent Creation (Pro)
+  version: 1.0.0
+  description: >-
+    Creates a single agent using automated research, DNA extraction, and
+    multi-specialist validation. Overrides base create-agent task in pro mode.
+    Delegates to @oalanicolas (DNA), @pedro-valerio (axioma check), @thiago_finch (positioning).
+  type: agent_creation
+  override_base: squads/squad-creator/tasks/create-agent.md
+
+  agent_mapping:
+    orchestrator: squad-chief
+    specialists:
+      - oalanicolas   # DNA extraction (when real specialist)
+      - pedro-valerio # Axioma validation
+      - thiago_finch  # Positioning check (optional)
+
+  phases:
+    mode_detection:
+      agent: squad-chief
+      description: "Determine if agent requires real-specialist clone or synthetic persona"
+      model: haiku
+
+    dna_extraction:
+      agent: oalanicolas
+      description: "Clone specialist mind — Voice DNA + Thinking DNA + fidelity score"
+      task: squads/squad-creator-pro/tasks/clone-mind.md
+      model: opus
+      condition: "real_specialist == true"
+      on_fidelity_below_5: "flag and require additional sources before proceeding"
+
+    agent_creation:
+      agent: squad-chief
+      description: "Generate agent file from DNA extraction + templates"
+      task: squads/squad-creator-pro/tasks/research-then-create-agent.md
+      model: opus
+
+    axioma_check:
+      agent: pedro-valerio
+      description: "Validate new agent against axioma framework"
+      task: squads/squad-creator-pro/tasks/axioma-assessment.md
+      model: sonnet
+      scope: single_agent
+      pass_threshold: 8.0
+
+    remediation:
+      agent: squad-chief
+      description: "Apply fixes for any axioma FAILs"
+      model: sonnet
+      condition: "axioma_check.failed == true"
+      max_iterations: 2
+
+  quality_gates:
+    agent_file:
+      - all_6_layers_present: true
+      - heuristics_min: 5
+      - veto_heuristic_min: 1
+      - output_examples_min: 3
+      - axioma_score_min: 8.0
+      - fidelity_score_min: 7.0  # Only applies if mind-cloned

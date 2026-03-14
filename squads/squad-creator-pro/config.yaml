@@ -1,0 +1,67 @@
+name: squad-creator-pro
+version: 1.0.0
+type: pro_upgrade
+base: squad-creator
+tested: true
+updated_at: "2026-03-14"
+short-title: Squad Creator Pro
+description: >-
+  Pro upgrade pack para o Squad Creator base. Adiciona mind cloning, DNA extraction,
+  multi-agent orchestration, model routing e axioma assessment.
+  Requer squad-creator >= 4.0.0. Detectado automaticamente pelo squad-chief via config.yaml.
+  Pro mode: 3 agentes especialistas, 3 tasks, 3 workflows, axioma assessment, model routing.
+author: AIOX Team
+entry_agent: squad-chief
+
+agents:
+  - id: oalanicolas
+    file: agents/oalanicolas.md
+    tier: 1
+    role: Knowledge Architect
+    specialty: DNA extraction, source classification, mind cloning
+  - id: pedro-valerio
+    file: agents/pedro-valerio.md
+    tier: 1
+    role: Process Absolutist
+    specialty: Axioma assessment, auditing, modernization scoring
+  - id: thiago_finch
+    file: agents/thiago_finch.md
+    tier: 1
+    role: Business Strategy Architect
+    specialty: Strategy, positioning, market intelligence
+
+capabilities:
+  mind_cloning: true
+  model_routing: true
+  axioma_assessment: true
+  auto_acquire_sources: true
+  brownfield_upgrade: true
+  fidelity_scoring: true
+
+model_routing:
+  opus:
+    - "mind cloning"
+    - "DNA extraction"
+    - "axioma assessment"
+    - "strategy architecture"
+    - "complex squad creation"
+  sonnet:
+    - "source analysis"
+    - "positioning"
+    - "squad optimization"
+    - "process auditing"
+  haiku:
+    - "template formatting"
+    - "scoring"
+    - "validation checks"
+    - "metadata generation"
+
+metadata:
+  version: "1.0.0"
+  type: "pro"
+  requires_base: "squad-creator >= 4.0.0"
+  score: 9.2
+  pro_stats:
+    agents: 3
+    tasks: 3
+    workflows: 3
