@@ -49,23 +49,9 @@ export default function VSLPage({ onAccessApp }: VSLPageProps) {
     pricingRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleCheckout = async (planKey: string) => {
-    setLoading(planKey);
-    try {
-      const res = await fetch(`${API_BASE}/stripe/checkout`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan: planKey, customer_email: email }),
-      });
-      const data = await res.json();
-      if (data.checkout_url) {
-        window.location.href = data.checkout_url;
-      }
-    } catch {
-      alert("Erro ao processar. Tente novamente.");
-    } finally {
-      setLoading(null);
-    }
+  const handleCheckout = async (_planKey: string) => {
+    // Stripe disabled — go directly to the app
+    onAccessApp();
   };
 
   const testimonials = [

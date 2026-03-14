@@ -1,4 +1,9 @@
-"""Stripe payment integration for Legal Analyst Squad."""
+"""Stripe payment integration for Legal Analyst Squad.
+
+NOTE: Stripe is currently DISABLED. All endpoints return mock/free-access
+responses so the app works without Stripe credentials.
+To re-enable, set STRIPE_ENABLED=true in .env and provide Stripe keys.
+"""
 from __future__ import annotations
 
 import os
@@ -7,16 +12,18 @@ import hmac
 import hashlib
 from typing import Any
 
-import stripe
 from pydantic import BaseModel, Field
 
+STRIPE_ENABLED = os.getenv("STRIPE_ENABLED", "false").lower() == "true"
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
 STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "")
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
 STRIPE_PRICE_ID = os.getenv("STRIPE_PRICE_ID", "")
 APP_URL = os.getenv("APP_URL", "http://localhost:3000")
 
-stripe.api_key = STRIPE_SECRET_KEY
+if STRIPE_ENABLED:
+    import stripe
+    stripe.api_key = STRIPE_SECRET_KEY
 
 
 # ---------------------------------------------------------------------------
@@ -106,7 +113,13 @@ _access_tokens: dict[str, AccessToken] = {}
 # ---------------------------------------------------------------------------
 
 def create_checkout_session(req: CheckoutRequest) -> CheckoutResponse:
-    """Create a Stripe Checkout session."""
+    """Create a Stripe Checkout session (or mock when disabled)."""
+    if not STRIPE_ENABLED:
+        return CheckoutResponse(
+            checkout_url=f"{APP_URL}/app?free_access=true&plan={req.plan}",
+            session_id="free_access",
+        )
+
     price_id = req.price_id or STRIPE_PRICE_ID
     if not price_id:
         raise ValueError("STRIPE_PRICE_ID not configured")
@@ -125,7 +138,13 @@ def create_checkout_session(req: CheckoutRequest) -> CheckoutResponse:
 
 
 def create_one_time_checkout(amount_cents: int, description: str, email: str = "") -> CheckoutResponse:
-    """Create a one-time payment checkout."""
+    """Create a one-time payment checkout (or mock when disabled)."""
+    if not STRIPE_ENABLED:
+        return CheckoutResponse(
+            checkout_url=f"{APP_URL}/app?free_access=true",
+            session_id="free_access",
+        )
+
     session = stripe.checkout.Session.create(
         payment_method_types=["card", "boleto", "pix"],
         line_items=[{
@@ -151,6 +170,14 @@ def create_one_time_checkout(amount_cents: int, description: str, email: str = "
 
 def get_subscription_status(customer_email: str) -> SubscriptionStatus:
     """Check subscription status by email."""
+    if not STRIPE_ENABLED:
+        return SubscriptionStatus(
+            active=True,
+            plan="pro",
+            customer_email=customer_email,
+            current_period_end=int(time.time()) + 365 * 24 * 3600,
+        )
+
     customers = stripe.Customer.list(email=customer_email, limit=1)
     if not customers.data:
         return SubscriptionStatus()
@@ -173,6 +200,9 @@ def get_subscription_status(customer_email: str) -> SubscriptionStatus:
 
 def cancel_subscription(customer_email: str) -> dict[str, Any]:
     """Cancel subscription at period end."""
+    if not STRIPE_ENABLED:
+        return {"status": "disabled", "message": "Stripe desabilitado — acesso livre"}
+
     customers = stripe.Customer.list(email=customer_email, limit=1)
     if not customers.data:
         return {"error": "Customer not found"}
@@ -191,6 +221,9 @@ def cancel_subscription(customer_email: str) -> dict[str, Any]:
 
 def process_webhook(payload: bytes, sig_header: str) -> dict[str, Any]:
     """Process Stripe webhook event."""
+    if not STRIPE_ENABLED:
+        return {"status": "disabled", "message": "Stripe desabilitado"}
+
     if STRIPE_WEBHOOK_SECRET:
         event = stripe.Webhook.construct_event(payload, sig_header, STRIPE_WEBHOOK_SECRET)
     else:
@@ -251,6 +284,9 @@ def _revoke_access(email: str) -> None:
 
 def validate_access(token: str) -> AccessToken | None:
     """Validate access token."""
+    if not STRIPE_ENABLED:
+        return AccessToken(token="free", email="free@access", plan="pro", expires_at=int(time.time()) + 365 * 24 * 3600)
+
     at = _access_tokens.get(token)
     if not at:
         return None
