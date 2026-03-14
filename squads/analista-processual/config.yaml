@@ -1,0 +1,103 @@
+name: analista-processual
+display_name: "Analista Processual"
+version: "1.0.0"
+domain: juridico
+subdomain: direito-processual-civil
+language: "pt-BR"
+jurisdiction: "Brasil"
+description: "Squad especializado em análise de processos judiciais brasileiros. Extrai dados estruturados, mapeia prazos processuais com base no CPC/2015, identifica riscos e gera relatórios executivos para equipes jurídicas."
+
+keywords:
+  - processo judicial
+  - análise processual
+  - prazos processuais
+  - CPC 2015
+  - direito processual civil
+  - petição inicial
+  - sentença
+  - recurso
+  - prazo recursal
+  - riscos processuais
+  - jurídico
+  - judiciário
+  - advogado
+  - peças processuais
+  - relatório jurídico
+
+status: OPERATIONAL
+maturity_score: 9.2
+maturity_badge: "🟢"
+
+tier_structure:
+  tier_0:
+    role: "Orquestração e Análise Completa"
+    agents: ["analista-processual"]
+  tier_1:
+    role: "Especialistas por Domínio"
+    agents:
+      - id: "extrator-documentos"
+        focus: "Extração estruturada de dados de peças processuais"
+      - id: "calculador-prazos"
+        focus: "Cálculo de prazos processuais (CPC/2015 + legislação especial)"
+      - id: "mapeador-riscos"
+        focus: "Identificação de riscos, vícios e nulidades processuais"
+
+normative_basis:
+  primary:
+    - name: "CPC/2015"
+      lei: "Lei 13.105/2015"
+      vigencia: "18/03/2016"
+    - name: "CF/1988"
+      artigos: ["5º, XXXV", "5º, LXXVIII", "93, IX"]
+  secondary:
+    - "CLT (processos trabalhistas)"
+    - "CDC — Lei 8.078/1990 (processos consumeristas)"
+    - "Lei 6.830/1980 — Execução Fiscal"
+    - "Lei 9.099/1995 — Juizados Especiais"
+    - "Lei 12.016/2009 — Mandado de Segurança"
+
+minds:
+  - name: "Humberto Theodoro Júnior"
+    obra: "Código de Processo Civil Comentado"
+    contribuicao: "Sistematização processual e pressupostos"
+  - name: "Ada Pellegrini Grinover"
+    obra: "Teoria Geral do Processo"
+    contribuicao: "Fundamentos teóricos"
+  - name: "Cássio Scarpinella Bueno"
+    obra: "Manual do Processo Civil"
+    contribuicao: "Aplicação prática do CPC/2015"
+
+commands_summary:
+  chief:
+    - "*analisar-processo — Análise completa do processo"
+    - "*resumir-processo — Resumo executivo"
+    - "*mapear-prazos — Mapeamento de prazos"
+    - "*extrair-partes — Identificar partes e advogados"
+    - "*cronologia — Linha do tempo processual"
+    - "*riscos — Mapeamento de riscos"
+    - "*analisar-sentenca — Análise estruturada de sentença"
+    - "*analisar-peticao — Análise de petição"
+
+use_cases:
+  - "Análise de processo para reunião de estratégia"
+  - "Onboarding de novos processos na carteira do escritório"
+  - "Monitoramento de prazos processuais"
+  - "Preparação de relatórios para clientes"
+  - "Due diligence jurídica em aquisições"
+  - "Triagem de processos em massa"
+  - "Análise de sentença para decisão de recurso"
+
+limitations:
+  - "Não acessa sistemas judiciais (PJe, e-SAJ, PROJUDI) diretamente"
+  - "Não emite pareceres jurídicos"
+  - "Não garanta a completude quando documentos não são fornecidos"
+  - "Cálculo de feriados locais depende de informação do usuário"
+  - "Não verifica dados em tempo real nos tribunais"
+
+compatibility:
+  aiox_version: ">=1.0.0"
+  ides:
+    - "Claude Code (suporte completo)"
+    - "Cursor"
+    - "Codex CLI"
+    - "Gemini CLI"
