@@ -168,7 +168,7 @@ veto_summary:
 # ═══════════════════════════════════════════════════════════════════════════════
 
 implementation:
-  script: "scripts/validate-routing-gate.py"  # TODO: Create this script
+  script: "scripts/validate-routing-gate.py"
   invocation: |
     python squads/dispatch/scripts/validate-routing-gate.py \
       --run-id {run_id} \

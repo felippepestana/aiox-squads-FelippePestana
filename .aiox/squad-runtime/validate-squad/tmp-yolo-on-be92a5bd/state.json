@@ -1,0 +1,74 @@
+{
+  "workflow": "validate-squad",
+  "squad_name": "tmp-yolo-on-be92a5bd",
+  "created_at": "2026-03-17T13:31:42.406Z",
+  "phases": {
+    "phase_1_structure": {
+      "status": "completed",
+      "started_at": "2026-03-17T13:31:42.432Z",
+      "completed_at": "2026-03-17T13:31:42.499Z"
+    },
+    "phase_2_security_scan": {
+      "status": "completed",
+      "started_at": "2026-03-17T13:31:42.524Z",
+      "completed_at": "2026-03-17T13:31:42.567Z"
+    },
+    "phase_3_cross_reference": {
+      "status": "completed",
+      "started_at": "2026-03-17T13:31:42.592Z",
+      "completed_at": "2026-03-17T13:31:42.622Z"
+    },
+    "phase_3_5_workflow_contracts": {
+      "status": "completed",
+      "started_at": "2026-03-17T13:31:42.647Z",
+      "completed_at": "2026-03-17T13:31:42.673Z"
+    },
+    "phase_4_type_detection": {
+      "status": "completed",
+      "started_at": "2026-03-17T13:31:42.698Z",
+      "completed_at": "2026-03-17T13:31:42.735Z"
+    },
+    "phase_5_production_validation": {
+      "status": "completed",
+      "started_at": "2026-03-17T13:31:42.760Z",
+      "completed_at": "2026-03-17T13:31:42.801Z"
+    },
+    "phase_6_quality_analysis": {
+      "status": "completed",
+      "started_at": "2026-03-17T13:31:42.826Z",
+      "completed_at": "2026-03-17T13:31:42.852Z"
+    },
+    "phase_7_final_scoring": {
+      "status": "completed",
+      "started_at": "2026-03-17T13:31:42.876Z",
+      "completed_at": "2026-03-17T13:31:42.910Z"
+    }
+  },
+  "phase_order": [
+    "phase_1_structure",
+    "phase_2_security_scan",
+    "phase_3_cross_reference",
+    "phase_3_5_workflow_contracts",
+    "phase_4_type_detection",
+    "phase_5_production_validation",
+    "phase_6_quality_analysis",
+    "phase_7_final_scoring"
+  ],
+  "status": "in_progress",
+  "current_phase": "phase_7_final_scoring",
+  "updated_at": "2026-03-17T13:31:42.910Z",
+  "started_at": "2026-03-17T13:31:42.406Z",
+  "completed_at": null,
+  "result": null,
+  "final_score": null,
+  "exit_code": null,
+  "error": null,
+  "summary": null,
+  "options": {
+    "mode": "quick",
+    "model": "opus",
+    "quick": true,
+    "verbose": false,
+    "json": true
+  }
+}
