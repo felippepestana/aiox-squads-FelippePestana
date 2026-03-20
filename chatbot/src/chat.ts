@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { Agent } from "./agents";
-import { UploadedFile, buildFileContentBlock } from "./files";
+import { UploadedFile, buildFileContentBlock, FILES_BETA_HEADER } from "./files";
 
 const MODEL = "claude-opus-4-6";
 
@@ -76,7 +76,7 @@ export class ChatSession {
         system: this.agent.systemPrompt,
         messages,
       },
-      { headers: { "anthropic-beta": "files-api-2025-04-14" } }
+      FILES_BETA_HEADER
     );
 
     let fullText = "";

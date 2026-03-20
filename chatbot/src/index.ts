@@ -125,7 +125,6 @@ async function chatLoop(
   console.log(info(`Digite /help para ver os comandos disponíveis.\n`));
 
   while (true) {
-    const agentName = session.getAgent().name;
     const userInput = await ask(
       prompt(`\nVocê > `)
     );
@@ -230,7 +229,7 @@ async function chatLoop(
     }
 
     console.log(
-      `\n${c.bold}${c.cyan}${agentName}${c.reset} ${c.dim}▶${c.reset} `
+      `\n${c.bold}${c.cyan}${session.getAgent().name}${c.reset} ${c.dim}▶${c.reset} `
     );
 
     try {

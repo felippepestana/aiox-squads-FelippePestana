@@ -2,6 +2,8 @@ import Anthropic, { toFile } from "@anthropic-ai/sdk";
 import fs from "fs";
 import path from "path";
 
+export const FILES_BETA_HEADER = { headers: { "anthropic-beta": "files-api-2025-04-14" } };
+
 const SUPPORTED_MIME: Record<string, string> = {
   ".pdf": "application/pdf",
   ".txt": "text/plain",
@@ -42,7 +44,7 @@ export async function uploadFile(
 
   const result = await (client.beta.files as any).upload(
     { file: uploadedFile },
-    { headers: { "anthropic-beta": "files-api-2025-04-14" } }
+    FILES_BETA_HEADER
   );
 
   return {
@@ -76,9 +78,7 @@ export async function deleteFile(
   client: Anthropic,
   fileId: string
 ): Promise<void> {
-  await (client.beta.files as any).delete(fileId, {
-    headers: { "anthropic-beta": "files-api-2025-04-14" },
-  });
+  await (client.beta.files as any).delete(fileId, FILES_BETA_HEADER);
 }
 
 /** Lista extensões suportadas */

@@ -16,7 +16,7 @@ import fs from "fs";
 import Anthropic from "@anthropic-ai/sdk";
 
 import { loadAllSquads, flatAgentList, Squad, Agent } from "./agents";
-import { uploadFile, deleteFile } from "./files";
+import { uploadFile, deleteFile, UploadedFile } from "./files";
 import { ChatSession } from "./chat";
 
 // ── Config ─────────────────────────────────────────────────────────────────────
@@ -28,19 +28,21 @@ const client = new Anthropic({ apiKey: API_KEY });
 const squads: Squad[] = loadAllSquads();
 const agents: Agent[] = flatAgentList(squads);
 
-// sessionId → ChatSession + uploaded file IDs
-const sessions = new Map<
-  string,
-  { session: ChatSession; fileIds: string[] }
->();
+// sessionId → ChatSession + uploaded files with metadata
+interface SessionEntry {
+  session: ChatSession;
+  files: Map<string, UploadedFile>;
+}
 
-function getOrCreateSession(sessionId: string, agentId: string) {
+const sessions = new Map<string, SessionEntry>();
+
+function getOrCreateSession(sessionId: string, agentId: string): SessionEntry {
   if (!sessions.has(sessionId)) {
     const agent =
       agents.find((a) => a.id === agentId) ?? agents[0];
     sessions.set(sessionId, {
       session: new ChatSession(client, agent),
-      fileIds: [],
+      files: new Map(),
     });
   }
   return sessions.get(sessionId)!;
@@ -109,7 +111,7 @@ app.post(
     try {
       const uploaded = await uploadFile(client, tmpWithExt);
       const entry = getOrCreateSession(sessionId, agentId);
-      entry.fileIds.push(uploaded.fileId);
+      entry.files.set(uploaded.fileId, uploaded);
       fs.unlinkSync(tmpWithExt);
       res.json({
         ok: true,
@@ -125,12 +127,13 @@ app.post(
 );
 
 // ── API: chat com SSE streaming ───────────────────────────────────────────────
-app.get("/api/chat", async (req: Request, res: Response) => {
-  const q = req.query;
-  const sessionId = String(q.sessionId ?? "");
-  const agentId = String(q.agentId ?? "");
-  const message = String(q.message ?? "");
-  const rawFileIds = q.fileIds ? String(q.fileIds) : undefined;
+app.post("/api/chat", async (req: Request, res: Response) => {
+  const { sessionId, agentId, message, fileIds: rawFileIds } = req.body as {
+    sessionId?: string;
+    agentId?: string;
+    message?: string;
+    fileIds?: string;
+  };
 
   if (!sessionId || !message) {
     res.status(400).json({ error: "sessionId and message required" });
@@ -148,20 +151,17 @@ app.get("/api/chat", async (req: Request, res: Response) => {
     res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
   };
 
-  const entry = getOrCreateSession(sessionId, agentId ?? agents[0].id);
+  const entry = getOrCreateSession(sessionId, agentId || agents[0].id);
   const { session } = entry;
 
-  // Constrói lista de UploadedFile a partir dos fileIds enviados
+  // Resolve UploadedFile metadata from stored session files
   const pendingFileIds: string[] = rawFileIds
     ? rawFileIds.split(",").filter(Boolean)
     : [];
 
-  const pendingFiles = pendingFileIds.map((id) => ({
-    fileId: id,
-    filename: id,
-    mimeType: "application/octet-stream",
-    sizeBytes: 0,
-  }));
+  const pendingFiles: UploadedFile[] = pendingFileIds.map((id) =>
+    entry.files.get(id) ?? { fileId: id, filename: id, mimeType: "application/octet-stream", sizeBytes: 0 }
+  );
 
   try {
     send("start", { agent: session.getAgent().name });
@@ -179,15 +179,24 @@ app.get("/api/chat", async (req: Request, res: Response) => {
 });
 
 // ── API: limpar sessão e arquivos ─────────────────────────────────────────────
-app.delete("/api/session/:id", async (req: Request, res: Response) => {
-  const id = String(req.params.id);
+async function destroySession(id: string): Promise<void> {
   const entry = sessions.get(id);
   if (entry) {
-    for (const fid of entry.fileIds) {
+    for (const fid of entry.files.keys()) {
       await deleteFile(client, fid).catch(() => {});
     }
     sessions.delete(id);
   }
+}
+
+app.delete("/api/session/:id", async (req: Request, res: Response) => {
+  await destroySession(String(req.params.id));
+  res.json({ ok: true });
+});
+
+// POST variant for navigator.sendBeacon (which only sends POST)
+app.post("/api/session/:id/close", async (req: Request, res: Response) => {
+  await destroySession(String(req.params.id));
   res.json({ ok: true });
 });
 
@@ -557,27 +566,31 @@ async function sendMessage(){
   streaming=true;
   document.getElementById('send-btn').disabled=true;
 
-  const url='/api/chat?'+new URLSearchParams({
-    sessionId:SESSION_ID,agentId:activeAgent.id,message:text,fileIds:fids
-  });
-  const es=new EventSource(url);
-  let full='';
-
-  es.addEventListener('chunk',e=>{
-    full+=JSON.parse(e.data).text;
-    bubble.textContent=full;
-    scrollBot();
-  });
-  es.addEventListener('done',()=>{
-    es.close();finish(bubble);
+  try{
+    const resp=await fetch('/api/chat',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({sessionId:SESSION_ID,agentId:activeAgent.id,message:text,fileIds:fids})
+    });
+    const reader=resp.body.getReader();
+    const dec=new TextDecoder();
+    let full='',buf='';
+    while(true){
+      const{done,value}=await reader.read();
+      if(done)break;
+      buf+=dec.decode(value,{stream:true});
+      const lines=buf.split('\\n');
+      buf=lines.pop()||'';
+      for(const line of lines){
+        if(line.startsWith('data: ')){
+          const raw=line.slice(6);
+          try{const d=JSON.parse(raw);if(d.text){full+=d.text;bubble.textContent=full;scrollBot();}}catch{}
+        }
+      }
+    }
     msgCount+=2;badge();
-  });
-  es.addEventListener('error',e=>{
-    es.close();
-    if(e.data){bubble.textContent='⚠ '+JSON.parse(e.data).message;bubble.style.color='var(--red)';}
-    finish(bubble);
-  });
-  es.onerror=()=>{if(es.readyState===EventSource.CLOSED)return;es.close();finish(bubble);};
+  }catch(e){
+    bubble.textContent='⚠ '+(e.message||'Erro de conexão');bubble.style.color='var(--red)';
+  }finally{finish(bubble);}
 }
 
 function finish(b){
@@ -637,7 +650,7 @@ document.getElementById('drawer').addEventListener('touchend',e=>{
 
 // ── Cleanup ───────────────────────────────────────────────────────────────────
 window.addEventListener('beforeunload',()=>{
-  navigator.sendBeacon('/api/session/'+SESSION_ID);
+  navigator.sendBeacon('/api/session/'+SESSION_ID+'/close');
 });
 
 init();
