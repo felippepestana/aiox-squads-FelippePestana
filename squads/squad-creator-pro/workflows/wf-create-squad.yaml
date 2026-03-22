@@ -1,0 +1,180 @@
+# Pro Squad Creation Pipeline
+# Overrides base create-squad.yaml when squad-creator-pro is active.
+# Adds: mind research, DNA extraction, multi-agent orchestration, model routing.
+
+workflow:
+  id: wf-create-squad
+  name: Squad Creation Pipeline (Pro)
+  version: 1.0.0
+  description: >-
+    Pro pipeline for creating AIOX squads with mind cloning, DNA extraction,
+    multi-agent orchestration, and axioma validation. Overrides base create-squad.yaml.
+    Delegates to @oalanicolas (DNA), @pedro-valerio (validation), @thiago_finch (strategy).
+  type: orchestration
+  override_base: squads/squad-creator/workflows/create-squad.yaml
+
+  agent_mapping:
+    agents:
+      squad-chief:
+        roles: [orchestrator]
+      oalanicolas:
+        roles: [researcher, dna_extractor]
+      pedro-valerio:
+        roles: [validator, assessor]
+      thiago_finch:
+        roles: [strategist, positioning]
+
+    phase_ownership:
+      context_detection: squad-chief
+      domain_elicitation: squad-chief
+      market_analysis: thiago_finch
+      source_research: oalanicolas
+      dna_extraction: oalanicolas
+      architecture: squad-chief
+      creation: squad-chief
+      integration: squad-chief
+      validation: pedro-valerio
+      fix_cycle: squad-chief
+      smoke_test: squad-chief
+
+  state_machine:
+    states:
+      - init
+      - context_detection
+      - domain_elicitation
+      - market_analysis
+      - source_research
+      - dna_extraction
+      - architecture
+      - creation
+      - integration
+      - validation
+      - fix_cycle
+      - smoke_test
+      - complete
+      - failed
+
+    transitions:
+      - trigger: start
+        source: init
+        dest: context_detection
+      - trigger: context_ready
+        source: context_detection
+        dest: domain_elicitation
+      - trigger: domain_ready
+        source: domain_elicitation
+        dest: market_analysis
+      - trigger: strategy_ready
+        source: market_analysis
+        dest: source_research
+      - trigger: sources_acquired
+        source: source_research
+        dest: dna_extraction
+      - trigger: dna_complete
+        source: dna_extraction
+        dest: architecture
+      - trigger: architecture_approved
+        source: architecture
+        dest: creation
+      - trigger: agents_created
+        source: creation
+        dest: integration
+      - trigger: integration_complete
+        source: integration
+        dest: validation
+      - trigger: validation_passed
+        source: validation
+        dest: smoke_test
+      - trigger: fix_needed
+        source: validation
+        dest: fix_cycle
+      - trigger: fix_complete
+        source: fix_cycle
+        dest: validation
+      - trigger: smoke_passed
+        source: smoke_test
+        dest: complete
+      - trigger: fatal_error
+        source: "*"
+        dest: failed
+
+  phases:
+    context_detection:
+      agent: squad-chief
+      description: "Detect creation context: greenfield (new squad) or brownfield (upgrade existing)"
+      task: squads/squad-creator/tasks/detect-squad-context.md
+      model: haiku
+
+    domain_elicitation:
+      agent: squad-chief
+      description: "Elicit squad domain, target user, and required agents from user"
+      task: squads/squad-creator/tasks/create-squad.md
+      model: sonnet
+      elicit: true
+
+    market_analysis:
+      agent: thiago_finch
+      description: "Map competitive landscape, identify differentiation, validate positioning"
+      command: "*market-analysis {domain}"
+      model: sonnet
+
+    source_research:
+      agent: oalanicolas
+      description: "Surface and classify sources for mind cloning"
+      command: "*auto-acquire-sources {specialists}"
+      model: sonnet
+      optional: true
+      condition: "Only if squad requires mind-cloned agents (real specialist personas)"
+
+    dna_extraction:
+      agent: oalanicolas
+      description: "Extract Voice DNA and Thinking DNA for each specialist agent"
+      command: "*clone-mind {specialist}"
+      task: squads/squad-creator-pro/tasks/clone-mind.md
+      model: opus
+      optional: true
+      condition: "Only if source_research phase was executed"
+
+    architecture:
+      agent: squad-chief
+      description: "Define tier structure, agent roster, and task inventory"
+      task: squads/squad-creator/tasks/create-squad.md
+      model: opus
+
+    creation:
+      agent: squad-chief
+      description: "Create all agent files using templates + DNA extraction output"
+      task: squads/squad-creator-pro/tasks/research-then-create-agent.md
+      model: opus
+      iterate_per: agents
+
+    integration:
+      agent: squad-chief
+      description: "Create config.yaml, tasks, workflows, and README"
+      task: squads/squad-creator/tasks/create-squad.md
+      model: sonnet
+
+    validation:
+      agent: pedro-valerio
+      description: "Apply 10-axioma assessment to completed squad"
+      task: squads/squad-creator-pro/tasks/axioma-assessment.md
+      model: sonnet
+      pass_threshold: 7.0
+
+    fix_cycle:
+      agent: squad-chief
+      description: "Apply remediation for any axioma FAILs found"
+      model: sonnet
+      max_iterations: 3
+
+    smoke_test:
+      agent: squad-chief
+      description: "Execute operational test to confirm squad is functional"
+      task: squads/squad-creator/tasks/operational-test.md
+      model: haiku
+
+  quality_gates:
+    pre_deploy:
+      - axioma_score_min: 7.0
+      - critical_fails: 0
+      - required_files: [config.yaml, "agents/*.md", "README.md"]
