@@ -1,0 +1,72 @@
+name: seo
+version: 1.0.0
+status: OPERATIONAL
+description: >-
+  Post-design SEO optimization squad for AIOS-built websites. Evaluates (0-100),
+  optimizes, and reports — like Yoast/RankMath but as intelligent agents.
+  Clones 8 elite SEO minds (Joost de Valk, Marie Haynes, Jason Barnard, etc.)
+slashPrefix: seo
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+automation_boundary:
+  deterministic:
+    - "SEO score calculation (0-100, weighted by category)"
+    - "Schema/structured data validation"
+    - "Technical audit checks (canonical, robots, sitemap)"
+  probabilistic:
+    - "E-E-A-T content quality assessment (LLM)"
+    - "AI visibility optimization (LLM)"
+    - "Site architecture recommendations (LLM)"
+  autonomy_level: 2
+  autonomy_rationale: "Scoring is deterministic; content quality and recommendations require LLM."
+
+commands:
+  - name: "*seo-evaluate"
+    description: "Phase 1: Audit — score 0-100 across 7 categories"
+  - name: "*seo-optimize"
+    description: "Phase 2: Optimize — apply all fixes from audit"
+  - name: "*seo-report"
+    description: "Phase 3: Report — before/after comparison with score delta"
+  - name: "*seo-full"
+    description: "Full pipeline: evaluate → optimize → report"
+
+components:
+  agents:
+    - seo-chief.md
+    - on-page-optimizer.md
+    - technical-auditor.md
+    - schema-architect.md
+    - content-quality-assessor.md
+    - performance-engineer.md
+    - ai-visibility-optimizer.md
+    - site-architect.md
+  tasks:
+    - evaluate-seo.md
+    - optimize-on-page.md
+    - audit-technical.md
+  workflows:
+    - wf-seo-full.yaml
+
+metrics:
+  agents: 8
+  minds: 8
+  quality_gates: 3
+  scoring:
+    on_page: 25
+    technical: 20
+    schema: 15
+    content_eeat: 15
+    performance_cwv: 10
+    ai_visibility: 10
+    site_architecture: 5
+    total: 100
+  grade_scale:
+    "A+": "90-100"
+    "A": "80-89"
+    "B": "70-79"
+    "C": "60-69"
+    "D": "50-59"
+    "F": "0-49"

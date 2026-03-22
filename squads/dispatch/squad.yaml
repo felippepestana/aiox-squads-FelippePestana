@@ -1,0 +1,72 @@
+name: dispatch
+version: 1.0.0
+status: OPERATIONAL
+description: >-
+  Parallel execution engine — the execution backbone of AIOS. Receives stories,
+  PRDs, or task lists, decomposes into atomic sub-tasks, optimizes into DAG-based
+  waves, routes to correct agents/models, and executes via subagents.
+  Core philosophy: "Never contaminate the main context. Always subagents. Always."
+  Cost savings: ~43-58x cheaper than executing in main Opus context.
+slashPrefix: dispatch
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+automation_boundary:
+  deterministic:
+    - "Task decomposition and atomization (Python worker)"
+    - "DAG topological sorting (Kahn's algorithm)"
+    - "Wave optimization (cost/parallelism balance)"
+    - "Task routing via registry"
+    - "Cost tracking and reporting"
+  probabilistic:
+    - "Story interpretation and semantic decomposition (LLM)"
+    - "Agent selection for ambiguous tasks (LLM)"
+    - "Quality gate evaluation (LLM)"
+  autonomy_level: 3
+  autonomy_rationale: "Highly autonomous — CODE > LLM philosophy. Workers handle deterministic ops, LLM only for semantic work."
+
+commands:
+  - name: "*dispatch {story}"
+    description: "Full dispatch pipeline — decompose → wave-plan → route → execute"
+  - name: "*plan {story}"
+    description: "Plan only — show decomposition and wave structure without executing"
+  - name: "*execute {manifest}"
+    description: "Execute from pre-built wave manifest"
+  - name: "*batch {list}"
+    description: "Batch dispatch from task list"
+  - name: "*verify"
+    description: "Verify execution results and generate completion report"
+  - name: "*cost"
+    description: "Show cost breakdown for last execution"
+
+components:
+  agents:
+    - dispatch-chief.md
+    - wave-planner.md
+    - task-router.md
+    - quality-gate.md
+  tasks:
+    - decompose-story.md
+    - plan-waves.md
+    - route-tasks.md
+    - execute-wave.md
+    - verify-results.md
+    - generate-report.md
+    - convert-freetext.md
+    - discover-ecosystem.md
+  workflows:
+    - wf-main-dispatch.yaml
+    - wf-freetext.yaml
+    - wf-batch.yaml
+
+metrics:
+  agents: 4
+  minds: 5
+  quality_gates: 3
+  workflows: 3
+  cost_savings: "43-58x vs main Opus context"
+  model_routing:
+    orchestration: "claude-opus-4"
+    execution: "claude-haiku-4-5"

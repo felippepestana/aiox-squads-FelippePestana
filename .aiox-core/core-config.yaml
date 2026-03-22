@@ -1,0 +1,162 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# AIOX Core Configuration
+# Version: 4.0.0
+# Purpose: Central configuration loaded by all agents at activation time
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# --- Project Identity ---
+project_name: "AIOX Squads Community"
+framework_version: "4.0.0"
+repository_type: "squads-community"
+
+# --- Path Configuration ---
+paths:
+  constitution: ".aiox-core/constitution.md"
+  agents: ".claude/agents/"
+  tasks: ".aiox-core/development/tasks/"
+  checklists: ".aiox-core/development/checklists/"
+  templates: ".aiox-core/product/templates/"
+  squads: "squads/"
+  runtime: ".aiox/"
+  schemas: ".aiox-core/schemas/"
+  data: ".aiox-core/data/"
+  scripts: ".aiox-core/development/scripts/"
+  handoffs: ".aiox/handoffs/"
+  gotchas: ".aiox/gotchas.json"
+
+# Aliases for backward compatibility
+constitution_path: ".aiox-core/constitution.md"
+agents_path: ".claude/agents/"
+tasks_path: ".aiox-core/development/tasks/"
+checklists_path: ".aiox-core/development/checklists/"
+templates_path: ".aiox-core/product/templates/"
+squads_path: "squads/"
+runtime_path: ".aiox/"
+
+# --- Tech Preset ---
+techPreset:
+  active: nextjs-react
+  presetsDir: ".aiox-core/data/tech-presets/"
+
+# --- Quality Gates ---
+quality_gates:
+  story_validation:
+    min_score: 7
+    max_score: 10
+    blocking: true
+  squad_validation:
+    min_score: 7.0
+    blocking: true
+  agent_quality:
+    min_lines: 300
+    min_score: 7.0
+    blocking: true
+  code_review:
+    coderabbit_enabled: true
+    max_critical_issues: 0
+    max_self_healing_iterations: 2
+
+# --- Dev Load Always Files ---
+# Files that @dev agent MUST load at startup (beyond story file)
+devLoadAlwaysFiles:
+  - ".aiox-core/data/technical-preferences.md"
+
+# --- Auto-Claude Configuration ---
+autoClaude:
+  version: "3.0"
+  defaultMode: "yolo"
+  qaLoop:
+    maxIterations: 5
+    statusFile: "qa/loop-status.json"
+    verdicts:
+      - APPROVE
+      - REJECT
+      - BLOCKED
+    escalationTriggers:
+      - max_iterations_reached
+      - verdict_blocked
+      - fix_failure
+      - manual_escalate
+  recovery:
+    maxAttempts: 3
+    stuckDetection: true
+    rollbackOnFailure: false
+  selfCritique:
+    enabled: true
+    checkpoints:
+      - "3.5"
+      - "5.5"
+    checklistRef: "self-critique-checklist.md"
+
+# --- Context Economy (Dispatch) ---
+context_economy:
+  description: "Model pricing for cost estimation in dispatch pipeline"
+  pricing_2026:
+    opus:
+      input_per_million: 15.00
+      output_per_million: 75.00
+      label: "Complex reasoning, architecture, creative"
+    sonnet:
+      input_per_million: 3.00
+      output_per_million: 15.00
+      label: "Standard tasks, code generation, analysis"
+    haiku:
+      input_per_million: 0.25
+      output_per_million: 1.25
+      label: "Simple tasks, formatting, extraction"
+    worker:
+      input_per_million: 0.00
+      output_per_million: 0.00
+      label: "Deterministic scripts, no LLM needed"
+  dispatch_savings:
+    opus_baseline: 1.0
+    haiku_subagent: 0.02
+    savings_factor: "43-58x"
+
+# --- Story Lifecycle ---
+story_lifecycle:
+  statuses:
+    - Draft
+    - Ready
+    - InProgress
+    - ReadyForReview
+    - InReview
+    - Done
+  transitions:
+    Draft: [Ready]
+    Ready: [InProgress]
+    InProgress: [ReadyForReview]
+    ReadyForReview: [InReview, InProgress]
+    InReview: [Done, InProgress]
+    Done: []
+
+# --- Agent Authority ---
+agent_authority:
+  git_push_exclusive: "devops"
+  pr_create_exclusive: "devops"
+  mcp_management_exclusive: "devops"
+  story_creation_exclusive: "sm"
+  story_validation_exclusive: "po"
+
+# --- IDS Protocol ---
+ids_protocol:
+  description: "Intelligent Decision System - Search before creating"
+  steps:
+    - "SEARCH: Glob + Grep for similar in squads/, components/, existing code"
+    - "DECIDE: REUSE / ADAPT / CREATE (with justification)"
+    - "LOG: Record decision in implementation log"
+  mandatory_for:
+    - "Every new file creation"
+    - "Every new component"
+    - "Every new utility function"
+
+# --- Conventions ---
+conventions:
+  commits: "conventional-commits"
+  branches:
+    main: "main"
+    feature: "feat/add-{squad}-squad"
+    fix: "fix/{squad}-*"
+    docs: "docs/*"
+  language: "portuguese"
+  imports: "absolute"

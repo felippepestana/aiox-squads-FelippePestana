@@ -1,0 +1,51 @@
+name: squad-creator-pro
+version: 1.0.0
+status: OPERATIONAL
+description: >-
+  Upgrade pack for Squad Creator base — adds mind cloning, model routing, and
+  3 specialist agents without replacing the base. Requires squad-creator base.
+  Enables 85-95% fidelity mind cloning vs 60-75% in base mode.
+slashPrefix: squad-creator-pro
+requires: squad-creator
+
+aios:
+  minVersion: "2.1.0"
+  type: squad-upgrade-pack
+
+automation_boundary:
+  deterministic:
+    - "Fidelity score calculation"
+    - "Axioma assessment scoring"
+    - "Model routing rules"
+  probabilistic:
+    - "Mind cloning — Voice DNA + Thinking DNA extraction (LLM)"
+    - "Business strategy framing (LLM)"
+    - "Process design and SOP structuring (LLM)"
+  autonomy_level: 2
+  autonomy_rationale: "Mind cloning is inherently LLM-driven; scoring is deterministic."
+
+commands:
+  - name: "*clone-mind {expert}"
+    description: "Full mind clone — Voice DNA + Thinking DNA + Axioma Assessment (85-95% fidelity)"
+  - name: "*assess-fidelity {agent}"
+    description: "Assess fidelity score of cloned agent (weighted dimensions)"
+  - name: "*route-model {task}"
+    description: "Recommend optimal model for task type"
+
+components:
+  agents:
+    - oalanicolas.md
+    - pedro-valerio.md
+    - thiago_finch.md
+
+metrics:
+  agents: 3
+  fidelity_target: "85-95%"
+  upgrade_of: squad-creator
+  capabilities:
+    - "Mind cloning with Voice DNA + Thinking DNA"
+    - "Model routing (Opus/Sonnet/Haiku by task type)"
+    - "Axioma assessment with pass/fail per dimension"
+    - "Business strategy framing (Thiago Finch)"
+    - "Process design (Pedro Valério)"
+    - "Mind architecture (oalanicolas)"

@@ -1,0 +1,155 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# Story Template — AIOX
+# Version: 1.0.0
+# Usage: Used by @sm (create-next-story.md) to create new story files.
+#        Story files are saved to: .aiox/stories/{epic_id}.{story_num}.story.md
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ─── INSTRUCTIONS FOR @sm ────────────────────────────────────────────────────
+# 1. Copy the STORY FILE FORMAT section below as the actual story .md file
+# 2. Replace ALL {placeholders} with real values
+# 3. Remove all comment lines (lines starting with #) from the output file
+# 4. Save to .aiox/stories/{epic_id}.{story_num}.story.md
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ─── FIELD DEFINITIONS ───────────────────────────────────────────────────────
+
+fields:
+  story_id:
+    format: "{epic_id}.{story_num}"
+    examples: ["E001.1", "E001.2", "1.3"]
+    rules: "epic_id matches the parent epic, story_num is sequential within that epic"
+
+  title:
+    format: "Action-oriented short title"
+    examples: ["Add user authentication", "Create product listing page", "Implement order checkout flow"]
+    rules: "Start with a verb. Max 60 characters. Reflects the user story action."
+
+  status:
+    values: ["Draft", "Ready", "InProgress", "InReview", "Done", "Blocked"]
+    initial: "Draft"
+    transitions:
+      Draft: ["Ready"]           # @po validates
+      Ready: ["InProgress"]      # @dev starts
+      InProgress: ["InReview"]   # @dev completes
+      InReview: ["Done", "InProgress"]  # @qa verdict
+      Done: []                   # Terminal
+      Blocked: ["Ready"]         # Blocker resolved
+
+  user_story:
+    format: "As a {role}, I want {action} so that {benefit}."
+    role_examples: ["authenticated user", "admin", "visitor", "product manager", "customer"]
+    action_rules: "Concrete verb (create, view, delete, update, search). Not 'manage' or 'handle'."
+    benefit_rules: "Observable user outcome. Not 'it works'. Maps to business value."
+
+  acceptance_criteria:
+    format: "- [ ] AC{N}: {criterion}"
+    rules:
+      - "Binary: PASS or FAIL only — no partial states"
+      - "Observable behavior — not internal implementation"
+      - "No subjective terms: smooth, fast, intuitive, good, nice, appropriate"
+      - "Minimum 3 ACs, maximum 8 ACs per story"
+      - "Must include at least 1 happy path AC and 1 error/edge case AC"
+
+  technical_notes:
+    sections:
+      - "API contracts (endpoints, methods, request/response shape)"
+      - "Data model changes (new fields, tables, relations)"
+      - "Relevant existing files to modify"
+      - "Patterns/conventions to follow"
+      - "Security considerations"
+    rules: "Must give @dev enough context to start without asking questions. Not empty."
+
+  file_list:
+    format: "| {path} | CREATE/MODIFY | |"
+    rules:
+      - "Include both src and test files"
+      - "Action is CREATE (new file) or MODIFY (existing file)"
+      - "Status column is blank — @dev fills it during implementation"
+      - "At least 1 file required"
+
+# ─── STORY FILE FORMAT ───────────────────────────────────────────────────────
+# Copy everything below this line into the actual .md file
+
+story_file_format: |
+  # Story: {title}
+
+  story_id: "{epic_id}.{story_num}"
+  epic: "{epic_id}"
+  status: "Draft"
+
+  ## User Story
+
+  As a {role}, I want {action} so that {benefit}.
+
+  ## Description
+
+  {2-3 sentences of context explaining the story goal and why it matters.}
+
+  ## Acceptance Criteria
+
+  - [ ] AC1: {specific testable criterion — describe observable behavior}
+  - [ ] AC2: {specific testable criterion — include an error/edge case}
+  - [ ] AC3: {specific testable criterion — additional behavior}
+
+  ## Technical Notes
+
+  ### API Changes
+  {Describe new or modified endpoints, or "None" if not applicable.}
+
+  ### Data Model
+  {Describe new tables, fields, or schema changes, or "None" if not applicable.}
+
+  ### Relevant Files
+  {List existing files that will need to be modified.}
+
+  ### Patterns & Conventions
+  {Note any specific patterns to follow from the codebase.}
+
+  ### Security Considerations
+  {Auth requirements, input validation needs, or "None" if not applicable.}
+
+  ## Dependencies
+
+  {List each dependency with its current status. Write "None" if there are no dependencies.}
+  - {Story/External dependency}: {status: Done|InProgress|Not Started}
+
+  ## File List
+
+  <!-- @dev updates Status column during implementation -->
+  | File | Action | Status |
+  |------|--------|--------|
+  | {path/to/file.ts} | CREATE | |
+  | {path/to/existing.ts} | MODIFY | |
+  | {path/to/file.test.ts} | CREATE | |
+
+  ## QA Results
+
+  <!-- @qa fills this section after review -->
+  Verdict: PENDING
+
+# ─── VALIDATION RULES ────────────────────────────────────────────────────────
+
+validation:
+  required_sections:
+    - "## User Story"
+    - "## Acceptance Criteria"
+    - "## Technical Notes"
+    - "## Dependencies"
+    - "## File List"
+    - "## QA Results"
+
+  auto_fail_conditions:
+    - "story_id is empty or does not match {epic}.{num} format"
+    - "User Story section missing role, action, or benefit"
+    - "Fewer than 3 Acceptance Criteria"
+    - "More than 8 Acceptance Criteria (split the story)"
+    - "Any AC contains: smooth, fast, intuitive, good, nice, appropriate, proper"
+    - "Technical Notes section is empty or contains only {placeholders}"
+    - "File List table has no rows"
+    - "Dependencies section is blank (must say None if no deps)"
+
+  po_validation_gate:
+    minimum_score: 7
+    maximum_score: 10
+    checklist_file: ".aiox-core/development/checklists/po-master-checklist.md"

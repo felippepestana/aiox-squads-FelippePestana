@@ -1,0 +1,88 @@
+name: squad-creator
+version: 4.0.0
+status: OPERATIONAL
+description: >-
+  Meta-squad for creating high-quality AIOX squads based on real elite minds.
+  Base mode: 1 agent, 24 tasks, template-driven creation with 6-phase guided workflow.
+  Pro mode (auto-detected when squad-creator-pro/ is installed): adds mind cloning,
+  model routing, 3 specialist agents, and axioma assessment (85-95% fidelity).
+slashPrefix: squad-creator
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+automation_boundary:
+  deterministic:
+    - "Template generation and file scaffolding (Python workers)"
+    - "Structure validation (validate-squad)"
+    - "Registry refresh and sync"
+    - "Naming convention validation"
+    - "Analytics and scoring"
+  probabilistic:
+    - "Elite mind research and Voice/Thinking DNA extraction (LLM)"
+    - "Task design and heuristic generation (LLM)"
+    - "Smoke test generation (LLM)"
+    - "SOP extraction from transcripts (LLM)"
+  autonomy_level: 3
+  autonomy_rationale: "File operations are deterministic workers; mind extraction and design require LLM."
+
+commands:
+  - name: "*create-squad {domain}"
+    description: "Create new squad — 6-phase workflow (detect → elicit → template → propose → create → validate)"
+  - name: "*create-agent {expert}"
+    description: "Create individual agent based on a real expert"
+  - name: "*create-task {name}"
+    description: "Create individual task for a squad"
+  - name: "*validate-squad {name}"
+    description: "Validate squad structure (score ≥ 7.0 for community PR)"
+  - name: "*discover-tools {domain}"
+    description: "Deep tool discovery (5 sub-agents: MCP, API, CLI, Library, GitHub)"
+  - name: "*extract-sop {transcript}"
+    description: "Extract Standard Operating Procedures from transcript"
+  - name: "*refresh-registry"
+    description: "Refresh squad/agent registry"
+  - name: "*download-squad {name}"
+    description: "Install squad into current AIOX project"
+
+components:
+  agents:
+    - squad-chief.md
+  tasks:
+    - create-squad.md
+    - create-agent.md
+    - create-task.md
+    - create-template.md
+    - create-workflow.md
+    - create-documentation.md
+    - validate-squad.md
+    - validate-agent.md
+    - validate-task.md
+    - validate-structure.md
+    - discover-tools.md
+    - evaluate-tool.md
+    - generate-smoke-tests.md
+    - extract-sop.md
+    - extract-mind.md
+    - propose-architecture.md
+    - generate-registry-entry.md
+    - refresh-registry.md
+    - sync-commands.md
+    - analytics.md
+    - download-squad.md
+    - upgrade-squad.md
+    - clone-mind.md
+    - create-squad-from-sop.md
+
+metrics:
+  agents: 1
+  pro_agents: 3
+  tasks: 24
+  quality_gates: 3
+  maturity_threshold:
+    draft: "score < 7.0"
+    developing: "score 7.0-8.9"
+    operational: "score >= 9.0"
+  fidelity:
+    base_mode: "60-75%"
+    pro_mode: "85-95%"

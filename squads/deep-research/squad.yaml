@@ -1,0 +1,89 @@
+name: deep-research
+version: 1.0.0
+status: OPERATIONAL
+description: >-
+  11-agent evidence-based research pipeline: from question formulation to
+  bias-audited synthesis. Every conclusion earns its confidence level.
+  Clones 10 elite research minds (Sackett, Kahneman, Forsgren, Ioannidis, etc.)
+slashPrefix: deep-research
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+automation_boundary:
+  deterministic:
+    - "Question parsing and PICO/SALSA decomposition"
+    - "Methodology selection matrix"
+    - "Template rendering for reports"
+    - "Quality gate validation"
+  probabilistic:
+    - "Evidence synthesis and confidence assessment (LLM)"
+    - "Cognitive bias audit (LLM)"
+    - "Competitive intelligence extraction (LLM)"
+  autonomy_level: 2
+  autonomy_rationale: "Methodology is deterministic; synthesis and bias detection require LLM."
+
+commands:
+  - name: "*research {question}"
+    description: "Full research pipeline — PICO → methodology → execution → synthesis → audit"
+  - name: "*technical {question}"
+    description: "Technical deep dive (engineering decisions, benchmarks, tooling)"
+  - name: "*strategic {question}"
+    description: "Strategic research (market, competitive, decision-making)"
+  - name: "*competitive {company}"
+    description: "Competitive intelligence — CI/OSINT approach"
+  - name: "*synthesize"
+    description: "Synthesize evidence across multiple sources with confidence levels"
+  - name: "*audit"
+    description: "Audit evidence reliability and cognitive biases"
+
+components:
+  agents:
+    - dr-orchestrator.md
+    - sackett.md
+    - booth.md
+    - creswell.md
+    - forsgren.md
+    - cochrane.md
+    - higgins.md
+    - klein.md
+    - gilad.md
+    - ioannidis.md
+    - kahneman.md
+  tasks:
+    - formulate-question.md
+    - select-methodology.md
+    - execute-systematic-review.md
+    - execute-technical-deep-dive.md
+    - execute-strategic-research.md
+    - execute-competitive-intel.md
+    - synthesize-evidence.md
+    - audit-evidence-reliability.md
+    - audit-cognitive-bias.md
+    - generate-research-report.md
+    - generate-decision-brief.md
+    - validate-methodology.md
+    - validate-sources.md
+    - extract-patterns.md
+    - map-confidence.md
+    - generate-recommendations.md
+    - archive-research.md
+  workflows:
+    - wf-technical.yaml
+    - wf-strategic.yaml
+    - wf-competitive-intel.yaml
+
+metrics:
+  agents: 11
+  minds: 10
+  quality_gates: 4
+  workflows: 3
+  frameworks:
+    - PICO
+    - SALSA
+    - PRISMA
+    - GRADE
+    - Bellingcat
+    - "NDM/RPD"
+    - SCIP
