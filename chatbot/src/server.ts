@@ -262,9 +262,11 @@ header{background:var(--bg2);border-bottom:1px solid var(--border);
   padding-top:calc(10px + var(--safe-top));z-index:10;}
 #back-btn{background:none;border:none;color:var(--dim);font-size:18px;
   cursor:pointer;padding:4px 8px;border-radius:8px;display:none;flex-shrink:0;}
+#back-btn.show{display:flex;}
 #back-btn:hover{background:var(--bg3);color:var(--text);}
 #menu-btn{background:none;border:none;color:var(--dim);font-size:22px;
   cursor:pointer;padding:4px 6px;border-radius:8px;line-height:1;flex-shrink:0;display:none;}
+#menu-btn.show{display:flex;}
 #menu-btn:hover{background:var(--bg3);color:var(--text);}
 header h1{font-size:15px;font-weight:700;color:var(--accent);letter-spacing:-.3px;cursor:pointer;}
 #header-subtitle{font-size:12px;color:var(--dim);}
@@ -272,6 +274,7 @@ header h1{font-size:15px;font-weight:700;color:var(--accent);letter-spacing:-.3p
   color:var(--accent);padding:3px 10px;border-radius:20px;
   border:1px solid rgba(88,166,255,.3);white-space:nowrap;overflow:hidden;
   text-overflow:ellipsis;max-width:160px;display:none;}
+#agent-pill.show{display:block;}
 .hdr-spacer{flex:1;}
 #hdr-badge{font-size:11px;color:var(--dim);white-space:nowrap;}
 
@@ -433,7 +436,7 @@ header h1{font-size:15px;font-weight:700;color:var(--accent);letter-spacing:-.3p
    RESPONSIVE
 ══════════════════════════════════ */
 @media(max-width:767px){
-  #menu-btn{display:flex;}
+  #menu-btn.show{display:flex;}
   #squad-panel{position:fixed;top:0;left:0;bottom:0;z-index:50;
     transform:translateX(-100%);transition:transform .25s ease;
     padding-top:var(--safe-top);}
@@ -441,8 +444,8 @@ header h1{font-size:15px;font-weight:700;color:var(--accent);letter-spacing:-.3p
   .msg{max-width:90%;}
 }
 @media(min-width:768px){
-  #menu-btn{display:none;}
-  #agent-pill{max-width:200px;}
+  #menu-btn{display:none!important;}
+  #agent-pill.show{max-width:200px;}
 }
 </style>
 </head>
@@ -532,9 +535,9 @@ let allSquadsMeta=[];
 function showDashboard(){
   document.getElementById('view-dashboard').classList.add('active');
   document.getElementById('view-workspace').classList.remove('active');
-  document.getElementById('back-btn').style.display='none';
-  document.getElementById('menu-btn').style.display='none';
-  document.getElementById('agent-pill').style.display='none';
+  document.getElementById('back-btn').classList.remove('show');
+  document.getElementById('menu-btn').classList.remove('show');
+  document.getElementById('agent-pill').classList.remove('show');
   document.getElementById('header-subtitle').textContent='Squads Platform';
   document.getElementById('hdr-badge').textContent='';
   activeSquadMeta=null;
@@ -544,10 +547,10 @@ function showDashboard(){
 function showWorkspace(squadMeta){
   document.getElementById('view-dashboard').classList.remove('active');
   document.getElementById('view-workspace').classList.add('active');
-  document.getElementById('back-btn').style.display='flex';
-  document.getElementById('menu-btn').style.display='flex';
-  document.getElementById('agent-pill').style.display='block';
-  document.getElementById('header-subtitle').textContent=squadMeta.icon+' '+squadMeta.id;
+  document.getElementById('back-btn').classList.add('show');
+  document.getElementById('menu-btn').classList.add('show');
+  document.getElementById('agent-pill').classList.add('show');
+  document.getElementById('header-subtitle').textContent=\`\${squadMeta.icon} \${squadMeta.id}\`;
   badge();
 }
 
@@ -630,10 +633,10 @@ async function enterSquad(meta){
   // Update welcome screen
   document.getElementById('welcome-icon').textContent=meta.icon;
   document.getElementById('welcome-title').textContent=meta.title;
-  document.getElementById('welcome-desc').textContent='Use os prompts rápidos ou escreva sua mensagem. '+meta.agentCount+' agentes disponíveis.';
+  document.getElementById('welcome-desc').textContent=\`Use os prompts rápidos ou escreva sua mensagem. \${meta.agentCount} agentes disponíveis.\`;
 
   // Auto-select chief agent
-  const chiefBtn=agentList.querySelector('[data-id="'+meta.chiefAgent+'"]');
+  const chiefBtn=agentList.querySelector(\`[data-id="\${meta.chiefAgent}"]\`);
   if(chiefBtn){
     chiefBtn.click();
   } else if(agentList.firstChild){
@@ -654,7 +657,7 @@ async function selectAgent(id,name,squad,btn){
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({sessionId:SESSION_ID,agentId:id})
   });
-  appendSys(name+' ['+squad+'] ativado');
+  appendSys(\`\${name} [\${squad}] ativado\`);
 
   // Fecha panel no mobile
   if(window.innerWidth<768){
