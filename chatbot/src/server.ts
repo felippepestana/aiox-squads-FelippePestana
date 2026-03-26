@@ -15,7 +15,7 @@ import os from "os";
 import fs from "fs";
 import Anthropic from "@anthropic-ai/sdk";
 
-import { loadAllSquads, flatAgentList, Squad, Agent } from "./agents";
+import { loadAllSquads, flatAgentList, loadSquadsMeta, Squad, Agent, SquadMeta } from "./agents";
 import { uploadFile, deleteFile } from "./files";
 import { ChatSession } from "./chat";
 
@@ -27,6 +27,7 @@ const API_KEY = process.env.ANTHROPIC_API_KEY ?? "";
 const client = new Anthropic({ apiKey: API_KEY });
 const squads: Squad[] = loadAllSquads();
 const agents: Agent[] = flatAgentList(squads);
+const squadsMeta: SquadMeta[] = loadSquadsMeta(squads);
 
 // sessionId → ChatSession + uploaded file IDs
 const sessions = new Map<
@@ -60,6 +61,19 @@ app.get("/api/agents", (_req: Request, res: Response) => {
     agents: s.agents.map((a) => ({ id: a.id, name: a.name, squad: a.squad })),
   }));
   res.json(list);
+});
+
+// ── API: metadados enriquecidos dos squads (dashboard UI) ─────────────────────
+app.get("/api/squads/meta", (_req: Request, res: Response) => {
+  const enriched = squadsMeta.map((meta) => {
+    const squad = squads.find((s) => s.id === meta.id);
+    return {
+      ...meta,
+      agentCount: squad?.agents.length ?? 0,
+      agents: squad?.agents.map((a) => ({ id: a.id, name: a.name })) ?? [],
+    };
+  });
+  res.json(enriched);
 });
 
 // ── API: trocar agente ────────────────────────────────────────────────────────
@@ -217,7 +231,7 @@ app.listen(PORT, "0.0.0.0", () => {
 });
 
 // ── HTML UI (embutido) ─────────────────────────────────────────────────────────
-// ── HTML UI mobile-first (embutido) ───────────────────────────────────────────
+// ── HTML UI — Squad Dashboard + Workspace (SPA) ────────────────────────────────
 const HTML_UI = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -240,58 +254,106 @@ html,body{height:100%;overflow:hidden;}
 body{background:var(--bg);color:var(--text);font-family:var(--font);
   display:flex;flex-direction:column;overscroll-behavior:none;}
 
-/* ── Header ── */
+/* ══════════════════════════════════
+   GLOBAL HEADER
+══════════════════════════════════ */
 header{background:var(--bg2);border-bottom:1px solid var(--border);
-  padding:10px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0;
-  padding-top:calc(10px + var(--safe-top));}
+  padding:10px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;
+  padding-top:calc(10px + var(--safe-top));z-index:10;}
+#back-btn{background:none;border:none;color:var(--dim);font-size:18px;
+  cursor:pointer;padding:4px 8px;border-radius:8px;display:none;flex-shrink:0;}
+#back-btn:hover{background:var(--bg3);color:var(--text);}
 #menu-btn{background:none;border:none;color:var(--dim);font-size:22px;
-  cursor:pointer;padding:4px 6px;border-radius:8px;line-height:1;flex-shrink:0;}
+  cursor:pointer;padding:4px 6px;border-radius:8px;line-height:1;flex-shrink:0;display:none;}
 #menu-btn:hover{background:var(--bg3);color:var(--text);}
-header h1{font-size:15px;font-weight:700;color:var(--accent);letter-spacing:-.3px;}
+header h1{font-size:15px;font-weight:700;color:var(--accent);letter-spacing:-.3px;cursor:pointer;}
+#header-subtitle{font-size:12px;color:var(--dim);}
 #agent-pill{font-size:12px;font-weight:600;background:rgba(88,166,255,.15);
   color:var(--accent);padding:3px 10px;border-radius:20px;
   border:1px solid rgba(88,166,255,.3);white-space:nowrap;overflow:hidden;
-  text-overflow:ellipsis;max-width:140px;}
+  text-overflow:ellipsis;max-width:160px;display:none;}
 .hdr-spacer{flex:1;}
 #hdr-badge{font-size:11px;color:var(--dim);white-space:nowrap;}
 
-/* ── Overlay ── */
-#overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:40;
-  display:none;transition:opacity .2s;}
-#overlay.show{display:block;}
+/* ══════════════════════════════════
+   VIEWS (SPA router)
+══════════════════════════════════ */
+.view{flex:1;display:none;flex-direction:column;overflow:hidden;min-height:0;}
+.view.active{display:flex;}
 
-/* ── Drawer ── */
-#drawer{position:fixed;top:0;left:0;bottom:0;width:min(300px,85vw);
-  background:var(--bg2);border-right:1px solid var(--border);
-  z-index:50;transform:translateX(-100%);transition:transform .25s ease;
-  display:flex;flex-direction:column;overflow:hidden;
-  padding-top:var(--safe-top);}
-#drawer.open{transform:translateX(0);}
-.drawer-header{padding:14px 16px 10px;display:flex;align-items:center;
-  justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0;}
-.drawer-header h2{font-size:13px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.6px;color:var(--dim);}
-#close-drawer{background:none;border:none;color:var(--dim);font-size:22px;
-  cursor:pointer;padding:2px 6px;border-radius:6px;line-height:1;}
-#close-drawer:hover{background:var(--bg3);color:var(--text);}
-#agent-list{flex:1;overflow-y:auto;padding:6px 0;}
-.squad-label{font-size:10px;font-weight:700;text-transform:uppercase;
-  letter-spacing:.6px;color:var(--yellow);padding:10px 16px 4px;}
-.agent-btn{display:flex;align-items:center;gap:8px;width:100%;text-align:left;
-  background:none;border:none;color:var(--text);font:14px var(--font);
-  padding:10px 16px;cursor:pointer;transition:background .12s;}
-.agent-btn:hover,.agent-btn:active{background:var(--bg3);}
-.agent-btn.active{background:rgba(88,166,255,.12);color:var(--accent);
-  border-left:3px solid var(--accent);}
-.agent-btn.active{padding-left:13px;}
+/* ══════════════════════════════════
+   DASHBOARD VIEW
+══════════════════════════════════ */
+#view-dashboard{overflow-y:auto;padding:24px 16px;gap:0;}
+.dash-hero{text-align:center;padding:24px 16px 32px;flex-shrink:0;}
+.dash-hero h2{font-size:26px;font-weight:800;color:var(--text);margin-bottom:8px;}
+.dash-hero p{font-size:14px;color:var(--dim);max-width:420px;margin:0 auto;line-height:1.6;}
+.squad-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:14px;max-width:1100px;margin:0 auto;width:100%;padding-bottom:24px;}
+.squad-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;
+  padding:20px;cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s;
+  display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;}
+.squad-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--squad-color,var(--accent));border-radius:16px 16px 0 0;}
+.squad-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4);
+  border-color:var(--squad-color,var(--border));}
+.squad-card:active{transform:translateY(0);}
+.card-top{display:flex;align-items:flex-start;gap:12px;}
+.card-icon{font-size:28px;line-height:1;flex-shrink:0;}
+.card-info{flex:1;min-width:0;}
+.card-title{font-size:14px;font-weight:700;color:var(--text);line-height:1.3;
+  margin-bottom:4px;}
+.card-ver{font-size:10px;color:var(--dim);font-weight:600;
+  background:var(--bg3);padding:1px 6px;border-radius:4px;
+  border:1px solid var(--border);display:inline-block;}
+.card-desc{font-size:12px;color:var(--dim);line-height:1.5;flex:1;}
+.card-footer{display:flex;align-items:center;justify-content:space-between;
+  padding-top:8px;border-top:1px solid var(--border);}
+.card-agents{font-size:11px;color:var(--dim);}
+.card-cta{font-size:12px;font-weight:600;color:var(--squad-color,var(--accent));
+  background:none;border:none;cursor:pointer;padding:4px 0;}
+
+/* ══════════════════════════════════
+   WORKSPACE VIEW
+══════════════════════════════════ */
+#view-workspace{flex-direction:row;}
+
+/* Left info panel */
+#squad-panel{width:280px;background:var(--bg2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;}
+.panel-hero{padding:16px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.panel-squad-icon{font-size:32px;margin-bottom:8px;display:block;}
+.panel-squad-title{font-size:14px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:6px;}
+.panel-squad-desc{font-size:12px;color:var(--dim);line-height:1.55;}
+.panel-section{padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.panel-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;
+  color:var(--dim);margin-bottom:8px;}
+.quick-prompt-btn{display:block;width:100%;text-align:left;background:var(--bg3);
+  border:1px solid var(--border);color:var(--dim);font:12px var(--font);
+  padding:8px 10px;border-radius:8px;cursor:pointer;line-height:1.4;
+  transition:background .12s,border-color .12s,color .12s;margin-bottom:6px;}
+.quick-prompt-btn:last-child{margin-bottom:0;}
+.quick-prompt-btn:hover{background:var(--bg);border-color:var(--squad-color,var(--accent));
+  color:var(--text);}
+#agent-list-panel{flex:1;overflow-y:auto;padding:6px 0;}
+.panel-agent-btn{display:flex;align-items:center;gap:8px;width:100%;text-align:left;
+  background:none;border:none;color:var(--text);font:13px var(--font);
+  padding:9px 14px;cursor:pointer;transition:background .12s;}
+.panel-agent-btn:hover{background:var(--bg3);}
+.panel-agent-btn.active{background:rgba(88,166,255,.12);color:var(--accent);
+  border-left:3px solid var(--squad-color,var(--accent));padding-left:11px;}
 .agent-dot{width:7px;height:7px;border-radius:50%;background:var(--dim);flex-shrink:0;}
-.agent-btn.active .agent-dot{background:var(--accent);}
-.drawer-footer{padding:12px 16px;border-top:1px solid var(--border);flex-shrink:0;
+.panel-agent-btn.active .agent-dot{background:var(--squad-color,var(--accent));}
+.panel-footer{padding:12px 14px;border-top:1px solid var(--border);flex-shrink:0;
   padding-bottom:calc(12px + var(--safe-bottom));}
 .btn-outline{background:var(--bg3);border:1px solid var(--border);color:var(--dim);
-  font:13px var(--font);padding:8px 14px;border-radius:8px;cursor:pointer;
+  font:12px var(--font);padding:8px 12px;border-radius:8px;cursor:pointer;
   width:100%;transition:background .12s;}
 .btn-outline:hover{background:#2d333b;color:var(--text);}
+
+/* Mobile drawer overlay for panel */
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:40;display:none;}
+#overlay.show{display:block;}
 
 /* ── Chat area ── */
 .chat-area{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
@@ -319,6 +381,7 @@ header h1{font-size:15px;font-weight:700;color:var(--accent);letter-spacing:-.3p
 /* ── Welcome ── */
 .welcome{flex:1;display:flex;flex-direction:column;align-items:center;
   justify-content:center;text-align:center;padding:32px 20px;gap:10px;color:var(--dim);}
+.welcome-icon{font-size:48px;margin-bottom:8px;}
 .welcome h2{font-size:20px;font-weight:700;color:var(--text);}
 .welcome p{font-size:14px;max-width:320px;line-height:1.5;}
 .welcome .hint{font-size:12px;margin-top:4px;}
@@ -366,46 +429,69 @@ header h1{font-size:15px;font-weight:700;color:var(--accent);letter-spacing:-.3p
 ::-webkit-scrollbar{width:5px;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
 
-/* ── Desktop sidebar ── */
+/* ══════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════ */
+@media(max-width:767px){
+  #menu-btn{display:flex;}
+  #squad-panel{position:fixed;top:0;left:0;bottom:0;z-index:50;
+    transform:translateX(-100%);transition:transform .25s ease;
+    padding-top:var(--safe-top);}
+  #squad-panel.open{transform:translateX(0);}
+  .msg{max-width:90%;}
+}
 @media(min-width:768px){
   #menu-btn{display:none;}
   #agent-pill{max-width:200px;}
-  .layout{display:flex;flex:1;min-height:0;overflow:hidden;}
-  .chat-area{flex:1;}
-  #drawer{position:static;transform:none!important;border-right:1px solid var(--border);
-    transition:none;width:260px;}
-  #overlay{display:none!important;}
-  body{flex-direction:column;}
-  .layout{display:flex;flex:1;overflow:hidden;}
-}
-@media(max-width:767px){
-  .msg{max-width:90%;}
 }
 </style>
 </head>
 <body>
 
+<!-- ── Global Header ────────────────────────────────────────────────── -->
 <header>
-  <button id="menu-btn" onclick="toggleDrawer()" aria-label="Menu">☰</button>
-  <h1>⬡ AIOX</h1>
-  <span id="agent-pill">Selecione →</span>
+  <button id="back-btn" onclick="showDashboard()" title="Voltar ao início">← Squads</button>
+  <button id="menu-btn" onclick="togglePanel()" aria-label="Menu">☰</button>
+  <h1 onclick="showDashboard()">⬡ AIOX</h1>
+  <span id="header-subtitle">Squads Platform</span>
+  <span id="agent-pill"></span>
   <span class="hdr-spacer"></span>
-  <span id="hdr-badge">0 msgs</span>
+  <span id="hdr-badge"></span>
 </header>
 
-<div class="layout">
-  <!-- Overlay (mobile) -->
-  <div id="overlay" onclick="toggleDrawer()"></div>
+<!-- ── Dashboard View ──────────────────────────────────────────────── -->
+<div id="view-dashboard" class="view active">
+  <div class="dash-hero">
+    <h2>⬡ AIOX Squads Platform</h2>
+    <p>Escolha um squad especializado para começar. Cada squad possui agentes com expertise específica, pipelines otimizados e interfaces adaptadas ao seu caso de uso.</p>
+  </div>
+  <div class="squad-grid" id="squad-grid">
+    <!-- Cards injected by JS -->
+  </div>
+</div>
 
-  <!-- Drawer / Sidebar -->
-  <nav id="drawer">
-    <div class="drawer-header">
-      <h2>Agentes</h2>
-      <button id="close-drawer" onclick="toggleDrawer()" aria-label="Fechar">×</button>
+<!-- ── Workspace View ───────────────────────────────────────────────── -->
+<div id="view-workspace" class="view">
+  <!-- Overlay (mobile) -->
+  <div id="overlay" onclick="togglePanel()"></div>
+
+  <!-- Squad Info Panel -->
+  <nav id="squad-panel">
+    <div class="panel-hero" id="panel-hero">
+      <span class="panel-squad-icon" id="panel-icon">🤖</span>
+      <div class="panel-squad-title" id="panel-title">Squad</div>
+      <div class="panel-squad-desc" id="panel-desc"></div>
     </div>
-    <div id="agent-list"></div>
-    <div class="drawer-footer">
-      <button class="btn-outline" onclick="resetHistory()">🗑  Limpar histórico</button>
+    <div class="panel-section" id="quick-prompts-section">
+      <div class="panel-label">Prompts rápidos</div>
+      <div id="quick-prompts-list"></div>
+    </div>
+    <div class="panel-section" style="flex-shrink:0;">
+      <div class="panel-label">Agentes</div>
+    </div>
+    <div id="agent-list-panel"></div>
+    <div class="panel-footer">
+      <button class="btn-outline" onclick="resetHistory()">🗑 Limpar histórico</button>
     </div>
   </nav>
 
@@ -413,14 +499,13 @@ header h1{font-size:15px;font-weight:700;color:var(--accent);letter-spacing:-.3p
   <div class="chat-area">
     <div id="messages">
       <div class="welcome" id="welcome">
-        <h2>AIOX Squads</h2>
-        <p>Toque em ☰ para selecionar um agente e começar a conversa.</p>
-        <p class="hint">Suporta PDF, imagens, CSV e JSON via 📎.</p>
+        <div class="welcome-icon" id="welcome-icon">🤖</div>
+        <h2 id="welcome-title">Pronto para começar</h2>
+        <p id="welcome-desc">Use os prompts rápidos ou escreva sua mensagem.</p>
+        <p class="hint">📎 Suporta PDF, imagens, CSV e JSON.</p>
       </div>
     </div>
-
     <div id="file-chips"></div>
-
     <div class="input-wrap">
       <div class="input-row">
         <label for="file-input" class="icon-btn" title="Anexar arquivo">📎</label>
@@ -438,46 +523,128 @@ header h1{font-size:15px;font-weight:700;color:var(--accent);letter-spacing:-.3p
 <div id="toast"></div>
 
 <script>
+// ── State ─────────────────────────────────────────────────────────────────────
 const SESSION_ID='sess-'+Math.random().toString(36).slice(2,10);
-let activeAgent=null,pendingFiles=[],msgCount=0,streaming=false;
+let activeAgent=null,activeSquadMeta=null,pendingFiles=[],msgCount=0,streaming=false;
+let allSquadsMeta=[];
 
-// ── Drawer ────────────────────────────────────────────────────────────────────
-function toggleDrawer(){
-  const d=document.getElementById('drawer');
+// ── Router ────────────────────────────────────────────────────────────────────
+function showDashboard(){
+  document.getElementById('view-dashboard').classList.add('active');
+  document.getElementById('view-workspace').classList.remove('active');
+  document.getElementById('back-btn').style.display='none';
+  document.getElementById('menu-btn').style.display='none';
+  document.getElementById('agent-pill').style.display='none';
+  document.getElementById('header-subtitle').textContent='Squads Platform';
+  document.getElementById('hdr-badge').textContent='';
+  activeSquadMeta=null;
+  activeAgent=null;
+}
+
+function showWorkspace(squadMeta){
+  document.getElementById('view-dashboard').classList.remove('active');
+  document.getElementById('view-workspace').classList.add('active');
+  document.getElementById('back-btn').style.display='flex';
+  document.getElementById('menu-btn').style.display='flex';
+  document.getElementById('agent-pill').style.display='block';
+  document.getElementById('header-subtitle').textContent=squadMeta.icon+' '+squadMeta.id;
+  badge();
+}
+
+// ── Panel toggle (mobile) ─────────────────────────────────────────────────────
+function togglePanel(){
+  const p=document.getElementById('squad-panel');
   const o=document.getElementById('overlay');
-  const open=d.classList.toggle('open');
+  const open=p.classList.toggle('open');
   o.classList.toggle('show',open);
-  if(open)document.body.style.overflow='hidden';
-  else document.body.style.overflow='';
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 async function init(){
-  const res=await fetch('/api/agents');
-  const squads=await res.json();
-  const list=document.getElementById('agent-list');
+  const res=await fetch('/api/squads/meta');
+  allSquadsMeta=await res.json();
+  renderDashboard();
+}
 
-  squads.forEach(s=>{
-    const lbl=document.createElement('div');
-    lbl.className='squad-label';
-    lbl.textContent=s.id;
-    list.appendChild(lbl);
-
-    s.agents.forEach(a=>{
-      const btn=document.createElement('button');
-      btn.className='agent-btn';
-      btn.dataset.id=a.id;
-      btn.innerHTML=\`<span class="agent-dot"></span>\${a.name}\`;
-      btn.onclick=()=>selectAgent(a.id,a.name,s.id,btn);
-      list.appendChild(btn);
-    });
+function renderDashboard(){
+  const grid=document.getElementById('squad-grid');
+  grid.innerHTML='';
+  allSquadsMeta.forEach(meta=>{
+    const card=document.createElement('div');
+    card.className='squad-card';
+    card.style.setProperty('--squad-color',meta.color);
+    card.innerHTML=\`
+      <div class="card-top">
+        <div class="card-icon">\${meta.icon}</div>
+        <div class="card-info">
+          <div class="card-title">\${meta.title}</div>
+          <span class="card-ver">\${meta.agentCount} agentes</span>
+        </div>
+      </div>
+      <div class="card-desc">\${meta.description}</div>
+      <div class="card-footer">
+        <span class="card-agents">\${meta.id}</span>
+        <button class="card-cta" style="color:\${meta.color}">Entrar →</button>
+      </div>\`;
+    card.onclick=()=>enterSquad(meta);
+    grid.appendChild(card);
   });
 }
 
-// ── Selecionar agente ─────────────────────────────────────────────────────────
+// ── Enter squad ───────────────────────────────────────────────────────────────
+async function enterSquad(meta){
+  activeSquadMeta=meta;
+  showWorkspace(meta);
+
+  // Set CSS color variable for squad panel
+  document.getElementById('squad-panel').style.setProperty('--squad-color',meta.color);
+
+  // Update panel hero
+  document.getElementById('panel-icon').textContent=meta.icon;
+  document.getElementById('panel-title').textContent=meta.title;
+  document.getElementById('panel-desc').textContent=meta.description;
+
+  // Quick prompts
+  const qpList=document.getElementById('quick-prompts-list');
+  qpList.innerHTML='';
+  (meta.quickPrompts||[]).forEach(prompt=>{
+    const btn=document.createElement('button');
+    btn.className='quick-prompt-btn';
+    btn.textContent=prompt;
+    btn.onclick=()=>useQuickPrompt(prompt);
+    qpList.appendChild(btn);
+  });
+
+  // Agents list
+  const agentList=document.getElementById('agent-list-panel');
+  agentList.innerHTML='';
+  (meta.agents||[]).forEach(a=>{
+    const btn=document.createElement('button');
+    btn.className='panel-agent-btn';
+    btn.dataset.id=a.id;
+    btn.innerHTML=\`<span class="agent-dot"></span>\${a.name}\`;
+    btn.onclick=()=>selectAgent(a.id,a.name,meta.id,btn);
+    agentList.appendChild(btn);
+  });
+
+  // Update welcome screen
+  document.getElementById('welcome-icon').textContent=meta.icon;
+  document.getElementById('welcome-title').textContent=meta.title;
+  document.getElementById('welcome-desc').textContent='Use os prompts rápidos ou escreva sua mensagem. '+meta.agentCount+' agentes disponíveis.';
+
+  // Auto-select chief agent
+  const chiefBtn=agentList.querySelector('[data-id="'+meta.chiefAgent+'"]');
+  if(chiefBtn){
+    chiefBtn.click();
+  } else if(agentList.firstChild){
+    agentList.firstChild.click();
+  }
+}
+
+// ── Select agent ──────────────────────────────────────────────────────────────
 async function selectAgent(id,name,squad,btn){
   if(streaming)return;
-  document.querySelectorAll('.agent-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.panel-agent-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('agent-pill').textContent=name;
   document.getElementById('welcome')?.remove();
@@ -487,10 +654,25 @@ async function selectAgent(id,name,squad,btn){
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({sessionId:SESSION_ID,agentId:id})
   });
-  appendSys(\`\${name} [\${squad}] ativado\`);
+  appendSys(name+' ['+squad+'] ativado');
 
-  // Fecha drawer no mobile
-  if(window.innerWidth<768)toggleDrawer();
+  // Fecha panel no mobile
+  if(window.innerWidth<768){
+    const p=document.getElementById('squad-panel');
+    if(p.classList.contains('open'))togglePanel();
+  }
+}
+
+// ── Quick prompt ──────────────────────────────────────────────────────────────
+function useQuickPrompt(prompt){
+  const inp=document.getElementById('msg-input');
+  inp.value=prompt;
+  resize(inp);
+  inp.focus();
+  if(window.innerWidth<768){
+    const p=document.getElementById('squad-panel');
+    if(p.classList.contains('open'))togglePanel();
+  }
 }
 
 // ── Reset ─────────────────────────────────────────────────────────────────────
@@ -502,7 +684,10 @@ async function resetHistory(){
   });
   msgCount=0;badge();
   appendSys('Histórico limpo.');
-  if(window.innerWidth<768)toggleDrawer();
+  if(window.innerWidth<768){
+    const p=document.getElementById('squad-panel');
+    if(p.classList.contains('open'))togglePanel();
+  }
 }
 
 // ── Upload ────────────────────────────────────────────────────────────────────
@@ -608,7 +793,9 @@ function scrollBot(){
   const m=document.getElementById('messages');
   m.scrollTo({top:m.scrollHeight,behavior:'smooth'});
 }
-function badge(){document.getElementById('hdr-badge').textContent=msgCount+' msgs';}
+function badge(){
+  document.getElementById('hdr-badge').textContent=msgCount>0?msgCount+' msgs':'';
+}
 function toast(msg,type=''){
   const el=document.getElementById('toast');
   el.textContent=msg;el.className=type;el.style.display='block';
@@ -625,13 +812,13 @@ ta.addEventListener('keydown',e=>{
   }
 });
 
-// ── Swipe-to-close drawer (mobile) ───────────────────────────────────────────
+// ── Swipe-to-close panel (mobile) ────────────────────────────────────────────
 let tx0=null;
-document.getElementById('drawer').addEventListener('touchstart',e=>{tx0=e.touches[0].clientX;},{passive:true});
-document.getElementById('drawer').addEventListener('touchend',e=>{
+document.getElementById('squad-panel').addEventListener('touchstart',e=>{tx0=e.touches[0].clientX;},{passive:true});
+document.getElementById('squad-panel').addEventListener('touchend',e=>{
   if(tx0===null)return;
   const dx=e.changedTouches[0].clientX-tx0;
-  if(dx<-50)toggleDrawer();
+  if(dx<-50)togglePanel();
   tx0=null;
 },{passive:true});
 
@@ -644,3 +831,4 @@ init();
 </script>
 </body>
 </html>`;
+
