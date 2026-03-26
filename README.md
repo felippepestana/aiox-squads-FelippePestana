@@ -153,7 +153,15 @@ Squads publicados pela comunidade neste repositório.
 
 | Squad | O que faz | Status |
 |-------|-----------|--------|
-| _Nenhum squad publicado ainda_ | Seja o primeiro a contribuir! | — |
+| [**apex**](squads/apex/) | Squad ultra-premium de frontend (Web, Mobile, Spatial) — 15 agentes cobrindo design system, React/RN, animações, 3D/WebXR, acessibilidade e performance | 🟢 |
+| [**curator**](squads/curator/) | Minera transcrições de vídeo, identifica momentos de alto impacto com timestamps e monta roteiros de corte prontos para edição | 🟢 |
+| [**deep-research**](squads/deep-research/) | Pipeline de pesquisa profunda baseada em evidências com 11 agentes — da formulação da pergunta à síntese auditada por viés cognitivo | 🟡 |
+| [**dispatch**](squads/dispatch/) | Motor de execução paralela que decompõe stories/PRDs em subtarefas atômicas, otimiza em ondas (DAG) e roteia para agentes/modelos certos | 🟢 |
+| [**education**](squads/education/) | Design instrucional que transforma expertise em cursos online conformes ao MEC, aplicando 15 frameworks pedagógicos (Bloom, Mayer, UbD, ARCS) | 🟢 |
+| [**kaizen**](squads/kaizen/) | Monitora e melhora continuamente todos os squads — analisa estrutura, performance, gargalos, competências e custos | 🟢 |
+| [**seo**](squads/seo/) | Otimiza SEO de sites (score 0-100) — auditoria on-page, técnico, schema, E-E-A-T, Core Web Vitals e visibilidade para IA (GEO) | 🟡 |
+| [**squad-creator**](squads/squad-creator/) | Meta-squad que cria outros squads via templates estruturais, validação de qualidade e extração de DNA de especialistas reais | 🟢 |
+| [**squad-creator-pro**](squads/squad-creator-pro/) | Upgrade do Squad Creator com mind cloning, roteamento de modelos, 3 agentes especialistas e benchmarks de qualidade | 🟢 |
 
 > Tem um squad pronto? [Abra um PR](#contribuindo) e compartilhe com a comunidade.
 
