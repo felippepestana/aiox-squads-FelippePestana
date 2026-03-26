@@ -147,6 +147,32 @@ cp -r aiox-squads/squads/copy ./squads/copy
 
 <br/>
 
+## Interface Web — como acessar
+
+Este repositório inclui um **chatbot web** com dashboard de squads. Para rodá-lo localmente:
+
+```bash
+# 1. Clone o repositório (se ainda não fez)
+git clone https://github.com/SynkraAI/aiox-squads.git
+cd aiox-squads
+
+# 2. Defina sua chave de API Anthropic
+export ANTHROPIC_API_KEY=sk-ant-...
+
+# 3. Inicie a interface web
+bash chatbot/web-start.sh
+```
+
+Acesse **http://localhost:3000** no navegador. Ou com Docker:
+
+```bash
+ANTHROPIC_API_KEY=sk-ant-... docker compose -f docker-compose.chatbot.yml up
+```
+
+Veja a [documentação completa do chatbot](chatbot/README.md) para mais opções de acesso.
+
+<br/>
+
 ## Catálogo de Squads
 
 Squads publicados pela comunidade neste repositório.
