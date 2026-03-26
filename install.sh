@@ -72,6 +72,11 @@ clone_repo() {
 
 # ── Instalar dependências do chatbot ─────────────────────────────────────────
 install_chatbot() {
+  if [ ! -d "$INSTALL_DIR/chatbot" ]; then
+    warn "Diretório chatbot/ não encontrado — pulando instalação do chatbot."
+    return
+  fi
+
   step "Instalando dependências do chatbot..."
 
   cd "$INSTALL_DIR/chatbot"
@@ -105,15 +110,20 @@ show_status() {
   echo "  1. Defina sua API key:"
   echo "     export ANTHROPIC_API_KEY=sk-ant-..."
   echo ""
-  echo "  2. Inicie o chatbot (terminal):"
-  echo "     cd ${INSTALL_DIR}/chatbot && bash start.sh"
-  echo ""
-  echo "  3. Ou inicie o chatbot (web):"
-  echo "     cd ${INSTALL_DIR}/chatbot && bash web-start.sh"
-  echo "     Acesse: http://localhost:3000"
-  echo ""
-  echo "  4. Ou use com Docker:"
-  echo "     cd ${INSTALL_DIR} && ANTHROPIC_API_KEY=sk-ant-... docker compose -f docker-compose.chatbot.yml up"
+  if [ -d "$INSTALL_DIR/chatbot" ]; then
+    echo "  2. Inicie o chatbot (terminal):"
+    echo "     cd ${INSTALL_DIR}/chatbot && bash start.sh"
+    echo ""
+    echo "  3. Ou inicie o chatbot (web):"
+    echo "     cd ${INSTALL_DIR}/chatbot && bash web-start.sh"
+    echo "     Acesse: http://localhost:3000"
+    echo ""
+    echo "  4. Ou use com Docker:"
+    echo "     cd ${INSTALL_DIR} && ANTHROPIC_API_KEY=sk-ant-... docker compose -f docker-compose.chatbot.yml up"
+  else
+    echo "  2. Instale um squad no seu projeto AIOX:"
+    echo "     cp -r ${INSTALL_DIR}/squads/<nome> ./squads/"
+  fi
   echo ""
   echo "  Documentação: https://github.com/SynkraAI/aiox-squads"
 }
