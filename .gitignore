@@ -1,0 +1,10 @@
+.DS_Store
+.npm-cache/
+__pycache__/
+*.pyc
+chatbot/node_modules/
+chatbot/dist/
+web/node_modules/
+web/dist/
+web/.env
+.env

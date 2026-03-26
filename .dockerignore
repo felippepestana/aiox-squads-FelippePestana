@@ -1,0 +1,12 @@
+.git
+**/.git
+**/node_modules
+web/node_modules
+web/dist
+web/.env
+web/.env.*
+chatbot/node_modules
+chatbot/dist
+**/__pycache__
+**/*.pyc
+.npm-cache

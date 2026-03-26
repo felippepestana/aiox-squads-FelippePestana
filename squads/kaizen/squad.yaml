@@ -1,0 +1,114 @@
+name: kaizen
+version: 1.3.0
+status: ACTIVE
+description: >-
+  O squad que vigia e melhora todos os outros. Analisa continuamente o ecossistema de agentes,
+  squads, ferramentas e competências. Detecta gaps, monitora performance, recomenda
+  novos recursos. O sistema nervoso do seu projeto.
+slashPrefix: kaizen
+cadence: "semanal (domingo 20:00 BRT)"
+
+aios:
+  minVersion: "2.1.0"
+  type: squad
+
+automation_boundary:
+  deterministic:
+    - "Glob/Grep para inventário de squads, agentes, tasks"
+    - "git log para métricas de atividade"
+    - "Contagem e agregação de métricas (DORA, OKR)"
+    - "Template rendering para relatórios"
+  probabilistic:
+    - "detect-gaps — análise de competência via Wardley Maps (LLM)"
+    - "generate-recommendations — recomendações priorizadas (LLM)"
+    - "cost-analysis — ROI e estimativas de custo (LLM)"
+    - "self-improve — meta-análise e auto-melhoria (LLM)"
+    - "audit-output-quality — avaliação qualitativa de outputs (LLM)"
+  autonomy_level: 2
+  autonomy_rationale: "Coleta de dados automática, análise requer LLM, decisões requerem humano."
+
+commands:
+  - name: "*analyze"
+    description: "Análise completa — 6 dimensões, todos os agentes"
+    skill: "kaizen:analyze"
+  - name: "*gaps"
+    description: "Detecta competências e ferramentas que estão faltando"
+    skill: "kaizen:gaps"
+  - name: "*performance"
+    description: "Dashboard de métricas (lead time, rework rate, throughput)"
+    skill: "kaizen:performance"
+  - name: "*radar"
+    description: "Atualiza o radar de tecnologias (Adopt / Trial / Assess / Hold)"
+    skill: "kaizen:radar"
+  - name: "*cost"
+    description: "Análise de custo por squad, por entrega, ROI"
+    skill: "kaizen:cost"
+  - name: "*report"
+    description: "Relatório semanal com máx 5 recomendações priorizadas"
+  - name: "*self-improve"
+    description: "O squad analisa a si mesmo e aplica melhorias"
+    skill: "kaizen:self-improve"
+
+components:
+  agents:
+    - kaizen-chief.md
+    - topology-analyst.md
+    - performance-tracker.md
+    - bottleneck-hunter.md
+    - capability-mapper.md
+    - tech-radar.md
+    - cost-analyst.md
+  tasks:
+    - detect-gaps.md
+    - performance-dashboard.md
+    - update-radar.md
+    - cost-analysis.md
+    - generate-recommendations.md
+    - self-improve.md
+    - audit-output-quality.md
+    - auto-healing-gate.md
+  workflows:
+    - wf-ecosystem-analysis.yaml
+    - wf-weekly-report.yaml
+    - wf-self-improve.yaml
+  templates:
+    - capability-map-tmpl.md
+    - weekly-report-tmpl.md
+    - performance-dashboard-tmpl.md
+    - tech-radar-tmpl.md
+  checklists:
+    - agent-activation-checklist.md
+    - report-quality-checklist.md
+    - analysis-quality-checklist.md
+  rules:
+    - recommendation-defensibility.md
+  minds:
+    - skelton_pais
+    - eliyahu_goldratt
+    - nicole_forsgren
+    - simon_wardley
+    - martin_fowler
+    - kaplan_norton
+    - john_doerr
+    - josh_bersin
+    - neal_ford
+    - alistair_croll
+  scripts:
+    - validate-report.sh
+    - kaizen-trigger.sh
+  data:
+    - baselines/ecosystem-baseline.yaml
+    - baselines/initial-radar.yaml
+    - radar/initial-radar.yaml
+    - recommendation-tracker.yaml
+    - gap-action-plan.md
+  config:
+    - config.yaml
+
+metrics:
+  agents: 7
+  frameworks: 11
+  heuristics: 35
+  minds: 10
+  quality_gates: 4
+  weekly_cost: "~$4.50"
