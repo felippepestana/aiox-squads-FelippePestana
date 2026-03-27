@@ -77,11 +77,13 @@ install_claude_code() {
   fi
 
   echo "  Instalando Claude Code CLI..."
-  npm install -g @anthropic-ai/claude-code@latest 2>/dev/null && \
-    ok "Claude Code instalado via npm" && return
-
-  warn "Não foi possível instalar Claude Code via npm."
-  warn "  Instale manualmente: curl -fsSL https://claude.ai/install.sh | bash"
+  if npm install -g @anthropic-ai/claude-code@latest 2>/dev/null; then
+    ok "Claude Code instalado via npm"
+    return
+  else
+    warn "Não foi possível instalar Claude Code via npm."
+    warn "  Instale manualmente: curl -fsSL https://claude.ai/install.sh | bash"
+  fi
 }
 
 # ── Clonar repositório ───────────────────────────────────────────────────────
@@ -139,6 +141,13 @@ setup_local_deploy() {
   if ! command -v docker &>/dev/null; then
     warn "Docker necessário para local-deploy — pulando."
     warn "  Instale Docker e execute: bash ${INSTALL_DIR}/setup-local-deploy.sh"
+    return
+  fi
+
+  if ! docker compose version &>/dev/null 2>&1 && \
+     ! docker-compose --version &>/dev/null 2>&1; then
+    warn "Docker Compose não encontrado para local-deploy — pulando."
+    warn "  Instale Docker Compose e execute: bash ${INSTALL_DIR}/setup-local-deploy.sh"
     return
   fi
 

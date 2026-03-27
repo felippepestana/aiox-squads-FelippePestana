@@ -5,6 +5,11 @@ IFS=$'\n\t'       # Stricter word splitting
 # 1. Extract Docker DNS info BEFORE any flushing
 DOCKER_DNS_RULES=$(iptables-save -t nat | grep "127\.0\.0\.11" || true)
 
+# Reset default policies to ACCEPT before flushing (idempotency)
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+
 # Flush existing rules and delete existing ipsets
 iptables -F
 iptables -X
@@ -55,12 +60,17 @@ fi
 
 echo "Processing GitHub IPs..."
 while read -r cidr; do
+    # Skip IPv6 ranges (ipset hash:net only handles IPv4)
+    if [[ "$cidr" == *:* ]]; then
+        echo "Skipping IPv6 range $cidr"
+        continue
+    fi
     if [[ ! "$cidr" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/[0-9]{1,2}$ ]]; then
-        echo "ERROR: Invalid CIDR range from GitHub meta: $cidr"
-        exit 1
+        echo "WARNING: Skipping invalid CIDR range from GitHub meta: $cidr"
+        continue
     fi
     echo "Adding GitHub range $cidr"
-    ipset add allowed-domains "$cidr"
+    ipset add -exist allowed-domains "$cidr"
 done < <(echo "$gh_ranges" | jq -r '(.web + .api + .git)[]' | aggregate -q)
 
 # Resolve and add other allowed domains
@@ -86,7 +96,7 @@ for domain in \
             exit 1
         fi
         echo "Adding $ip for $domain"
-        ipset add allowed-domains "$ip"
+        ipset add -exist allowed-domains "$ip"
     done < <(echo "$ips")
 done
 

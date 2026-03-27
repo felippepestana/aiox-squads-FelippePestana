@@ -35,7 +35,7 @@ Este é o repositório da comunidade para compartilhar, descobrir e contribuir s
 
 Todo squad segue a anatomia de 6 camadas:
 
-```
+```text
 squads/<nome>/
 ├── agents/          # Agentes .md com persona, voice_dna, heuristics
 ├── tasks/           # Tasks executáveis
@@ -57,7 +57,7 @@ squads/<nome>/
 - Nunca commitar API keys, tokens ou credenciais
 - `.env` e `credentials.*` devem estar no `.gitignore`
 - O devcontainer usa firewall restritivo (allowlist de domínios)
-- Scripts de instalação devem verificar dependências, não assumir
+- Scripts de instalação devem verificar dependências, não assumi-las como presentes
 
 ## CI/CD
 
@@ -69,5 +69,5 @@ squads/<nome>/
 
 - Base: Node.js 20, ZSH, ferramentas de dev
 - Firewall via iptables (init-firewall.sh)
-- Seguro para usar `--dangerously-skip-permissions` dentro do container
+- Firewall restringe egress, mas `--dangerously-skip-permissions` permite alterações irrestritas no workspace — use apenas com repositórios confiáveis
 - Volumes persistentes para histórico de comandos e config do Claude
