@@ -1,0 +1,194 @@
+metadata:
+  version: "1.0"
+  created: "2026-03-28"
+  squad: "analista-processual"
+
+squad:
+  name: "analista-processual"
+  display_name: "Analista Processual"
+  version: "1.0.0"
+  domain: "Process Analysis & Legal Domain"
+  description: |
+    Squad de análise processual com pipeline 3-tier: Intake (mapeamento + avaliação),
+    Execução Jurídica (leitor de peças, pesquisa jurisprudencial, estratégia, orientação),
+    e Síntese Final (relatório estruturado com citações rastreadas). Cobre processos
+    genéricos e demandas jurídicas completas com suporte a documentos legais.
+  philosophy: |
+    "Todo processo merece análise rigorosa: mapeado, avaliado, fundamentado e documentado."
+  keywords:
+    - analista-processual
+    - mapeamento-processo
+    - analise-juridica
+    - jurisprudencia
+    - estrategia-processual
+    - relatorio-tecnico
+    - brasil
+    - direito-civil
+  entry_agent: analista-chefe
+
+tiers:
+  tier_0:
+    name: "Intake e Mapeamento"
+    agents: [mapeador-processual, avaliador-processual]
+    purpose: "Mapeia etapas/atores/decisões e avalia riscos/maturidade. Sempre executa sequencialmente primeiro."
+  tier_1:
+    name: "Execução Jurídica"
+    agents: [leitor-de-pecas, pesquisador-juridico, estrategista-processual, advogado-orientador]
+    purpose: "Análise jurídica profunda. Execução paralela — orquestrador seleciona agentes por use case."
+  tier_sintese:
+    name: "Síntese e Documentação"
+    agents: [documentador-processual]
+    purpose: "Consolida todos os outputs em relatório final estruturado. Sempre executa por último."
+  orchestrator:
+    name: "Coordenação do Pipeline"
+    agents: [analista-chefe]
+    purpose: "Classifica demandas, roteia pelo pipeline, enforça quality gates, sintetiza relatório final."
+
+agents:
+  analista-chefe:
+    file: agents/analista-chefe.md
+    tier: orchestrator
+    icon: "⚖️"
+    focus: "Classificação de demandas, roteamento de pipeline, quality gates, síntese final"
+  mapeador-processual:
+    file: agents/mapeador-processual.md
+    tier: tier_0
+    icon: "🗺️"
+    focus: "Mapeamento de etapas, atores, entradas/saídas, decisões, sistemas (pseudo-BPMN)"
+  avaliador-processual:
+    file: agents/avaliador-processual.md
+    tier: tier_0
+    icon: "📊"
+    focus: "Conformidade, riscos, gargalos, oportunidades de melhoria, pontuação de maturidade (0-5)"
+  leitor-de-pecas:
+    file: agents/leitor-de-pecas.md
+    tier: tier_1
+    icon: "📄"
+    focus: "Extração estruturada de peças processuais (TXT/PDF): partes, pedidos, fundamentos, datas"
+  pesquisador-juridico:
+    file: agents/pesquisador-juridico.md
+    tier: tier_1
+    icon: "🔍"
+    focus: "Pesquisa online de jurisprudência (STF/STJ/TJs), legislação, doutrina via WebSearch"
+  estrategista-processual:
+    file: agents/estrategista-processual.md
+    tier: tier_1
+    icon: "♟️"
+    focus: "Riscos de sucumbência, cenários (otimista/realista/pessimista), viabilidade de acordo"
+  advogado-orientador:
+    file: agents/advogado-orientador.md
+    tier: tier_1
+    icon: "📋"
+    focus: "Medidas urgentes, plano de ação com prazos, monitoramento DJe, comunicação com cliente"
+  documentador-processual:
+    file: agents/documentador-processual.md
+    tier: tier_sintese
+    icon: "📝"
+    focus: "Relatório executivo + tabela de etapas + Top-5 riscos + roadmap + bloco citacoes rastreado"
+
+handoffs:
+  analista-chefe:
+    routes_to: [mapeador-processual, avaliador-processual, leitor-de-pecas, pesquisador-juridico, estrategista-processual, advogado-orientador, documentador-processual]
+  mapeador-processual:
+    hands_off_to: [avaliador-processual]
+    escalates_to: [analista-chefe]
+  avaliador-processual:
+    receives_from: [mapeador-processual]
+    hands_off_to: [analista-chefe]
+  leitor-de-pecas:
+    collaborates_with: [pesquisador-juridico]
+    returns_to: [analista-chefe]
+  pesquisador-juridico:
+    collaborates_with: [leitor-de-pecas]
+    returns_to: [analista-chefe]
+  estrategista-processual:
+    receives_from: [leitor-de-pecas, pesquisador-juridico]
+    returns_to: [analista-chefe]
+  advogado-orientador:
+    receives_from: [estrategista-processual]
+    returns_to: [analista-chefe]
+  documentador-processual:
+    receives_from: [analista-chefe]
+    final: true
+
+pipeline:
+  use_cases:
+    UC-AP-001:
+      name: "Mapeamento de Processo"
+      trigger_patterns: ["mapear processo", "etapas", "fluxo", "BPMN", "workflow", "mapeamento"]
+      tier_0_active: true
+      tier_1_agents: []
+    UC-AP-002:
+      name: "Análise Jurídica Completa"
+      trigger_patterns: ["processo judicial", "peças", "petição", "sentença", "recurso", "analisar processo"]
+      tier_0_active: false
+      tier_1_agents: [leitor-de-pecas, pesquisador-juridico, estrategista-processual, advogado-orientador]
+    UC-AP-003:
+      name: "Análise Estratégica"
+      trigger_patterns: ["riscos", "cenários", "probabilidade", "sucumbência", "estratégia", "acordo"]
+      tier_0_active: true
+      tier_1_agents: [estrategista-processual, advogado-orientador]
+    UC-AP-004:
+      name: "Pesquisa Jurisprudencial"
+      trigger_patterns: ["jurisprudência", "STJ", "STF", "súmula", "legislação", "precedente"]
+      tier_0_active: false
+      tier_1_agents: [pesquisador-juridico]
+
+quality_gates:
+  QG-AP-001:
+    name: "Classificação da Demanda"
+    agent: analista-chefe
+    criteria: "Use case classificado, plano de ativação dos agentes definido"
+  QG-AP-002:
+    name: "Mapeamento Completo"
+    agent: mapeador-processual
+    criteria: "Todas etapas, atores, entradas/saídas e decisões identificados"
+  QG-AP-003:
+    name: "Avaliação Fundamentada"
+    agent: avaliador-processual
+    criteria: "Pontuação de maturidade (0-5) com justificativa, Top-5 riscos identificados"
+  QG-AP-004:
+    name: "Relatório Rastreado"
+    agent: documentador-processual
+    criteria: "Relatório Markdown salvo, bloco citacoes presente (modo jurídico), roadmap completo"
+
+tools:
+  WebSearch:
+    used_by: [pesquisador-juridico]
+    purpose: "Pesquisa de jurisprudência, legislação e doutrina"
+  Read:
+    used_by: [leitor-de-pecas, mapeador-processual, avaliador-processual, estrategista-processual, advogado-orientador, documentador-processual]
+    purpose: "Leitura de peças processuais e documentos"
+  Write:
+    used_by: [documentador-processual]
+    purpose: "Salvar relatório final no workspace"
+  Glob:
+    used_by: [leitor-de-pecas, analista-chefe]
+    purpose: "Descoberta de documentos no workspace"
+  Grep:
+    used_by: [leitor-de-pecas, pesquisador-juridico, estrategista-processual]
+    purpose: "Busca em documentos e relatórios"
+
+settings:
+  activation:
+    prefix: "analista-processual"
+    example: "@analista-processual:analista-chefe"
+  greeting:
+    show_use_cases: true
+    show_pipeline_status: true
+  language: "pt-BR"
+
+quality_standards:
+  min_score: 7.0
+  smoke_tests:
+    - "Mapear processo simples com 5 etapas"
+    - "Analisar processo judicial com documentos"
+    - "Gerar relatório com jurisprudência pesquisada"
+
+stats:
+  total_agents: 8
+  total_tasks: 9
+  total_workflows: 2
+  total_checklists: 2
+  total_templates: 1
+  total_data_files: 1
