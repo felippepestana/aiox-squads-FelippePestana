@@ -1,0 +1,51 @@
+workflow:
+  id: wf-mapeamento-rapido
+  name: "Mapeamento Rápido de Processo"
+  version: "1.0.0"
+  orchestrator: analista-chefe
+  description: |
+    Pipeline rápido para processos genéricos sem documentos legais.
+    Ativa apenas Tier 0 (mapeamento + avaliação) e gera relatório MODO_PROCESSUAL.
+  use_case: UC-AP-001
+  estimated_duration: "5-15 min"
+  language: "pt-BR"
+
+constraints:
+  legal_tier_skip: true
+  documentation_mode: MODO_PROCESSUAL
+
+phases:
+  PHASE-1:
+    name: "Classificação"
+    executor: analista-chefe
+    action: "Classificar demanda como UC-AP-001"
+    quality_gate: QG-AP-001
+
+  PHASE-2:
+    name: "Mapeamento"
+    executor: mapeador-processual
+    task: ap-mapear-processo
+    quality_gate: QG-AP-002
+
+  PHASE-3:
+    name: "Avaliação"
+    executor: avaliador-processual
+    task: ap-avaliar-conformidade
+    quality_gate: QG-AP-003
+    depends_on: PHASE-2
+
+  PHASE-4:
+    name: "Documentação"
+    executor: documentador-processual
+    action: "Gerar e salvar relatório MODO_PROCESSUAL"
+    task: ap-gerar-relatorio
+    quality_gate: QG-AP-004
+    depends_on: PHASE-3
+
+quality_checklist:
+  - "[ ] Demanda classificada como UC-AP-001"
+  - "[ ] Todas as etapas mapeadas com atores (QG-AP-002)"
+  - "[ ] Score de maturidade (0-5) com Top-5 riscos (QG-AP-003)"
+  - "[ ] Relatório MODO_PROCESSUAL salvo com roadmap 3 horizontes (QG-AP-004)"
+
+completion_signal: "<promise>COMPLETE: relatorio salvo em [caminho]</promise>"
