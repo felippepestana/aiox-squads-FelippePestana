@@ -162,6 +162,7 @@ app.get("/api/squads", (_req, res) => {
   res.json(
     squads.map((s) => ({
       id: s.id,
+      meta: s.meta,
       agents: s.agents.map((a) => stripAgent(a)),
     }))
   );
