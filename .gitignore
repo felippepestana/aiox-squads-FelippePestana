@@ -7,4 +7,5 @@ chatbot/dist/
 web/node_modules/
 web/dist/
 web/.env
+web/worker/*.js
 .env
