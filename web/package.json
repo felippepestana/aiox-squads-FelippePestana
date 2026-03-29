@@ -8,6 +8,8 @@
     "dev:server": "tsx watch server/index.ts",
     "dev:client": "vite --config client/vite.config.ts",
     "build": "tsc -p tsconfig.server.json && vite build --config client/vite.config.ts",
+    "build:worker": "tsc -p tsconfig.server.json && vite build --config client/vite.config.ts && node scripts/bundle-squads.mjs",
+    "deploy": "npm run build:worker && npx wrangler deploy",
     "start": "node dist/server/index.js",
     "preview": "vite preview --config client/vite.config.ts",
     "test:smoke": "node scripts/smoke-api.mjs"
@@ -26,6 +28,7 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260329.1",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/multer": "^2.1.0",
