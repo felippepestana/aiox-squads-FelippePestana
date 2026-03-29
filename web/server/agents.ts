@@ -4,6 +4,44 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+/** Cached bundle for Cloudflare Workers (no fs access) */
+let _bundleCache: Squad[] | null = null;
+
+interface BundledAgent {
+  id: string;
+  name: string;
+  content: string;
+}
+interface BundledSquad {
+  id: string;
+  meta: SquadMeta;
+  agents: BundledAgent[];
+}
+
+/** Try to load from squads-bundle.json (used in Workers deploy) */
+function tryLoadFromBundle(): Squad[] | null {
+  if (_bundleCache) return _bundleCache;
+  try {
+    const bundlePath = path.resolve(__dirname, "../squads-bundle.json");
+    if (!fs.existsSync(bundlePath)) return null;
+    const raw = JSON.parse(fs.readFileSync(bundlePath, "utf-8")) as BundledSquad[];
+    _bundleCache = raw.map((s) => ({
+      id: s.id,
+      meta: s.meta,
+      agents: s.agents.map((a) => ({
+        id: a.id,
+        name: a.name,
+        squad: s.id,
+        filePath: `bundled:${s.id}/${a.id}`,
+        systemPrompt: buildSystemPrompt(a.content, a.name, s.id),
+      })),
+    }));
+    return _bundleCache;
+  } catch {
+    return null;
+  }
+}
+
 export interface Agent {
   id: string;
   name: string;
@@ -69,6 +107,10 @@ function loadSquadMeta(squadDir: string, squadId: string): SquadMeta {
 
 /** Carrega todos os agentes de todos os squads disponíveis */
 export function loadAllSquads(): Squad[] {
+  // Try bundle first (Cloudflare Workers deploy)
+  const fromBundle = tryLoadFromBundle();
+  if (fromBundle) return fromBundle;
+
   const squads: Squad[] = [];
   const SQUADS_DIR = getSquadsDir();
 

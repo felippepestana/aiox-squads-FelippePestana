@@ -1,0 +1,10 @@
+name = "aiox-squads-web"
+main = "dist/worker/index.js"
+compatibility_date = "2026-03-20"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./dist/client"
+
+[vars]
+NODE_ENV = "production"
