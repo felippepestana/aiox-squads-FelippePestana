@@ -35,6 +35,9 @@ import {
   type RecentSessionMeta,
 } from "./recentSessions";
 const MarkdownMessage = lazy(() => import("./MarkdownMessage"));
+const AnalistaProcessualView = lazy(
+  () => import("./components/ap/AnalistaProcessualView")
+);
 
 function isAbortError(e: unknown): boolean {
   if (e instanceof DOMException && e.name === "AbortError") return true;
@@ -728,8 +731,28 @@ export function App() {
       </aside>
 
       <main className="main">
+        {squadId === "analista-processual" && (
+          <Suspense fallback={null}>
+            <AnalistaProcessualView
+              sessionId={sessionId}
+              messages={lines}
+              onSelectUseCase={(uc) => {
+                // Start session with analista-chefe then inject use case context
+                if (!sessionId) {
+                  setAgentId("analista-chefe");
+                  void startSession().then(() => {
+                    setInput(`Executar use case ${uc}`);
+                  });
+                } else {
+                  setInput(`Executar use case ${uc}`);
+                }
+              }}
+              currentAgent={currentAgent}
+            />
+          </Suspense>
+        )}
         <div className="messages">
-          {!sessionId && (
+          {!sessionId && squadId !== "analista-processual" && (
             <p className="loading">
               Escolha squad e agente e clique em <strong>Iniciar sessão</strong>
               .
