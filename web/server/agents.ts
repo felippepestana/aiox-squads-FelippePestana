@@ -34,6 +34,7 @@ function tryLoadFromBundle(): Squad[] | null {
         squad: s.id,
         filePath: `bundled:${s.id}/${a.id}`,
         systemPrompt: buildSystemPrompt(a.content, a.name, s.id),
+        tools: [],
       })),
     }));
     return _bundleCache;
@@ -48,6 +49,7 @@ export interface Agent {
   squad: string;
   filePath: string;
   systemPrompt: string;
+  tools: string[];
 }
 
 export interface SquadMeta {
@@ -105,6 +107,37 @@ function loadSquadMeta(squadDir: string, squadId: string): SquadMeta {
   }
 }
 
+/** Extract tool assignments per agent from config.yaml tools section */
+function loadAgentTools(
+  squadDir: string
+): Map<string, string[]> {
+  const result = new Map<string, string[]>();
+  const configPath = path.join(squadDir, "config.yaml");
+  if (!fs.existsSync(configPath)) return result;
+  try {
+    const raw = fs.readFileSync(configPath, "utf-8");
+    // Parse tools section: find each tool name and its used_by agents
+    const toolsSection = raw.match(/^tools:\s*\n((?:\s+.+\n)*)/m);
+    if (!toolsSection) return result;
+
+    const toolBlocks = toolsSection[1].matchAll(
+      /^\s{2}(\w+):\s*\n(?:\s+.*\n)*?\s+used_by:\s*\[([^\]]+)\]/gm
+    );
+    for (const match of toolBlocks) {
+      const toolName = match[1];
+      const agents = match[2].split(",").map((a) => a.trim());
+      for (const agentId of agents) {
+        const existing = result.get(agentId) ?? [];
+        existing.push(toolName);
+        result.set(agentId, existing);
+      }
+    }
+  } catch {
+    // ignore parse errors
+  }
+  return result;
+}
+
 /** Carrega todos os agentes de todos os squads disponíveis */
 export function loadAllSquads(): Squad[] {
   // Try bundle first (Cloudflare Workers deploy)
@@ -134,6 +167,7 @@ export function loadAllSquads(): Squad[] {
 
     if (agentFiles.length === 0) continue;
 
+    const agentToolMap = loadAgentTools(squadPath);
     const agents: Agent[] = agentFiles.map((file) => {
       const filePath = path.join(agentsDir, file);
       const content = fs.readFileSync(filePath, "utf-8");
@@ -144,6 +178,7 @@ export function loadAllSquads(): Squad[] {
         squad: squadId,
         filePath,
         systemPrompt: buildSystemPrompt(content, meta.name, squadId),
+        tools: agentToolMap.get(meta.id) ?? [],
       };
     });
 

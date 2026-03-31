@@ -26,6 +26,7 @@ import {
   uploadFileFromBuffer,
   type UploadedFile,
 } from "./files.js";
+import { store } from "./store.js";
 
 const PORT = Number(process.env.PORT ?? 8787);
 const NODE_ENV = process.env.NODE_ENV ?? "development";
@@ -193,6 +194,13 @@ app.post("/api/sessions", (req, res) => {
   const client = new Anthropic({ apiKey });
   const sessionId = randomUUID();
   sessions.set(sessionId, { chat: new ChatSession(client, agent) });
+  store.createSession({
+    id: sessionId,
+    squad_id: squadId,
+    agent_id: agentId,
+    agent_name: agent.name,
+    use_case: null,
+  });
   res.json({ sessionId, agent: stripAgent(agent) });
 });
 
@@ -294,15 +302,78 @@ app.post("/api/sessions/:id/chat", heavyLimiter, async (req, res) => {
     (res as express.Response & { flushHeaders: () => void }).flushHeaders();
   }
 
+  const sid = routeSessionId(req);
+  store.addMessage(sid, "user", text, files.map((f) => f.filename));
+
   try {
-    await state.chat.send(text, files, (chunk) => {
+    const fullText = await state.chat.send(text, files, (chunk) => {
       sseSend(res, { type: "chunk", text: chunk });
     });
+    store.addMessage(sid, "assistant", fullText);
+    store.touchSession(sid);
     sseSend(res, { type: "done" });
   } catch (e) {
     sseSend(res, { type: "error", message: String(e) });
   }
   res.end();
+});
+
+// --- New endpoints for analista-processual and project consolidation ---
+
+app.delete("/api/sessions/:id", (req, res) => {
+  const id = routeSessionId(req);
+  sessions.delete(id);
+  store.deleteSession(id);
+  res.json({ ok: true });
+});
+
+app.post("/api/sessions/:id/set-use-case", (req, res) => {
+  const id = routeSessionId(req);
+  const state = sessions.get(id);
+  if (!state) {
+    res.status(404).json({ error: "Sessão não encontrada" });
+    return;
+  }
+  const useCase = String(req.body?.useCase ?? "");
+  if (!useCase) {
+    res.status(400).json({ error: "useCase é obrigatório" });
+    return;
+  }
+  store.setUseCase(id, useCase);
+  res.json({ ok: true, useCase });
+});
+
+app.post("/api/sessions/:id/report", (req, res) => {
+  const id = routeSessionId(req);
+  const state = sessions.get(id);
+  if (!state) {
+    res.status(404).json({ error: "Sessão não encontrada" });
+    return;
+  }
+  const { useCase, mode, content } = req.body ?? {};
+  if (!content) {
+    res.status(400).json({ error: "content é obrigatório" });
+    return;
+  }
+  const reportId = store.saveReport(
+    id,
+    String(useCase ?? ""),
+    String(mode ?? ""),
+    String(content)
+  );
+  res.json({ reportId });
+});
+
+app.get("/api/sessions/:id/reports", (req, res) => {
+  const id = routeSessionId(req);
+  const reports = store.getReportsBySession(id);
+  res.json(reports);
+});
+
+app.get("/api/sessions/:id/messages", (req, res) => {
+  const id = routeSessionId(req);
+  const messages = store.getMessages(id);
+  res.json(messages);
 });
 
 const isCompiledBundle = /[/\\]dist[/\\]server$/i.test(serverDir);
