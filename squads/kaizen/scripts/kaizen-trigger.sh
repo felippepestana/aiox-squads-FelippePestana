@@ -86,7 +86,7 @@ fi
 # ─────────────────────────────────────────────────────────────
 BOUNDARY_CHANGES=$(echo "$CHANGED_FILES" | grep -cE '^squads/.*/squad\.yaml$' || true)
 if [[ "$BOUNDARY_CHANGES" -gt 0 ]]; then
-  if git diff HEAD~1 -- squads/*/squad.yaml 2>/dev/null | grep -q 'automation_boundary\|autonomy_level'; then
+  if git diff HEAD~1 -- squads/*/config.yaml 2>/dev/null | grep -q 'automation_boundary\|autonomy_level'; then
     TRIGGERS+=("Automation boundary alterado ($BOUNDARY_CHANGES squads)")
     COMMANDS+=("bash scripts/kaizen-audit-autonomy.sh — atualizar autonomy dashboard")
   fi

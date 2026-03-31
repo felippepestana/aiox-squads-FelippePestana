@@ -9,7 +9,7 @@ WORKDIR /app/chatbot
 COPY chatbot/package*.json ./
 
 # Instala todas as dependências (incluindo devDeps para build)
-RUN npm install
+RUN npm ci
 
 # Copia source TypeScript e configs
 COPY chatbot/tsconfig.json ./

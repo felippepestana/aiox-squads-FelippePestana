@@ -1,10 +1,60 @@
 metadata:
-  version: 1.3.0
-  last_updated: '2026-03-26'
-  total_squads: 8
+  version: 1.5.0
+  last_updated: '2026-03-31'
+  total_squads: 10
   maintainer: squad-creator
   generated_by: "scripts/refresh-registry.py --write (100% deterministic)"
 squads:
+  analista-processual:
+    path: squads/analista-processual/
+    version: 1.0.0
+    score: 9.0
+    maturity: DEVELOPING
+    validated: false
+    validated_explicit: false
+    auto_promoted: false
+    description: >
+      Squad de análise processual com pipeline 3-tier: Intake (mapeamento + avaliação),
+      Execução Jurídica (leitor de peças, pesquisa jurisprudencial, estratégia, orientação),
+      e Síntese Final (relatório estruturado com citações rastreadas). Cobre processos
+      genéricos e demandas jurídicas completas com suporte a documentos legais brasileiros.
+    slashPrefix: ''
+    counts:
+      agents: 8
+      tasks: 9
+      workflows: 2
+      templates: 1
+      checklists: 2
+      data_files: 1
+    agent_names:
+    - analista-chefe
+    - mapeador-processual
+    - avaliador-processual
+    - leitor-de-pecas
+    - pesquisador-juridico
+    - estrategista-processual
+    - advogado-orientador
+    - documentador-processual
+    has_readme: true
+    has_changelog: true
+    domain: legal
+    keywords:
+    - analista-processual
+    - mapeamento
+    - juridico
+    - jurisprudencia
+    - processo
+    - pecas-processuais
+    - estrategia-juridica
+    - relatorio
+    - brasil
+    - direito-civil
+    highlights:
+    - 8 agents, 9 tasks
+    - 2 workflows available
+    - README documented
+    - Dual-mode (processual + juridico)
+    example_use: Use analista-processual for process mapping or legal document analysis.
   apex:
     path: squads/apex/
     version: 1.1.0
@@ -112,6 +162,46 @@ squads:
     - 5 workflows available
     - README documented
     example_use: Use curator for curator tasks.
+  devops:
+    path: squads/devops/
+    version: 1.0.0
+    score: 9.0
+    maturity: DEVELOPING
+    validated: false
+    validated_explicit: false
+    auto_promoted: false
+    description: "Pipeline-driven infrastructure automation squad. Designs CI/CD pipelines, containerizes applications, provisions cloud infrastructure as code, and implements observability."
+    slashPrefix: ''
+    counts:
+      agents: 6
+      tasks: 6
+      workflows: 0
+      templates: 0
+      checklists: 0
+      data_files: 0
+    agent_names:
+    - devops-chief
+    - pipeline-architect
+    - container-engineer
+    - infra-coder
+    - monitor-sentinel
+    - devsecops-guardian
+    has_readme: true
+    has_changelog: true
+    domain: devops
+    keywords:
+    - devops
+    - ci-cd
+    - docker
+    - kubernetes
+    - terraform
+    - monitoring
+    - cloud
+    - security
+    highlights:
+    - 6 agents, 6 tasks
+    - README documented
+    example_use: Use devops for CI/CD pipeline design and infrastructure automation.
   deep-research:
     path: squads/deep-research/
     version: 1.0.0
@@ -367,7 +457,7 @@ squads:
     description: "Base meta-squad para criar squads de agentes via templates e validacao estrutural. Orchestrator: @squad-chief\
       \ (triage, routing, criacao template-driven de squads). Base mode: 24 tasks, 3 workflows, 1 agent. Pro mode: auto-detected\
       \ via squad-creator-pro/ (adds mind cloning, DNA extraction, multi-agent orchestration, model routing, advanced optimization).\
-      \ v4.0: Base/Pro split — template-driven base, mind-cloning pro."
+      \ v4.0: Base/Pro split \u2014 template-driven base, mind-cloning pro."
     slashPrefix: squadCreator
     counts:
       agents: 1
@@ -401,6 +491,36 @@ squads:
     - Command prefix /squadCreator
     example_use: Use /squadCreator to execute squad-creator workflows in squad-creator.
 domain_index:
+  legal:
+  - analista-processual
+  analista-processual:
+  - analista-processual
+  mapeamento:
+  - analista-processual
+  juridico:
+  - analista-processual
+  jurisprudencia:
+  - analista-processual
+  processo:
+  - analista-processual
+  relatorio:
+  - analista-processual
+  estrategia-juridica:
+  - analista-processual
+  devops:
+  - devops
+  ci-cd:
+  - devops
+  docker:
+  - devops
+  kubernetes:
+  - devops
+  terraform:
+  - devops
+  monitoring:
+  - devops
+  cloud:
+  - devops
   design-system:
   - apex
   apex:
@@ -582,13 +702,13 @@ domain_index:
   squad-chief:
   - squad-creator
 summary:
-  total_agents: 73
-  total_tasks: 174
-  total_workflows: 30
-  total_templates: 60
-  total_checklists: 78
-  total_data_files: 69
+  total_agents: 87
+  total_tasks: 189
+  total_workflows: 32
+  total_templates: 62
+  total_checklists: 82
+  total_data_files: 71
 maturity_summary:
   DRAFT: 0
-  DEVELOPING: 8
+  DEVELOPING: 10
   OPERATIONAL: 0

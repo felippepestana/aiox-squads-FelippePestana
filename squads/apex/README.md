@@ -432,7 +432,7 @@ squads/apex/
 ├── templates/       # 13 document templates
 ├── data/            # 9 data files (tokens, presets, intelligence)
 ├── config/          # Squad configuration
-├── squad.yaml       # Manifest
+├── config.yaml      # Manifest
 ├── CLAUDE.md        # Project integration
 └── README.md        # This file
 ```

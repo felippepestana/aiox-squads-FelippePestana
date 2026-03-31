@@ -153,9 +153,11 @@ Squads publicados pela comunidade neste repositório.
 
 | Squad | O que faz | Status |
 |-------|-----------|--------|
-| [**apex**](squads/apex/) | Squad ultra-premium de frontend (Web, Mobile, Spatial) — 15 agentes cobrindo design system, React/RN, animações, 3D/WebXR, acessibilidade e performance | 🟢 |
+| [**analista-processual**](squads/analista-processual/) | Análise completa de processos organizacionais e jurídicos brasileiros — pipeline 3-tier com 8 agentes, do mapeamento ao relatório estratégico | 🟢 |
+| [**apex**](squads/apex/) | Squad ultra-premium de frontend (Web, Mobile, Spatial) — 14 agentes cobrindo design system, React/RN, animações, 3D/WebXR, acessibilidade e performance | 🟢 |
 | [**curator**](squads/curator/) | Minera transcrições de vídeo, identifica momentos de alto impacto com timestamps e monta roteiros de corte prontos para edição | 🟢 |
 | [**deep-research**](squads/deep-research/) | Pipeline de pesquisa profunda baseada em evidências com 11 agentes — da formulação da pergunta à síntese auditada por viés cognitivo | 🟡 |
+| [**devops**](squads/devops/) | Squad de engenharia DevOps com 6 agentes — CI/CD pipelines, containerização, IaC, monitoramento e DevSecOps | 🟢 |
 | [**dispatch**](squads/dispatch/) | Motor de execução paralela que decompõe stories/PRDs em subtarefas atômicas, otimiza em ondas (DAG) e roteia para agentes/modelos certos | 🟢 |
 | [**education**](squads/education/) | Design instrucional que transforma expertise em cursos online conformes ao MEC, aplicando 15 frameworks pedagógicos (Bloom, Mayer, UbD, ARCS) | 🟢 |
 | [**kaizen**](squads/kaizen/) | Monitora e melhora continuamente todos os squads — analisa estrutura, performance, gargalos, competências e custos | 🟢 |
