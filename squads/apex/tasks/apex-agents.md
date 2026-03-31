@@ -14,7 +14,7 @@ List active agents for the current project profile.
 
 2. **Determine active profile**
    - Read `profile` from scan cache
-   - Map to agent list from `squad.yaml → profiles.{profile}.agents`
+   - Map to agent list from `config.yaml → profiles.{profile}.agents`
 
 3. **Display agent table**
    ```
