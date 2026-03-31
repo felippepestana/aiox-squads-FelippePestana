@@ -93,7 +93,5 @@ The squad supports multiple deployment strategies:
 
 ## Documentation
 
-- [Architecture Overview](docs/architecture.md)
-- [Pipeline Patterns](data/pipeline-patterns.md)
-- [Container Best Practices](data/container-best-practices.md)
-- [IaC Conventions](data/iac-conventions.md)
+- [DevOps Squad Config](config.yaml)
+- [Changelog](CHANGELOG.md)

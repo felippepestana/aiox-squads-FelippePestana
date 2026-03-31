@@ -154,7 +154,7 @@ Squads publicados pela comunidade neste repositório.
 | Squad | O que faz | Status |
 |-------|-----------|--------|
 | [**analista-processual**](squads/analista-processual/) | Análise completa de processos organizacionais e jurídicos brasileiros — pipeline 3-tier com 8 agentes, do mapeamento ao relatório estratégico | 🟢 |
-| [**apex**](squads/apex/) | Squad ultra-premium de frontend (Web, Mobile, Spatial) — 15 agentes cobrindo design system, React/RN, animações, 3D/WebXR, acessibilidade e performance | 🟢 |
+| [**apex**](squads/apex/) | Squad ultra-premium de frontend (Web, Mobile, Spatial) — 14 agentes cobrindo design system, React/RN, animações, 3D/WebXR, acessibilidade e performance | 🟢 |
 | [**curator**](squads/curator/) | Minera transcrições de vídeo, identifica momentos de alto impacto com timestamps e monta roteiros de corte prontos para edição | 🟢 |
 | [**deep-research**](squads/deep-research/) | Pipeline de pesquisa profunda baseada em evidências com 11 agentes — da formulação da pergunta à síntese auditada por viés cognitivo | 🟡 |
 | [**devops**](squads/devops/) | Squad de engenharia DevOps com 6 agentes — CI/CD pipelines, containerização, IaC, monitoramento e DevSecOps | 🟢 |
