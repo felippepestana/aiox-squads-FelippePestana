@@ -1,0 +1,5 @@
+{
+    "workbench.editor.enablePreviewFromQuickOpen": true,
+    "workbench.editor.enablePreviewFromCodeNavigation": true,
+    "python.defaultInterpreterPath": "${workspaceFolder}/mcp/.venv/Scripts/python.exe"
+}
