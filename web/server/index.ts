@@ -278,7 +278,9 @@ app.post(
       return;
     }
     const text = String(req.body?.text ?? "");
-    const filesBody = req.body?.files;
+    const filesRaw = req.body?.files;
+    const filesBody =
+      filesRaw === undefined || filesRaw === null ? [] : filesRaw;
     if (!Array.isArray(filesBody)) {
       res.status(400).json({ error: "files deve ser um array" });
       return;

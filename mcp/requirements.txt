@@ -1,0 +1,5 @@
+# SDK e CLI oficiais — https://github.com/modelcontextprotocol/python-sdk
+mcp[cli]>=1.26,<2
+# Usado pelo interpretador do workspace (.vscode) e por scripts em squads/ (yaml, testes).
+pyyaml>=6
+pytest>=8
