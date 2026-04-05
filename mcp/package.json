@@ -1,0 +1,34 @@
+{
+  "name": "@aiox-squads/mcp-local",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Servidor MCP local (stdio) e ferramentas oficiais MCP para desenvolvimento",
+  "scripts": {
+    "server": "tsx src/stdio-server.ts",
+    "server:py": ".venv\\Scripts\\mcp run python/stdio_server.py -t stdio",
+    "inspector": "mcp-inspector --config inspector.config.json --server aiox-local",
+    "inspector:cli": "mcp-inspector --cli --config inspector.config.json --server aiox-local",
+    "inspector:stdio": "mcp-inspector --transport stdio -- npx tsx src/stdio-server.ts",
+    "inspector:python": "mcp-inspector --config inspector.config.json --server aiox-python",
+    "inspector:python:cli": "mcp-inspector --cli --config inspector.config.json --server aiox-python",
+    "test:py:list": "mcp-inspector --cli --config inspector.config.json --server aiox-python --method tools/list",
+    "test:py:echo": "mcp-inspector --cli --config inspector.config.json --server aiox-python --method tools/call --tool-name echo_py --tool-arg message=smoke",
+    "test:py:ping": "mcp-inspector --cli --config inspector.config.json --server aiox-python --method tools/call --tool-name ping_py",
+    "test:py": "npm run test:py:list && npm run test:py:echo && npm run test:py:ping",
+    "reference:everything": "npx --yes @modelcontextprotocol/server-everything"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/inspector": "^0.16.0",
+    "@types/node": "^22.19.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

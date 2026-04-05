@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "aiox-local-ts": {
+      "command": "npx",
+      "args": ["tsx", "src/stdio-server.ts"],
+      "cwd": "mcp"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        "gitlab.gitlab-workflow",
+        "webhint.vscode-webhint",
+        "WakaTime.vscode-wakatime"
+    ]
+}

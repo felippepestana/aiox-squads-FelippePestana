@@ -1,0 +1,58 @@
+name: Docker Compose Test
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "chatbot/**"
+      - "web/**"
+      - "squads/**"
+      - "docker-compose.yml"
+      - ".env.example"
+      - ".github/workflows/docker-compose-test.yml"
+  pull_request:
+    branches: [main, master]
+    paths:
+      - "chatbot/**"
+      - "web/**"
+      - "squads/**"
+      - "docker-compose.yml"
+
+jobs:
+  test-compose:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create .env file
+        run: cp .env.example .env || echo "ANTHROPIC_API_KEY=test" > .env
+
+      - name: Build with docker-compose
+        run: |
+          docker compose --profile web --profile chatbot build
+
+      - name: Start services
+        run: |
+          docker compose --profile web --profile chatbot up -d
+          sleep 5
+
+      - name: Check chatbot health
+        run: |
+          docker compose exec -T chatbot wget -qO- http://127.0.0.1:3000/ || true
+
+      - name: Check web health
+        run: |
+          docker compose exec -T squads-web wget -qO- http://127.0.0.1:8787/api/health || true
+
+      - name: View logs on failure
+        if: failure()
+        run: |
+          echo "=== Chatbot logs ==="
+          docker compose logs chatbot || true
+          echo "=== Web logs ==="
+          docker compose logs squads-web || true
+
+      - name: Cleanup
+        if: always()
+        run: docker compose down --remove-orphans

@@ -1,0 +1,57 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "WakaTime: abrir API Key no navegador",
+      "type": "shell",
+      "windows": {
+        "command": "powershell",
+        "args": [
+          "-NoProfile",
+          "-Command",
+          "Start-Process 'https://wakatime.com/settings/api-key'"
+        ]
+      },
+      "linux": {
+        "command": "xdg-open",
+        "args": ["https://wakatime.com/settings/api-key"]
+      },
+      "osx": {
+        "command": "open",
+        "args": ["https://wakatime.com/settings/api-key"]
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared",
+        "close": true
+      }
+    },
+    {
+      "label": "WakaTime: abrir dashboard no navegador",
+      "type": "shell",
+      "windows": {
+        "command": "powershell",
+        "args": [
+          "-NoProfile",
+          "-Command",
+          "Start-Process 'https://wakatime.com/dashboard'"
+        ]
+      },
+      "linux": {
+        "command": "xdg-open",
+        "args": ["https://wakatime.com/dashboard"]
+      },
+      "osx": {
+        "command": "open",
+        "args": ["https://wakatime.com/dashboard"]
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared",
+        "close": true
+      }
+    }
+  ]
+}

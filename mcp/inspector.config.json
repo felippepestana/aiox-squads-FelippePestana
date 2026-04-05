@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "aiox-local": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["tsx", "src/stdio-server.ts"]
+    },
+    "aiox-python": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        ".venv\\Scripts\\mcp.exe",
+        "run",
+        "python\\stdio_server.py",
+        "-t",
+        "stdio"
+      ]
+    }
+  }
+}

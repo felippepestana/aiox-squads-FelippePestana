@@ -1,0 +1,37 @@
+{
+  "plugins": {
+    "sentry": {
+      "enabled": true
+    },
+    "vercel": {
+      "enabled": true
+    },
+    "cloudflare": {
+      "enabled": true
+    },
+    "firebase": {
+      "enabled": true
+    },
+    "wix": {
+      "enabled": true
+    },
+    "cli-for-agent": {
+      "enabled": true
+    },
+    "cursor-team-kit": {
+      "enabled": true
+    },
+    "meta-quest-agentic-tools": {
+      "enabled": true
+    },
+    "stripe": {
+      "enabled": true
+    },
+    "runlayer": {
+      "enabled": true
+    },
+    "encore": {
+      "enabled": true
+    }
+  }
+}
