@@ -14,7 +14,13 @@
 
 import readline from "readline";
 import Anthropic from "@anthropic-ai/sdk";
-import { loadAllSquads, flatAgentList, Agent, Squad } from "./agents";
+import {
+  loadAllSquads,
+  flatAgentList,
+  squadDisplayLabel,
+  type Agent,
+  type Squad,
+} from "./agents";
 import { uploadFile, deleteFile, supportedExtensions, UploadedFile } from "./files";
 import { ChatSession } from "./chat";
 
@@ -48,8 +54,15 @@ function info(text: string): string {
 function prompt(text: string): string {
   return `${c.bold}${c.magenta}${text}${c.reset}`;
 }
-function agentTag(squad: string, name: string): string {
-  return `${c.bgBlue}${c.white} ${squad.toUpperCase()} ${c.reset} ${c.bold}${name}${c.reset}`;
+function formatSquadLabel(squads: Squad[], squadId: string): string {
+  const s = squads.find((x) => x.id === squadId);
+  return s ? squadDisplayLabel(s) : squadId;
+}
+
+function agentTag(squadDisplay: string, name: string): string {
+  const slugLike = /^[\w-]+$/.test(squadDisplay) && squadDisplay.length <= 32;
+  const badge = slugLike ? squadDisplay.toUpperCase() : squadDisplay;
+  return `${c.bgBlue}${c.white} ${badge} ${c.reset} ${c.bold}${name}${c.reset}`;
 }
 
 // ── Readline ──────────────────────────────────────────────────────────────────
@@ -73,7 +86,9 @@ async function selectAgent(squads: Squad[]): Promise<Agent> {
 
   let i = 1;
   for (const squad of squads) {
-    console.log(`\n  ${c.bold}${c.yellow}Squad: ${squad.id}${c.reset}`);
+    console.log(
+      `\n  ${c.bold}${c.yellow}Squad: ${squadDisplayLabel(squad)}${c.dim} (${squad.id})${c.reset}`
+    );
     for (const agent of squad.agents) {
       console.log(
         `  ${c.dim}[${i}]${c.reset} ${c.cyan}${agent.name}${c.reset} ${c.dim}(${agent.id})${c.reset}`
@@ -117,10 +132,13 @@ async function chatLoop(
 ): Promise<void> {
   const uploadedFiles: UploadedFile[] = [];
   const pendingFiles: UploadedFile[] = []; // arquivos a incluir na próxima mensagem
+  const sl = (id: string) => formatSquadLabel(squads, id);
 
   console.log(header("\n  Chatbot iniciado!"));
   console.log(
-    info(`Agente: ${agentTag(session.getAgent().squad, session.getAgent().name)}`)
+    info(
+      `Agente: ${agentTag(sl(session.getAgent().squad), session.getAgent().name)}`
+    )
   );
   console.log(info(`Digite /help para ver os comandos disponíveis.\n`));
 
@@ -153,7 +171,7 @@ async function chatLoop(
     if (trimmed === "/status") {
       console.log(
         info(
-          `Agente: ${agentTag(session.getAgent().squad, session.getAgent().name)}`
+          `Agente: ${agentTag(sl(session.getAgent().squad), session.getAgent().name)}`
         )
       );
       console.log(info(`Mensagens no histórico: ${session.historyLength()}`));
@@ -182,7 +200,7 @@ async function chatLoop(
       session.switchAgent(newAgent);
       console.log(
         success(
-          `Agente alterado para: ${agentTag(newAgent.squad, newAgent.name)}`
+          `Agente alterado para: ${agentTag(sl(newAgent.squad), newAgent.name)}`
         )
       );
       continue;
@@ -293,7 +311,7 @@ async function main(): Promise<void> {
 
   console.log(
     success(
-      `Agente selecionado: ${agentTag(selectedAgent.squad, selectedAgent.name)}`
+      `Agente selecionado: ${agentTag(formatSquadLabel(squads, selectedAgent.squad), selectedAgent.name)}`
     )
   );
 

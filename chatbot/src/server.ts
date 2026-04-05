@@ -57,6 +57,7 @@ app.use(express.json());
 app.get("/api/agents", (_req: Request, res: Response) => {
   const list = squads.map((s) => ({
     id: s.id,
+    meta: s.meta,
     agents: s.agents.map((a) => ({ id: a.id, name: a.name, squad: a.squad })),
   }));
   res.json(list);
@@ -460,7 +461,8 @@ async function init(){
   squads.forEach(s=>{
     const lbl=document.createElement('div');
     lbl.className='squad-label';
-    lbl.textContent=s.id;
+    const m=s.meta||{};
+    lbl.textContent=(m.title&&m.title.trim())||(m.name&&m.name.trim())||s.id;
     list.appendChild(lbl);
 
     s.agents.forEach(a=>{
@@ -468,14 +470,15 @@ async function init(){
       btn.className='agent-btn';
       btn.dataset.id=a.id;
       btn.innerHTML=\`<span class="agent-dot"></span>\${a.name}\`;
-      btn.onclick=()=>selectAgent(a.id,a.name,s.id,btn);
+      const squadShown=lbl.textContent;
+      btn.onclick=()=>selectAgent(a.id,a.name,squadShown,btn);
       list.appendChild(btn);
     });
   });
 }
 
 // ── Selecionar agente ─────────────────────────────────────────────────────────
-async function selectAgent(id,name,squad,btn){
+async function selectAgent(id,name,squadLabel,btn){
   if(streaming)return;
   document.querySelectorAll('.agent-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
@@ -487,7 +490,7 @@ async function selectAgent(id,name,squad,btn){
     method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({sessionId:SESSION_ID,agentId:id})
   });
-  appendSys(\`\${name} [\${squad}] ativado\`);
+  appendSys(\`\${name} [\${squadLabel}] ativado\`);
 
   // Fecha drawer no mobile
   if(window.innerWidth<768)toggleDrawer();
