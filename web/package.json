@@ -20,6 +20,7 @@
     "dotenv": "^16.6.1",
     "express": "^5.2.1",
     "express-rate-limit": "^8.3.1",
+    "get-shit-done-cc": "^1.32.0",
     "helmet": "^8.1.0",
     "highlight.js": "^11.11.1",
     "multer": "^2.1.1",
