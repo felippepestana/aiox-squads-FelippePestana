@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.6;
+  }
+
+  ::selection {
+    background-color: rgba(59, 130, 246, 0.15);
+    color: #1E3A5F;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg
+      bg-covenant-blue text-white font-semibold text-sm
+      transition-all duration-200 ease-out
+      hover:bg-covenant-blue-light hover:shadow-lg hover:shadow-covenant-blue/25
+      focus:outline-none focus:ring-2 focus:ring-covenant-blue focus:ring-offset-2
+      active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg
+      border-2 border-covenant-blue text-covenant-blue font-semibold text-sm
+      transition-all duration-200 ease-out
+      hover:bg-covenant-blue hover:text-white
+      focus:outline-none focus:ring-2 focus:ring-covenant-blue focus:ring-offset-2
+      active:scale-[0.98];
+  }
+
+  .btn-warm {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg
+      bg-covenant-warm text-white font-semibold text-sm
+      transition-all duration-200 ease-out
+      hover:bg-covenant-warm-dark hover:shadow-lg hover:shadow-covenant-warm/25
+      focus:outline-none focus:ring-2 focus:ring-covenant-warm focus:ring-offset-2
+      active:scale-[0.98];
+  }
+
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8 py-16 md:py-24;
+  }
+
+  .container-max {
+    @apply max-w-7xl mx-auto;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

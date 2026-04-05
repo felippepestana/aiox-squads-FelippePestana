@@ -1,0 +1,226 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: #B8860B #F5F0E8;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: rgba(76, 29, 149, 0.2);
+    color: #2D2D2D;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #F5F0E8;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #B8860B;
+    border-radius: 3px;
+  }
+}
+
+@layer components {
+  /* Parchment texture overlay */
+  .parchment-texture {
+    position: relative;
+  }
+
+  .parchment-texture::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(139, 101, 8, 0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(107, 142, 107, 0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(76, 29, 149, 0.02) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .parchment-texture > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Parchment paper effect */
+  .parchment-paper {
+    background-color: #F5F0E8;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 35px,
+        rgba(184, 134, 11, 0.03) 35px,
+        rgba(184, 134, 11, 0.03) 36px
+      );
+  }
+
+  /* Sacred text styling */
+  .sacred-text {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    line-height: 1.8;
+    letter-spacing: 0.02em;
+  }
+
+  /* Drop cap for first letter */
+  .drop-cap::first-letter {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    float: left;
+    font-size: 3.5em;
+    line-height: 0.8;
+    padding-right: 0.1em;
+    color: #B8860B;
+    font-weight: 600;
+  }
+
+  /* Gold gradient text */
+  .text-gold-gradient {
+    background: linear-gradient(135deg, #B8860B, #D4A017, #B8860B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Handwriting accent */
+  .handwriting-accent {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+  }
+
+  /* Scroll indicator line */
+  .scroll-line {
+    width: 2px;
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      #B8860B 20%,
+      #B8860B 80%,
+      transparent
+    );
+  }
+
+  /* Station dot */
+  .station-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #B8860B;
+    background: #F5F0E8;
+    transition: all 0.4s ease;
+  }
+
+  .station-dot.active {
+    background: #B8860B;
+    box-shadow: 0 0 12px rgba(184, 134, 11, 0.5);
+    transform: scale(1.3);
+  }
+
+  .station-dot.visited {
+    background: #B8860B;
+  }
+
+  /* Decorative divider */
+  .ornamental-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #B8860B;
+    opacity: 0.6;
+  }
+
+  .ornamental-divider::before,
+  .ornamental-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent,
+      #B8860B,
+      transparent
+    );
+  }
+
+  /* Path visualization */
+  .winding-path {
+    position: relative;
+  }
+
+  .winding-path::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: repeating-linear-gradient(
+      to bottom,
+      #B8860B 0px,
+      #B8860B 8px,
+      transparent 8px,
+      transparent 16px
+    );
+    transform: translateX(-50%);
+    opacity: 0.3;
+  }
+
+  /* Form styling */
+  .pilgrimage-input {
+    @apply w-full px-4 py-3 bg-parchment-light border border-gold/30 rounded-lg
+           font-sans text-charcoal placeholder:text-charcoal/40
+           focus:outline-none focus:ring-2 focus:ring-gold/50 focus:border-gold
+           transition-all duration-300;
+  }
+
+  .pilgrimage-input:focus {
+    box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.1);
+  }
+
+  /* Button primary */
+  .btn-pilgrimage {
+    @apply px-8 py-4 bg-gold text-parchment font-serif text-lg font-semibold
+           rounded-lg transition-all duration-300 cursor-pointer
+           hover:bg-gold-dark hover:shadow-lg hover:shadow-gold/20
+           focus:outline-none focus:ring-2 focus:ring-gold/50 focus:ring-offset-2
+           focus:ring-offset-parchment active:scale-[0.98];
+  }
+
+  /* Section transition gradients */
+  .gradient-to-purple {
+    background: linear-gradient(to bottom, #F5F0E8, #4C1D95);
+  }
+
+  .gradient-from-purple {
+    background: linear-gradient(to bottom, #4C1D95, #F5F0E8);
+  }
+
+  /* Parallax layers */
+  .parallax-slow {
+    will-change: transform;
+  }
+
+  .parallax-fast {
+    will-change: transform;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
