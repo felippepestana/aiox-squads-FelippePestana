@@ -22,6 +22,7 @@
     "python": ">=3.10"
   },
   "dependencies": {
+    "get-shit-done-cc": "^1.32.0",
     "js-yaml": "^4.1.0"
   }
 }

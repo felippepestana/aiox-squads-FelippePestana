@@ -12,6 +12,7 @@
     "@anthropic-ai/sdk": "^0.54.0",
     "chalk": "^5.4.1",
     "express": "^5.2.1",
+    "get-shit-done-cc": "^1.32.0",
     "multer": "^2.1.1"
   },
   "devDependencies": {
