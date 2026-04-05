@@ -31,21 +31,44 @@ const rateLimitDisabled =
   process.env.RATE_LIMIT_ENABLED === "0" ||
   process.env.RATE_LIMIT_ENABLED === "false";
 
+function parseLimitEnv(name: string, def: number): number {
+  const v = process.env[name];
+  if (v === undefined || v === "") return def;
+  const n = Number(v);
+  return Number.isFinite(n) && n >= 0 ? Math.floor(n) : def;
+}
+
 function corsOptions(): cors.CorsOptions {
   const raw = process.env.CORS_ORIGIN?.trim();
-  if (!raw) return {};
+  const credentials = false as const;
+  if (!raw) {
+    return { origin: true, credentials };
+  }
   const origin = raw
     .split(",")
     .map((s) => s.trim())
     .filter(Boolean);
-  return { origin: origin.length === 1 ? origin[0] : origin };
+  return {
+    origin: origin.length === 1 ? origin[0] : origin,
+    credentials,
+  };
 }
 
 function trustProxyEnabled(): boolean {
-  if (process.env.TRUST_PROXY === "1" || process.env.TRUST_PROXY === "true") {
-    return true;
-  }
-  return NODE_ENV === "production";
+  const raw = process.env.TRUST_PROXY?.trim().toLowerCase();
+  return (
+    raw === "1" ||
+    raw === "true" ||
+    (NODE_ENV === "production" && raw !== "0" && raw !== "false")
+  );
+}
+
+type HttpError = Error & { status?: number };
+
+function httpError(status: number, message: string): HttpError {
+  const e = new Error(message) as HttpError;
+  e.status = status;
+  return e;
 }
 
 let anthropicClient: Anthropic | null = null;
@@ -54,7 +77,10 @@ function getAnthropic(): Anthropic {
   if (!anthropicClient) {
     const key = process.env.ANTHROPIC_API_KEY?.trim();
     if (!key) {
-      throw new Error("ANTHROPIC_API_KEY não definida");
+      throw httpError(
+        503,
+        "ANTHROPIC_API_KEY não configurada. Defina no ambiente ou em web/.env"
+      );
     }
     anthropicClient = new Anthropic({ apiKey: key });
   }
@@ -76,6 +102,7 @@ function paramId(req: Request): string {
 function squadsSummary(squads: Squad[]) {
   return squads.map((s) => ({
     id: s.id,
+    meta: s.meta,
     agents: s.agents.map((a) => ({
       id: a.id,
       name: a.name,
@@ -96,7 +123,12 @@ if (trustProxyEnabled()) {
   app.set("trust proxy", 1);
 }
 
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  })
+);
 app.use(cors(corsOptions()));
 app.use(express.json({ limit: "2mb" }));
 app.use(portalAuthMiddleware);
@@ -106,18 +138,26 @@ if (!rateLimitDisabled) {
     "/api",
     rateLimit({
       windowMs: 60_000,
-      max: Number(process.env.RATE_LIMIT_MAX ?? "200"),
+      max: parseLimitEnv("RATE_LIMIT_MAX", 200),
       standardHeaders: true,
       legacyHeaders: false,
+      message: {
+        error: "Demasiados pedidos. Tente novamente dentro de instantes.",
+      },
     })
   );
 }
 
 const heavyLimiter = rateLimit({
   windowMs: 60_000,
-  max: Number(process.env.RATE_LIMIT_HEAVY_MAX ?? "30"),
+  max: parseLimitEnv("RATE_LIMIT_HEAVY_MAX", 30),
   standardHeaders: true,
   legacyHeaders: false,
+  message: {
+    error:
+      "Limite de mensagens ou uploads por minuto atingido. Aguarde um instante.",
+  },
+  skip: () => rateLimitDisabled,
 });
 
 const upload = multer({
@@ -133,8 +173,22 @@ function asyncHandler(
   };
 }
 
+function multerSingle(fieldName: string) {
+  const mw = upload.single(fieldName);
+  return (req: Request, res: Response, next: NextFunction) => {
+    mw(req, res, (err: unknown) => {
+      if (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        res.status(400).json({ error: message });
+        return;
+      }
+      next();
+    });
+  };
+}
+
 app.get("/api/health", (_req, res) => {
-  res.json({ ok: true });
+  res.json({ ok: true, service: "aiox-squads-web" });
 });
 
 app.get("/api/auth/status", (_req, res) => {
@@ -219,8 +273,8 @@ app.post(
 
 app.post(
   "/api/sessions/:id/upload",
-  rateLimitDisabled ? ((_req, _res, next) => next()) : heavyLimiter,
-  upload.single("file"),
+  heavyLimiter,
+  multerSingle("file"),
   asyncHandler(async (req, res) => {
     const state = sessions.get(paramId(req));
     if (!state) {
@@ -258,7 +312,7 @@ app.post(
     } catch (e) {
       Sentry.captureException(e);
       const message = e instanceof Error ? e.message : String(e);
-      res.status(502).json({ error: message });
+      res.status(500).json({ error: message });
     }
   })
 );
@@ -270,7 +324,7 @@ type StreamEvent =
 
 app.post(
   "/api/sessions/:id/chat",
-  rateLimitDisabled ? ((_req, _res, next) => next()) : heavyLimiter,
+  heavyLimiter,
   asyncHandler(async (req, res) => {
     const state = sessions.get(paramId(req));
     if (!state) {

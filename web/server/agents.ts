@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { parse as parseYaml } from "yaml";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -12,8 +13,19 @@ export interface Agent {
   systemPrompt: string;
 }
 
+/** Metadados públicos do squad (manifest YAML), expostos em /api/squads. */
+export interface SquadMeta {
+  id: string;
+  name: string;
+  title?: string;
+  description?: string;
+  version?: string;
+  status?: string;
+}
+
 export interface Squad {
   id: string;
+  meta: SquadMeta;
   agents: Agent[];
 }
 
@@ -38,6 +50,85 @@ function extractAgentMeta(
     name: nameMatch ? nameMatch[1].trim() : filename,
     id: idMatch ? idMatch[1].trim() : filename,
   };
+}
+
+function defaultMeta(squadId: string): SquadMeta {
+  return { id: squadId, name: squadId };
+}
+
+function asRecord(v: unknown): Record<string, unknown> | null {
+  return v && typeof v === "object" && !Array.isArray(v)
+    ? (v as Record<string, unknown>)
+    : null;
+}
+
+function resolveSquadManifestPath(squadDir: string): string | null {
+  const candidates = [
+    path.join(squadDir, "squad.yaml"),
+    path.join(squadDir, "squad.yml"),
+    path.join(squadDir, "config", "squad-config.yaml"),
+    path.join(squadDir, "config", "squad-config.yml"),
+  ];
+  for (const p of candidates) {
+    if (fs.existsSync(p)) return p;
+  }
+  return null;
+}
+
+function extractMetaFromYamlRoot(
+  root: Record<string, unknown>,
+  squadId: string
+): SquadMeta {
+  let src = root;
+  const nested = root["squad_config"];
+  const nestedRec = asRecord(nested);
+  if (nestedRec) src = nestedRec;
+
+  const name =
+    typeof src["name"] === "string" && src["name"].trim()
+      ? (src["name"] as string).trim()
+      : squadId;
+  const title =
+    typeof src["title"] === "string" && src["title"].trim()
+      ? (src["title"] as string).trim()
+      : undefined;
+  const status =
+    typeof src["status"] === "string" && src["status"].trim()
+      ? (src["status"] as string).trim()
+      : undefined;
+  let description: string | undefined;
+  if (typeof src["description"] === "string") {
+    const d = (src["description"] as string).trim();
+    if (d) description = d;
+  }
+  let version: string | undefined;
+  if (src["version"] !== undefined && src["version"] !== null) {
+    const v = String(src["version"]).trim();
+    if (v) version = v;
+  }
+
+  return {
+    id: squadId,
+    name,
+    title,
+    description,
+    version,
+    status,
+  };
+}
+
+function loadSquadMeta(squadDir: string, squadId: string): SquadMeta {
+  const manifest = resolveSquadManifestPath(squadDir);
+  if (!manifest) return defaultMeta(squadId);
+  try {
+    const raw = fs.readFileSync(manifest, "utf-8");
+    const doc = parseYaml(raw);
+    const root = asRecord(doc);
+    if (!root) return defaultMeta(squadId);
+    return extractMetaFromYamlRoot(root, squadId);
+  } catch {
+    return defaultMeta(squadId);
+  }
 }
 
 /** Carrega todos os agentes de todos os squads disponíveis */
@@ -77,7 +168,8 @@ export function loadAllSquads(): Squad[] {
       };
     });
 
-    squads.push({ id: squadId, agents });
+    const meta = loadSquadMeta(path.join(SQUADS_DIR, squadId), squadId);
+    squads.push({ id: squadId, meta, agents });
   }
 
   return squads;

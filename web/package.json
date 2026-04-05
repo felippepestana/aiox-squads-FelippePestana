@@ -27,7 +27,8 @@
     "multer": "^2.1.1",
     "react-markdown": "^10.1.0",
     "rehype-highlight": "^7.0.2",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "yaml": "^2.8.3"
   },
   "devDependencies": {
     "@hint/connector-local": "^3.2.28",

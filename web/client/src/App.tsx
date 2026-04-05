@@ -36,6 +36,19 @@ import {
 } from "./recentSessions";
 const MarkdownMessage = lazy(() => import("./MarkdownMessage"));
 
+function squadLabel(s: SquadSummary): string {
+  const t = s.meta?.title?.trim();
+  if (t) return t;
+  const n = s.meta?.name?.trim();
+  if (n) return n;
+  return s.id;
+}
+
+function squadLabelFromId(squads: SquadSummary[], squadId: string): string {
+  const s = squads.find((x) => x.id === squadId);
+  return s ? squadLabel(s) : squadId;
+}
+
 function isAbortError(e: unknown): boolean {
   if (e instanceof DOMException && e.name === "AbortError") return true;
   if (
@@ -314,7 +327,7 @@ export function App() {
         squadId,
         agentId,
         agentName: agent.name,
-        squadName: agent.squad,
+        squadName: squadLabelFromId(squads, agent.squad),
         preview: "",
       });
       refreshRecent();
@@ -328,7 +341,7 @@ export function App() {
     } finally {
       setBusy(false);
     }
-  }, [squadId, agentId, refreshRecent]);
+  }, [squadId, agentId, refreshRecent, squads]);
 
   const onSwitchAgent = useCallback(async () => {
     if (!sessionId) return;
@@ -343,7 +356,7 @@ export function App() {
         squadId,
         agentId: agent.id,
         agentName: agent.name,
-        squadName: agent.squad,
+        squadName: squadLabelFromId(squads, agent.squad),
         preview: prev?.preview ?? "",
       });
       refreshRecent();
@@ -352,7 +365,7 @@ export function App() {
     } finally {
       setBusy(false);
     }
-  }, [sessionId, squadId, agentId, refreshRecent]);
+  }, [sessionId, squadId, agentId, refreshRecent, squads]);
 
   const onReset = useCallback(async () => {
     if (!sessionId) return;
@@ -453,7 +466,7 @@ export function App() {
           squadId,
           agentId,
           agentName: currentAgent.name,
-          squadName: currentAgent.squad,
+          squadName: squadLabelFromId(squads, currentAgent.squad),
           preview: previewForRecent,
         });
         refreshRecent();
@@ -495,6 +508,7 @@ export function App() {
     squadId,
     agentId,
     refreshRecent,
+    squads,
   ]);
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -577,7 +591,7 @@ export function App() {
           >
             {squads.map((s) => (
               <option key={s.id} value={s.id}>
-                {s.id}
+                {squadLabel(s)}
               </option>
             ))}
           </select>
@@ -679,7 +693,7 @@ export function App() {
           <p className="meta">
             Ativo: <strong>{currentAgent.name}</strong>
             <br />
-            Squad: {currentAgent.squad}
+            Squad: {squadLabelFromId(squads, currentAgent.squad)}
           </p>
         )}
         <p className="meta shortcuts-hint">
