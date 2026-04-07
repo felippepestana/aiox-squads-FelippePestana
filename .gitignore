@@ -6,5 +6,6 @@ chatbot/node_modules/
 chatbot/dist/
 web/node_modules/
 web/dist/
+web/hint-report/
 web/.env
 .env

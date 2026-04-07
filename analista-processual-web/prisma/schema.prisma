@@ -1,0 +1,161 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  fullName  String?
+  avatarUrl String?
+  settings  Json     @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  analyses     Analysis[]
+  libraryItems LibraryItem[]
+  apiKeys      ApiKey[]
+  auditLogs   AuditLog[]
+
+  @@map("profiles")
+}
+
+model Analysis {
+  id            String       @id @default(uuid())
+  userId        String
+  processNumber String?
+  court         String?
+  processClass  String?
+  status        AnalysisStatus @default(PENDING)
+  result        Json?
+  documents     Document[]
+  deadlines     Deadline[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  user   Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  events AnalysisEvent[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("analyses")
+}
+
+enum AnalysisStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model Document {
+  id           String   @id @default(uuid())
+  analysisId   String
+  filename     String
+  fileType     String?
+  fileSize     Int?
+  storagePath  String?
+  extractedText String?
+  metadata     Json?
+  createdAt    DateTime @default(now())
+
+  analysis Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+
+  @@index([analysisId])
+  @@map("documents")
+}
+
+model Deadline {
+  id          String    @id @default(uuid())
+  analysisId  String
+  description String
+  dueDate    DateTime
+  businessDays Int?
+  status      DeadlineStatus @default(PENDING)
+  priority    Priority     @default(NORMAL)
+  createdAt   DateTime    @default(now())
+
+  analysis Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+
+  @@index([analysisId])
+  @@index([dueDate])
+  @@map("deadlines")
+}
+
+enum DeadlineStatus {
+  PENDING
+  COMPLETED
+  MISSED
+}
+
+enum Priority {
+  LOW
+  NORMAL
+  HIGH
+  CRITICAL
+}
+
+model LibraryItem {
+  id           String   @id @default(uuid())
+  userId       String?
+  title        String
+  content      String?
+  court        String?
+  processClass String?
+  tags         String[]
+  metadata     Json?
+  createdAt    DateTime @default(now())
+
+  user Profile? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@map("library_items")
+}
+
+model ApiKey {
+  id          String   @id @default(uuid())
+  userId      String
+  provider    String
+  encryptedKey String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("api_keys")
+}
+
+model AuditLog {
+  id           String   @id @default(uuid())
+  userId       String?
+  action       String
+  resourceType String?
+  resourceId   String?
+  metadata     Json?
+  ipAddress   String?
+  createdAt    DateTime @default(now())
+
+  user Profile? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([action])
+  @@map("audit_logs")
+}
+
+model AnalysisEvent {
+  id          String   @id @default(uuid())
+  analysisId  String
+  event       String
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  analysis Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+
+  @@index([analysisId])
+  @@map("analysis_events")
+}

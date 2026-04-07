@@ -1,0 +1,64 @@
+name: Docker Security Scan
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - "chatbot/**"
+      - "web/**"
+      - "docker-compose.yml"
+      - ".github/workflows/docker-security.yml"
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build chatbot image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./chatbot/Dockerfile
+          load: true
+          tags: aiox-chatbot:scan
+
+      - name: Build web image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./web/Dockerfile
+          load: true
+          tags: aiox-web:scan
+
+      - name: Run Trivy vulnerability scanner on chatbot
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: aiox-chatbot:scan
+          format: sarif
+          output: chatbot-trivy.sarif
+
+      - name: Run Trivy vulnerability scanner on web
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: aiox-web:scan
+          format: sarif
+          output: web-trivy.sarif
+
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: chatbot-trivy.sarif
+          category: chatbot-scan
+
+      - name: Upload web Trivy results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: web-trivy.sarif
+          category: web-scan
