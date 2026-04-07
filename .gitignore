@@ -10,4 +10,7 @@ web/hint-report/
 web/.env
 web/worker/*.js
 .env
-analista-processual-web/
+analista-processual-web/node_modules/
+analista-processual-web/.env*
+analista-processual-web/dist/
+analista-processual-web/.next/
