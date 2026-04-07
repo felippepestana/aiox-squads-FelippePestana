@@ -4,6 +4,44 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+/** Cached bundle for Cloudflare Workers (no fs access) */
+let _bundleCache: Squad[] | null = null;
+
+interface BundledAgent {
+  id: string;
+  name: string;
+  content: string;
+}
+interface BundledSquad {
+  id: string;
+  meta: SquadMeta;
+  agents: BundledAgent[];
+}
+
+/** Try to load from squads-bundle.json (used in Workers deploy) */
+function tryLoadFromBundle(): Squad[] | null {
+  if (_bundleCache) return _bundleCache;
+  try {
+    const bundlePath = path.resolve(__dirname, "../squads-bundle.json");
+    if (!fs.existsSync(bundlePath)) return null;
+    const raw = JSON.parse(fs.readFileSync(bundlePath, "utf-8")) as BundledSquad[];
+    _bundleCache = raw.map((s) => ({
+      id: s.id,
+      meta: s.meta,
+      agents: s.agents.map((a) => ({
+        id: a.id,
+        name: a.name,
+        squad: s.id,
+        filePath: `bundled:${s.id}/${a.id}`,
+        systemPrompt: buildSystemPrompt(a.content, a.name, s.id),
+      })),
+    }));
+    return _bundleCache;
+  } catch {
+    return null;
+  }
+}
+
 export interface Agent {
   id: string;
   name: string;
@@ -12,8 +50,15 @@ export interface Agent {
   systemPrompt: string;
 }
 
+export interface SquadMeta {
+  icon: string;
+  title: string;
+  description: string;
+}
+
 export interface Squad {
   id: string;
+  meta: SquadMeta;
   agents: Agent[];
 }
 
@@ -40,8 +85,32 @@ function extractAgentMeta(
   };
 }
 
+/** Extrai metadados do squad a partir de config.yaml */
+function loadSquadMeta(squadDir: string, squadId: string): SquadMeta {
+  const configPath = path.join(squadDir, "config.yaml");
+  const fallback: SquadMeta = { icon: "📦", title: squadId, description: "" };
+  if (!fs.existsSync(configPath)) return fallback;
+  try {
+    const raw = fs.readFileSync(configPath, "utf-8");
+    const iconMatch = raw.match(/^\s*icon:\s*"?([^\n"]+)"?\s*$/m);
+    const titleMatch = raw.match(/^\s*title:\s*"?([^\n"]+)"?\s*$/m);
+    const descMatch = raw.match(/^\s*description:\s*"?([^\n"]+)"?\s*$/m);
+    return {
+      icon: iconMatch ? iconMatch[1].trim() : fallback.icon,
+      title: titleMatch ? titleMatch[1].trim() : fallback.title,
+      description: descMatch ? descMatch[1].trim() : fallback.description,
+    };
+  } catch {
+    return fallback;
+  }
+}
+
 /** Carrega todos os agentes de todos os squads disponíveis */
 export function loadAllSquads(): Squad[] {
+  // Try bundle first (Cloudflare Workers deploy)
+  const fromBundle = tryLoadFromBundle();
+  if (fromBundle) return fromBundle;
+
   const squads: Squad[] = [];
   const SQUADS_DIR = getSquadsDir();
 
@@ -54,7 +123,8 @@ export function loadAllSquads(): Squad[] {
     .sort();
 
   for (const squadId of squadDirs) {
-    const agentsDir = path.join(SQUADS_DIR, squadId, "agents");
+    const squadPath = path.join(SQUADS_DIR, squadId);
+    const agentsDir = path.join(squadPath, "agents");
     if (!fs.existsSync(agentsDir)) continue;
 
     const agentFiles = fs
@@ -77,7 +147,7 @@ export function loadAllSquads(): Squad[] {
       };
     });
 
-    squads.push({ id: squadId, agents });
+    squads.push({ id: squadId, meta: loadSquadMeta(squadPath, squadId), agents });
   }
 
   return squads;

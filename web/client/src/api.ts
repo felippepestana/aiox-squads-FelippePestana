@@ -4,8 +4,15 @@ export interface AgentRef {
   squad: string;
 }
 
+export interface SquadMeta {
+  icon: string;
+  title: string;
+  description: string;
+}
+
 export interface SquadSummary {
   id: string;
+  meta: SquadMeta;
   agents: AgentRef[];
 }
 

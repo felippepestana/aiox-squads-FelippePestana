@@ -61,6 +61,7 @@ export function App() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [squadId, setSquadId] = useState("");
   const [agentId, setAgentId] = useState("");
+  const [agentSearch, setAgentSearch] = useState("");
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [currentAgent, setCurrentAgent] = useState<AgentRef | null>(null);
   const [lines, setLines] = useState<ChatLine[]>([]);
@@ -148,10 +149,20 @@ export function App() {
     setLoadError(null);
   }, []);
 
+  const selectedSquad = useMemo(
+    () => squads.find((x) => x.id === squadId) ?? null,
+    [squads, squadId]
+  );
+
   const agentsInSquad = useMemo(() => {
-    const s = squads.find((x) => x.id === squadId);
-    return s?.agents ?? [];
-  }, [squads, squadId]);
+    const agents = selectedSquad?.agents ?? [];
+    if (!agentSearch.trim()) return agents;
+    const q = agentSearch.trim().toLowerCase();
+    return agents.filter(
+      (a) =>
+        a.name.toLowerCase().includes(q) || a.id.toLowerCase().includes(q)
+    );
+  }, [selectedSquad, agentSearch]);
 
   useEffect(() => {
     if (!agentsInSquad.length) {
@@ -573,17 +584,32 @@ export function App() {
           <select
             id="squad"
             value={squadId}
-            onChange={(e) => setSquadId(e.target.value)}
+            onChange={(e) => {
+              setSquadId(e.target.value);
+              setAgentSearch("");
+            }}
           >
             {squads.map((s) => (
               <option key={s.id} value={s.id}>
-                {s.id}
+                {s.meta.icon} {s.meta.title} ({s.agents.length})
               </option>
             ))}
           </select>
+          {selectedSquad?.meta.description ? (
+            <p className="meta squad-desc">{selectedSquad.meta.description}</p>
+          ) : null}
         </div>
         <div>
           <label htmlFor="agent">Agente</label>
+          {(selectedSquad?.agents.length ?? 0) > 4 ? (
+            <input
+              type="text"
+              className="agent-search"
+              placeholder="Filtrar agentes…"
+              value={agentSearch}
+              onChange={(e) => setAgentSearch(e.target.value)}
+            />
+          ) : null}
           <select
             id="agent"
             value={agentId}

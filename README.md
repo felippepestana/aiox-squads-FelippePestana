@@ -145,18 +145,6 @@ cp -r aiox-squads/squads/copy ./squads/copy
 
 > **Compatível com:** Claude Code, Codex CLI, Gemini CLI, Cursor — qualquer IDE suportada pelo [AIOX](https://github.com/SynkraAI/aiox-core).
 
-### Chat no terminal e portal web (opcional)
-
-Este repositório inclui duas formas de conversar com os agentes em `squads/*/agents` usando a API Anthropic:
-
-| Ferramenta | Descrição |
-|------------|-----------|
-| [chatbot/](chatbot/README.md) | CLI em Node (terminal), streaming e anexos. |
-| [web/](web/README.md) | Interface React + API Express; mesmo contrato de agentes. |
-| [docker-compose.yml](docker-compose.yml) | Chatbot e/ou portal web (`--profile chatbot`, `--profile web`). |
-
-Variáveis de ambiente: veja [.env.example](.env.example) na raiz e `web/.env.example` para desenvolvimento local.
-
 <br/>
 
 ## Catálogo de Squads
@@ -165,7 +153,17 @@ Squads publicados pela comunidade neste repositório.
 
 | Squad | O que faz | Status |
 |-------|-----------|--------|
-| _Nenhum squad publicado ainda_ | Seja o primeiro a contribuir! | — |
+| [**analista-processual**](squads/analista-processual/) | Análise completa de processos organizacionais e jurídicos brasileiros — pipeline 3-tier com 8 agentes, do mapeamento ao relatório estratégico | 🟢 |
+| [**apex**](squads/apex/) | Squad ultra-premium de frontend (Web, Mobile, Spatial) — 14 agentes cobrindo design system, React/RN, animações, 3D/WebXR, acessibilidade e performance | 🟢 |
+| [**curator**](squads/curator/) | Minera transcrições de vídeo, identifica momentos de alto impacto com timestamps e monta roteiros de corte prontos para edição | 🟢 |
+| [**deep-research**](squads/deep-research/) | Pipeline de pesquisa profunda baseada em evidências com 11 agentes — da formulação da pergunta à síntese auditada por viés cognitivo | 🟡 |
+| [**devops**](squads/devops/) | Squad de engenharia DevOps com 6 agentes — CI/CD pipelines, containerização, IaC, monitoramento e DevSecOps | 🟢 |
+| [**dispatch**](squads/dispatch/) | Motor de execução paralela que decompõe stories/PRDs em subtarefas atômicas, otimiza em ondas (DAG) e roteia para agentes/modelos certos | 🟢 |
+| [**education**](squads/education/) | Design instrucional que transforma expertise em cursos online conformes ao MEC, aplicando 15 frameworks pedagógicos (Bloom, Mayer, UbD, ARCS) | 🟢 |
+| [**kaizen**](squads/kaizen/) | Monitora e melhora continuamente todos os squads — analisa estrutura, performance, gargalos, competências e custos | 🟢 |
+| [**seo**](squads/seo/) | Otimiza SEO de sites (score 0-100) — auditoria on-page, técnico, schema, E-E-A-T, Core Web Vitals e visibilidade para IA (GEO) | 🟡 |
+| [**squad-creator**](squads/squad-creator/) | Meta-squad que cria outros squads via templates estruturais, validação de qualidade e extração de DNA de especialistas reais | 🟢 |
+| [**squad-creator-pro**](squads/squad-creator-pro/) | Upgrade do Squad Creator com mind cloning, roteamento de modelos, 3 agentes especialistas e benchmarks de qualidade | 🟢 |
 
 > Tem um squad pronto? [Abra um PR](#contribuindo) e compartilhe com a comunidade.
 

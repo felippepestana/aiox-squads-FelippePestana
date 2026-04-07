@@ -1,0 +1,89 @@
+# DevOps Engineer Squad Configuration
+# Version: 1.0.0
+# Created: 2026-03-28
+
+squad:
+  name: devops
+  icon: "⚙️"
+  title: "DevOps Engineer Squad"
+  version: "1.0.0"
+  status: "production"
+  description: "Pipeline-driven infrastructure automation squad. Designs CI/CD pipelines, containerizes applications, provisions cloud infrastructure as code, and implements observability — turning manual operations into reproducible, auditable systems."
+
+  domain: "devops engineering & cloud infrastructure"
+  keywords:
+    - devops
+    - ci/cd
+    - docker
+    - kubernetes
+    - infrastructure as code
+    - terraform
+    - monitoring
+    - observability
+    - cloud
+    - security
+    - automation
+    - pipelines
+
+  target_user: "Development teams, platform engineers, startups scaling infrastructure, and CTOs seeking operational excellence"
+
+  use_cases:
+    - "Design and implement CI/CD pipelines (GitHub Actions, GitLab CI, Jenkins)"
+    - "Containerize applications with Docker and orchestrate with Kubernetes"
+    - "Provision cloud infrastructure as code (Terraform, Pulumi, CloudFormation)"
+    - "Set up monitoring, alerting, and observability stacks (Prometheus, Grafana, Datadog)"
+    - "Implement DevSecOps practices and security scanning in pipelines"
+    - "Automate deployment strategies (blue-green, canary, rolling)"
+
+  architecture:
+    layers:
+      permanent: "DevOps Engineering (CI/CD, containers, IaC, monitoring, security)"
+      variable: "Platform-specific knowledge (grows per cloud provider via minds/)"
+    tiers:
+      tier_0:
+        name: "Orchestration"
+        agents:
+          - devops-chief
+      tier_1:
+        name: "Core Engine"
+        agents:
+          - pipeline-architect
+          - container-engineer
+          - infra-coder
+      tier_2:
+        name: "Specialists"
+        agents:
+          - monitor-sentinel
+          - devsecops-guardian
+    orchestrator:
+      agents:
+        - devops-chief
+
+  paths:
+    agents: "agents/"
+    tasks: "tasks/"
+    templates: "templates/"
+    checklists: "checklists/"
+    workflows: "workflows/"
+    data: "data/"
+    docs: "docs/"
+
+  model_routing:
+    opus:
+      - "complex infrastructure architecture decisions"
+      - "multi-cloud migration strategies"
+      - "incident post-mortem analysis"
+    sonnet:
+      - "pipeline configuration generation"
+      - "Dockerfile creation"
+      - "Terraform module writing"
+      - "documentation"
+    haiku:
+      - "validation checklists"
+      - "security scan interpretation"
+      - "log analysis triage"
+
+  dependencies:
+    external_squads: []
+    mcps: []
+    scripts: []

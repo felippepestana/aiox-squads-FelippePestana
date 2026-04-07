@@ -153,7 +153,17 @@ Squads published by the community in this repository.
 
 | Squad | What it does | Status |
 |-------|-------------|--------|
-| _No squads published yet_ | Be the first to contribute! | — |
+| [**analista-processual**](../squads/analista-processual/) | Complete analysis of organizational and legal processes in Brazil — 3-tier pipeline with 8 agents, from mapping to strategic report | 🟢 |
+| [**apex**](../squads/apex/) | Ultra-premium frontend squad (Web, Mobile, Spatial) — 14 agents covering design system, React/RN, animations, 3D/WebXR, accessibility, and performance | 🟢 |
+| [**curator**](../squads/curator/) | Mines video transcripts, identifies high-impact moments with timestamps, and assembles ready-to-edit cut scripts | 🟢 |
+| [**deep-research**](../squads/deep-research/) | Evidence-based deep research pipeline with 11 agents — from question formulation to bias-audited synthesis | 🟡 |
+| [**devops**](../squads/devops/) | DevOps engineering squad with 6 agents — CI/CD pipelines, containerization, IaC, monitoring, and DevSecOps | 🟢 |
+| [**dispatch**](../squads/dispatch/) | Parallel execution engine that decomposes stories/PRDs into atomic subtasks, optimizes in waves (DAG), and routes to the right agents/models | 🟢 |
+| [**education**](../squads/education/) | Instructional design system that transforms expertise into pedagogically sound online courses, applying 15 frameworks (Bloom, Mayer, UbD, ARCS) | 🟢 |
+| [**kaizen**](../squads/kaizen/) | Continuously monitors and improves all squads — analyzes structure, performance, bottlenecks, skills, and costs | 🟢 |
+| [**seo**](../squads/seo/) | SEO optimization (score 0-100) — on-page, technical, schema, E-E-A-T, Core Web Vitals, and AI visibility (GEO) audit | 🟡 |
+| [**squad-creator**](../squads/squad-creator/) | Meta-squad that creates other squads via structural templates, quality validation, and real expert DNA extraction | 🟢 |
+| [**squad-creator-pro**](../squads/squad-creator-pro/) | Squad Creator upgrade with mind cloning, model routing, 3 specialist agents, and quality benchmarks | 🟢 |
 
 > Have a squad ready? [Open a PR](#contributing) and share it with the community.
 

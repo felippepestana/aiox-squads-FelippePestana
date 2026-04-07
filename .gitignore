@@ -8,4 +8,5 @@ web/node_modules/
 web/dist/
 web/hint-report/
 web/.env
+web/worker/*.js
 .env
