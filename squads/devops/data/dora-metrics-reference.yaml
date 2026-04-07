@@ -1,0 +1,44 @@
+# DORA Metrics Reference
+# Source: DORA State of DevOps Report (Google Cloud)
+# Used by: devops-chief for team maturity assessment
+
+dora_metrics:
+  deployment_frequency:
+    description: "How often code is deployed to production"
+    levels:
+      elite: "On-demand (multiple deploys per day)"
+      high: "Between once per day and once per week"
+      medium: "Between once per week and once per month"
+      low: "Less than once per month"
+
+  lead_time_for_changes:
+    description: "Time from commit to production deployment"
+    levels:
+      elite: "Less than one hour"
+      high: "Between one day and one week"
+      medium: "Between one week and one month"
+      low: "More than one month"
+
+  change_failure_rate:
+    description: "Percentage of deployments causing production failure"
+    levels:
+      elite: "0-5%"
+      high: "5-10%"
+      medium: "10-15%"
+      low: "15-45%"
+
+  mean_time_to_recovery:
+    description: "Time to restore service after a production incident"
+    levels:
+      elite: "Less than one hour"
+      high: "Less than one day"
+      medium: "Between one day and one week"
+      low: "More than one week"
+
+team_assessment:
+  questions:
+    - "How often do you deploy to production?"
+    - "What is your average lead time from commit to deploy?"
+    - "What percentage of deployments require rollback or hotfix?"
+    - "How long does it take to restore service after an incident?"
+  scoring: "Map answers to levels above. 2+ metrics at 'low' = critical improvement needed."

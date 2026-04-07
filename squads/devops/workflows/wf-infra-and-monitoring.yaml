@@ -1,0 +1,54 @@
+workflow:
+  id: wf-infra-and-monitoring
+  name: "Infrastructure + Monitoring"
+  version: "1.0.0"
+  orchestrator: devops-chief
+  description: |
+    Provisions cloud infrastructure with IaC and sets up full observability.
+    Infra coder creates the resources, then monitor sentinel instruments
+    metrics, dashboards, alerts, and logging.
+  estimated_duration: "20-35 min"
+
+phases:
+  PHASE-1:
+    name: "Requirements Gathering"
+    executor: devops-chief
+    action: "Identify cloud provider, required resources, SLO targets, and team preferences"
+    quality_gate: QG-DV-001
+    on_fail: "Ask user for cloud provider and resource requirements"
+
+  PHASE-2:
+    name: "Infrastructure Provisioning"
+    execution_mode: SEQUENTIAL
+    agents:
+      - infra-coder
+    tasks:
+      - provision-infra
+    depends_on: PHASE-1
+
+  PHASE-3:
+    name: "Observability Setup"
+    execution_mode: SEQUENTIAL
+    agents:
+      - monitor-sentinel
+    tasks:
+      - setup-monitoring
+    depends_on: PHASE-2
+
+  PHASE-4:
+    name: "Security Review"
+    executor: devsecops-guardian
+    action: "Review IaC for security misconfigurations and compliance gaps"
+    depends_on: PHASE-3
+    quality_gate: QG-DV-SEC
+
+quality_checklist:
+  - "[ ] Remote state configured with locking"
+  - "[ ] All resources tagged (environment, owner, cost center)"
+  - "[ ] IAM follows least privilege principle"
+  - "[ ] SLOs defined with error budgets"
+  - "[ ] Golden signals (latency, traffic, errors, saturation) instrumented"
+  - "[ ] Every alert has a runbook link"
+  - "[ ] No public-facing resources without justification"
+
+completion_signal: "<promise>COMPLETE: infrastructure + monitoring delivered</promise>"

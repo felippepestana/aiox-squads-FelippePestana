@@ -1,0 +1,104 @@
+registry:
+  version: "1.0.0"
+  squad: devops
+  total_agents: 6
+  description: "DevOps Engineer Squad — CI/CD, Containers, IaC, Monitoring, Security"
+
+  tiers:
+    orchestrator: devops-chief
+    tier_1: [pipeline-architect, container-engineer, infra-coder]
+    tier_2: [monitor-sentinel, devsecops-guardian]
+
+  agents:
+    - id: devops-chief
+      icon: "⚙️"
+      tier: orchestrator
+      dna_source: "Gene Kim (The Phoenix Project) + Google SRE"
+      role: "DevOps Engineering Orchestrator"
+      file: agents/devops-chief.md
+      commands:
+        - help
+        - pipeline
+        - containerize
+        - infra
+        - monitor
+        - security-scan
+        - full-cycle
+        - exit
+
+    - id: pipeline-architect
+      icon: "🔄"
+      tier: tier_1
+      dna_source: "Jez Humble & Dave Farley (Continuous Delivery)"
+      role: "CI/CD Pipeline Design Specialist"
+      file: agents/pipeline-architect.md
+      specialties:
+        - github-actions
+        - gitlab-ci
+        - jenkins
+
+    - id: container-engineer
+      icon: "🐳"
+      tier: tier_1
+      dna_source: "Kelsey Hightower (Kubernetes Up & Running)"
+      role: "Docker & Kubernetes Specialist"
+      file: agents/container-engineer.md
+      specialties:
+        - dockerfile
+        - docker-compose
+        - kubernetes
+        - helm
+
+    - id: infra-coder
+      icon: "🏗️"
+      tier: tier_1
+      dna_source: "HashiCorp + AWS Well-Architected + Kief Morris"
+      role: "Infrastructure as Code Specialist"
+      file: agents/infra-coder.md
+      specialties:
+        - terraform
+        - pulumi
+        - aws
+        - gcp
+        - azure
+
+    - id: monitor-sentinel
+      icon: "📊"
+      tier: tier_2
+      dna_source: "Google SRE + Charity Majors (Observability Engineering)"
+      role: "Observability & SRE Specialist"
+      file: agents/monitor-sentinel.md
+      specialties:
+        - prometheus
+        - grafana
+        - alertmanager
+        - loki
+        - jaeger
+
+    - id: devsecops-guardian
+      icon: "🛡️"
+      tier: tier_2
+      dna_source: "OWASP + NIST Cybersecurity Framework"
+      role: "Security Automation & Compliance Specialist"
+      file: agents/devsecops-guardian.md
+      specialties:
+        - sast
+        - sca
+        - container-scanning
+        - secrets-management
+        - compliance
+
+  model_routing:
+    opus:
+      - "Complex multi-cloud architecture"
+      - "Incident root cause analysis"
+      - "Full DevOps cycle orchestration"
+    sonnet:
+      - "Pipeline generation"
+      - "Dockerfile creation"
+      - "Terraform modules"
+      - "Monitoring setup"
+    haiku:
+      - "Checklist validation"
+      - "Security scan interpretation"
+      - "Log triage"

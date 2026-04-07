@@ -1,0 +1,74 @@
+# Core Web Vitals Thresholds
+# Used by: performance-engineer
+# Source: Google Web Vitals (web.dev/vitals)
+
+metrics:
+  lcp:
+    name: "Largest Contentful Paint"
+    description: "Time until the largest content element is rendered"
+    thresholds:
+      good: "≤ 2.5s"
+      needs_improvement: "2.5s - 4.0s"
+      poor: "> 4.0s"
+    target: "< 2.5s"
+    common_causes:
+      - "Slow server response (TTFB > 800ms)"
+      - "Render-blocking CSS/JS"
+      - "Unoptimized hero image"
+      - "Client-side rendering without SSR"
+    fixes:
+      - "Preload LCP image: <link rel='preload' as='image'>"
+      - "Add fetchpriority='high' to LCP element"
+      - "Use CDN for static assets"
+      - "Inline critical CSS"
+      - "Use SSR/SSG for initial render"
+
+  inp:
+    name: "Interaction to Next Paint"
+    description: "Time from user interaction to visual response"
+    thresholds:
+      good: "≤ 200ms"
+      needs_improvement: "200ms - 500ms"
+      poor: "> 500ms"
+    target: "< 200ms"
+    common_causes:
+      - "Long JavaScript tasks (> 50ms)"
+      - "Heavy event handlers"
+      - "Synchronous layout/style recalculations"
+      - "Large DOM size (> 1500 nodes)"
+    fixes:
+      - "Break long tasks with requestIdleCallback or scheduler.yield()"
+      - "Debounce/throttle event handlers"
+      - "Use web workers for computation"
+      - "Reduce DOM size"
+
+  cls:
+    name: "Cumulative Layout Shift"
+    description: "Total unexpected layout shifts during page life"
+    thresholds:
+      good: "≤ 0.1"
+      needs_improvement: "0.1 - 0.25"
+      poor: "> 0.25"
+    target: "< 0.1"
+    common_causes:
+      - "Images without width/height attributes"
+      - "Dynamically injected content above fold"
+      - "Web fonts causing FOIT/FOUT"
+      - "Ads/embeds without reserved space"
+    fixes:
+      - "Always set width and height on images and videos"
+      - "Use aspect-ratio CSS for responsive elements"
+      - "Use font-display: optional or swap"
+      - "Reserve space for dynamic content (min-height)"
+
+image_optimization:
+  formats:
+    webp: "30-50% smaller than JPEG, wide browser support"
+    avif: "50-70% smaller than JPEG, growing support"
+    svg: "Best for icons and illustrations"
+  recommendations:
+    - "Use <picture> with WebP/AVIF sources and JPEG fallback"
+    - "Lazy load below-fold images: loading='lazy'"
+    - "Size images to display dimensions (no oversized images)"
+    - "Use responsive images: srcset + sizes attributes"
+    - "Compress with quality 75-85 for photos"

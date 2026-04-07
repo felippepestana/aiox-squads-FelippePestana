@@ -1,0 +1,82 @@
+registry:
+  version: "1.0.0"
+  squad: seo
+  total_agents: 8
+  description: "SEO Expert Squad — Evaluate, Optimize, Report (0-100 scoring)"
+
+  tiers:
+    orchestrator: seo-chief
+    tier_1: [on-page-optimizer, technical-auditor, schema-architect]
+    tier_2: [content-quality-assessor, performance-engineer, ai-visibility-optimizer, site-architect]
+
+  agents:
+    - id: seo-chief
+      icon: "🔍"
+      tier: orchestrator
+      role: "SEO Diagnosis & Orchestration"
+      file: agents/seo-chief.md
+      commands:
+        - seo-evaluate
+        - seo-optimize
+        - seo-report
+        - seo-audit-optimize
+
+    - id: on-page-optimizer
+      icon: "📝"
+      tier: tier_1
+      role: "On-Page SEO Specialist"
+      file: agents/on-page-optimizer.md
+      category: on_page_seo
+      max_score: 25
+
+    - id: technical-auditor
+      icon: "🔧"
+      tier: tier_1
+      role: "Technical SEO Auditor"
+      file: agents/technical-auditor.md
+      category: technical_seo
+      max_score: 20
+
+    - id: schema-architect
+      icon: "🏗️"
+      tier: tier_1
+      role: "Structured Data & Schema.org Specialist"
+      file: agents/schema-architect.md
+      category: schema_structured_data
+      max_score: 15
+
+    - id: content-quality-assessor
+      icon: "📊"
+      tier: tier_2
+      role: "Content Quality & E-E-A-T Evaluator"
+      file: agents/content-quality-assessor.md
+      category: content_quality
+      max_score: 15
+
+    - id: performance-engineer
+      icon: "⚡"
+      tier: tier_2
+      role: "Core Web Vitals & Performance Specialist"
+      file: agents/performance-engineer.md
+      category: performance
+      max_score: 10
+
+    - id: ai-visibility-optimizer
+      icon: "🤖"
+      tier: tier_2
+      role: "AI Visibility & GEO Specialist"
+      file: agents/ai-visibility-optimizer.md
+      category: ai_visibility
+      max_score: 10
+
+    - id: site-architect
+      icon: "🗺️"
+      tier: tier_2
+      role: "Site Architecture & Internal Linking Specialist"
+      file: agents/site-architect.md
+      category: site_architecture
+      max_score: 5
+
+  scoring:
+    total: 100
+    note: "Each agent scores its category. seo-chief aggregates."

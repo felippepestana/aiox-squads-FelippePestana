@@ -1,0 +1,66 @@
+# Container Base Images Reference
+# Used by: container-engineer
+# Source: Docker Hub official images, Chainguard, Google distroless
+
+base_images:
+  nodejs:
+    recommended:
+      production: "node:20-alpine"
+      minimal: "gcr.io/distroless/nodejs20-debian12"
+      build: "node:20-bookworm-slim"
+    sizes:
+      "node:20": "~1.1GB"
+      "node:20-slim": "~250MB"
+      "node:20-alpine": "~180MB"
+      "distroless/nodejs20": "~130MB"
+    notes: "Alpine lacks glibc — some native modules need musl. Use slim if native deps fail on alpine."
+
+  python:
+    recommended:
+      production: "python:3.12-slim"
+      minimal: "gcr.io/distroless/python3-debian12"
+      build: "python:3.12-bookworm"
+    sizes:
+      "python:3.12": "~1.0GB"
+      "python:3.12-slim": "~150MB"
+      "python:3.12-alpine": "~60MB"
+    notes: "Alpine causes issues with numpy/pandas (no wheels). Use slim for ML workloads."
+
+  go:
+    recommended:
+      production: "gcr.io/distroless/static-debian12"
+      build: "golang:1.22-alpine"
+    sizes:
+      "golang:1.22": "~850MB"
+      "golang:1.22-alpine": "~280MB"
+      "distroless/static": "~2MB"
+      "scratch": "~0MB (binary only)"
+    notes: "Go compiles to static binaries. Production image can be scratch or distroless."
+
+  java:
+    recommended:
+      production: "eclipse-temurin:21-jre-alpine"
+      minimal: "gcr.io/distroless/java21-debian12"
+      build: "eclipse-temurin:21-jdk-alpine"
+    sizes:
+      "eclipse-temurin:21-jdk": "~460MB"
+      "eclipse-temurin:21-jre-alpine": "~180MB"
+      "distroless/java21": "~230MB"
+    notes: "JRE only in production. Use jlink for custom minimal runtime."
+
+  rust:
+    recommended:
+      production: "gcr.io/distroless/cc-debian12"
+      build: "rust:1.77-slim"
+    sizes:
+      "rust:1.77": "~1.4GB"
+      "rust:1.77-slim": "~800MB"
+      "distroless/cc": "~20MB"
+    notes: "Rust compiles to native binaries. Use distroless/cc if linking to C libs, scratch for static."
+
+selection_rules:
+  - "ALWAYS use specific version tags — never :latest in production"
+  - "Prefer alpine for size when native dependencies allow it"
+  - "Use distroless for highest security (no shell, no package manager)"
+  - "Use slim as fallback when alpine compatibility fails"
+  - "Build stage can use full image — only production stage matters for size"

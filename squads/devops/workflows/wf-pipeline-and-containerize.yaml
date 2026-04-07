@@ -1,0 +1,51 @@
+workflow:
+  id: wf-pipeline-and-containerize
+  name: "Pipeline + Containerization"
+  version: "1.0.0"
+  orchestrator: devops-chief
+  description: |
+    Lightweight workflow for projects that need CI/CD and containerization
+    but manage their own infrastructure. Pipeline architect designs the
+    delivery pipeline, then container engineer packages the application.
+  estimated_duration: "15-25 min"
+
+phases:
+  PHASE-1:
+    name: "Stack Analysis"
+    executor: devops-chief
+    action: "Identify language, framework, CI platform, and deployment target"
+    quality_gate: QG-DV-001
+    on_fail: "Ask user to provide stack details"
+
+  PHASE-2:
+    name: "CI/CD Pipeline Design"
+    execution_mode: SEQUENTIAL
+    agents:
+      - pipeline-architect
+    tasks:
+      - design-pipeline
+
+  PHASE-3:
+    name: "Containerization"
+    execution_mode: SEQUENTIAL
+    agents:
+      - container-engineer
+    tasks:
+      - containerize-app
+    depends_on: PHASE-2
+
+  PHASE-4:
+    name: "Security Review"
+    executor: devsecops-guardian
+    action: "Quick scan of pipeline config and Dockerfile for security issues"
+    depends_on: PHASE-3
+    quality_gate: QG-DV-SEC
+
+quality_checklist:
+  - "[ ] Pipeline includes lint, test, build, scan, and deploy stages"
+  - "[ ] Caching strategy defined for dependencies and build outputs"
+  - "[ ] Dockerfile uses multi-stage builds with minimal base image"
+  - "[ ] No secrets in pipeline config or Dockerfile"
+  - "[ ] Container runs as non-root user"
+
+completion_signal: "<promise>COMPLETE: pipeline + container delivered</promise>"

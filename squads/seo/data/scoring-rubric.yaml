@@ -1,0 +1,95 @@
+# SEO Scoring Rubric
+# Used by: seo-chief (score aggregation)
+# Source: Google Search Quality Evaluator Guidelines + industry best practices
+
+scoring:
+  total: 100
+  categories:
+    on_page_seo:
+      weight: 25
+      agent: on-page-optimizer
+      checks_count: 12
+      critical_checks:
+        - title_tag
+        - meta_description
+        - h1_tag
+      description: "Meta tags, headings, keyword placement, readability, links"
+
+    technical_seo:
+      weight: 20
+      agent: technical-auditor
+      checks_count: 12
+      critical_checks:
+        - https_enforced
+        - canonical_tags
+        - xml_sitemap
+      description: "Crawlability, indexability, broken links, mobile readiness"
+
+    schema_structured_data:
+      weight: 15
+      agent: schema-architect
+      checks_count: 10
+      critical_checks:
+        - json_ld_present
+        - schema_valid
+      description: "JSON-LD, rich results, entity linking"
+
+    content_quality:
+      weight: 15
+      agent: content-quality-assessor
+      checks_count: 12
+      critical_checks:
+        - eeat_signals
+        - ymyl_compliance
+      description: "E-E-A-T, trust markers, content depth"
+
+    performance:
+      weight: 10
+      agent: performance-engineer
+      checks_count: 10
+      critical_checks:
+        - lcp_optimization
+        - cls_prevention
+      description: "Core Web Vitals, image optimization, render blocking"
+
+    ai_visibility:
+      weight: 10
+      agent: ai-visibility-optimizer
+      checks_count: 9
+      critical_checks:
+        - direct_answer_formatting
+      description: "GEO, llms.txt, machine readability, citation worthiness"
+
+    site_architecture:
+      weight: 5
+      agent: site-architect
+      checks_count: 6
+      critical_checks:
+        - url_structure
+      description: "URL structure, internal linking, navigation depth"
+
+grades:
+  - grade: "A+"
+    min_score: 90
+    description: "Excellent — production-ready, competitive SEO"
+  - grade: "A"
+    min_score: 80
+    description: "Great — minor optimizations available"
+  - grade: "B"
+    min_score: 70
+    description: "Good — several improvement opportunities"
+  - grade: "C"
+    min_score: 50
+    description: "Needs work — significant gaps"
+  - grade: "D"
+    min_score: 30
+    description: "Poor — major issues blocking SEO performance"
+  - grade: "F"
+    min_score: 0
+    description: "Critical — site has fundamental SEO problems"
+
+benchmarks:
+  typical_before_optimization: "35-55 (C to D range)"
+  typical_after_optimization: "70-85 (B to A range)"
+  realistic_improvement: "+20 to +40 points per cycle"
+  note: "Content quality and site architecture often need manual effort beyond agent capabilities"

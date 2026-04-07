@@ -1,0 +1,82 @@
+workflow:
+  id: wf-full-devops-cycle
+  name: "Full DevOps Cycle"
+  version: "1.0.0"
+  orchestrator: devops-chief
+  description: |
+    End-to-end DevOps pipeline: CI/CD design, containerization,
+    infrastructure provisioning, monitoring setup, and security hardening.
+    Each phase is executed by a specialist agent and builds on previous outputs.
+  estimated_duration: "30-60 min"
+
+phases:
+  PHASE-1:
+    name: "Triage & Planning"
+    executor: devops-chief
+    action: "Assess current stack, classify request, define activation plan"
+    quality_gate: QG-DV-001
+    on_fail: "Ask user to clarify requirements"
+
+  PHASE-2:
+    name: "CI/CD Pipeline Design"
+    execution_mode: SEQUENTIAL
+    agents:
+      - pipeline-architect
+    tasks:
+      - design-pipeline
+    depends_on: PHASE-1
+
+  PHASE-3:
+    name: "Containerization"
+    execution_mode: SEQUENTIAL
+    agents:
+      - container-engineer
+    tasks:
+      - containerize-app
+    depends_on: PHASE-2
+
+  PHASE-4:
+    name: "Infrastructure Provisioning"
+    execution_mode: SEQUENTIAL
+    agents:
+      - infra-coder
+    tasks:
+      - provision-infra
+    depends_on: PHASE-3
+
+  PHASE-5:
+    name: "Observability & Monitoring"
+    execution_mode: SEQUENTIAL
+    agents:
+      - monitor-sentinel
+    tasks:
+      - setup-monitoring
+    depends_on: PHASE-4
+
+  PHASE-6:
+    name: "Security Hardening"
+    execution_mode: SEQUENTIAL
+    agents:
+      - devsecops-guardian
+    tasks:
+      - security-assessment
+    depends_on: PHASE-5
+
+  PHASE-7:
+    name: "Integration & Validation"
+    executor: devops-chief
+    action: "Validate all outputs integrate correctly, run integration checklist"
+    quality_gate: QG-DV-007
+    depends_on: PHASE-6
+    on_fail: "Re-execute failing phase with corrected inputs"
+
+quality_checklist:
+  - "[ ] CI/CD pipeline generated with caching, tests, and deploy gates (@pipeline-architect)"
+  - "[ ] Dockerfile is multi-stage, non-root, with health checks (@container-engineer)"
+  - "[ ] IaC uses remote state, least privilege, tagged resources (@infra-coder)"
+  - "[ ] SLOs defined, golden signals monitored, alerts have runbooks (@monitor-sentinel)"
+  - "[ ] SAST + SCA + secrets scanning integrated into pipeline (@devsecops-guardian)"
+  - "[ ] All outputs reference each other (pipeline deploys container to provisioned infra)"
+  - "[ ] Rollback strategy documented for each phase"
+
+completion_signal: "<promise>COMPLETE: full DevOps cycle delivered</promise>"

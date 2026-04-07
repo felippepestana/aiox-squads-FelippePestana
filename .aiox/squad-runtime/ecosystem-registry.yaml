@@ -1,6 +1,6 @@
 metadata:
   version: 1.5.0
-  last_updated: '2026-03-31'
+  last_updated: '2026-04-07'
   total_squads: 10
   maintainer: squad-creator
   generated_by: "scripts/refresh-registry.py --write (100% deterministic)"
@@ -164,8 +164,8 @@ squads:
     example_use: Use curator for curator tasks.
   devops:
     path: squads/devops/
-    version: 1.0.0
-    score: 9.0
+    version: 1.1.0
+    score: 9.5
     maturity: DEVELOPING
     validated: false
     validated_explicit: false
@@ -175,10 +175,10 @@ squads:
     counts:
       agents: 6
       tasks: 6
-      workflows: 0
-      templates: 0
-      checklists: 0
-      data_files: 0
+      workflows: 3
+      templates: 6
+      checklists: 4
+      data_files: 4
     agent_names:
     - devops-chief
     - pipeline-architect
@@ -400,8 +400,8 @@ squads:
     example_use: Use /kaizen to execute kaizen workflows in kaizen.
   seo:
     path: squads/seo/
-    version: 1.0.0
-    score: 6.5
+    version: 1.1.0
+    score: 9.0
     maturity: DEVELOPING
     validated: false
     validated_explicit: false
@@ -411,11 +411,11 @@ squads:
     slashPrefix: ''
     counts:
       agents: 8
-      tasks: 3
+      tasks: 10
       workflows: 1
-      templates: 0
+      templates: 3
       checklists: 2
-      data_files: 0
+      data_files: 3
     agent_names:
     - ai-visibility-optimizer
     - content-quality-assessor
@@ -426,7 +426,7 @@ squads:
     - site-architect
     - technical-auditor
     has_readme: true
-    has_changelog: false
+    has_changelog: true
     domain: content
     keywords:
     - seo
@@ -703,11 +703,11 @@ domain_index:
   - squad-creator
 summary:
   total_agents: 87
-  total_tasks: 189
-  total_workflows: 32
-  total_templates: 62
-  total_checklists: 82
-  total_data_files: 71
+  total_tasks: 196
+  total_workflows: 35
+  total_templates: 71
+  total_checklists: 86
+  total_data_files: 78
 maturity_summary:
   DRAFT: 0
   DEVELOPING: 10

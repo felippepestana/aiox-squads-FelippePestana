@@ -1,0 +1,80 @@
+# Deployment Strategies Reference
+# Used by: pipeline-architect, devops-chief
+# Source: Industry best practices (Martin Fowler, AWS Well-Architected)
+
+strategies:
+  rolling_update:
+    description: "Gradually replace old instances with new ones"
+    risk: low
+    downtime: zero
+    complexity: low
+    rollback_speed: medium
+    best_for:
+      - "Stateless web applications"
+      - "Microservices with health checks"
+      - "Teams starting with zero-downtime deploys"
+    kubernetes: "Deployment with maxSurge/maxUnavailable"
+    veto: "Do NOT use for database schema migrations or stateful services"
+
+  blue_green:
+    description: "Run two identical environments, switch traffic atomically"
+    risk: low
+    downtime: zero
+    complexity: medium
+    rollback_speed: instant
+    best_for:
+      - "Applications requiring instant rollback"
+      - "Regulated environments (finance, healthcare)"
+      - "Major version releases"
+    cost_note: "Requires 2x infrastructure during deployment"
+    veto: "Requires shared state (DB) to be backwards-compatible"
+
+  canary:
+    description: "Route small percentage of traffic to new version, monitor, then expand"
+    risk: very_low
+    downtime: zero
+    complexity: high
+    rollback_speed: fast
+    best_for:
+      - "High-traffic applications (>1000 rps)"
+      - "Risk-averse organizations"
+      - "A/B testing new features"
+    percentages: "1% → 5% → 25% → 50% → 100% (typical progression)"
+    requires: "Advanced traffic routing (Istio, Argo Rollouts, AWS ALB)"
+    veto: "Not practical for < 100 rps (insufficient signal at 1%)"
+
+  recreate:
+    description: "Stop all old instances, start all new instances"
+    risk: high
+    downtime: yes
+    complexity: very_low
+    rollback_speed: slow
+    best_for:
+      - "Development/staging environments"
+      - "Batch processing jobs"
+      - "Applications that cannot run two versions simultaneously"
+    veto: "NEVER use for production user-facing services"
+
+  feature_flags:
+    description: "Deploy code but control activation via flags"
+    risk: very_low
+    downtime: zero
+    complexity: medium
+    rollback_speed: instant
+    best_for:
+      - "Gradual feature rollout"
+      - "A/B testing"
+      - "Quick kill-switch for problematic features"
+    tools: "LaunchDarkly, Unleash, Flagsmith, ConfigCat"
+    note: "Complements other strategies — not a deployment strategy alone"
+
+decision_tree:
+  - condition: "Cannot tolerate any downtime?"
+    yes: "rolling_update, blue_green, or canary"
+    no: "recreate is acceptable for non-production"
+  - condition: "Need instant rollback?"
+    yes: "blue_green or feature_flags"
+    no: "rolling_update is sufficient"
+  - condition: "High traffic (>1000 rps) and risk-averse?"
+    yes: "canary"
+    no: "rolling_update or blue_green"
