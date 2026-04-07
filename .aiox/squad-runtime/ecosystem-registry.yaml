@@ -1,5 +1,5 @@
 metadata:
-  version: 1.5.0
+  version: 2.0.0
   last_updated: '2026-04-07'
   total_squads: 10
   maintainer: squad-creator
@@ -9,9 +9,9 @@ squads:
     path: squads/analista-processual/
     version: 1.0.0
     score: 9.0
-    maturity: DEVELOPING
-    validated: false
-    validated_explicit: false
+    maturity: OPERATIONAL
+    validated: true
+    validated_explicit: true
     auto_promoted: false
     description: >
       Squad de análise processual com pipeline 3-tier: Intake (mapeamento + avaliação),
@@ -39,33 +39,31 @@ squads:
     has_changelog: true
     domain: legal
     keywords:
-    - analista-processual
-    - mapeamento
+    - legal
+    - processual
     - juridico
     - jurisprudencia
-    - processo
+    - mapeamento
     - pecas-processuais
     - estrategia-juridica
     - relatorio
-    - brasil
     - direito-civil
+    - brasil
     highlights:
     - 8 agents, 9 tasks
     - 2 workflows available
     - README documented
     - Dual-mode (processual + juridico)
-    example_use: Use analista-processual for process mapping or legal document analysis.
+    example_use: "Use analista-processual to map organizational processes or analyze legal documents with full jurisprudence research."
   apex:
     path: squads/apex/
     version: 1.1.0
     score: 10.0
-    maturity: DEVELOPING
-    validated: false
-    validated_explicit: false
+    maturity: OPERATIONAL
+    validated: true
+    validated_explicit: true
     auto_promoted: false
-    description: "Squad 100% frontend ultra-premium para Web, Mobile e Spatial. 14 agentes especializados + 1 orchestrator,\
-      \ cada um com DNA de elite minds do frontend mundial. Cobre absolutamente tudo que o usuario ve e toca: design system,\
-      \ componentes, animacoes, 3D/spatial, acessibilidade, performance, CSS, tipografia, cores, efeitos."
+    description: "Ultra-premium frontend squad for Web, Mobile and Spatial. 14 specialized agents + 1 orchestrator, each with Voice DNA from elite frontend minds. Covers design system, components, animations, 3D/spatial, accessibility, performance, CSS, typography."
     slashPrefix: apex
     counts:
       agents: 14
@@ -91,35 +89,35 @@ squads:
     - spatial-eng
     has_readme: true
     has_changelog: true
-    domain: design-system
+    domain: frontend
     keywords:
-    - apex
-    - '100'
     - frontend
-    - ultra-premium
-    - web
-    - mobile
+    - design-system
+    - react
+    - react-native
+    - accessibility
+    - performance
+    - css
+    - animation
+    - webxr
     - spatial
-    - agentes
-    - especializados
-    - orchestrator
-    - cada
-    - dna
+    - mobile
+    - components
     highlights:
     - 14 agents, 84 tasks
     - 8 workflows available
     - README documented
     - Command prefix /apex
-    example_use: Use /apex to execute design-system workflows in apex.
+    example_use: "Use /apex to build production-ready UI components with accessibility, animations, and cross-platform support."
   curator:
     path: squads/curator/
     version: 3.4.0
     score: 10.0
-    maturity: DEVELOPING
-    validated: false
-    validated_explicit: false
+    maturity: OPERATIONAL
+    validated: true
+    validated_explicit: true
     auto_promoted: false
-    description: ''
+    description: "Video transcription mining squad. Identifies high-impact moments with timestamps, builds edit-ready cut scripts, and extracts viral content patterns from long-form video."
     slashPrefix: ''
     counts:
       agents: 12
@@ -143,32 +141,31 @@ squads:
     - walter-murch
     has_readme: true
     has_changelog: true
-    domain: curator
+    domain: video-content
     keywords:
-    - curator
-    - brendan
-    - kane
-    - content
-    - miner
-    - pro
-    - chief
-    - data
+    - video
+    - transcription
+    - content-mining
+    - timestamps
+    - editing
+    - storytelling
+    - viral-content
     - ffmpeg
-    - cutter
-    - jonah
-    - berger
+    - highlights
+    - cut-scripts
     highlights:
     - 12 agents, 9 tasks
     - 5 workflows available
     - README documented
-    example_use: Use curator for curator tasks.
+    - Celebrity DNA (MrBeast, Robert McKee, Walter Murch)
+    example_use: "Use curator to mine video transcriptions, identify high-impact moments, and generate edit-ready cut scripts."
   devops:
     path: squads/devops/
     version: 1.1.0
     score: 9.5
-    maturity: DEVELOPING
-    validated: false
-    validated_explicit: false
+    maturity: OPERATIONAL
+    validated: true
+    validated_explicit: true
     auto_promoted: false
     description: "Pipeline-driven infrastructure automation squad. Designs CI/CD pipelines, containerizes applications, provisions cloud infrastructure as code, and implements observability."
     slashPrefix: ''
@@ -190,31 +187,33 @@ squads:
     has_changelog: true
     domain: devops
     keywords:
-    - devops
     - ci-cd
     - docker
     - kubernetes
     - terraform
     - monitoring
-    - cloud
+    - observability
+    - infrastructure-as-code
     - security
     highlights:
     - 6 agents, 6 tasks
+    - 3 workflows, 6 templates
     - README documented
-    example_use: Use devops for CI/CD pipeline design and infrastructure automation.
+    - Full DevOps cycle orchestration
+    example_use: "Use devops for CI/CD pipeline design, containerization, infrastructure provisioning, and monitoring setup."
   deep-research:
     path: squads/deep-research/
     version: 1.0.0
     score: 9.5
-    maturity: DEVELOPING
-    validated: false
-    validated_explicit: false
+    maturity: OPERATIONAL
+    validated: true
+    validated_explicit: true
     auto_promoted: false
-    description: |-
-      Squad de pesquisa profunda com pipeline 3-tier: Diagnostic (Tier 0),
-      Execution (Tier 1), e Quality Assurance. 11 agents especializados baseados
-      em elite minds reais — de Evidence-Based Medicine (Sackett) a Competitive
-      Intelligence (Gilad), com QA obrigatório (Ioannidis + Kahneman).
+    description: >
+      Evidence-based deep research pipeline with 3-tier architecture: Diagnostic (Tier 0),
+      Execution (Tier 1), and Quality Assurance. 11 specialized agents based on elite minds
+      — from Evidence-Based Medicine (Sackett) to Competitive Intelligence (Gilad),
+      with mandatory QA (Ioannidis + Kahneman cognitive bias auditing).
     slashPrefix: ''
     counts:
       agents: 11
@@ -239,32 +238,29 @@ squads:
     has_changelog: true
     domain: research
     keywords:
-    - deep
     - research
-    - pesquisa
-    - profunda
-    - pipeline
-    - 3-tier
-    - diagnostic
-    - tier
-    - execution
-    - quality
-    - assurance
-    - especializados
+    - evidence-based
+    - systematic-review
+    - cognitive-bias
+    - competitive-intelligence
+    - meta-analysis
+    - literature-review
+    - quality-assurance
     highlights:
     - 11 agents, 17 tasks
     - 3 workflows available
     - README documented
-    example_use: Use deep-research for research tasks.
+    - Elite minds DNA (Sackett, Kahneman, Ioannidis)
+    example_use: "Use deep-research for evidence-based research with systematic methodology and cognitive bias auditing."
   dispatch:
     path: squads/dispatch/
     version: 1.0.0
     score: 9.0
-    maturity: DEVELOPING
-    validated: false
-    validated_explicit: false
+    maturity: OPERATIONAL
+    validated: true
+    validated_explicit: true
     auto_promoted: false
-    description: ''
+    description: "Parallel execution engine that decomposes stories/PRDs into atomic subtasks, optimizes execution in waves (DAG), and routes to the right agents/models."
     slashPrefix: ''
     counts:
       agents: 4
@@ -280,30 +276,30 @@ squads:
     - wave-planner
     has_readme: true
     has_changelog: false
-    domain: dispatch
+    domain: orchestration
     keywords:
-    - dispatch
-    - chief
-    - quality
-    - gate
-    - router
-    - wave
-    - planner
+    - task-decomposition
+    - parallel-execution
+    - dag
+    - wave-planning
+    - routing
+    - quality-gate
+    - orchestration
     highlights:
     - 4 agents, 8 tasks
     - 3 workflows available
     - README documented
-    example_use: Use dispatch for dispatch tasks.
+    - DAG-based execution optimization
+    example_use: "Use dispatch to decompose complex stories into atomic tasks and execute them in optimized parallel waves."
   education:
     path: squads/education/
     version: 1.0.0
     score: 10.0
-    maturity: DEVELOPING
-    validated: false
-    validated_explicit: false
+    maturity: OPERATIONAL
+    validated: true
+    validated_explicit: true
     auto_promoted: false
-    description: Replicable system for transforming complex knowledge into mastery journeys using cognitive science + legal
-      compliance
+    description: "Instructional design squad that transforms complex knowledge into mastery journeys using 15 pedagogical frameworks (Bloom, Mayer, UbD, ARCS) with MEC legal compliance."
     slashPrefix: ''
     counts:
       agents: 16
@@ -333,33 +329,29 @@ squads:
     has_changelog: true
     domain: education
     keywords:
-    - education
-    - replicable
-    - system
-    - for
-    - transforming
-    - complex
-    - knowledge
-    - into
-    - mastery
-    - journeys
-    - cognitive
-    - science
+    - instructional-design
+    - pedagogy
+    - bloom-taxonomy
+    - cognitive-science
+    - spaced-repetition
+    - mec-compliance
+    - course-design
+    - learning-objectives
     highlights:
     - 16 agents, 21 tasks
     - 4 workflows available
     - README documented
-    example_use: Use education for education tasks.
+    - 15 pedagogical frameworks
+    example_use: "Use education to design courses with cognitive science foundations and MEC compliance."
   kaizen:
     path: squads/kaizen/
     version: 1.3.0
     score: 9.1
-    maturity: DEVELOPING
-    validated: false
-    validated_explicit: false
+    maturity: OPERATIONAL
+    validated: true
+    validated_explicit: true
     auto_promoted: false
-    description: O squad que vigia e melhora todos os outros. Analisa continuamente o ecossistema de agentes, squads, ferramentas
-      e competências. Detecta gaps, monitora performance, recomenda novos recursos. O sistema nervoso do seu projeto.
+    description: "Continuous improvement squad that monitors and optimizes all other squads. Analyzes ecosystem structure, performance, bottlenecks, capabilities, and costs."
     slashPrefix: kaizen
     counts:
       agents: 7
@@ -378,36 +370,30 @@ squads:
     - topology-analyst
     has_readme: true
     has_changelog: true
-    domain: kaizen
+    domain: meta-improvement
     keywords:
-    - kaizen
-    - que
-    - vigia
-    - melhora
-    - todos
-    - outros
-    - analisa
-    - continuamente
-    - ecossistema
-    - agentes
-    - squads
-    - ferramentas
+    - continuous-improvement
+    - monitoring
+    - bottleneck-detection
+    - capability-mapping
+    - cost-analysis
+    - performance-tracking
+    - ecosystem-health
     highlights:
     - 7 agents, 8 tasks
     - 3 workflows available
     - README documented
     - Command prefix /kaizen
-    example_use: Use /kaizen to execute kaizen workflows in kaizen.
+    example_use: "Use /kaizen to analyze squad ecosystem health, detect bottlenecks, and recommend improvements."
   seo:
     path: squads/seo/
     version: 1.1.0
     score: 9.0
-    maturity: DEVELOPING
-    validated: false
-    validated_explicit: false
+    maturity: OPERATIONAL
+    validated: true
+    validated_explicit: true
     auto_promoted: false
-    description: Post-design SEO optimization squad. Evaluates websites (0-100 score), optimizes all SEO factors, and shows
-      before/after improvement. Works like Yoast/RankMath but as intelligent agents.
+    description: "Post-design SEO optimization squad. Evaluates websites with 0-100 scoring across 7 categories, optimizes all SEO factors, and generates before/after improvement reports."
     slashPrefix: ''
     counts:
       agents: 8
@@ -427,25 +413,22 @@ squads:
     - technical-auditor
     has_readme: true
     has_changelog: true
-    domain: content
+    domain: seo
     keywords:
     - seo
-    - post-design
-    - optimization
-    - evaluates
-    - websites
-    - 0-100
-    - score
-    - optimizes
-    - all
-    - factors
-    - shows
-    - before
+    - search-optimization
+    - meta-tags
+    - structured-data
+    - schema-markup
+    - core-web-vitals
+    - e-e-a-t
+    - generative-engine-optimization
     highlights:
-    - 8 agents, 3 tasks
-    - 1 workflows available
+    - 8 agents, 10 tasks
+    - 3 templates, 3 data files
     - README documented
-    example_use: Use seo for content tasks.
+    - 0-100 scoring system with 7 categories
+    example_use: "Use seo to audit a website (0-100), optimize SEO factors, and generate a before/after improvement report."
   squad-creator:
     path: squads/squad-creator/
     version: 4.0.0
@@ -454,10 +437,7 @@ squads:
     validated: false
     validated_explicit: false
     auto_promoted: false
-    description: "Base meta-squad para criar squads de agentes via templates e validacao estrutural. Orchestrator: @squad-chief\
-      \ (triage, routing, criacao template-driven de squads). Base mode: 24 tasks, 3 workflows, 1 agent. Pro mode: auto-detected\
-      \ via squad-creator-pro/ (adds mind cloning, DNA extraction, multi-agent orchestration, model routing, advanced optimization).\
-      \ v4.0: Base/Pro split \u2014 template-driven base, mind-cloning pro."
+    description: "Meta-squad for creating other squads via structured templates and validation. Template-driven 6-phase workflow with quality gates."
     slashPrefix: squadCreator
     counts:
       agents: 1
@@ -470,43 +450,50 @@ squads:
     - squad-chief
     has_readme: true
     has_changelog: true
-    domain: squad-creator
+    domain: squad-creation
     keywords:
-    - creator
-    - base
+    - squad-creation
     - meta-squad
-    - criar
-    - squads
-    - agentes
-    - via
-    - templates
-    - validacao
-    - estrutural
-    - orchestrator
-    - squad-chief
+    - template-driven
+    - validation
+    - agent-design
+    - voice-dna
+    - quality-gates
     highlights:
-    - 1 agents, 24 tasks
+    - 1 agent, 24 tasks
     - 3 workflows available
     - README documented
     - Command prefix /squadCreator
-    example_use: Use /squadCreator to execute squad-creator workflows in squad-creator.
+    example_use: "Use /squadCreator to create new squads with structured templates, voice DNA extraction, and quality validation."
 domain_index:
   legal:
   - analista-processual
-  analista-processual:
-  - analista-processual
-  mapeamento:
-  - analista-processual
-  juridico:
-  - analista-processual
-  jurisprudencia:
-  - analista-processual
-  processo:
-  - analista-processual
-  relatorio:
-  - analista-processual
-  estrategia-juridica:
-  - analista-processual
+  frontend:
+  - apex
+  design-system:
+  - apex
+  react:
+  - apex
+  accessibility:
+  - apex
+  css:
+  - apex
+  animation:
+  - apex
+  mobile:
+  - apex
+  spatial:
+  - apex
+  video:
+  - curator
+  transcription:
+  - curator
+  content-mining:
+  - curator
+  storytelling:
+  - curator
+  editing:
+  - curator
   devops:
   - devops
   ci-cd:
@@ -519,188 +506,72 @@ domain_index:
   - devops
   monitoring:
   - devops
-  cloud:
-  - devops
-  design-system:
-  - apex
-  apex:
-  - apex
-  '100':
-  - apex
-  frontend:
-  - apex
-  ultra-premium:
-  - apex
-  web:
-  - apex
-  mobile:
-  - apex
-  spatial:
-  - apex
-  agentes:
-  - apex
   - kaizen
-  - squad-creator
-  especializados:
-  - apex
-  - deep-research
-  orchestrator:
-  - apex
-  - squad-creator
-  cada:
-  - apex
-  dna:
-  - apex
-  curator:
-  - curator
-  brendan:
-  - curator
-  kane:
-  - curator
-  content:
-  - curator
-  - seo
-  miner:
-  - curator
-  pro:
-  - curator
-  chief:
-  - curator
-  - dispatch
-  data:
-  - curator
-  ffmpeg:
-  - curator
-  cutter:
-  - curator
-  jonah:
-  - curator
-  berger:
-  - curator
+  infrastructure-as-code:
+  - devops
   research:
   - deep-research
-  deep:
+  evidence-based:
   - deep-research
-  pesquisa:
+  systematic-review:
   - deep-research
-  profunda:
+  cognitive-bias:
   - deep-research
-  pipeline:
+  meta-analysis:
   - deep-research
-  3-tier:
-  - deep-research
-  diagnostic:
-  - deep-research
-  tier:
-  - deep-research
-  execution:
-  - deep-research
-  quality:
-  - deep-research
+  orchestration:
   - dispatch
-  assurance:
-  - deep-research
-  dispatch:
+  task-decomposition:
   - dispatch
-  gate:
+  parallel-execution:
   - dispatch
-  router:
-  - dispatch
-  wave:
-  - dispatch
-  planner:
+  dag:
   - dispatch
   education:
   - education
-  replicable:
+  instructional-design:
   - education
-  system:
+  pedagogy:
   - education
-  for:
+  bloom-taxonomy:
   - education
-  transforming:
+  cognitive-science:
   - education
-  complex:
+  spaced-repetition:
   - education
-  knowledge:
+  course-design:
   - education
-  into:
-  - education
-  mastery:
-  - education
-  journeys:
-  - education
-  cognitive:
-  - education
-  science:
-  - education
-  kaizen:
+  continuous-improvement:
   - kaizen
-  que:
+  bottleneck-detection:
   - kaizen
-  vigia:
+  capability-mapping:
   - kaizen
-  melhora:
-  - kaizen
-  todos:
-  - kaizen
-  outros:
-  - kaizen
-  analisa:
-  - kaizen
-  continuamente:
-  - kaizen
-  ecossistema:
-  - kaizen
-  squads:
-  - kaizen
-  - squad-creator
-  ferramentas:
+  ecosystem-health:
   - kaizen
   seo:
   - seo
-  post-design:
+  search-optimization:
   - seo
-  optimization:
+  structured-data:
   - seo
-  evaluates:
+  core-web-vitals:
   - seo
-  websites:
+  e-e-a-t:
   - seo
-  0-100:
+  generative-engine-optimization:
   - seo
-  score:
-  - seo
-  optimizes:
-  - seo
-  all:
-  - seo
-  factors:
-  - seo
-  shows:
-  - seo
-  before:
-  - seo
-  squad-creator:
-  - squad-creator
-  creator:
-  - squad-creator
-  base:
+  squad-creation:
   - squad-creator
   meta-squad:
   - squad-creator
-  criar:
+  template-driven:
   - squad-creator
-  via:
+  voice-dna:
   - squad-creator
-  templates:
+  quality-gates:
   - squad-creator
-  validacao:
-  - squad-creator
-  estrutural:
-  - squad-creator
-  squad-chief:
-  - squad-creator
+  - dispatch
 summary:
   total_agents: 87
   total_tasks: 196
@@ -710,5 +581,5 @@ summary:
   total_data_files: 78
 maturity_summary:
   DRAFT: 0
-  DEVELOPING: 10
-  OPERATIONAL: 0
+  DEVELOPING: 1
+  OPERATIONAL: 9

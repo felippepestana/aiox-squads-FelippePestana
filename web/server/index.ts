@@ -26,6 +26,12 @@ import {
   uploadFileFromBuffer,
   type UploadedFile,
 } from "./files.js";
+import { SessionManager } from "./sessionManager.js";
+import {
+  createSessionSchema,
+  switchAgentSchema,
+  chatMessageSchema,
+} from "./validation.js";
 
 const PORT = Number(process.env.PORT ?? 8787);
 const NODE_ENV = process.env.NODE_ENV ?? "development";
@@ -72,11 +78,9 @@ const heavyLimiter = rateLimit({
   skip: () => !rateLimitOn,
 });
 
-interface SessionState {
-  chat: ChatSession;
-}
-
-const sessions = new Map<string, SessionState>();
+const SESSION_TTL_MS = parseLimitEnv("SESSION_TTL_MINUTES", 30) * 60 * 1000;
+const sessionManager = new SessionManager(SESSION_TTL_MS);
+sessionManager.start();
 
 function stripAgent(agent: { id: string; name: string; squad: string }) {
   return { id: agent.id, name: agent.name, squad: agent.squad };
@@ -170,7 +174,7 @@ app.get("/api/squads", (_req, res) => {
 
 app.get("/api/sessions/:id", (req, res) => {
   const id = routeSessionId(req);
-  if (!sessions.has(id)) {
+  if (!sessionManager.has(id)) {
     res.status(404).json({ error: "Sessão não encontrada" });
     return;
   }
@@ -181,8 +185,13 @@ app.post("/api/sessions", (req, res) => {
   const apiKey = requireApiKey(res);
   if (!apiKey) return;
 
-  const squadId = String(req.body?.squadId ?? "");
-  const agentId = String(req.body?.agentId ?? "");
+  const parsed = createSessionSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: parsed.error.issues[0]?.message ?? "Invalid input" });
+    return;
+  }
+
+  const { squadId, agentId } = parsed.data;
   const squads = loadAllSquads();
   const agent = findAgent(squads, squadId, agentId);
   if (!agent) {
@@ -192,18 +201,24 @@ app.post("/api/sessions", (req, res) => {
 
   const client = new Anthropic({ apiKey });
   const sessionId = randomUUID();
-  sessions.set(sessionId, { chat: new ChatSession(client, agent) });
+  sessionManager.set(sessionId, new ChatSession(client, agent));
   res.json({ sessionId, agent: stripAgent(agent) });
 });
 
 app.post("/api/sessions/:id/switch-agent", (req, res) => {
-  const state = sessions.get(routeSessionId(req));
+  const state = sessionManager.get(routeSessionId(req));
   if (!state) {
     res.status(404).json({ error: "Sessão não encontrada" });
     return;
   }
-  const squadId = String(req.body?.squadId ?? "");
-  const agentId = String(req.body?.agentId ?? "");
+
+  const parsed = switchAgentSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: parsed.error.issues[0]?.message ?? "Invalid input" });
+    return;
+  }
+
+  const { squadId, agentId } = parsed.data;
   const agent = findAgent(loadAllSquads(), squadId, agentId);
   if (!agent) {
     res.status(404).json({ error: "Agente não encontrado" });
@@ -214,7 +229,7 @@ app.post("/api/sessions/:id/switch-agent", (req, res) => {
 });
 
 app.post("/api/sessions/:id/reset", (req, res) => {
-  const state = sessions.get(routeSessionId(req));
+  const state = sessionManager.get(routeSessionId(req));
   if (!state) {
     res.status(404).json({ error: "Sessão não encontrada" });
     return;
@@ -239,7 +254,7 @@ app.post(
     const apiKey = requireApiKey(res);
     if (!apiKey) return;
 
-    const state = sessions.get(routeSessionId(req));
+    const state = sessionManager.get(routeSessionId(req));
     if (!state) {
       res.status(404).json({ error: "Sessão não encontrada" });
       return;
@@ -273,18 +288,19 @@ app.post(
 );
 
 app.post("/api/sessions/:id/chat", heavyLimiter, async (req, res) => {
-  const state = sessions.get(routeSessionId(req));
+  const state = sessionManager.get(routeSessionId(req));
   if (!state) {
     res.status(404).json({ error: "Sessão não encontrada" });
     return;
   }
 
-  const text = String(req.body?.text ?? "");
-  const files = (req.body?.files ?? []) as UploadedFile[];
-  if (!Array.isArray(files)) {
-    res.status(400).json({ error: "files deve ser um array" });
+  const parsed = chatMessageSchema.safeParse(req.body);
+  if (!parsed.success) {
+    res.status(400).json({ error: parsed.error.issues[0]?.message ?? "Invalid input" });
     return;
   }
+
+  const { text, files } = parsed.data;
 
   res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
   res.setHeader("Cache-Control", "no-cache, no-transform");
