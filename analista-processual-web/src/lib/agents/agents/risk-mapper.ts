@@ -1,4 +1,4 @@
-import { llmGateway } from "./llm-gateway";
+import { llmGateway } from "../llm-gateway";
 
 interface RiskMapperInput {
   parties: Array<{

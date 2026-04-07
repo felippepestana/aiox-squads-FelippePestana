@@ -1,4 +1,4 @@
-import { llmGateway, type TaskComplexity } from "./llm-gateway";
+import { llmGateway, type TaskComplexity } from "../llm-gateway";
 
 interface NavigatorInput {
   documents: Array<{
