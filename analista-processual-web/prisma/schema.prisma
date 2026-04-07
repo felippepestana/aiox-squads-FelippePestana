@@ -73,10 +73,14 @@ model Deadline {
   id          String    @id @default(uuid())
   analysisId  String
   description String
+  legalBasis  String?
   dueDate    DateTime
   businessDays Int?
+  calendarDays Int?
   status      DeadlineStatus @default(PENDING)
   priority    Priority     @default(NORMAL)
+  urgency     Urgency     @default(NORMAL)
+  isAutomatic  Boolean    @default(false)
   createdAt   DateTime    @default(now())
 
   analysis Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
@@ -95,6 +99,13 @@ enum DeadlineStatus {
 enum Priority {
   LOW
   NORMAL
+  HIGH
+  CRITICAL
+}
+
+enum Urgency {
+  LOW
+  MEDIUM
   HIGH
   CRITICAL
 }
