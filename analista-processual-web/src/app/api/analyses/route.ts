@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
             where: { id: analysis.id },
             data: {
               status: result.status === "completed" ? "COMPLETED" : "FAILED",
-              result: result as unknown as Record<string, unknown>,
+              result: JSON.parse(JSON.stringify(result)),
             },
           });
 
@@ -147,7 +147,7 @@ export async function POST(request: NextRequest) {
                   legalBasis: deadline.legalBasis,
                   dueDate: new Date(deadline.dueDate),
                   status: "PENDING",
-                  urgency: deadline.urgency.toUpperCase(),
+                  urgency: deadline.urgency.toUpperCase() as any,
                 },
               });
             }

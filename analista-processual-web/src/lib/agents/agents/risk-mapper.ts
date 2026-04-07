@@ -142,3 +142,4 @@ Retorne um JSON com:
 }
 
 export const riskMapperAgent = new RiskMapperAgent();
+export type { RiskMapperOutput };

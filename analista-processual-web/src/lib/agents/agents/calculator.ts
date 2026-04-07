@@ -172,3 +172,4 @@ Analise e retorne um JSON com:
 }
 
 export const calculatorAgent = new CalculatorAgent();
+export type { CalculatorOutput };

@@ -1,9 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    typedRoutes: true,
-  },
+  typedRoutes: false,
   images: {
     domains: ["localhost", "supabase.co"],
   },

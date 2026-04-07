@@ -99,3 +99,4 @@ Analise e retorne um JSON com:
 }
 
 export const navigatorAgent = new NavigatorAgent();
+export type { NavigatorOutput };

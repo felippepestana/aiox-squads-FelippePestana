@@ -263,7 +263,7 @@ export default function AnaliseDetailPage() {
                 {result.score ? `${result.score}/100` : "N/A"}
               </div>
               <p className="text-xs text-muted-foreground">
-                {result.scoreDescription || "Análise completada"}
+                {String(result.scoreDescription || "Análise completada")}
               </p>
             </CardContent>
           </Card>
@@ -274,7 +274,7 @@ export default function AnaliseDetailPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {result.partiesCount || "N/A"}
+                {String(result.partiesCount || "N/A")}
               </div>
               <p className="text-xs text-muted-foreground">Identificadas</p>
             </CardContent>
@@ -298,7 +298,7 @@ export default function AnaliseDetailPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {result.risksCount || 0}
+                {String(result.risksCount || 0)}
               </div>
               <p className="text-xs text-muted-foreground">Encontrados</p>
             </CardContent>

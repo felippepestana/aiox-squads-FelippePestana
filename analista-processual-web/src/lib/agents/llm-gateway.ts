@@ -210,7 +210,7 @@ class LLMGateway {
     });
 
     if (request.stream && onStream) {
-      for await (const chunk of response) {
+      for await (const chunk of response as AsyncIterable<any>) {
         const content = chunk.choices[0]?.delta?.content || "";
         if (content) {
           onStream(content);

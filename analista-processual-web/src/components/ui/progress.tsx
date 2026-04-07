@@ -1,7 +1,5 @@
 "use client";
 
-import { Progress } from "@/components/ui/progress";
-
 interface ProgressProps {
   value?: number;
   className?: string;

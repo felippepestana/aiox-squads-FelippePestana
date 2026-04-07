@@ -297,3 +297,4 @@ Retorne APENAS JSON válido, sem markdown, sem explicações adicionais:`;
 }
 
 export const extractorAgent = new ExtractorAgent();
+export type { ExtractorOutput };

@@ -19,13 +19,6 @@ export async function POST(
 
     const analysis = await prisma.analysis.findUnique({ where: { id } });
     if (!analysis) {
-      return NextAnalysisEvent.create({
-        data: {
-          analysisId: id,
-          event: "DOCUMENT_UPLOADED",
-          metadata: { filename: file.name, size: file.size },
-        },
-      });
       return NextResponse.json(
         { error: "Análise não encontrada" },
         { status: 404 }
