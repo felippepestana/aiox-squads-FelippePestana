@@ -1,0 +1,213 @@
+# Fontes autorizadas para pesquisa imobiliária
+version: "1.0"
+updated: "2026-04-08"
+
+registros_publicos:
+  cartorio_ri:
+    nome: "Cartório de Registro de Imóveis"
+    tipo: registro_publico
+    prioridade: 1
+    busca_sugerida: "registro de imóveis [município] [matrícula]"
+    nota: "Fonte primária para dados de matrícula, cadeia dominial e ônus reais"
+
+  e_certidao:
+    url: "registradores.onr.org.br"
+    nome: "Central de Registro de Imóveis (CRI) — e-Certidão"
+    tipo: certidao_eletronica
+    prioridade: 1
+    busca_sugerida: "site:registradores.onr.org.br certidão [matrícula]"
+
+legislacao_federal:
+  planalto:
+    url: "planalto.gov.br"
+    nome: "Portal da Legislação Federal"
+    tipo: legislacao
+    prioridade: 1
+    busca_sugerida: "site:planalto.gov.br [lei ou artigo]"
+
+  lexml:
+    url: "lexml.gov.br"
+    nome: "LexML — Legislação federal e estadual"
+    tipo: legislacao
+    prioridade: 1
+
+  codigo_civil:
+    referencia: "Lei 10.406/2002"
+    artigos_chave: ["Art. 1.228-1.368 (Direitos Reais)", "Art. 1.331-1.358 (Condomínio Edilício)"]
+    prioridade: 1
+
+  lei_registros_publicos:
+    referencia: "Lei 6.015/1973"
+    artigos_chave: ["Art. 167-288 (Registro de Imóveis)"]
+    prioridade: 1
+
+  lei_parcelamento:
+    referencia: "Lei 6.766/1979"
+    artigos_chave: ["Art. 1-53 (Parcelamento do Solo Urbano)"]
+    prioridade: 1
+
+  reurb:
+    referencia: "Lei 13.465/2017"
+    artigos_chave: ["Art. 9-75 (Regularização Fundiária Urbana)"]
+    prioridade: 1
+
+  codigo_florestal:
+    referencia: "Lei 12.651/2012"
+    artigos_chave: ["Art. 3-8 (APP)", "Art. 12-18 (Reserva Legal)"]
+    prioridade: 1
+
+tribunais:
+  stf:
+    url: "stf.jus.br"
+    nome: "Supremo Tribunal Federal"
+    tipo: controle_constitucionalidade
+    prioridade: 1
+    busca_sugerida: "site:stf.jus.br [tema] direito propriedade"
+
+  stj:
+    url: "stj.jus.br"
+    nome: "Superior Tribunal de Justiça"
+    tipo: recurso_especial
+    prioridade: 1
+    busca_sugerida: "site:stj.jus.br [tema] imóvel propriedade"
+
+prefeituras:
+  geoprocessamento:
+    tipo: mapa_urbano
+    prioridade: 1
+    busca_sugerida: "geoprocessamento [município] mapa zoneamento"
+    nota: "Portais municipais de geoprocessamento com mapas de zoneamento e uso do solo"
+
+  iptu_online:
+    tipo: dados_fiscais
+    prioridade: 1
+    busca_sugerida: "[município] consulta IPTU online [inscrição]"
+
+  habite_se:
+    tipo: certidao_municipal
+    prioridade: 1
+    busca_sugerida: "[município] consulta habite-se certidão [número]"
+
+  plano_diretor:
+    tipo: legislacao_municipal
+    prioridade: 1
+    busca_sugerida: "plano diretor [município] lei complementar zoneamento"
+
+orgaos_ambientais:
+  ibama:
+    url: "ibama.gov.br"
+    nome: "IBAMA — Instituto Brasileiro do Meio Ambiente"
+    tipo: ambiental_federal
+    prioridade: 1
+
+  ipaam_am:
+    url: "ipaam.am.gov.br"
+    nome: "IPAAM — Instituto de Proteção Ambiental do Amazonas"
+    tipo: ambiental_estadual
+    prioridade: 1
+    nota: "Específico para imóveis no Estado do Amazonas"
+
+  cetesb_sp:
+    url: "cetesb.sp.gov.br"
+    nome: "CETESB — São Paulo"
+    tipo: ambiental_estadual
+    prioridade: 2
+
+patrimonio_uniao:
+  spu:
+    url: "gov.br/spu"
+    nome: "SPU — Secretaria do Patrimônio da União"
+    tipo: aforamento
+    prioridade: 1
+    busca_sugerida: "site:gov.br/spu aforamento terreno marinha [localidade]"
+    nota: "Para terrenos de marinha, aforamento e laudêmio"
+
+imagens_geoespaciais:
+  google_maps:
+    url: "maps.google.com"
+    nome: "Google Maps / Google Earth"
+    tipo: satelite
+    prioridade: 1
+    nota: "Imagens de satélite, Street View, medição de distâncias"
+
+  sentinel_hub:
+    url: "apps.sentinel-hub.com"
+    nome: "Sentinel Hub — ESA Copernicus"
+    tipo: satelite_publico
+    prioridade: 2
+    nota: "Imagens de satélite gratuitas, Sentinel-2, atualização regular"
+
+  bing_maps:
+    url: "bing.com/maps"
+    nome: "Bing Maps"
+    tipo: satelite
+    prioridade: 2
+    nota: "Cobertura alternativa, Bird's Eye View em algumas regiões"
+
+  inpe:
+    url: "inpe.br"
+    nome: "INPE — Instituto Nacional de Pesquisas Espaciais"
+    tipo: satelite_publico
+    prioridade: 2
+    nota: "Imagens CBERS, monitoramento de desmatamento"
+
+mercado_imobiliario:
+  fipezap:
+    url: "fipezap.zapimoveis.com.br"
+    nome: "FipeZap — Índice de Preços"
+    tipo: indice_mercado
+    prioridade: 1
+    nota: "Índice de preços médios por m² por cidade/bairro"
+
+  portais_anuncio:
+    tipo: dados_mercado
+    prioridade: 2
+    nota: "ZAP Imóveis, OLX, Viva Real, Imovelweb — para pesquisa de comparáveis"
+    busca_sugerida: "[portal] [tipo imóvel] [bairro] [cidade] venda"
+
+  creci:
+    tipo: regulamentacao_profissional
+    prioridade: 2
+    nota: "CRECI regional — tabela de honorários e regulamentação"
+
+  secovi:
+    tipo: sindicato_mercado
+    prioridade: 2
+    nota: "Dados de mercado, pesquisas de preço, tendências"
+
+custos_construcao:
+  cub_sinduscon:
+    tipo: custo_unitario
+    prioridade: 1
+    nota: "CUB/m² por estado, padrão construtivo (baixo/normal/alto) e tipo (R1/R8/R16/PP4/CAL8)"
+    busca_sugerida: "CUB SINDUSCON [estado] [mês] [ano]"
+
+  sinapi_cef:
+    url: "caixa.gov.br/sinapi"
+    nome: "SINAPI — Sistema Nacional de Pesquisa de Custos e Índices da Construção Civil"
+    tipo: custo_referencia
+    prioridade: 1
+    nota: "Custos de referência CEF, utilizado em financiamentos e obras públicas"
+
+rurais:
+  incra:
+    url: "incra.gov.br"
+    nome: "INCRA — Instituto Nacional de Colonização e Reforma Agrária"
+    tipo: cadastro_rural
+    prioridade: 1
+    busca_sugerida: "INCRA CCIR [município] [proprietário]"
+
+  car:
+    url: "car.gov.br"
+    nome: "CAR — Cadastro Ambiental Rural"
+    tipo: ambiental_rural
+    prioridade: 1
+
+regras_de_uso:
+  - "Priorizar fontes de prioridade 1 antes de prioridade 2"
+  - "Indicar sempre: fonte, URL/referência, data de consulta"
+  - "Nunca citar dados sem verificar autenticidade"
+  - "Para dados de mercado, usar mínimo 3 fontes comparáveis"
+  - "Imagens de satélite devem ter data de captura registrada"
+  - "Legislação municipal varia por cidade — sempre verificar vigência"
+  - "Dados do IPTU podem estar desatualizados — cruzar com vistoria visual"

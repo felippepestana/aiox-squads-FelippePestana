@@ -1,0 +1,377 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# Squad: Property Data
+# Domain: Levantamento e Avaliação Imobiliária
+# Created: 2026-04-08
+# Version: 1.0.0
+# ═══════════════════════════════════════════════════════════════════════════════
+
+metadata:
+  version: "1.0"
+  created: "2026-04-08"
+  squad: "property-data"
+
+squad:
+  name: "property-data"
+  display_name: "Property Data Squad"
+  version: "1.0.0"
+  domain: "Levantamento e Avaliação Imobiliária"
+  description: |
+    Squad de levantamento detalhado de dados imobiliários com pipeline 4-tier:
+    Intake documental (Tier 0.5), Execução especializada (Tier 1), Análise de nicho
+    (Tier 2), e Síntese final. 10 agentes especializados cobrindo pesquisa registral,
+    legislação, urbanismo, análise visual/geoespacial, avaliação ABNT NBR 14653,
+    meio ambiente, condomínios e elaboração de relatórios/laudos estruturados.
+    Suporte multimodal: lê PDFs, imagens, fotos de imóveis e imagens de satélite.
+  philosophy: |
+    "Todo imóvel merece um levantamento completo: registrado, legislado, avaliado e documentado."
+    O pipeline garante que toda pesquisa passa por intake documental (extrair dados),
+    execução especializada (pesquisar e analisar), e síntese (consolidar relatório/laudo).
+  keywords:
+    - property-data
+    - levantamento-imobiliario
+    - avaliacao-imovel
+    - laudo-avaliacao
+    - abnt-nbr-14653
+    - registro-imoveis
+    - plano-diretor
+    - zoneamento
+    - analise-visual
+    - geolocalizacao
+    - certidao-matricula
+    - habite-se
+    - direito-propriedade
+  entry_agent: property-data-chief
+  created_by: "claude-code"
+  created_at: "2026-04-08"
+  tested: false
+
+workspace_integration:
+  level: documents
+  rationale: >-
+    O squad property-data lê documentos (PDFs, imagens) do workspace e salva
+    relatórios/laudos finais no workspace via Write.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TIER ARCHITECTURE
+# ─────────────────────────────────────────────────────────────────────────────
+
+tiers:
+  tier_0:
+    name: "Intake e Extração"
+    agents:
+      - leitor-documental
+    purpose: "Lê e extrai dados estruturados de PDFs, imagens e documentos fornecidos pelo usuário. Sempre executa primeiro quando há documentos."
+
+  tier_1:
+    name: "Execução Especializada"
+    agents:
+      - pesquisador-registral
+      - analista-legislativo
+      - analista-urbanistico
+      - analista-visual
+      - avaliador-imovel
+    purpose: "Análise profunda em 5 dimensões. Execução paralela — orquestrador seleciona agentes por use case."
+
+  tier_2:
+    name: "Análise de Nicho"
+    agents:
+      - analista-ambiental
+      - analista-condominial
+    purpose: "Análise especializada quando aplicável. Execução paralela."
+
+  tier_sintese:
+    name: "Síntese e Documentação"
+    agents:
+      - relator-imobiliario
+    purpose: "Consolida todos os outputs em relatório ou laudo final estruturado. Sempre executa por último."
+
+  orchestrator:
+    name: "Coordenação do Pipeline"
+    agents:
+      - property-data-chief
+    purpose: "Classifica demandas, roteia pelo pipeline, enforça quality gates, sintetiza resultado final."
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AGENT REGISTRY
+# ─────────────────────────────────────────────────────────────────────────────
+
+agents:
+  property-data-chief:
+    file: agents/property-data-chief.md
+    tier: orchestrator
+    icon: "🏠"
+    focus: "Classificação de demandas imobiliárias, roteamento de pipeline, quality gates, síntese final"
+
+  leitor-documental:
+    file: agents/leitor-documental.md
+    tier: tier_0
+    icon: "📑"
+    focus: "Leitura multimodal de PDFs (matrículas, certidões, IPTU) e imagens (fotos, plantas, mapas)"
+
+  pesquisador-registral:
+    file: agents/pesquisador-registral.md
+    tier: tier_1
+    icon: "📋"
+    focus: "Pesquisa registral: matrícula, certidões, habite-se, cadeia dominial, situação fiscal"
+
+  analista-legislativo:
+    file: agents/analista-legislativo.md
+    tier: tier_1
+    icon: "⚖️"
+    focus: "Legislação federal/estadual/municipal: direitos reais, restrições, regularização fundiária"
+
+  analista-urbanistico:
+    file: agents/analista-urbanistico.md
+    tier: tier_1
+    icon: "🏗️"
+    focus: "Plano diretor, zoneamento, uso do solo, parcelamento, código de obras, atividades limitadoras"
+
+  analista-visual:
+    file: agents/analista-visual.md
+    tier: tier_1
+    icon: "🛰️"
+    focus: "Análise de fotos, imagens de satélite, mapas, geolocalização, padrão construtivo, entorno"
+
+  avaliador-imovel:
+    file: agents/avaliador-imovel.md
+    tier: tier_1
+    icon: "💰"
+    focus: "Laudo de avaliação ABNT NBR 14653: método comparativo, evolutivo, capitalização, involutivo"
+
+  analista-ambiental:
+    file: agents/analista-ambiental.md
+    tier: tier_2
+    icon: "🌿"
+    focus: "APP, APA, licenciamento ambiental, recursos hídricos, normas ambientais municipais"
+
+  analista-condominial:
+    file: agents/analista-condominial.md
+    tier: tier_2
+    icon: "🏘️"
+    focus: "Convenção condominial, regulamento interno, atas de assembleia, aforamento, formação do conjunto"
+
+  relator-imobiliario:
+    file: agents/relator-imobiliario.md
+    tier: tier_sintese
+    icon: "📝"
+    focus: "Relatório analítico ou Laudo de Avaliação estruturado com citações rastreadas"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# HANDOFF MATRIX
+# ─────────────────────────────────────────────────────────────────────────────
+
+handoffs:
+  property-data-chief:
+    routes_to: [leitor-documental, pesquisador-registral, analista-legislativo, analista-urbanistico, analista-visual, avaliador-imovel, analista-ambiental, analista-condominial, relator-imobiliario]
+
+  leitor-documental:
+    receives_from: [property-data-chief]
+    hands_off_to: [property-data-chief]
+    collaborates_with: [analista-visual, pesquisador-registral, avaliador-imovel]
+
+  pesquisador-registral:
+    collaborates_with: [leitor-documental, analista-legislativo]
+    returns_to: [property-data-chief]
+
+  analista-legislativo:
+    collaborates_with: [analista-urbanistico, pesquisador-registral]
+    returns_to: [property-data-chief]
+
+  analista-urbanistico:
+    collaborates_with: [analista-legislativo, analista-ambiental]
+    returns_to: [property-data-chief]
+
+  analista-visual:
+    collaborates_with: [leitor-documental, avaliador-imovel]
+    returns_to: [property-data-chief]
+
+  avaliador-imovel:
+    collaborates_with: [analista-visual, pesquisador-registral, leitor-documental]
+    returns_to: [property-data-chief]
+
+  analista-ambiental:
+    receives_from: [property-data-chief]
+    returns_to: [property-data-chief]
+
+  analista-condominial:
+    receives_from: [property-data-chief]
+    returns_to: [property-data-chief]
+
+  relator-imobiliario:
+    receives_from: [property-data-chief]
+    final: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PIPELINE FLOW
+# ─────────────────────────────────────────────────────────────────────────────
+
+pipeline:
+  description: |
+    Toda pesquisa imobiliária segue este pipeline:
+    1. property-data-chief classifica a demanda em use cases (UC-PD-001~007 ou ALL)
+    2. Se há documentos/imagens, leitor-documental executa primeiro (Tier 0.5)
+    3. Tier 1 executa em paralelo: agentes selecionados por use case
+    4. Tier 2 executa em paralelo quando aplicável: ambiental + condominial
+    5. relator-imobiliario consolida tudo em relatório ou laudo final
+    6. property-data-chief revisa e entrega
+
+  use_cases:
+    UC-PD-001:
+      name: "Pesquisa Registral"
+      trigger_patterns: ["matrícula", "certidão", "registro", "habite-se", "IPTU", "cartório"]
+      tier_0_active: true
+      tier_1_agents: [pesquisador-registral]
+
+    UC-PD-002:
+      name: "Levantamento Legislativo"
+      trigger_patterns: ["lei", "legislação", "direito de propriedade", "restrição", "limitação", "código civil"]
+      tier_0_active: false
+      tier_1_agents: [analista-legislativo]
+
+    UC-PD-003:
+      name: "Análise Urbanística"
+      trigger_patterns: ["plano diretor", "zoneamento", "uso do solo", "parcelamento", "código de obras"]
+      tier_0_active: false
+      tier_1_agents: [analista-urbanistico]
+
+    UC-PD-004:
+      name: "Verificação Ambiental"
+      trigger_patterns: ["ambiental", "APP", "área de preservação", "licenciamento", "meio ambiente"]
+      tier_0_active: false
+      tier_1_agents: []
+      tier_2_agents: [analista-ambiental]
+
+    UC-PD-005:
+      name: "Documentação Condominial"
+      trigger_patterns: ["condomínio", "conjunto residencial", "ata", "aforamento", "regulamento", "convenção"]
+      tier_0_active: false
+      tier_1_agents: []
+      tier_2_agents: [analista-condominial]
+
+    UC-PD-006:
+      name: "Laudo de Avaliação"
+      trigger_patterns: ["laudo", "avaliação", "ABNT", "valor do imóvel", "NBR 14653", "avaliar"]
+      tier_0_active: true
+      tier_1_agents: [analista-visual, avaliador-imovel]
+
+    UC-PD-007:
+      name: "Análise Visual/Geoespacial"
+      trigger_patterns: ["foto", "imagem", "satélite", "mapa", "geolocalização", "Google Maps"]
+      tier_0_active: true
+      tier_1_agents: [analista-visual]
+
+    UC-PD-ALL:
+      name: "Levantamento Completo"
+      trigger_patterns: ["busca ampla", "levantamento completo", "todas informações", "busca detalhada"]
+      tier_0_active: true
+      tier_1_agents: [pesquisador-registral, analista-legislativo, analista-urbanistico, analista-visual, avaliador-imovel]
+      tier_2_agents: [analista-ambiental, analista-condominial]
+
+# ─────────────────────────────────────────────────────────────────────────────
+# QUALITY GATES
+# ─────────────────────────────────────────────────────────────────────────────
+
+quality_gates:
+  QG-PD-001:
+    name: "Classificação da Demanda"
+    agent: property-data-chief
+    placement: "Antes de qualquer ação"
+    criteria: "Use case classificado, endereço completo identificado"
+
+  QG-PD-002:
+    name: "Extração Documental"
+    agent: leitor-documental
+    placement: "Após intake"
+    criteria: "Dados extraídos com confiabilidade marcada, campos [NÃO ENCONTRADO] sinalizados"
+
+  QG-PD-003:
+    name: "Pesquisa Registral Validada"
+    agent: pesquisador-registral
+    placement: "Após Tier 1"
+    criteria: "Dados cruzados com fontes online, divergências sinalizadas"
+
+  QG-PD-004:
+    name: "Legislação Mapeada"
+    agent: analista-legislativo
+    placement: "Após Tier 1"
+    criteria: "Mínimo 5 dispositivos legais identificados com artigos e ementas"
+
+  QG-PD-005:
+    name: "Análise Visual Verificada"
+    agent: analista-visual
+    placement: "Após Tier 1"
+    criteria: "Geolocalização confirmada, grau de confiança atribuído a cada observação"
+
+  QG-PD-006:
+    name: "Avaliação Fundamentada"
+    agent: avaliador-imovel
+    placement: "Após Tier 1"
+    criteria: "Método declarado, mínimo 3 dados comparáveis, grau de fundamentação ABNT especificado"
+
+  QG-PD-007:
+    name: "Relatório/Laudo Salvo"
+    agent: relator-imobiliario
+    placement: "Final"
+    criteria: "Arquivo Markdown salvo com Write, todas fontes citadas com data de consulta"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TOOL INTEGRATION
+# ─────────────────────────────────────────────────────────────────────────────
+
+tools:
+  WebSearch:
+    used_by: [pesquisador-registral, analista-legislativo, analista-urbanistico, analista-visual, avaliador-imovel, analista-ambiental, analista-condominial]
+    purpose: "Pesquisa de legislação, dados públicos, mercado imobiliário, imagens satélite"
+
+  WebFetch:
+    used_by: [pesquisador-registral, analista-legislativo, analista-urbanistico, analista-visual]
+    purpose: "Acesso a portais de legislação, geoprocessamento, mapas públicos"
+
+  Read:
+    used_by: [property-data-chief, leitor-documental, analista-visual, relator-imobiliario]
+    purpose: "Leitura de PDFs, imagens e documentos (multimodal via Anthropic Files API)"
+
+  Write:
+    used_by: [relator-imobiliario]
+    purpose: "Salvar relatório/laudo final no workspace"
+
+  Glob:
+    used_by: [property-data-chief, leitor-documental]
+    purpose: "Descoberta de documentos no workspace"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SETTINGS
+# ─────────────────────────────────────────────────────────────────────────────
+
+settings:
+  activation:
+    prefix: "property-data"
+    example: "@property-data:property-data-chief"
+  greeting:
+    show_use_cases: true
+    show_pipeline_status: true
+  language: "pt-BR"
+
+quality_standards:
+  min_score: 7.0
+  smoke_tests:
+    - "Pesquisar dados registrais de um imóvel por endereço"
+    - "Elaborar laudo de avaliação com fotos e matrícula"
+    - "Levantamento legislativo completo de imóvel em Manaus"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# STATISTICS
+# ─────────────────────────────────────────────────────────────────────────────
+
+stats:
+  total_agents: 10
+  tier_0_intake: 1
+  tier_1_execution: 5
+  tier_2_niche: 2
+  tier_sintese: 1
+  orchestrator: 1
+  total_tasks: 10
+  total_workflows: 2
+  total_templates: 2
+  total_checklists: 2
+  total_data_files: 2

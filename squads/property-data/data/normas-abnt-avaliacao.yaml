@@ -1,0 +1,204 @@
+# Normas ABNT e referências técnicas para avaliação imobiliária
+version: "1.0"
+updated: "2026-04-08"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# NORMAS TÉCNICAS
+# ─────────────────────────────────────────────────────────────────────────────
+
+normas:
+  nbr_14653_1:
+    codigo: "ABNT NBR 14653-1"
+    titulo: "Avaliação de bens — Parte 1: Procedimentos gerais"
+    escopo: |
+      Estabelece os conceitos, métodos e procedimentos gerais para os serviços
+      técnicos de avaliação de bens. Base para todas as partes subsequentes.
+    conceitos_chave:
+      - "Valor de mercado: quantia mais provável pela qual um bem seria negociado"
+      - "Valor em uso: valor para um proprietário específico, uso específico"
+      - "Valor de liquidação forçada: condição de venda compulsória"
+    classificacao_bens:
+      - "Imóveis urbanos (NBR 14653-2)"
+      - "Imóveis rurais (NBR 14653-3)"
+      - "Empreendimentos (NBR 14653-4)"
+      - "Máquinas, equipamentos e bens industriais (NBR 14653-5)"
+
+  nbr_14653_2:
+    codigo: "ABNT NBR 14653-2"
+    titulo: "Avaliação de bens — Parte 2: Imóveis urbanos"
+    escopo: |
+      Fixa diretrizes para avaliação de imóveis urbanos, incluindo terrenos,
+      edificações, glebas urbanizáveis, unidades padronizadas e servidões.
+    metodos_avaliacao:
+      comparativo_direto:
+        nome: "Método Comparativo Direto de Dados de Mercado"
+        descricao: "Identifica o valor do bem por comparação com dados de mercado semelhantes"
+        requisitos_minimos:
+          grau_I: "mínimo 3 dados de mercado"
+          grau_II: "mínimo 6 dados de mercado"
+          grau_III: "mínimo 10 dados de mercado com tratamento estatístico"
+        fatores_homogeneizacao:
+          - "Fator oferta (0.90 a 1.00 — desconto sobre valor pedido)"
+          - "Fator localização (comparação entre bairros/ruas)"
+          - "Fator área (elasticidade preço/área)"
+          - "Fator padrão construtivo (alto/normal/baixo)"
+          - "Fator idade/depreciação (Ross-Heidecke)"
+          - "Fator topografia (aclive, declive, plano)"
+          - "Fator frente/profundidade (testada do terreno)"
+
+      capitalizacao_renda:
+        nome: "Método da Capitalização da Renda"
+        descricao: "Identifica o valor do bem com base na renda líquida que ele pode gerar"
+        formula: "V = R / i (valor = renda líquida / taxa de capitalização)"
+        aplicacao: "Imóveis de renda (comerciais, locação)"
+
+      evolutivo:
+        nome: "Método Evolutivo"
+        descricao: "Soma do valor do terreno + custo de reprodução da benfeitoria - depreciação"
+        formula: "V = Vt + (Cb × Fc) - D"
+        componentes:
+          - "Vt: valor do terreno (pelo método comparativo)"
+          - "Cb: custo de reprodução da benfeitoria (CUB × área)"
+          - "Fc: fator de comercialização"
+          - "D: depreciação (Ross-Heidecke)"
+
+      involutivo:
+        nome: "Método Involutivo"
+        descricao: "Análise de viabilidade técnico-econômica de empreendimento hipotético"
+        aplicacao: "Terrenos com potencial de desenvolvimento"
+
+    graus_fundamentacao:
+      grau_I:
+        descricao: "Fundamentação mínima"
+        requisitos: "Mínimo 3 dados, tratamento por fatores"
+      grau_II:
+        descricao: "Fundamentação intermediária"
+        requisitos: "Mínimo 6 dados, tratamento estatístico básico"
+      grau_III:
+        descricao: "Fundamentação completa"
+        requisitos: "Mínimo 10 dados, regressão múltipla, intervalo de confiança 80%"
+
+    graus_precisao:
+      grau_I:
+        descricao: "Precisão mínima"
+        amplitude: "Amplitude do intervalo de confiança ≤ 50%"
+      grau_II:
+        descricao: "Precisão intermediária"
+        amplitude: "Amplitude do intervalo de confiança ≤ 40%"
+      grau_III:
+        descricao: "Precisão máxima"
+        amplitude: "Amplitude do intervalo de confiança ≤ 30%"
+
+  nbr_14653_3:
+    codigo: "ABNT NBR 14653-3"
+    titulo: "Avaliação de bens — Parte 3: Imóveis rurais"
+    escopo: "Avaliação de imóveis rurais: terras nuas, culturas, pastagens, benfeitorias rurais"
+    metodos: ["Comparativo direto", "Capitalização da renda", "Custo de reprodução"]
+
+  nbr_12721:
+    codigo: "ABNT NBR 12721"
+    titulo: "Avaliação de custos unitários de construção — CUB"
+    escopo: "Define o Custo Unitário Básico por m² para diferentes padrões e tipos construtivos"
+    padroes_construtivos:
+      baixo: "Acabamento simples, materiais econômicos"
+      normal: "Acabamento convencional, materiais de qualidade média"
+      alto: "Acabamento superior, materiais de primeira linha"
+    tipos_projeto:
+      R1: "Residência unifamiliar (1 pavimento)"
+      R8: "Edifício residencial (8 pavimentos, 4 aptos/andar)"
+      R16: "Edifício residencial (16 pavimentos)"
+      PP4: "Prédio popular (4 pavimentos)"
+      CAL8: "Edifício comercial (8 pavimentos)"
+      CSL8: "Edifício comercial salas/lojas (8 pavimentos)"
+      GI: "Galpão industrial"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DEPRECIAÇÃO — ROSS-HEIDECKE
+# ─────────────────────────────────────────────────────────────────────────────
+
+depreciacao_ross_heidecke:
+  descricao: |
+    Método que combina depreciação por idade (Ross) com estado de conservação
+    (Heidecke) para calcular a depreciação total da benfeitoria.
+  formula: "D = Cb × [1 - (1 - R) × (1 - H)]"
+
+  estados_conservacao:
+    a:
+      descricao: "Novo / Excelente"
+      coeficiente_heidecke: 0.00
+      criterio: "Edificação nova ou em estado equivalente a nova"
+    b:
+      descricao: "Entre novo e regular"
+      coeficiente_heidecke: 0.032
+      criterio: "Edificação com desgaste mínimo, manutenção em dia"
+    c:
+      descricao: "Regular"
+      coeficiente_heidecke: 0.086
+      criterio: "Necessita reparos simples (pintura, pequenas infiltrações)"
+    d:
+      descricao: "Entre regular e reparos simples"
+      coeficiente_heidecke: 0.181
+      criterio: "Reparos necessários em instalações e acabamentos"
+    e:
+      descricao: "Reparos simples"
+      coeficiente_heidecke: 0.332
+      criterio: "Reparos significativos em telhado, instalações, pisos"
+    f:
+      descricao: "Entre reparos simples e importantes"
+      coeficiente_heidecke: 0.527
+      criterio: "Reparos extensos necessários"
+    g:
+      descricao: "Reparos importantes"
+      coeficiente_heidecke: 0.754
+      criterio: "Necessita reforma ampla (estrutural e acabamentos)"
+    h:
+      descricao: "Sem valor / Demolição"
+      coeficiente_heidecke: 1.000
+      criterio: "Sem condições de uso, apenas valor residual"
+
+  vida_util_estimada:
+    residencial_alvenaria: "60-70 anos"
+    residencial_madeira: "40-50 anos"
+    comercial_alvenaria: "50-60 anos"
+    industrial_metalica: "30-40 anos"
+    galpao_simples: "25-35 anos"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# FATORES DE HOMOGENEIZAÇÃO PADRÃO
+# ─────────────────────────────────────────────────────────────────────────────
+
+fatores_homogeneizacao:
+  fator_oferta:
+    descricao: "Desconto sobre valor anunciado (oferta vs transação efetiva)"
+    valores_tipicos:
+      mercado_aquecido: 0.95
+      mercado_normal: 0.90
+      mercado_recessivo: 0.80
+    nota: "Aplicar quando o dado é de oferta (anúncio) e não de transação efetiva"
+
+  fator_localizacao:
+    descricao: "Ajuste pela diferença de localização entre comparável e avaliando"
+    metodo: "Relação entre valores de terreno por m² nas respectivas localizações"
+
+  fator_area:
+    descricao: "Ajuste pela diferença de área (elasticidade preço-área)"
+    formula: "Fa = (Ac/Aa)^n onde n = 0.125 a 0.25 (expoente de elasticidade)"
+    nota: "Quanto maior a área, menor o valor unitário (economia de escala)"
+
+  fator_padrao:
+    descricao: "Ajuste pelo padrão construtivo (acabamento, materiais)"
+    referencia: "Usar CUB/m² do padrão como base de comparação"
+
+  fator_idade:
+    descricao: "Ajuste pela idade e estado de conservação"
+    metodo: "Aplicar Ross-Heidecke com vida útil estimada e estado de conservação"
+
+regras_de_uso:
+  - "Sempre declarar a norma ABNT utilizada como base da avaliação"
+  - "Método comparativo requer mínimo 3 dados (Grau I) — nunca avaliar com menos"
+  - "Sempre especificar grau de fundamentação e grau de precisão"
+  - "Data-base da avaliação deve ser explícita"
+  - "Fatores de homogeneização devem ser justificados e documentados"
+  - "Depreciação Ross-Heidecke exige vistoria ou análise fotográfica para classificar estado"
+  - "CUB deve ser do mês/estado correto — nunca usar CUB desatualizado"
+  - "Para laudo judicial, seguir adicionalmente as regras do CPC (Código de Processo Civil)"

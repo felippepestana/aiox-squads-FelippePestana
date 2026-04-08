@@ -1,0 +1,71 @@
+# Workflow: Laudo de Avaliação Imobiliária
+# Pipeline focado em avaliação conforme ABNT NBR 14653
+
+workflow:
+  id: wf-laudo-avaliacao
+  name: "Laudo de Avaliação Imobiliária"
+  version: "1.0"
+  use_case: UC-PD-006
+  description: |
+    Pipeline focado na elaboração de Laudo de Avaliação Imobiliária
+    conforme ABNT NBR 14653. Ativa: leitor-documental (intake),
+    analista-visual (vistoria), avaliador-imovel (avaliação),
+    pesquisador-registral (dados complementares) e relator-imobiliario (laudo).
+
+steps:
+  - step: 1
+    name: "Classificação da Demanda"
+    agent: property-data-chief
+    task: pd-classificar-demanda
+    gate: QG-PD-001
+    mode: sequential
+    description: "Classifica como UC-PD-006, extrai endereço e dados iniciais"
+
+  - step: 2
+    name: "Intake Documental"
+    agent: leitor-documental
+    task: pd-extrair-dados-documentos
+    gate: QG-PD-002
+    mode: sequential
+    description: "Extrai dados de matrícula, IPTU, fotos e demais documentos"
+
+  - step: 3
+    name: "Análise Especializada"
+    mode: parallel
+    description: "Análise visual e registral em paralelo"
+    agents:
+      - agent: analista-visual
+        task: pd-analisar-imagens
+        gate: QG-PD-005
+        description: "Analisa fotos, satélite, padrão construtivo, estado de conservação"
+
+      - agent: pesquisador-registral
+        task: pd-pesquisar-registro
+        gate: QG-PD-003
+        description: "Complementa dados registrais para a avaliação"
+
+  - step: 4
+    name: "Avaliação ABNT"
+    agent: avaliador-imovel
+    task: pd-elaborar-avaliacao
+    gate: QG-PD-006
+    mode: sequential
+    description: |
+      Elabora avaliação com base nos dados do leitor-documental,
+      analista-visual e pesquisador-registral. Aplica método ABNT,
+      pesquisa mercado, homogeneiza e determina valor.
+
+  - step: 5
+    name: "Elaboração do Laudo"
+    agent: relator-imobiliario
+    task: pd-gerar-relatorio
+    gate: QG-PD-007
+    mode: sequential
+    report_mode: MODO_LAUDO
+    description: "Gera Laudo de Avaliação usando template laudo-avaliacao-tmpl.md"
+
+  - step: 6
+    name: "Revisão e Entrega"
+    agent: property-data-chief
+    mode: sequential
+    description: "Revisa laudo, verifica conformidade ABNT, entrega ao usuário"

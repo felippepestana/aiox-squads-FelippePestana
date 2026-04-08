@@ -1,0 +1,81 @@
+# Workflow: Levantamento Imobiliário Completo
+# Ativa TODOS os agentes para pesquisa exaustiva do imóvel
+
+workflow:
+  id: wf-levantamento-completo
+  name: "Levantamento Imobiliário Completo"
+  version: "1.0"
+  use_case: UC-PD-ALL
+  description: |
+    Pipeline completo com todos os 10 agentes para levantamento exaustivo
+    de dados imobiliários. Cobre: registral, legislativo, urbanístico,
+    visual, avaliação, ambiental, condominial e relatório final.
+
+steps:
+  - step: 1
+    name: "Classificação da Demanda"
+    agent: property-data-chief
+    task: pd-classificar-demanda
+    gate: QG-PD-001
+    mode: sequential
+    description: "Classifica UC, extrai endereço, define plano de ativação"
+
+  - step: 2
+    name: "Intake Documental"
+    agent: leitor-documental
+    task: pd-extrair-dados-documentos
+    gate: QG-PD-002
+    mode: sequential
+    condition: "Executar se usuário forneceu documentos (PDF/imagens)"
+    description: "Lê e extrai dados de PDFs e imagens fornecidos"
+
+  - step: 3
+    name: "Execução Especializada (Tier 1)"
+    mode: parallel
+    description: "5 agentes em paralelo para análise profunda"
+    agents:
+      - agent: pesquisador-registral
+        task: pd-pesquisar-registro
+        gate: QG-PD-003
+
+      - agent: analista-legislativo
+        task: pd-levantar-legislacao
+        gate: QG-PD-004
+
+      - agent: analista-urbanistico
+        task: pd-analisar-plano-diretor
+
+      - agent: analista-visual
+        task: pd-analisar-imagens
+        gate: QG-PD-005
+
+      - agent: avaliador-imovel
+        task: pd-elaborar-avaliacao
+        gate: QG-PD-006
+
+  - step: 4
+    name: "Análise de Nicho (Tier 2)"
+    mode: parallel
+    description: "Agentes especializados quando aplicável"
+    agents:
+      - agent: analista-ambiental
+        task: pd-verificar-normas-ambientais
+
+      - agent: analista-condominial
+        task: pd-pesquisar-documentacao-condominial
+        condition: "Executar se imóvel em condomínio ou conjunto residencial"
+
+  - step: 5
+    name: "Síntese e Relatório Final"
+    agent: relator-imobiliario
+    task: pd-gerar-relatorio
+    gate: QG-PD-007
+    mode: sequential
+    report_mode: MODO_COMPLETO
+    description: "Consolida todos os outputs em relatório final estruturado"
+
+  - step: 6
+    name: "Revisão e Entrega"
+    agent: property-data-chief
+    mode: sequential
+    description: "Revisa relatório, verifica qualidade, entrega ao usuário"
