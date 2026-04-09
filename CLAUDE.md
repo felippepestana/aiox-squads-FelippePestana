@@ -71,3 +71,48 @@ squads/<nome>/
 - Firewall via iptables (init-firewall.sh)
 - Firewall restringe egress, mas `--dangerously-skip-permissions` permite alterações irrestritas no workspace — use apenas com repositórios confiáveis
 - Volumes persistentes para histórico de comandos e config do Claude
+
+## Setup Local
+
+### macOS (Apple Silicon — M5)
+```bash
+bash scripts/setup-macos.sh
+```
+
+### WSL2 (Windows)
+```bash
+bash scripts/setup-wsl-env.sh
+```
+
+Ambos os scripts instalam: Node.js (NVM), Git, GitHub CLI, Claude Code CLI, Docker, VS Code + extensões.
+
+## Claude Code Skills
+
+Skills disponíveis no projeto (`.claude/skills/`):
+
+- `/create-squad` — Cria novo squad com anatomia completa de 6 camadas
+- `/validate-squad` — Valida estrutura e convenções de um squad
+- `/deploy-local` — Build + deploy local via Docker Compose
+- `/deploy-vps` — Deploy para VPS Hostinger (bootstrap, deploy, status)
+
+## Deploy
+
+### Local (Docker Compose)
+```bash
+docker compose --profile web --profile chatbot up -d --build
+```
+
+### VPS Hostinger
+```bash
+# 1. Bootstrap (primeira vez):
+scp scripts/vps-bootstrap.sh root@IP:/tmp/
+ssh root@IP 'bash /tmp/vps-bootstrap.sh'
+
+# 2. Deploy:
+VPS_HOST=IP bash scripts/deploy-vps.sh
+
+# 3. CI/CD automático via .github/workflows/deploy-vps.yml
+```
+
+### Cloudflare Workers
+Push para `main` aciona deploy automático (requer secret `CLOUDFLARE_API_TOKEN`).

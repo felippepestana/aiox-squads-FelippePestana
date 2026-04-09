@@ -14,3 +14,10 @@ analista-processual-web/node_modules/
 analista-processual-web/.env*
 analista-processual-web/dist/
 analista-processual-web/.next/
+
+# Claude Code local config (secrets may be present)
+.claude/settings.local.json
+
+# Production env
+.env.production
+.env.local

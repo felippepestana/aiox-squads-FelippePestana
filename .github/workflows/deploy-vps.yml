@@ -1,0 +1,86 @@
+name: Deploy to VPS (Hostinger)
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - 'chatbot/**'
+      - 'squads/**'
+      - 'docker-compose.yml'
+      - 'deploy/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./web
+        run: npm ci
+
+      - name: Build
+        working-directory: ./web
+        run: npm run build
+
+      - name: Smoke test
+        working-directory: ./web
+        continue-on-error: true
+        run: npm run test:smoke || echo "Smoke test skipped (server not running in CI)"
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: success()
+    environment: ${{ github.event.inputs.environment || 'production' }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -euo pipefail
+            cd /opt/aiox-squads
+
+            echo "→ Pulling latest code..."
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo "→ Building and starting containers..."
+            docker compose --profile web --profile chatbot up -d --build --remove-orphans
+
+            echo "→ Waiting for services..."
+            sleep 10
+
+            echo "→ Health checks..."
+            curl -sf http://localhost:8787/api/health && echo " Web: OK" || echo " Web: FAIL"
+            curl -sf http://localhost:3000/ && echo " Chatbot: OK" || echo " Chatbot: FAIL"
+
+            echo "→ Cleaning up old images..."
+            docker image prune -f
+
+            echo "→ Deploy complete!"

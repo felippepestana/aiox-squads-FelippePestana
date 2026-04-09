@@ -1,0 +1,89 @@
+# docker-compose.prod.yml — Compose otimizado para producao (VPS)
+#
+# Uso:
+#   docker compose -f docker-compose.prod.yml up -d --build
+#
+# Diferenças do docker-compose.yml (dev):
+#   - Sem perfis (tudo sobe junto)
+#   - Restart always
+#   - Limites de recursos
+#   - Logging configurado
+#   - Network isolada
+
+services:
+  squads-web:
+    build:
+      context: ..
+      dockerfile: web/Dockerfile
+    image: aiox-squads-web:latest
+    ports:
+      - "127.0.0.1:8787:8787"
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:?ANTHROPIC_API_KEY is required}
+      SENTRY_DSN: ${SENTRY_DSN:-}
+      WEB_PORTAL_API_KEY: ${WEB_PORTAL_API_KEY:-}
+      CORS_ORIGIN: ${CORS_ORIGIN:-}
+      TRUST_PROXY: "1"
+      RATE_LIMIT_ENABLED: "1"
+      RATE_LIMIT_MAX: ${RATE_LIMIT_MAX:-200}
+      RATE_LIMIT_HEAVY_MAX: ${RATE_LIMIT_HEAVY_MAX:-30}
+      SQUADS_ROOT: /app/squads
+      PORT: "8787"
+      NODE_ENV: production
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "1.0"
+        reservations:
+          memory: 256M
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8787/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - aiox-net
+
+  chatbot:
+    build:
+      context: ..
+      dockerfile: chatbot/Dockerfile
+    image: aiox-chatbot:latest
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:?ANTHROPIC_API_KEY is required}
+      NODE_ENV: production
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "0.5"
+        reservations:
+          memory: 128M
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - aiox-net
+
+networks:
+  aiox-net:
+    driver: bridge
