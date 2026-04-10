@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Profile {
+  id         String     @id
+  email      String     @unique
+  name       String?
+  apiKeys    ApiKey[]
+  properties Property[]
+  createdAt  DateTime   @default(now()) @map("created_at")
+
+  @@map("profiles")
+}
+
+model ApiKey {
+  id        String   @id @default(cuid())
+  provider  String   // anthropic | openai | gemini | deepseek
+  keyEnc    String   @map("key_enc")
+  label     String?
+  isActive  Boolean  @default(true) @map("is_active")
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String   @map("profile_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("api_keys")
+}
+
+model Property {
+  id           String     @id @default(cuid())
+  address      String
+  number       String?
+  neighborhood String?
+  city         String
+  state        String
+  cep          String?
+  type         String     // residencial | comercial | rural | misto
+  area         Float?
+  matricula    String?
+  inscricao    String?
+  status       String     @default("draft") // draft | ready
+  analyses     Analysis[]
+  documents    Document[]
+  profile      Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId    String     @map("profile_id")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  @@map("properties")
+}
+
+model Document {
+  id         String   @id @default(cuid())
+  type       String   // matricula | iptu | habite_se | foto | planta | outro
+  filename   String
+  mimeType   String   @map("mime_type")
+  size       Int
+  storageKey String   @map("storage_key")
+  fileId     String?  @map("file_id")
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId String   @map("property_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("documents")
+}
+
+model Analysis {
+  id         String   @id @default(cuid())
+  useCase    String   @map("use_case") // UC-PD-001~007 | ALL
+  status     String   @default("pending") // pending | running | done | error
+  agentLogs  Json     @default("[]") @map("agent_logs")
+  result     Json?
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId String   @map("property_id")
+  exports    Export[]
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@map("analyses")
+}
+
+model Export {
+  id         String   @id @default(cuid())
+  mode       String   // RELATORIO | LAUDO_ABNT | CARD | SUMMARY
+  format     String   // pdf | png | json | md
+  fileUrl    String?  @map("file_url")
+  designId   String?  @map("design_id")
+  thumbUrl   String?  @map("thumb_url")
+  analysis   Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  analysisId String   @map("analysis_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("exports")
+}
