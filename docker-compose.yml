@@ -58,3 +58,31 @@ services:
       timeout: 10s
       retries: 3
       start_period: 20s
+
+  property-data-web:
+    profiles: ["property-web"]
+    build:
+      context: .
+      dockerfile: property-data-web/Dockerfile
+    image: aiox-property-data-web:latest
+    ports:
+      - "${PROPERTY_WEB_PORT:-3001}:3000"
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:-}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:-}
+      DATABASE_URL: ${DATABASE_URL:-}
+      API_KEY_ENCRYPTION_SECRET: ${API_KEY_ENCRYPTION_SECRET:-}
+      SQUADS_ROOT: /app/squads
+      NODE_ENV: production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
