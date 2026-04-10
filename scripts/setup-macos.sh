@@ -318,12 +318,15 @@ setup_project() {
   echo "  Para clonar o projeto:"
   echo "    mkdir -p ${HOME}/projetos"
   echo "    cd ${HOME}/projetos"
-  echo "    git clone git@github.com:felippepestana/aiox-squads-felippepestana.git aiox-squads-felippepestanav2"
+  echo "    git clone https://github.com/felippepestana/aiox-squads-felippepestana.git aiox-squads-felippepestanav2"
   echo "    cd aiox-squads-felippepestanav2"
   echo "    cp .env.example .env"
   echo "    nano .env  # preencher ANTHROPIC_API_KEY"
   echo "    cd web && npm install && cd .."
   echo "    cd chatbot && npm install && cd .."
+  echo ""
+  echo "  Nota: se preferir SSH (requer chave configurada no GitHub):"
+  echo "    git clone git@github.com:felippepestana/aiox-squads-felippepestana.git aiox-squads-felippepestanav2"
 }
 
 # ── Status final ──────────────────────────────────────────────────────────────
@@ -366,7 +369,7 @@ show_status() {
   echo ""
   echo "  1. Configurar API key:    echo 'export ANTHROPIC_API_KEY=\"sk-ant-...\"' >> ~/.zshrc"
   echo "  2. Autenticar GitHub:     gh auth login"
-  echo "  3. Clonar projeto:        git clone git@github.com:felippepestana/aiox-squads-felippepestana.git aiox-squads-felippepestanav2"
+  echo "  3. Clonar projeto:        git clone https://github.com/felippepestana/aiox-squads-felippepestana.git aiox-squads-felippepestanav2"
   echo "  4. Instalar deps:         cd aiox-squads-felippepestanav2 && cd web && npm install && cd ../chatbot && npm install"
   echo "  5. Configurar .env:       cp .env.example .env && nano .env"
   echo "  6. Iniciar dev:           cd web && npm run dev"
