@@ -33,6 +33,16 @@
     }
   },
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd web && [ -d node_modules ] || npm install --silent 2>/dev/null; cd ../chatbot && [ -d node_modules ] || npm install --silent 2>/dev/null; echo 'AIOX Squads environment ready'"
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Bash",
