@@ -22,9 +22,10 @@ interface CallLLMParams {
   model: string;
   apiKey: string;
   systemPrompt: string;
-  messages: { role: "user" | "assistant"; content: string }[];
+  messages: { role: "user" | "assistant"; content: string | any[] }[];
   maxTokens: number;
   stream?: boolean;
+  fileBlocks?: any[];
 }
 
 const PROVIDER_BASE_URLS: Partial<Record<LLMProvider, string>> = {
@@ -92,7 +93,7 @@ export async function* callLLM(
   const { provider, model, apiKey, systemPrompt, messages, maxTokens } = params;
 
   if (provider === "anthropic") {
-    yield* callAnthropic({ model, apiKey, systemPrompt, messages, maxTokens });
+    yield* callAnthropic({ model, apiKey, systemPrompt, messages, maxTokens, fileBlocks: params.fileBlocks });
   } else {
     // openai, gemini, deepseek all use the OpenAI-compatible SDK
     const baseURL = PROVIDER_BASE_URLS[provider];
@@ -111,17 +112,33 @@ async function* callAnthropic(params: {
   model: string;
   apiKey: string;
   systemPrompt: string;
-  messages: { role: "user" | "assistant"; content: string }[];
+  messages: { role: "user" | "assistant"; content: string | any[] }[];
   maxTokens: number;
+  fileBlocks?: any[];
 }): AsyncGenerator<string> {
   const client = new Anthropic({ apiKey: params.apiKey });
 
-  const stream = client.messages.stream({
-    model: params.model,
-    max_tokens: params.maxTokens,
-    system: params.systemPrompt,
-    messages: params.messages,
+  // If fileBlocks are provided, prepend them to the first user message content
+  const messages = params.messages.map((msg, idx) => {
+    if (idx === 0 && msg.role === "user" && params.fileBlocks && params.fileBlocks.length > 0) {
+      const textContent = typeof msg.content === "string"
+        ? [{ type: "text", text: msg.content }]
+        : msg.content;
+      return { ...msg, content: [...params.fileBlocks, ...textContent] };
+    }
+    return msg;
   });
+
+  const stream = (client.beta.messages as any).stream(
+    {
+      model: params.model,
+      max_tokens: params.maxTokens,
+      thinking: { type: "adaptive" },
+      system: params.systemPrompt,
+      messages,
+    },
+    { headers: { "anthropic-beta": "files-api-2025-04-14" } }
+  );
 
   for await (const event of stream) {
     if (

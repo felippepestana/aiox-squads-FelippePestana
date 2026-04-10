@@ -62,6 +62,7 @@ export async function GET(
       id: doc.id,
       name: doc.filename,
       type: doc.type,
+      fileId: doc.fileId ?? undefined,
     }));
 
     const encoder = new TextEncoder();

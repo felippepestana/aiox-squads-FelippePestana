@@ -13,8 +13,28 @@ export interface DocumentData {
   id: string;
   name: string;
   type: string;
+  fileId?: string; // Anthropic Files API ID
   content?: string;
   url?: string;
+}
+
+/**
+ * Build message content with file references for documents uploaded to Anthropic Files API.
+ * Returns either a plain string (no file refs) or an array of content blocks.
+ */
+function buildUserMessage(contextText: string, documents: DocumentData[]): string | any[] {
+  const fileBlocks = documents
+    .filter(d => d.fileId)
+    .map(d => ({
+      type: d.type === "foto" || d.name.match(/\.(jpg|jpeg|png|webp|gif)$/i)
+        ? "image" : "document",
+      source: { type: "file", file_id: d.fileId },
+      ...(d.name.match(/\.(jpg|jpeg|png|webp|gif)$/i) ? {} : { title: d.name }),
+    }));
+
+  if (fileBlocks.length === 0) return contextText;
+
+  return [...fileBlocks, { type: "text", text: contextText }];
 }
 
 /**
@@ -117,7 +137,8 @@ export async function* executePipeline(
         }
       }
 
-      const userMessage = contextParts.join("\n");
+      const userText = contextParts.join("\n");
+      const userContent = buildUserMessage(userText, documents);
       let fullOutput = "";
 
       const stream = callLLM({
@@ -125,7 +146,7 @@ export async function* executePipeline(
         model: selected.model,
         apiKey: selected.apiKey,
         systemPrompt: agent.systemPrompt,
-        messages: [{ role: "user", content: userMessage }],
+        messages: [{ role: "user", content: userContent }],
         maxTokens: selected.maxTokens,
         stream: true,
       });

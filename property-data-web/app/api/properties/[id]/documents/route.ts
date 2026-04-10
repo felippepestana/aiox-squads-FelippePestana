@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { nanoid } from "nanoid";
+import Anthropic from "@anthropic-ai/sdk";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { uploadFileFromBuffer } from "@/lib/files/upload";
 
 const prisma = new PrismaClient();
 
@@ -46,6 +48,19 @@ export async function POST(
       return NextResponse.json({ error: "Failed to upload file" }, { status: 500 });
     }
 
+    // Upload to Anthropic Files API for direct file referencing in analyses
+    let fileId: string | null = null;
+    const anthropicKey = process.env.ANTHROPIC_API_KEY;
+    if (anthropicKey) {
+      try {
+        const anthropic = new Anthropic({ apiKey: anthropicKey });
+        const uploaded = await uploadFileFromBuffer(anthropic, buffer, file.name, file.type);
+        fileId = uploaded.fileId;
+      } catch (err) {
+        console.error("Anthropic Files API upload failed:", err);
+      }
+    }
+
     const document = await prisma.document.create({
       data: {
         type,
@@ -54,6 +69,7 @@ export async function POST(
         size: file.size,
         storageKey,
         propertyId,
+        fileId,
       },
     });
 
