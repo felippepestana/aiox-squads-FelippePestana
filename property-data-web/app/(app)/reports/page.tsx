@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FileText } from "lucide-react";
+import Link from "next/link";
+import { FileText, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
@@ -88,14 +90,18 @@ export default function ReportsPage() {
 
       {/* Grid */}
       {filtered.length === 0 ? (
-        <Card className="py-12 text-center">
-          <CardContent>
-            <FileText className="mx-auto h-10 w-10 text-muted-foreground" />
-            <p className="mt-3 text-muted-foreground">
-              Nenhum relatorio encontrado.
-            </p>
-          </CardContent>
-        </Card>
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <FileText className="h-16 w-16 text-muted-foreground/30 mb-4" />
+          <h3 className="text-lg font-medium">Nenhum relatorio exportado</h3>
+          <p className="text-sm text-muted-foreground mt-1 max-w-md">
+            Crie uma analise de imovel e exporte o relatorio para visualiza-lo aqui.
+          </p>
+          <Link href="/properties/new">
+            <Button className="mt-4" variant="outline">
+              <Plus className="h-4 w-4 mr-2" /> Novo Imovel
+            </Button>
+          </Link>
+        </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((ex) => (

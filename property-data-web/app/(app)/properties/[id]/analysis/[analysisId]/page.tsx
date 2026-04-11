@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { Play, Download } from "lucide-react";
+import { Play, Download, WifiOff } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -31,69 +31,141 @@ const RESULT_TABS = [
   "Visual",
 ];
 
+const MAX_SSE_RETRIES = 3;
+const SSE_RETRY_DELAY = 2000;
+
 export default function AnalysisPage() {
   const params = useParams<{ id: string; analysisId: string }>();
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [agents, setAgents] = useState<AgentLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [connectionLost, setConnectionLost] = useState(false);
   const eventSourceRef = useRef<EventSource | null>(null);
+  const retryCountRef = useRef(0);
+  const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const agentListRef = useRef<HTMLUListElement>(null);
+  const mountedRef = useRef(true);
 
-  useEffect(() => {
-    fetch(`/api/analyses/${params.analysisId}`)
-      .then((res) => res.json())
-      .then((data: Analysis) => {
-        setAnalysis(data);
-        setAgents(data.agents ?? []);
-        if (data.status === "running") connectSSE();
-      })
-      .catch(() => toast.error("Erro ao carregar analise"))
-      .finally(() => setLoading(false));
+  const handleAgentEvent = useCallback((data: PipelineEvent) => {
+    if (data.type === "agent:start" || data.type === "agent:done") {
+      setAgents((prev) => {
+        const idx = prev.findIndex((a) => a.agentId === data.agentId);
+        const log: AgentLog = {
+          agentId: data.agentId!,
+          agentName: data.agentName ?? data.agentId!,
+          tier: "",
+          status: data.status ?? "running",
+          model: data.model,
+          tokensUsed: data.tokensUsed,
+        };
+        if (idx >= 0) {
+          const next = [...prev];
+          next[idx] = { ...next[idx], ...log };
+          return next;
+        }
+        return [...prev, log];
+      });
 
-    return () => eventSourceRef.current?.close();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // Auto-scroll to latest agent when it finishes
+      if (data.type === "agent:done") {
+        requestAnimationFrame(() => {
+          agentListRef.current?.lastElementChild?.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+          });
+        });
+      }
+    }
+
+    if (data.type === "pipeline:done") {
+      setAnalysis((prev) => (prev ? { ...prev, status: "done" } : prev));
+      setConnectionLost(false);
+      retryCountRef.current = 0;
+      // Refetch full results
+      fetch(`/api/analyses/${params.analysisId}`)
+        .then((res) => res.json())
+        .then((d: Analysis) => {
+          if (mountedRef.current) setAnalysis(d);
+        });
+    }
   }, [params.analysisId]);
 
-  function connectSSE() {
+  const connectSSE = useCallback(() => {
+    // Close any existing connection
+    eventSourceRef.current?.close();
+
     const es = new EventSource(
       `/api/analyses/${params.analysisId}/stream`
     );
     eventSourceRef.current = es;
 
+    es.onopen = () => {
+      setConnectionLost(false);
+      retryCountRef.current = 0;
+    };
+
     es.onmessage = (event) => {
-      const data: PipelineEvent = JSON.parse(event.data);
+      try {
+        const data: PipelineEvent = JSON.parse(event.data);
+        handleAgentEvent(data);
 
-      if (data.type === "agent:start" || data.type === "agent:done") {
-        setAgents((prev) => {
-          const idx = prev.findIndex((a) => a.agentId === data.agentId);
-          const log: AgentLog = {
-            agentId: data.agentId!,
-            agentName: data.agentName ?? data.agentId!,
-            tier: "",
-            status: data.status ?? "running",
-            model: data.model,
-            tokensUsed: data.tokensUsed,
-          };
-          if (idx >= 0) {
-            const next = [...prev];
-            next[idx] = { ...next[idx], ...log };
-            return next;
-          }
-          return [...prev, log];
-        });
-      }
-
-      if (data.type === "pipeline:done") {
-        setAnalysis((prev) => (prev ? { ...prev, status: "done" } : prev));
-        es.close();
-        // Refetch full results
-        fetch(`/api/analyses/${params.analysisId}`)
-          .then((res) => res.json())
-          .then((d: Analysis) => setAnalysis(d));
+        if (data.type === "pipeline:done") {
+          es.close();
+          eventSourceRef.current = null;
+        }
+      } catch {
+        // Ignore malformed SSE messages
       }
     };
 
-    es.onerror = () => es.close();
-  }
+    es.onerror = () => {
+      es.close();
+      eventSourceRef.current = null;
+
+      if (!mountedRef.current) return;
+
+      if (retryCountRef.current < MAX_SSE_RETRIES) {
+        setConnectionLost(true);
+        retryCountRef.current += 1;
+        retryTimeoutRef.current = setTimeout(() => {
+          if (mountedRef.current) connectSSE();
+        }, SSE_RETRY_DELAY);
+      } else {
+        setConnectionLost(true);
+        toast.error("Conexao com o servidor perdida. Recarregue a pagina.");
+      }
+    };
+  }, [params.analysisId, handleAgentEvent]);
+
+  useEffect(() => {
+    mountedRef.current = true;
+
+    fetch(`/api/analyses/${params.analysisId}`)
+      .then((res) => res.json())
+      .then((data: Analysis) => {
+        if (!mountedRef.current) return;
+        setAnalysis(data);
+        setAgents(data.agents ?? []);
+        if (data.status === "running") connectSSE();
+      })
+      .catch(() => {
+        if (mountedRef.current) toast.error("Erro ao carregar analise");
+      })
+      .finally(() => {
+        if (mountedRef.current) setLoading(false);
+      });
+
+    return () => {
+      mountedRef.current = false;
+      eventSourceRef.current?.close();
+      eventSourceRef.current = null;
+      if (retryTimeoutRef.current) {
+        clearTimeout(retryTimeoutRef.current);
+        retryTimeoutRef.current = null;
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.analysisId]);
 
   async function handleStart() {
     const res = await fetch(
@@ -105,6 +177,7 @@ export default function AnalysisPage() {
       return;
     }
     setAnalysis((prev) => (prev ? { ...prev, status: "running" } : prev));
+    retryCountRef.current = 0;
     connectSSE();
   }
 
@@ -118,17 +191,25 @@ export default function AnalysisPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Analise {analysis.useCase}</h1>
-        <Badge
-          variant={
-            analysis.status === "done"
-              ? "default"
-              : analysis.status === "error"
-                ? "destructive"
-                : "secondary"
-          }
-        >
-          {analysis.status}
-        </Badge>
+        <div className="flex items-center gap-2">
+          {connectionLost && (
+            <Badge variant="destructive" className="flex items-center gap-1">
+              <WifiOff className="h-3 w-3" />
+              Conexao perdida
+            </Badge>
+          )}
+          <Badge
+            variant={
+              analysis.status === "done"
+                ? "default"
+                : analysis.status === "error"
+                  ? "destructive"
+                  : "secondary"
+            }
+          >
+            {analysis.status}
+          </Badge>
+        </div>
       </div>
 
       {/* Pending: start button */}
@@ -154,7 +235,7 @@ export default function AnalysisPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <Progress value={progressPct} />
-            <ul className="space-y-2">
+            <ul ref={agentListRef} className="space-y-2">
               {agents.map((a) => (
                 <li
                   key={a.agentId}

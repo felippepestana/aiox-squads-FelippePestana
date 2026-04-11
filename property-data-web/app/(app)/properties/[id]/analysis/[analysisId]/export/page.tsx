@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, FileDown } from "lucide-react";
+import { ArrowLeft, FileDown, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +20,7 @@ interface ExportRecord {
   mode: string;
   format: string;
   url: string;
+  content?: string;
   createdAt: string;
 }
 
@@ -34,12 +35,23 @@ const formats = [
   { value: "md", label: "Markdown" },
 ];
 
+function downloadMarkdown(content: string, filename: string) {
+  const blob = new Blob([content], { type: "text/markdown" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function ExportPage() {
   const params = useParams<{ id: string; analysisId: string }>();
   const [exports, setExports] = useState<ExportRecord[]>([]);
   const [selectedMode, setSelectedMode] = useState("RELATORIO");
   const [selectedFormat, setSelectedFormat] = useState("pdf");
   const [exporting, setExporting] = useState(false);
+  const [lastMarkdown, setLastMarkdown] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(`/api/analyses/${params.analysisId}/exports`)
@@ -50,16 +62,23 @@ export default function ExportPage() {
 
   async function handleExport() {
     setExporting(true);
+    setLastMarkdown(null);
+
     try {
-      const res = await fetch(`/api/analyses/${params.analysisId}/exports`, {
+      const res = await fetch(`/api/exports/${params.analysisId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mode: selectedMode, format: selectedFormat }),
       });
       if (!res.ok) throw new Error("Erro ao gerar exportacao");
-      const data = await res.json();
+      const data: ExportRecord = await res.json();
       setExports((prev) => [data, ...prev]);
       toast.success("Exportacao gerada com sucesso!");
+
+      // If markdown, store the content for immediate download
+      if (selectedFormat === "md" && data.content) {
+        setLastMarkdown(data.content);
+      }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro inesperado");
     } finally {
@@ -107,7 +126,10 @@ export default function ExportPage() {
               <select
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 value={selectedFormat}
-                onChange={(e) => setSelectedFormat(e.target.value)}
+                onChange={(e) => {
+                  setSelectedFormat(e.target.value);
+                  setLastMarkdown(null);
+                }}
               >
                 {formats.map((f) => (
                   <option key={f.value} value={f.value}>
@@ -117,10 +139,26 @@ export default function ExportPage() {
               </select>
             </div>
           </div>
-          <Button onClick={handleExport} disabled={exporting}>
-            <FileDown className="mr-2 h-4 w-4" />
-            {exporting ? "Gerando..." : "Gerar Exportacao"}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button onClick={handleExport} disabled={exporting}>
+              <FileDown className="mr-2 h-4 w-4" />
+              {exporting ? "Gerando..." : "Gerar Relatorio"}
+            </Button>
+            {lastMarkdown && (
+              <Button
+                variant="outline"
+                onClick={() =>
+                  downloadMarkdown(
+                    lastMarkdown,
+                    `relatorio-${params.analysisId}.md`
+                  )
+                }
+              >
+                <FileText className="mr-2 h-4 w-4" />
+                Baixar Markdown
+              </Button>
+            )}
+          </div>
         </CardContent>
       </Card>
 
@@ -148,14 +186,32 @@ export default function ExportPage() {
                       {new Date(ex.createdAt).toLocaleDateString("pt-BR")}
                     </span>
                   </div>
-                  <a
-                    href={ex.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary hover:underline"
-                  >
-                    Download
-                  </a>
+                  <div className="flex items-center gap-2">
+                    {ex.format === "md" && ex.content && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          downloadMarkdown(
+                            ex.content!,
+                            `relatorio-${ex.id}.md`
+                          )
+                        }
+                        className="text-primary hover:underline"
+                      >
+                        Baixar .md
+                      </button>
+                    )}
+                    {ex.url && (
+                      <a
+                        href={ex.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline"
+                      >
+                        Download
+                      </a>
+                    )}
+                  </div>
                 </li>
               ))}
             </ul>

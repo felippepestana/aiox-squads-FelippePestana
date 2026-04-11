@@ -26,7 +26,16 @@ const STEPS = [
   { title: "Analise", description: "Selecione o tipo de analise" },
 ];
 
-export function PropertyWizard() {
+interface PropertyWizardProps {
+  onComplete?: (data: {
+    property: PropertyFormData;
+    files: File[];
+    useCase: UseCase;
+  }) => void | Promise<void>;
+  loading?: boolean;
+}
+
+export function PropertyWizard({ onComplete, loading = false }: PropertyWizardProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [selectedUseCase, setSelectedUseCase] = useState<UseCase | null>(null);
@@ -65,13 +74,14 @@ export function PropertyWizard() {
     if (!selectedUseCase) return;
 
     const formData = form.getValues();
-    // The parent page or API route handles the actual submission
-    console.log("Starting analysis:", {
-      property: formData,
-      files: uploadedFiles,
-      useCase: selectedUseCase,
-    });
-  }, [selectedUseCase, form, uploadedFiles]);
+    if (onComplete) {
+      await onComplete({
+        property: formData,
+        files: uploadedFiles,
+        useCase: selectedUseCase,
+      });
+    }
+  }, [selectedUseCase, form, uploadedFiles, onComplete]);
 
   const useCaseEntries = Object.entries(USE_CASE_LABELS) as [UseCase, string][];
 
@@ -194,9 +204,9 @@ export function PropertyWizard() {
             <Button
               type="button"
               onClick={handleStartAnalysis}
-              disabled={!selectedUseCase}
+              disabled={!selectedUseCase || loading}
             >
-              Iniciar Analise
+              {loading ? "Processando..." : "Iniciar Analise"}
             </Button>
           )}
         </CardFooter>

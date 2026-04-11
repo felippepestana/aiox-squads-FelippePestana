@@ -45,7 +45,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
 
   return (
     <Link href={`/properties/${property.id}`}>
-      <Card className="transition-shadow hover:shadow-md cursor-pointer">
+      <Card className="transition-all hover:shadow-md hover:border-primary/50 cursor-pointer focus-within:ring-2 focus-within:ring-primary/20">
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="space-y-1">
