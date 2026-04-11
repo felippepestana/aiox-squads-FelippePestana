@@ -3,6 +3,8 @@ import { PrismaClient } from "@prisma/client";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { executePipeline } from "@/lib/agents/executor";
 import { decrypt } from "@/lib/crypto/key-encryption";
+import { isDemoMode } from "@/app/api/demo/middleware";
+import { demoStore } from "@/lib/demo/data";
 import type { LLMGatewayConfig, LLMProvider } from "@/types/llm";
 import type { AgentLog } from "@/types/analysis";
 
@@ -14,6 +16,14 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
+
+    if (isDemoMode()) {
+      const analysis = demoStore.getAnalysis(id);
+      if (!analysis) return NextResponse.json({ error: "Not found" }, { status: 404 });
+      demoStore.updateAnalysisStatus(id, "done");
+      return NextResponse.json({ ...analysis, status: "done" });
+    }
+
     const supabase = await createServerSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isDemoMode } from "@/app/api/demo/middleware";
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,6 +14,17 @@ export async function GET(request: NextRequest) {
 
     if (cleaned.length !== 8) {
       return NextResponse.json({ error: "CEP must be 8 digits" }, { status: 400 });
+    }
+
+    if (isDemoMode()) {
+      return NextResponse.json({
+        cep: "69010-120",
+        logradouro: "Rua Ramos Ferreira",
+        complemento: "",
+        bairro: "Centro",
+        localidade: "Manaus",
+        uf: "AM",
+      });
     }
 
     const response = await fetch(`https://viacep.com.br/ws/${cleaned}/json/`);

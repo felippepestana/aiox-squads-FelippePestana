@@ -1,12 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { isDemoMode } from "@/app/api/demo/middleware";
+import { demoStore } from "@/lib/demo/data";
 import type { PropertyFormData } from "@/types/property";
 
 const prisma = new PrismaClient();
 
 export async function GET() {
   try {
+    if (isDemoMode()) {
+      return NextResponse.json(demoStore.getProperties());
+    }
+
     const supabase = await createServerSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -28,6 +34,12 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    if (isDemoMode()) {
+      const body: PropertyFormData = await request.json();
+      const property = demoStore.createProperty(body);
+      return NextResponse.json(property, { status: 201 });
+    }
+
     const supabase = await createServerSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

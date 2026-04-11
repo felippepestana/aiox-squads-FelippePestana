@@ -4,6 +4,8 @@ import { nanoid } from "nanoid";
 import Anthropic from "@anthropic-ai/sdk";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { uploadFileFromBuffer } from "@/lib/files/upload";
+import { isDemoMode } from "@/app/api/demo/middleware";
+import { demoStore } from "@/lib/demo/data";
 
 const prisma = new PrismaClient();
 
@@ -13,6 +15,31 @@ export async function POST(
 ) {
   try {
     const { id: propertyId } = await params;
+
+    if (isDemoMode()) {
+      const formData = await request.formData();
+      const file = formData.get("file") as File | null;
+      const type = formData.get("type") as string | null;
+
+      if (!file) {
+        return NextResponse.json({ error: "File is required" }, { status: 400 });
+      }
+      if (!type) {
+        return NextResponse.json({ error: "Document type is required" }, { status: 400 });
+      }
+
+      const document = demoStore.addDocument(propertyId, {
+        type,
+        filename: file.name,
+        mimeType: file.type,
+        size: file.size,
+        storageKey: `demo/${propertyId}/${file.name}`,
+        fileId: null,
+        propertyId,
+      });
+      return NextResponse.json(document, { status: 201 });
+    }
+
     const supabase = await createServerSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

@@ -3,10 +3,22 @@ import { PrismaClient } from "@prisma/client";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { executePipeline } from "@/lib/agents/executor";
 import { decrypt } from "@/lib/crypto/key-encryption";
+import { isDemoMode } from "@/app/api/demo/middleware";
+import { demoStore } from "@/lib/demo/data";
 import type { LLMGatewayConfig, LLMProvider } from "@/types/llm";
 import type { AgentLog } from "@/types/analysis";
 
 const prisma = new PrismaClient();
+
+const SSE_HEADERS = {
+  "Content-Type": "text/event-stream",
+  "Cache-Control": "no-cache",
+  Connection: "keep-alive",
+};
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 export async function GET(
   _request: NextRequest,
@@ -14,6 +26,50 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+
+    if (isDemoMode()) {
+      const analysis = demoStore.getAnalysis(id);
+      if (!analysis) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+      const agentOutputs = analysis.result ?? demoStore.getMockAgentOutputs();
+      const agents = Object.entries(agentOutputs) as [string, string][];
+      const encoder = new TextEncoder();
+
+      function encode(data: Record<string, unknown>): Uint8Array {
+        return encoder.encode(`data: ${JSON.stringify(data)}\n\n`);
+      }
+
+      demoStore.updateAnalysisStatus(id, "running");
+
+      const stream = new ReadableStream({
+        async start(controller) {
+          for (const [agentId, output] of agents) {
+            // agent:start
+            controller.enqueue(encode({ type: "agent:start", agentId, agentName: agentId }));
+            await sleep(500);
+
+            // agent:chunk — send output in 3 chunks
+            const text = String(output);
+            const chunkSize = Math.ceil(text.length / 3);
+            for (let i = 0; i < text.length; i += chunkSize) {
+              controller.enqueue(encode({ type: "agent:chunk", agentId, text: text.slice(i, i + chunkSize) }));
+              await sleep(300);
+            }
+
+            // agent:done
+            controller.enqueue(encode({ type: "agent:done", agentId, agentName: agentId, status: "done", model: "demo-mode" }));
+            await sleep(200);
+          }
+
+          controller.enqueue(encode({ type: "pipeline:done" }));
+          demoStore.updateAnalysisStatus(id, "done");
+          controller.close();
+        },
+      });
+
+      return new Response(stream, { headers: SSE_HEADERS });
+    }
+
     const supabase = await createServerSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -127,13 +183,7 @@ export async function GET(
       },
     });
 
-    return new Response(stream, {
-      headers: {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        Connection: "keep-alive",
-      },
-    });
+    return new Response(stream, { headers: SSE_HEADERS });
   } catch (error) {
     console.error("GET /api/analyses/[id]/stream error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

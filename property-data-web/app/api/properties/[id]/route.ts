@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { isDemoMode } from "@/app/api/demo/middleware";
+import { demoStore } from "@/lib/demo/data";
 
 const prisma = new PrismaClient();
 
@@ -10,6 +12,13 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+
+    if (isDemoMode()) {
+      const property = demoStore.getProperty(id);
+      if (!property) return NextResponse.json({ error: "Not found" }, { status: 404 });
+      return NextResponse.json(property);
+    }
+
     const supabase = await createServerSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -36,6 +45,15 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
+
+    if (isDemoMode()) {
+      const property = demoStore.getProperty(id);
+      if (!property) return NextResponse.json({ error: "Not found" }, { status: 404 });
+      const body = await request.json();
+      Object.assign(property, body, { updatedAt: new Date().toISOString() });
+      return NextResponse.json(property);
+    }
+
     const supabase = await createServerSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -64,6 +82,11 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
+
+    if (isDemoMode()) {
+      return NextResponse.json({ success: true });
+    }
+
     const supabase = await createServerSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

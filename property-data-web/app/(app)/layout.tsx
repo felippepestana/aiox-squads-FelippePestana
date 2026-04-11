@@ -16,6 +16,8 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 
+const isDemo = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: Home },
   { href: "/dashboard", label: "Imoveis", icon: Building2 },
@@ -32,6 +34,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    if (isDemo) {
+      setEmail("demo@propertydata.app");
+      setReady(true);
+      return;
+    }
+
     const supabase = createClient();
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
@@ -44,6 +52,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }, [router]);
 
   async function handleSignOut() {
+    if (isDemo) {
+      router.push("/");
+      return;
+    }
     const supabase = createClient();
     await supabase.auth.signOut();
     router.push("/login");
@@ -73,8 +85,13 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex h-14 items-center border-b px-4 font-semibold">
+        <div className="flex h-14 items-center border-b px-4 font-semibold gap-2">
           Property Data
+          {isDemo && (
+            <span className="rounded bg-yellow-400 px-2 py-0.5 text-xs font-bold text-black">
+              DEMO
+            </span>
+          )}
         </div>
         <nav className="flex-1 space-y-1 p-3">
           {navItems.map((item) => {

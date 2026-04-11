@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { encrypt } from "@/lib/crypto/key-encryption";
+import { isDemoMode } from "@/app/api/demo/middleware";
 
 const prisma = new PrismaClient();
 
@@ -19,6 +20,10 @@ function maskKey(provider: string, keyEnc: string): string {
 
 export async function GET() {
   try {
+    if (isDemoMode()) {
+      return NextResponse.json([]);
+    }
+
     const supabase = await createServerSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -46,6 +51,10 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    if (isDemoMode()) {
+      return NextResponse.json({ id: "demo-key", provider: "demo", label: "demo", isActive: true }, { status: 201 });
+    }
+
     const supabase = await createServerSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -81,6 +90,10 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
+    if (isDemoMode()) {
+      return NextResponse.json({ success: true });
+    }
+
     const supabase = await createServerSupabase();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
