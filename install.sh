@@ -14,7 +14,7 @@
 set -euo pipefail
 
 REPO_URL="https://github.com/SynkraAI/aiox-squads.git"
-INSTALL_DIR="${AIOX_SQUADS_DIR:-aiox-squads}"
+INSTALL_DIR="${AIOX_SQUADS_DIR:-aiox-squads-felippepestanav2}"
 NODE_MIN_VERSION=18
 
 # ── Cores ─────────────────────────────────────────────────────────────────────
