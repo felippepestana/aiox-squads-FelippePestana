@@ -105,7 +105,7 @@ export async function POST(
 
       const updated = await prisma.analysis.update({
         where: { id },
-        data: { status: "done", agentLogs, result: finalResult },
+        data: { status: "done", agentLogs: agentLogs as unknown as any, result: finalResult },
       });
 
       return NextResponse.json(updated);
@@ -113,7 +113,7 @@ export async function POST(
       const errorMessage = pipelineError instanceof Error ? pipelineError.message : "Pipeline execution failed";
       await prisma.analysis.update({
         where: { id },
-        data: { status: "error", agentLogs, result: { error: errorMessage } },
+        data: { status: "error", agentLogs: agentLogs as unknown as any, result: { error: errorMessage } },
       });
       return NextResponse.json({ error: errorMessage }, { status: 500 });
     }

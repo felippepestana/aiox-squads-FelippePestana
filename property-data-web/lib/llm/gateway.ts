@@ -154,7 +154,7 @@ async function* callOpenAICompatible(params: {
   model: string;
   apiKey: string;
   systemPrompt: string;
-  messages: { role: "user" | "assistant"; content: string }[];
+  messages: { role: "user" | "assistant"; content: string | any[] }[];
   maxTokens: number;
   baseURL?: string;
 }): AsyncGenerator<string> {
@@ -168,8 +168,11 @@ async function* callOpenAICompatible(params: {
     max_tokens: params.maxTokens,
     stream: true,
     messages: [
-      { role: "system", content: params.systemPrompt },
-      ...params.messages,
+      { role: "system" as const, content: params.systemPrompt },
+      ...params.messages.map(m => ({
+        role: m.role as "user" | "assistant",
+        content: typeof m.content === "string" ? m.content : JSON.stringify(m.content),
+      })),
     ],
   });
 

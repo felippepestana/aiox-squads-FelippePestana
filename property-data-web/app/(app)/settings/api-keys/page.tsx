@@ -35,7 +35,7 @@ export default function ApiKeysPage() {
   const [saving, setSaving] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/settings/api-keys")
+    fetch("/api/api-keys")
       .then((res) => res.json())
       .then((data: ApiKey[]) => setKeys(data))
       .catch(() => setKeys([]));
@@ -51,8 +51,8 @@ export default function ApiKeysPage() {
 
     setSaving(provider);
     try {
-      const res = await fetch("/api/settings/api-keys", {
-        method: "PUT",
+      const res = await fetch("/api/api-keys", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ provider, key: value }),
       });
@@ -78,7 +78,7 @@ export default function ApiKeysPage() {
 
   async function handleDelete(provider: string) {
     try {
-      const res = await fetch(`/api/settings/api-keys?provider=${provider}`, {
+      const res = await fetch(`/api/api-keys?provider=${provider}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Erro ao remover chave");

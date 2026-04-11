@@ -110,7 +110,7 @@ export async function GET(
 
           await prisma.analysis.update({
             where: { id },
-            data: { status: "done", agentLogs, result: finalResult },
+            data: { status: "done", agentLogs: agentLogs as unknown as any, result: finalResult },
           });
         } catch (error) {
           const message = error instanceof Error ? error.message : "Pipeline failed";
@@ -119,7 +119,7 @@ export async function GET(
           );
           await prisma.analysis.update({
             where: { id },
-            data: { status: "error", agentLogs },
+            data: { status: "error", agentLogs: agentLogs as unknown as any },
           });
         } finally {
           controller.close();
