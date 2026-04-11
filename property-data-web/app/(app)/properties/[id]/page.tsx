@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { Plus, FileUp, MapPin } from "lucide-react";
+import { Plus, FileUp, MapPin, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -57,6 +57,25 @@ export default function PropertyDetailPage() {
         {property.address}
         {property.number ? `, ${property.number}` : ""}
       </h1>
+
+      {/* Vistoria CTA */}
+      <Card className="border-primary/30 bg-primary/5">
+        <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex-1">
+            <p className="font-medium">📱 Vistoria em Campo</p>
+            <p className="text-sm text-muted-foreground">
+              Use seu celular para fotografar o imovel e responder perguntas
+              qualificadoras
+            </p>
+          </div>
+          <Button asChild className="min-h-[48px] w-full gap-2 sm:w-auto">
+            <Link href={`/properties/${property.id}/vistoria`}>
+              <Camera className="h-5 w-5" />
+              Iniciar Vistoria
+            </Link>
+          </Button>
+        </CardContent>
+      </Card>
 
       {/* Property info */}
       <Card>
