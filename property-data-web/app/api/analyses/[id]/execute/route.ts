@@ -64,6 +64,7 @@ export async function POST(
       id: doc.id,
       name: doc.filename,
       type: doc.type,
+      fileId: doc.fileId ?? undefined,
     }));
 
     const agentLogs: AgentLog[] = [];
