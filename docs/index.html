@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#2D5016">
+<title>Property Data — Demo iPhone</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: linear-gradient(135deg, #2D5016 0%, #4A7C24 100%);
+  color: white;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 20px;
+  padding-top: env(safe-area-inset-top, 32px);
+}
+.container { max-width: 420px; width: 100%; }
+.icon { font-size: 72px; text-align: center; margin-bottom: 16px; }
+h1 {
+  font-size: 32px;
+  text-align: center;
+  margin-bottom: 8px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+.subtitle {
+  text-align: center;
+  opacity: 0.85;
+  font-size: 15px;
+  margin-bottom: 32px;
+}
+.card {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.card-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+.card-value { font-size: 18px; font-weight: 600; }
+.cta {
+  display: block;
+  background: white;
+  color: #2D5016;
+  text-align: center;
+  padding: 20px;
+  border-radius: 14px;
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: none;
+  margin-top: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.cta:active { transform: scale(0.98); }
+.cta-icon { font-size: 24px; }
+.features {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,0.08);
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+.feature-icon { font-size: 20px; width: 24px; text-align: center; }
+.footer {
+  text-align: center;
+  opacity: 0.6;
+  font-size: 12px;
+  margin-top: 32px;
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="icon">🏠</div>
+  <h1>Property Data</h1>
+  <p class="subtitle">Levantamento Imobiliário Inteligente</p>
+
+  <div class="card">
+    <div class="card-title">Imóvel Exemplo</div>
+    <div class="card-value">Rua Ramos Ferreira, 1000</div>
+    <div style="opacity:0.75; font-size:14px; margin-top:4px">Centro, Manaus/AM · Comercial · 450 m²</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Avaliação Estimada</div>
+    <div class="card-value" style="color:#FBBF24">R$ 1.850.000,00</div>
+    <div style="opacity:0.75; font-size:13px; margin-top:4px">Método Comparativo · NBR 14653-2</div>
+  </div>
+
+  <a href="vistoria.html" class="cta">
+    <span class="cta-icon">📱</span>
+    Iniciar Vistoria
+  </a>
+
+  <div class="features">
+    <div class="feature"><div class="feature-icon">📸</div><div>Câmera traseira nativa do iPhone</div></div>
+    <div class="feature"><div class="feature-icon">📋</div><div>10 fotos + 8 perguntas qualificadoras</div></div>
+    <div class="feature"><div class="feature-icon">💾</div><div>Salvamento automático (localStorage)</div></div>
+    <div class="feature"><div class="feature-icon">📤</div><div>Exporta JSON ao concluir</div></div>
+    <div class="feature"><div class="feature-icon">🔄</div><div>Funciona offline após carregar</div></div>
+  </div>
+
+  <div class="footer">
+    Property Data Squad v1.0 · Demo iPhone<br>
+    Abra no Safari para melhor experiência
+  </div>
+</div>
+</body>
+</html>

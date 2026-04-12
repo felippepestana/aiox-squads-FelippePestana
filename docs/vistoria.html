@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#2D5016">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Vistoria">
+<title>Vistoria — Rua Ramos Ferreira, 1000</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232D5016'/%3E%3Ctext x='50' y='65' text-anchor='middle' font-size='60' fill='white'%3E🏠%3C/text%3E%3C/svg%3E">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+:root {
+  --primary: #2D5016;
+  --primary-light: #4A7C24;
+  --accent: #C8860A;
+  --bg: #F8F6F1;
+  --card: #FFFFFF;
+  --text: #1C1917;
+  --muted: #78716C;
+  --border: #E5DDD0;
+  --success: #16A34A;
+  --danger: #DC2626;
+}
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Header */
+.header {
+  background: var(--primary);
+  color: white;
+  padding: env(safe-area-inset-top) 16px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 16px;
+}
+.header-icon {
+  font-size: 24px;
+}
+.header-title {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+.header-address {
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.header-location {
+  font-size: 13px;
+  opacity: 0.75;
+}
+.badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+/* Progress */
+.progress-bar {
+  background: rgba(255,255,255,0.2);
+  height: 6px;
+  border-radius: 3px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+.progress-fill {
+  background: var(--accent);
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+.progress-text {
+  font-size: 12px;
+  margin-top: 6px;
+  opacity: 0.9;
+}
+
+/* Main content */
+main {
+  padding: 16px;
+  padding-bottom: 120px;
+}
+.section {
+  margin-bottom: 24px;
+}
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--primary);
+  margin-bottom: 12px;
+  padding-left: 4px;
+}
+.section-icon {
+  margin-right: 6px;
+}
+
+/* Card (item) */
+.item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+.item.completed {
+  border-color: var(--success);
+  background: #F0FDF4;
+}
+.item-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.item-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+.required-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--danger);
+  border-radius: 50%;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.check-icon {
+  color: var(--success);
+  font-size: 24px;
+  font-weight: bold;
+}
+.item-description {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+/* Photo button */
+.photo-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 56px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 12px;
+  touch-action: manipulation;
+}
+.photo-btn:active { opacity: 0.85; }
+.photo-btn.secondary {
+  background: white;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+.photo-input { display: none; }
+
+.photo-preview {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 10px;
+  margin-top: 8px;
+  display: block;
+}
+.photo-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.photo-actions button {
+  flex: 1;
+  min-height: 44px;
+  background: white;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.photo-actions button.danger {
+  color: var(--danger);
+  border-color: #FECACA;
+}
+
+/* Question options */
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.option {
+  flex: 1 1 calc(50% - 4px);
+  min-height: 48px;
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text);
+  text-align: center;
+  touch-action: manipulation;
+}
+.option:active { background: #F5F5F4; }
+.option.selected {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+.option.multi-selected {
+  background: #F0FDF4;
+  border-color: var(--success);
+  color: var(--success);
+}
+.options.single .option {
+  flex: 1 1 calc(50% - 4px);
+}
+.options.multi .option {
+  flex: 1 1 100%;
+}
+
+/* Bottom bar */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid var(--border);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 10px;
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+  z-index: 100;
+}
+.bottom-bar button {
+  flex: 1;
+  min-height: 52px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  touch-action: manipulation;
+}
+.btn-save {
+  background: white;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+.btn-finish {
+  background: var(--primary);
+  color: white;
+}
+.btn-finish:disabled {
+  background: #A8A29E;
+  opacity: 0.6;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  top: 80px;
+  left: 16px;
+  right: 16px;
+  background: var(--text);
+  color: white;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  z-index: 200;
+  transform: translateY(-20px);
+  opacity: 0;
+  transition: all 0.3s;
+  pointer-events: none;
+}
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+.toast.success { background: var(--success); }
+.toast.error { background: var(--danger); }
+
+/* Welcome overlay */
+.welcome {
+  position: fixed;
+  inset: 0;
+  background: var(--primary);
+  color: white;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+  text-align: center;
+}
+.welcome.hidden { display: none; }
+.welcome-icon {
+  font-size: 72px;
+  margin-bottom: 24px;
+}
+.welcome h1 {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+.welcome p {
+  font-size: 16px;
+  opacity: 0.9;
+  margin-bottom: 32px;
+  max-width: 320px;
+}
+.welcome-info {
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 32px;
+  text-align: left;
+  width: 100%;
+  max-width: 320px;
+}
+.welcome-info strong { font-size: 14px; opacity: 0.8; }
+.welcome-info div { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.welcome-info div:last-child { margin-bottom: 0; }
+.welcome-btn {
+  background: white;
+  color: var(--primary);
+  border: none;
+  border-radius: 12px;
+  padding: 16px 32px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  min-width: 240px;
+  min-height: 56px;
+}
+</style>
+</head>
+<body>
+
+<!-- Welcome screen -->
+<div class="welcome" id="welcome">
+  <div class="welcome-icon">🏠</div>
+  <h1>Vistoria de Imóvel</h1>
+  <p>Percorra o local e complete o checklist com fotos e respostas</p>
+  <div class="welcome-info">
+    <strong>IMÓVEL</strong>
+    <div>Rua Ramos Ferreira, 1000</div>
+    <strong>LOCALIZAÇÃO</strong>
+    <div>Centro, Manaus/AM</div>
+    <strong>TIPO</strong>
+    <div>Comercial • 450 m²</div>
+  </div>
+  <button class="welcome-btn" onclick="document.getElementById('welcome').classList.add('hidden')">
+    Iniciar Vistoria →
+  </button>
+</div>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-top">
+    <div class="header-icon">🏠</div>
+    <div style="flex:1; min-width:0;">
+      <div class="header-title">VISTORIA EM CAMPO</div>
+      <div class="header-address">Rua Ramos Ferreira, 1000</div>
+      <div class="header-location">Centro, Manaus/AM</div>
+    </div>
+  </div>
+  <span class="badge">📱 Modo Mobile</span>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-text" id="progressText">0 de 18 itens preenchidos</div>
+</header>
+
+<main id="main"></main>
+
+<!-- Bottom action bar -->
+<div class="bottom-bar">
+  <button class="btn-save" onclick="saveProgress()">💾 Salvar</button>
+  <button class="btn-finish" id="finishBtn" onclick="finishInspection()">✅ Concluir</button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+const INSPECTION_ITEMS = [
+  // Fotos obrigatórias
+  { id: 'fachada-frontal', category: 'foto', label: 'Fachada Frontal', description: 'Fotografe a frente do imóvel, incluindo o número e a rua', required: true, section: 'required' },
+  { id: 'fachada-lateral', category: 'foto', label: 'Fachada Lateral', description: 'Fotografe a lateral visível do imóvel, mostrando limites', required: true, section: 'required' },
+  { id: 'entrada-principal', category: 'foto', label: 'Entrada Principal', description: 'Fotografe a porta/portão de entrada principal', required: true, section: 'required' },
+  { id: 'telhado-cobertura', category: 'foto', label: 'Telhado/Cobertura', description: 'Fotografe o telhado mostrando tipo de cobertura e estado', required: true, section: 'required' },
+  { id: 'rua-entorno', category: 'foto', label: 'Rua e Entorno', description: 'Fotografe a rua em ambas as direções mostrando vizinhança', required: true, section: 'required' },
+  // Fotos opcionais
+  { id: 'area-interna', category: 'foto', label: 'Área Interna', description: 'Se tiver acesso, fotografe o interior', required: false, section: 'optional' },
+  { id: 'quintal-fundo', category: 'foto', label: 'Quintal/Fundos', description: 'Fotografe a parte de trás do imóvel', required: false, section: 'optional' },
+  { id: 'garagem', category: 'foto', label: 'Garagem/Vagas', description: 'Fotografe a área de estacionamento', required: false, section: 'optional' },
+  { id: 'placa-numero', category: 'foto', label: 'Placa/Número', description: 'Fotografe a placa de identificação do imóvel', required: false, section: 'optional' },
+  { id: 'detalhe-estrutural', category: 'foto', label: 'Detalhe Estrutural', description: 'Fotografe trincas, infiltrações ou danos visíveis', required: false, section: 'optional' },
+  // Perguntas qualificadoras
+  { id: 'pavimentos', category: 'pergunta', label: 'Quantos pavimentos?', required: true, section: 'questions', options: ['1', '2', '3', '4+'], multi: false },
+  { id: 'padrao-construtivo', category: 'pergunta', label: 'Padrão construtivo?', required: true, section: 'questions', options: ['Baixo', 'Normal', 'Alto', 'Luxo'], multi: false },
+  { id: 'estado-conservacao', category: 'pergunta', label: 'Estado de conservação?', required: true, section: 'questions', options: ['Novo', 'Bom', 'Regular', 'Ruim', 'Demolição'], multi: false },
+  { id: 'tipo-cobertura', category: 'pergunta', label: 'Tipo de cobertura?', required: true, section: 'questions', options: ['Telha cerâmica', 'Telha fibrocimento', 'Laje', 'Metálica', 'Outro'], multi: false },
+  { id: 'material-fachada', category: 'pergunta', label: 'Material da fachada?', required: true, section: 'questions', options: ['Alvenaria rebocada', 'Alvenaria aparente', 'Madeira', 'Vidro/ACM', 'Misto'], multi: false },
+  { id: 'ocupacao', category: 'pergunta', label: 'Imóvel está ocupado?', required: true, section: 'questions', options: ['Proprietário', 'Inquilino', 'Desocupado', 'Em construção'], multi: false },
+  { id: 'infraestrutura-rua', category: 'pergunta', label: 'Infraestrutura da rua? (marque todas)', required: false, section: 'questions', options: ['Asfalto', 'Calçada', 'Iluminação', 'Rede de esgoto', 'Água encanada'], multi: true },
+  { id: 'acesso', category: 'pergunta', label: 'Conseguiu acesso ao interior?', required: true, section: 'questions', options: ['Sim', 'Não', 'Parcial'], multi: false },
+];
+
+const STORAGE_KEY = 'vistoria-demo-manaus';
+let responses = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+function renderItems() {
+  const main = document.getElementById('main');
+  const sections = [
+    { id: 'required', title: '📸 Fotos Obrigatórias', items: INSPECTION_ITEMS.filter(i => i.section === 'required') },
+    { id: 'optional', title: '📷 Fotos Opcionais', items: INSPECTION_ITEMS.filter(i => i.section === 'optional') },
+    { id: 'questions', title: '📋 Perguntas Qualificadoras', items: INSPECTION_ITEMS.filter(i => i.section === 'questions') },
+  ];
+
+  main.innerHTML = sections.map(section => `
+    <div class="section">
+      <div class="section-title">${section.title}</div>
+      ${section.items.map(item => renderItem(item)).join('')}
+    </div>
+  `).join('');
+  updateProgress();
+}
+
+function renderItem(item) {
+  const isCompleted = isItemCompleted(item);
+  const completedClass = isCompleted ? 'completed' : '';
+
+  if (item.category === 'foto') {
+    const preview = responses[item.id]?.preview;
+    return `
+      <div class="item ${completedClass}" id="item-${item.id}">
+        <div class="item-header">
+          <div>
+            <div class="item-title">${item.label}${item.required ? '<span class="required-dot"></span>' : ''}</div>
+          </div>
+          ${isCompleted ? '<div class="check-icon">✓</div>' : ''}
+        </div>
+        <div class="item-description">${item.description}</div>
+        ${preview ? `
+          <img class="photo-preview" src="${preview}" alt="${item.label}">
+          <div class="photo-actions">
+            <button onclick="triggerCapture('${item.id}')">🔄 Refazer</button>
+            <button class="danger" onclick="removePhoto('${item.id}')">🗑 Remover</button>
+          </div>
+        ` : `
+          <button class="photo-btn" onclick="triggerCapture('${item.id}')">
+            📸 Tirar Foto
+          </button>
+        `}
+        <input type="file" accept="image/*" capture="environment" class="photo-input"
+               id="input-${item.id}" onchange="handlePhoto('${item.id}', this)">
+      </div>
+    `;
+  } else {
+    const answer = responses[item.id]?.answer;
+    const multi = item.multi;
+    const selected = multi ? (answer ? answer.split(',') : []) : [answer];
+
+    return `
+      <div class="item ${completedClass}" id="item-${item.id}">
+        <div class="item-header">
+          <div>
+            <div class="item-title">${item.label}${item.required ? '<span class="required-dot"></span>' : ''}</div>
+          </div>
+          ${isCompleted ? '<div class="check-icon">✓</div>' : ''}
+        </div>
+        <div class="options ${multi ? 'multi' : 'single'}">
+          ${item.options.map(opt => {
+            const isSel = selected.includes(opt);
+            const cls = multi ? (isSel ? 'multi-selected' : '') : (isSel ? 'selected' : '');
+            return `<button class="option ${cls}" onclick="selectOption('${item.id}', '${opt}', ${multi})">${opt}</button>`;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }
+}
+
+function isItemCompleted(item) {
+  const r = responses[item.id];
+  if (!r) return false;
+  if (item.category === 'foto') return !!r.preview;
+  return !!r.answer;
+}
+
+function triggerCapture(itemId) {
+  document.getElementById(`input-${itemId}`).click();
+}
+
+function handlePhoto(itemId, input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const preview = e.target.result;
+    // Compress to fit localStorage (max ~500KB per image)
+    compressImage(preview, 1200, 0.7).then(compressed => {
+      responses[itemId] = { ...responses[itemId], preview: compressed, filename: file.name };
+      saveToStorage();
+      renderItems();
+      showToast('Foto capturada!', 'success');
+    });
+  };
+  reader.readAsDataURL(file);
+}
+
+function compressImage(dataUrl, maxWidth, quality) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      if (w > maxWidth) {
+        h = (maxWidth / w) * h;
+        w = maxWidth;
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.src = dataUrl;
+  });
+}
+
+function removePhoto(itemId) {
+  delete responses[itemId];
+  saveToStorage();
+  renderItems();
+  showToast('Foto removida');
+}
+
+function selectOption(itemId, option, isMulti) {
+  if (isMulti) {
+    const current = responses[itemId]?.answer ? responses[itemId].answer.split(',') : [];
+    const newValues = current.includes(option)
+      ? current.filter(v => v !== option)
+      : [...current, option];
+    responses[itemId] = { ...responses[itemId], answer: newValues.join(',') };
+  } else {
+    responses[itemId] = { ...responses[itemId], answer: option };
+  }
+  saveToStorage();
+  renderItems();
+}
+
+function updateProgress() {
+  const total = INSPECTION_ITEMS.length;
+  const completed = INSPECTION_ITEMS.filter(isItemCompleted).length;
+  const pct = Math.round((completed / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${completed} de ${total} itens preenchidos (${pct}%)`;
+
+  const requiredCompleted = INSPECTION_ITEMS.filter(i => i.required).every(isItemCompleted);
+  document.getElementById('finishBtn').disabled = !requiredCompleted;
+}
+
+function saveToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(responses));
+  } catch (e) {
+    showToast('Erro ao salvar: armazenamento cheio', 'error');
+  }
+}
+
+function saveProgress() {
+  saveToStorage();
+  showToast('✅ Progresso salvo!', 'success');
+}
+
+function finishInspection() {
+  const requiredItems = INSPECTION_ITEMS.filter(i => i.required);
+  const missing = requiredItems.filter(i => !isItemCompleted(i));
+
+  if (missing.length > 0) {
+    showToast(`Faltam ${missing.length} itens obrigatórios`, 'error');
+    return;
+  }
+
+  // Generate summary
+  const summary = {
+    imovel: 'Rua Ramos Ferreira, 1000 - Centro, Manaus/AM',
+    data: new Date().toISOString(),
+    fotos: {},
+    respostas: {},
+  };
+
+  INSPECTION_ITEMS.forEach(item => {
+    const r = responses[item.id];
+    if (!r) return;
+    if (item.category === 'foto' && r.preview) {
+      summary.fotos[item.id] = { label: item.label, filename: r.filename || 'photo.jpg' };
+    } else if (item.category === 'pergunta' && r.answer) {
+      summary.respostas[item.id] = { pergunta: item.label, resposta: r.answer };
+    }
+  });
+
+  // Create downloadable JSON
+  const json = JSON.stringify(summary, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `vistoria-manaus-${Date.now()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+
+  showToast('✅ Vistoria concluída! JSON baixado.', 'success');
+}
+
+function showToast(message, type = '') {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.className = 'toast show ' + type;
+  setTimeout(() => toast.className = 'toast', 3000);
+}
+
+// Initial render
+renderItems();
+
+// Save state on visibility change (iOS background)
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) saveToStorage();
+});
+</script>
+
+</body>
+</html>
