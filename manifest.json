@@ -1,0 +1,37 @@
+{
+  "name": "Property Data — Vistoria",
+  "short_name": "Vistoria",
+  "description": "Levantamento imobiliário inteligente com guia fotográfico e detecção de patologias",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#2D5016",
+  "theme_color": "#2D5016",
+  "categories": ["business", "productivity", "utilities"],
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Iniciar Vistoria",
+      "short_name": "Vistoria",
+      "description": "Abrir checklist de vistoria do imóvel",
+      "url": "./vistoria.html",
+      "icons": [{ "src": "icon-192.svg", "sizes": "192x192" }]
+    }
+  ]
+}

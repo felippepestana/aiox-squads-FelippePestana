@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="theme-color" content="#2D5016" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a3a0c" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Vistoria">
+<meta name="application-name" content="Vistoria">
+<meta name="description" content="Vistoria fotográfica de imóvel com guia técnico e detecção de patologias">
+<title>Vistoria — Rua Ramos Ferreira, 1000</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon-192.svg">
+<link rel="apple-touch-icon" href="icon-192.svg">
+<link rel="apple-touch-icon" sizes="192x192" href="icon-192.svg">
+<link rel="apple-touch-icon" sizes="512x512" href="icon-512.svg">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+:root {
+  --primary: #2D5016;
+  --primary-light: #4A7C24;
+  --accent: #C8860A;
+  --bg: #F8F6F1;
+  --card: #FFFFFF;
+  --text: #1C1917;
+  --muted: #78716C;
+  --border: #E5DDD0;
+  --success: #16A34A;
+  --danger: #DC2626;
+  /* iOS 18 / iPhone 17 dynamic viewport heights */
+  --vh-full: 100dvh;
+  --vh-small: 100svh;
+}
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Prevent iOS rubber-band scrolling on body */
+  overscroll-behavior-y: none;
+}
+body {
+  max-width: 100vw;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  padding-bottom: env(safe-area-inset-bottom);
+  /* iOS smooth scrolling */
+  -webkit-overflow-scrolling: touch;
+  /* Prevent text selection on touch targets */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+/* Allow text selection in inputs and textareas */
+input, textarea, [contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+/* Prevent iOS auto-zoom on input focus (font-size must be >= 16px) */
+input, textarea, select, button {
+  font-size: 16px;
+  font-family: inherit;
+}
+
+/* Header */
+.header {
+  background: var(--primary);
+  color: white;
+  padding: env(safe-area-inset-top) 16px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 16px;
+}
+.header-icon {
+  font-size: 24px;
+}
+.header-title {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+.header-address {
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.header-location {
+  font-size: 13px;
+  opacity: 0.75;
+}
+.badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+
+/* Progress */
+.progress-bar {
+  background: rgba(255,255,255,0.2);
+  height: 6px;
+  border-radius: 3px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+.progress-fill {
+  background: var(--accent);
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+.progress-text {
+  font-size: 12px;
+  margin-top: 6px;
+  opacity: 0.9;
+}
+
+/* Main content */
+main {
+  padding: 16px;
+  padding-bottom: 120px;
+}
+.section {
+  margin-bottom: 24px;
+}
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--primary);
+  margin-bottom: 12px;
+  padding-left: 4px;
+}
+.section-icon {
+  margin-right: 6px;
+}
+
+/* Card (item) */
+.item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+.item.completed {
+  border-color: var(--success);
+  background: #F0FDF4;
+}
+.item-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.item-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+}
+.required-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--danger);
+  border-radius: 50%;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.check-icon {
+  color: var(--success);
+  font-size: 24px;
+  font-weight: bold;
+}
+.item-description {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+/* Photo button */
+.photo-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 56px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 12px;
+  touch-action: manipulation;
+}
+.photo-btn:active { opacity: 0.85; }
+.photo-btn.secondary {
+  background: white;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+.photo-btn-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.photo-btn-group .photo-btn {
+  font-size: 14px;
+  padding: 10px 8px;
+  min-height: 52px;
+}
+.photo-btn-group .photo-btn.gallery {
+  background: white;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+.photo-input { display: none; }
+
+.photo-preview {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 10px;
+  margin-top: 8px;
+  display: block;
+}
+.photo-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.photo-actions button {
+  flex: 1;
+  min-height: 44px;
+  background: white;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.photo-actions button.danger {
+  color: var(--danger);
+  border-color: #FECACA;
+}
+
+/* Question options */
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.option {
+  flex: 1 1 calc(50% - 4px);
+  min-height: 48px;
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text);
+  text-align: center;
+  touch-action: manipulation;
+}
+.option:active { background: #F5F5F4; }
+.option.selected {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+.option.multi-selected {
+  background: #F0FDF4;
+  border-color: var(--success);
+  color: var(--success);
+}
+.options.single .option {
+  flex: 1 1 calc(50% - 4px);
+}
+.options.multi .option {
+  flex: 1 1 100%;
+}
+
+/* Bottom bar */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid var(--border);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 10px;
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+  z-index: 100;
+}
+.bottom-bar button {
+  flex: 1;
+  min-height: 52px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  touch-action: manipulation;
+}
+.btn-save {
+  background: white;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+.btn-finish {
+  background: var(--primary);
+  color: white;
+}
+.btn-finish:disabled {
+  background: #A8A29E;
+  opacity: 0.6;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  top: 80px;
+  left: 16px;
+  right: 16px;
+  background: var(--text);
+  color: white;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  z-index: 200;
+  transform: translateY(-20px);
+  opacity: 0;
+  transition: all 0.3s;
+  pointer-events: none;
+}
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+.toast.success { background: var(--success); }
+.toast.error { background: var(--danger); }
+
+/* Welcome overlay */
+.welcome {
+  position: fixed;
+  inset: 0;
+  background: var(--primary);
+  color: white;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+  text-align: center;
+}
+.welcome.hidden { display: none; }
+.welcome-icon {
+  font-size: 72px;
+  margin-bottom: 24px;
+}
+.welcome h1 {
+  font-size: 28px;
+  margin-bottom: 12px;
+}
+.welcome p {
+  font-size: 16px;
+  opacity: 0.9;
+  margin-bottom: 32px;
+  max-width: 320px;
+}
+.welcome-info {
+  background: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 32px;
+  text-align: left;
+  width: 100%;
+  max-width: 320px;
+}
+.welcome-info strong { font-size: 14px; opacity: 0.8; }
+.welcome-info div { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.welcome-info div:last-child { margin-bottom: 0; }
+.welcome-btn {
+  background: white;
+  color: var(--primary);
+  border: none;
+  border-radius: 12px;
+  padding: 16px 32px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  min-width: 240px;
+  min-height: 56px;
+}
+
+/* === MODAL BASE (guide + pathology) === */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 400;
+  display: none;
+  overflow-y: auto;
+  padding: 16px;
+  padding-top: env(safe-area-inset-top, 16px);
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.show { display: block; }
+.modal-box {
+  background: white;
+  border-radius: 16px;
+  max-width: 500px;
+  margin: 0 auto;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.modal-header {
+  background: var(--primary);
+  color: white;
+  padding: 20px 20px 16px;
+  position: relative;
+}
+.modal-icon { font-size: 36px; margin-bottom: 8px; }
+.modal-title { font-size: 20px; font-weight: 700; line-height: 1.2; }
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+}
+.modal-body { padding: 20px; }
+.modal-footer {
+  padding: 16px 20px calc(16px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid var(--border);
+  background: #FAFAFA;
+}
+.modal-footer button {
+  flex: 1;
+  min-height: 52px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  touch-action: manipulation;
+}
+
+/* === GUIDE MODAL === */
+.guide-section {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.guide-section:last-child { border-bottom: none; }
+.guide-section-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  width: 32px;
+  text-align: center;
+}
+.guide-section-content { flex: 1; }
+.guide-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--primary);
+  margin-bottom: 2px;
+}
+.guide-section-text { font-size: 15px; color: var(--text); line-height: 1.4; }
+
+.guide-lists {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 2px solid var(--border);
+}
+.guide-list-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.guide-list-title.include { color: var(--success); }
+.guide-list-title.avoid { color: var(--danger); }
+.guide-list ul {
+  list-style: none;
+  padding-left: 0;
+}
+.guide-list li {
+  font-size: 14px;
+  padding: 6px 0 6px 24px;
+  position: relative;
+  color: var(--text);
+  line-height: 1.4;
+}
+.guide-list.include li::before {
+  content: '✓';
+  position: absolute;
+  left: 4px;
+  color: var(--success);
+  font-weight: 700;
+}
+.guide-list.avoid li::before {
+  content: '✗';
+  position: absolute;
+  left: 4px;
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.modal-footer .btn-cancel {
+  background: white;
+  color: var(--muted);
+  border: 2px solid var(--border);
+}
+.modal-footer .btn-primary {
+  background: var(--primary);
+  color: white;
+}
+.modal-footer .btn-primary.ghost {
+  background: white;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+
+/* === PATHOLOGY MODAL === */
+.path-preview {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+.path-subtitle {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.path-list { display: grid; gap: 8px; }
+.path-item {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  transition: all 0.2s;
+}
+.path-item.selected {
+  border-color: var(--primary);
+  background: #F0FDF4;
+}
+.path-item-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 44px;
+}
+.path-checkbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-weight: 700;
+  color: white;
+  background: white;
+}
+.path-item.selected .path-checkbox {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+.path-icon { font-size: 22px; }
+.path-info { flex: 1; min-width: 0; }
+.path-label { font-size: 15px; font-weight: 600; color: var(--text); }
+.path-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.path-severity {
+  display: none;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
+.path-item.selected .path-severity { display: flex; }
+.sev-btn {
+  flex: 1;
+  min-height: 42px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text);
+  touch-action: manipulation;
+}
+.sev-btn.active.sev-1 { background: #FEF3C7; border-color: #FBBF24; color: #92400E; }
+.sev-btn.active.sev-2 { background: #FFEDD5; border-color: #F97316; color: #9A3412; }
+.sev-btn.active.sev-3 { background: #FEE2E2; border-color: #DC2626; color: #991B1B; }
+
+.path-notes {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.path-notes label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 6px;
+}
+.path-notes textarea {
+  width: 100%;
+  min-height: 72px;
+  padding: 10px 12px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+}
+.path-notes textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+.path-hint {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.suggest-btn {
+  background: #F0FDF4;
+  color: var(--primary);
+  border: 1px solid var(--success);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  touch-action: manipulation;
+  min-height: 40px;
+}
+
+/* Review modal specific */
+.review-section {
+  margin-bottom: 16px;
+}
+.review-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.review-text {
+  background: #F8F6F1;
+  border-left: 3px solid var(--border);
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+  white-space: pre-wrap;
+}
+.review-text.improved {
+  background: #F0FDF4;
+  border-left-color: var(--success);
+}
+.review-text.original {
+  background: #FEF3C7;
+  border-left-color: #F59E0B;
+}
+.review-issues {
+  background: #FFFBEB;
+  border: 1px solid #FBBF24;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+.review-issues-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #92400E;
+  margin-bottom: 8px;
+}
+.review-issues ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+.review-issues li {
+  font-size: 13px;
+  color: #78350F;
+  padding: 3px 0 3px 16px;
+  position: relative;
+}
+.review-issues li::before {
+  content: '⚠';
+  position: absolute;
+  left: 0;
+}
+
+/* Pathology badge on item card */
+.path-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #FEE2E2;
+  color: #991B1B;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 28px;
+}
+.path-badge.level-1 { background: #FEF3C7; color: #92400E; }
+.path-badge.level-2 { background: #FFEDD5; color: #9A3412; }
+.path-badge.level-3 { background: #FEE2E2; color: #991B1B; }
+</style>
+</head>
+<body>
+
+<!-- Welcome screen -->
+<div class="welcome" id="welcome">
+  <div class="welcome-icon">🏠</div>
+  <h1>Vistoria de Imóvel</h1>
+  <p>Percorra o local e complete o checklist com fotos e respostas</p>
+  <div class="welcome-info">
+    <strong>IMÓVEL</strong>
+    <div>Rua Ramos Ferreira, 1000</div>
+    <strong>LOCALIZAÇÃO</strong>
+    <div>Centro, Manaus/AM</div>
+    <strong>TIPO</strong>
+    <div>Comercial • 450 m²</div>
+  </div>
+  <button class="welcome-btn" onclick="document.getElementById('welcome').classList.add('hidden')">
+    Iniciar Vistoria →
+  </button>
+</div>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-top">
+    <div class="header-icon">🏠</div>
+    <div style="flex:1; min-width:0;">
+      <div class="header-title">VISTORIA EM CAMPO</div>
+      <div class="header-address">Rua Ramos Ferreira, 1000</div>
+      <div class="header-location">Centro, Manaus/AM</div>
+    </div>
+  </div>
+  <span class="badge">📱 Modo Mobile</span>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-text" id="progressText">0 de 18 itens preenchidos</div>
+</header>
+
+<main id="main"></main>
+
+<!-- Bottom action bar -->
+<div class="bottom-bar">
+  <button class="btn-save" onclick="saveProgress()">💾 Salvar</button>
+  <button class="btn-finish" id="finishBtn" onclick="finishInspection()">✅ Concluir</button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Photo Guide Modal -->
+<div class="modal-overlay" id="guideModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('guideModal')">×</button>
+      <div class="modal-icon" id="guideIcon">🏠</div>
+      <div class="modal-title" id="guideTitle">Guia Técnico</div>
+    </div>
+    <div class="modal-body" id="guideBody"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('guideModal')">Cancelar</button>
+      <button class="btn-primary" id="guideStart">📸 Entendi, tirar foto</button>
+    </div>
+  </div>
+</div>
+
+<!-- Pathology Assessment Modal -->
+<div class="modal-overlay" id="pathologyModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('pathologyModal')">×</button>
+      <div class="modal-icon">🔍</div>
+      <div class="modal-title">Análise de Patologias</div>
+    </div>
+    <div class="modal-body">
+      <img class="path-preview" id="pathPreview" alt="Foto capturada">
+      <div class="path-subtitle">Marque as patologias que você observa nesta foto:</div>
+      <div class="path-list" id="pathList"></div>
+      <div class="path-notes">
+        <label for="pathNotes">📝 Observações técnicas da vistoria</label>
+        <textarea id="pathNotes" placeholder="Descrição técnica da inspeção..."></textarea>
+        <div class="path-hint" id="pathHint"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('pathologyModal')">Pular</button>
+      <button class="btn-primary" onclick="savePathology()">✅ Salvar análise</button>
+    </div>
+  </div>
+</div>
+
+<!-- Normative Review Modal -->
+<div class="modal-overlay" id="reviewModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <button class="modal-close" id="reviewClose">×</button>
+      <div class="modal-icon">📐</div>
+      <div class="modal-title">Revisão Normativa</div>
+    </div>
+    <div class="modal-body">
+      <div class="review-issues">
+        <div class="review-issues-title">Sugestões para adequação técnica:</div>
+        <ul id="reviewIssues"></ul>
+      </div>
+      <div class="review-section">
+        <div class="review-label">📝 Texto original</div>
+        <div class="review-text original" id="reviewOriginal"></div>
+      </div>
+      <div class="review-section">
+        <div class="review-label">✨ Versão sugerida (padrão normativo)</div>
+        <div class="review-text improved" id="reviewImproved"></div>
+      </div>
+      <p style="font-size:13px;color:var(--muted);text-align:center;margin-top:8px;">
+        Você pode manter o texto original ou aceitar a versão adequada ao padrão NBR.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" id="reviewKeep">Manter original</button>
+      <button class="btn-primary" id="reviewAccept">✨ Usar versão sugerida</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const INSPECTION_ITEMS = [
+  // Fotos obrigatórias
+  { id: 'fachada-frontal', category: 'foto', label: 'Fachada Frontal', description: 'Fotografe a frente do imóvel, incluindo o número e a rua', required: true, section: 'required' },
+  { id: 'fachada-lateral', category: 'foto', label: 'Fachada Lateral', description: 'Fotografe a lateral visível do imóvel, mostrando limites', required: true, section: 'required' },
+  { id: 'entrada-principal', category: 'foto', label: 'Entrada Principal', description: 'Fotografe a porta/portão de entrada principal', required: true, section: 'required' },
+  { id: 'telhado-cobertura', category: 'foto', label: 'Telhado/Cobertura', description: 'Fotografe o telhado mostrando tipo de cobertura e estado', required: true, section: 'required' },
+  { id: 'rua-entorno', category: 'foto', label: 'Rua e Entorno', description: 'Fotografe a rua em ambas as direções mostrando vizinhança', required: true, section: 'required' },
+  // Fotos opcionais
+  { id: 'area-interna', category: 'foto', label: 'Área Interna', description: 'Se tiver acesso, fotografe o interior', required: false, section: 'optional' },
+  { id: 'quintal-fundo', category: 'foto', label: 'Quintal/Fundos', description: 'Fotografe a parte de trás do imóvel', required: false, section: 'optional' },
+  { id: 'garagem', category: 'foto', label: 'Garagem/Vagas', description: 'Fotografe a área de estacionamento', required: false, section: 'optional' },
+  { id: 'placa-numero', category: 'foto', label: 'Placa/Número', description: 'Fotografe a placa de identificação do imóvel', required: false, section: 'optional' },
+  { id: 'detalhe-estrutural', category: 'foto', label: 'Detalhe Estrutural', description: 'Fotografe trincas, infiltrações ou danos visíveis', required: false, section: 'optional' },
+  // Perguntas qualificadoras
+  { id: 'pavimentos', category: 'pergunta', label: 'Quantos pavimentos?', required: true, section: 'questions', options: ['1', '2', '3', '4+'], multi: false },
+  { id: 'padrao-construtivo', category: 'pergunta', label: 'Padrão construtivo?', required: true, section: 'questions', options: ['Baixo', 'Normal', 'Alto', 'Luxo'], multi: false },
+  { id: 'estado-conservacao', category: 'pergunta', label: 'Estado de conservação?', required: true, section: 'questions', options: ['Novo', 'Bom', 'Regular', 'Ruim', 'Demolição'], multi: false },
+  { id: 'tipo-cobertura', category: 'pergunta', label: 'Tipo de cobertura?', required: true, section: 'questions', options: ['Telha cerâmica', 'Telha fibrocimento', 'Laje', 'Metálica', 'Outro'], multi: false },
+  { id: 'material-fachada', category: 'pergunta', label: 'Material da fachada?', required: true, section: 'questions', options: ['Alvenaria rebocada', 'Alvenaria aparente', 'Madeira', 'Vidro/ACM', 'Misto'], multi: false },
+  { id: 'ocupacao', category: 'pergunta', label: 'Imóvel está ocupado?', required: true, section: 'questions', options: ['Proprietário', 'Inquilino', 'Desocupado', 'Em construção'], multi: false },
+  { id: 'infraestrutura-rua', category: 'pergunta', label: 'Infraestrutura da rua? (marque todas)', required: false, section: 'questions', options: ['Asfalto', 'Calçada', 'Iluminação', 'Rede de esgoto', 'Água encanada'], multi: true },
+  { id: 'acesso', category: 'pergunta', label: 'Conseguiu acesso ao interior?', required: true, section: 'questions', options: ['Sim', 'Não', 'Parcial'], multi: false },
+];
+
+// ============================================
+// SKILL 1: PHOTO GUIDANCE (pre-capture)
+// ============================================
+const PHOTO_GUIDANCE = {
+  'fachada-frontal': {
+    icon: '🏠',
+    title: 'Fachada Frontal — Guia Técnico',
+    distance: '5 a 10 metros do imóvel',
+    position: 'De frente, centralizado com o imóvel',
+    angle: 'Câmera horizontal, altura do peito',
+    lighting: 'Evite contraluz. Prefira manhã ou fim de tarde',
+    framing: 'Imóvel completo com ~10% de margem nas bordas',
+    include: ['Número da casa/prédio visível', 'Parte da rua/calçada', 'Muro ou portão de entrada', 'Pessoa (~1.7m) ou porta (~2.1m) como escala'],
+    avoid: ['Sombras grandes cobrindo fachada', 'Carros estacionados tampando a frente', 'Zoom digital (caminhe até o local)', 'Reflexos fortes em vidros']
+  },
+  'fachada-lateral': {
+    icon: '🏠',
+    title: 'Fachada Lateral — Guia Técnico',
+    distance: '3 a 6 metros',
+    position: 'Na diagonal para capturar profundidade',
+    angle: 'Câmera horizontal',
+    lighting: 'Luz lateral favorece contornos',
+    framing: 'Mostre 2 faces: frente e lado',
+    include: ['Limite com vizinho', 'Altura total visível', 'Janelas laterais', 'Muro divisório'],
+    avoid: ['Apenas uma face', 'Perspectiva muito inclinada', 'Vegetação tampando a lateral']
+  },
+  'entrada-principal': {
+    icon: '🚪',
+    title: 'Entrada Principal — Guia Técnico',
+    distance: '2 a 3 metros',
+    position: 'Centralizado com a porta/portão',
+    angle: 'Câmera horizontal, altura média',
+    lighting: 'Luz natural frontal',
+    framing: 'Porta completa + soleira + 1m acima',
+    include: ['Porta/portão fechado', 'Campainha/interfone', 'Soleira/degrau', 'Número da casa se próximo'],
+    avoid: ['Sombra pesada sobre a porta', 'Reflexos em vidro', 'Foto muito próxima']
+  },
+  'telhado-cobertura': {
+    icon: '🏘️',
+    title: 'Telhado/Cobertura — Guia Técnico',
+    distance: '10 a 20 metros (se possível afastar)',
+    position: 'Posição elevada ou de longe',
+    angle: 'Ligeiramente para cima',
+    lighting: 'Evite sol direto no sensor',
+    framing: 'Telhado completo visível com inclinação',
+    include: ['Tipo de telha (cerâmica, fibra, laje)', 'Calhas e rufos', 'Chaminés ou antenas', 'Manchas/umidade visíveis'],
+    avoid: ['Foto só do beiral', 'Obstruções de árvores', 'Foto por baixo apenas']
+  },
+  'rua-entorno': {
+    icon: '🛣️',
+    title: 'Rua e Entorno — Guia Técnico',
+    distance: 'Variável',
+    position: '2 fotos: uma para cada sentido da rua',
+    angle: 'Câmera horizontal',
+    lighting: 'Qualquer horário',
+    framing: 'Rua em perspectiva com vizinhança',
+    include: ['Pavimentação', 'Calçada e iluminação pública', 'Imóveis vizinhos', 'Largura da via'],
+    avoid: ['Apenas a fachada sem contexto', 'Trânsito cobrindo a via']
+  },
+  'area-interna': {
+    icon: '🛋️',
+    title: 'Área Interna — Guia Técnico',
+    distance: '2 a 4 metros (do canto do ambiente)',
+    position: 'De um canto para diagonal oposta',
+    angle: 'Câmera horizontal, altura do peito',
+    lighting: 'Luz natural + artificial se necessário',
+    framing: 'Enquadre 3 paredes + piso + teto parcial',
+    include: ['Estado do piso', 'Estado das paredes', 'Altura do pé-direito', 'Janelas/portas internas'],
+    avoid: ['Contraluz de janela', 'Móveis tampando totalmente', 'Distorção de lente']
+  },
+  'quintal-fundo': {
+    icon: '🌳',
+    title: 'Quintal/Fundos — Guia Técnico',
+    distance: '3 a 5 metros',
+    position: 'De frente para o fundo',
+    angle: 'Câmera horizontal',
+    lighting: 'Luz natural',
+    framing: 'Fundo completo + divisas',
+    include: ['Muro dos fundos', 'Solo (piso, terra, grama)', 'Edificações auxiliares', 'Árvores/vegetação'],
+    avoid: ['Apenas um canto', 'Vegetação tampando divisa']
+  },
+  'garagem': {
+    icon: '🚗',
+    title: 'Garagem/Vagas — Guia Técnico',
+    distance: '2 a 4 metros',
+    position: 'Da entrada para dentro',
+    angle: 'Câmera horizontal',
+    lighting: 'Flash se necessário',
+    framing: 'Vaga completa + cobertura',
+    include: ['Número de vagas', 'Tipo de piso', 'Cobertura (laje, telha, descoberta)', 'Porta/portão'],
+    avoid: ['Carros parados tampando']
+  },
+  'placa-numero': {
+    icon: '🔢',
+    title: 'Placa/Número — Guia Técnico',
+    distance: '1 a 2 metros',
+    position: 'Frontal à placa',
+    angle: 'Reta, sem distorção',
+    lighting: 'Boa legibilidade',
+    framing: 'Placa inteira legível',
+    include: ['Número completo', 'Nome da rua se próximo', 'CEP se visível'],
+    avoid: ['Foto tremida', 'Reflexo', 'Zoom digital']
+  },
+  'detalhe-estrutural': {
+    icon: '⚠️',
+    title: 'Detalhe Estrutural — Guia Técnico',
+    distance: '30 cm a 1 metro',
+    position: 'Diretamente na frente do defeito',
+    angle: 'Perpendicular à superfície',
+    lighting: 'Evite sombras próprias',
+    framing: 'Defeito completo + referência de escala',
+    include: ['Trinca/fissura completa', 'Régua, dedo ou moeda como escala', 'Contexto: qual parede/elemento', 'Severidade aparente'],
+    avoid: ['Distância excessiva', 'Foto sem escala de referência', 'Desfocado']
+  }
+};
+
+// ============================================
+// SKILL 2: PATHOLOGY DETECTION (post-capture)
+// ============================================
+const PATHOLOGIES = [
+  { id: 'trinca-fissura', label: 'Trincas / Fissuras', icon: '⚡', description: 'Rachaduras na alvenaria' },
+  { id: 'infiltracao', label: 'Infiltração / Umidade', icon: '💧', description: 'Manchas úmidas ou secas' },
+  { id: 'bolor-mofo', label: 'Bolor / Mofo', icon: '🟢', description: 'Manchas escuras/verdes de fungos' },
+  { id: 'descolamento', label: 'Descolamento de Revestimento', icon: '🧱', description: 'Reboco, pintura ou cerâmica soltando' },
+  { id: 'eflorescencia', label: 'Eflorescência', icon: '❄️', description: 'Manchas brancas cristalinas' },
+  { id: 'oxidacao', label: 'Oxidação / Corrosão', icon: '🔩', description: 'Ferro ou metal enferrujado' },
+  { id: 'desgaste-pintura', label: 'Desgaste de Pintura', icon: '🎨', description: 'Pintura desbotada ou descascada' },
+  { id: 'danos-cobertura', label: 'Danos na Cobertura', icon: '🏚️', description: 'Telhas quebradas ou calhas' },
+  { id: 'nenhuma', label: 'Nenhuma patologia visível', icon: '✅', description: 'Elemento em bom estado' }
+];
+
+const SEVERITY_LEVELS = [
+  { value: 1, label: 'Leve' },
+  { value: 2, label: 'Moderada' },
+  { value: 3, label: 'Grave' }
+];
+
+// Items that trigger pathology modal after capture
+const STRUCTURAL_ITEMS = ['fachada-frontal', 'fachada-lateral', 'detalhe-estrutural', 'telhado-cobertura', 'area-interna', 'quintal-fundo'];
+
+let currentPathologyItemId = null;
+let pathologyDraft = { pathologies: [], notes: '' };
+
+const STORAGE_KEY = 'vistoria-demo-manaus';
+let responses = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+
+function renderItems() {
+  const main = document.getElementById('main');
+  const sections = [
+    { id: 'required', title: '📸 Fotos Obrigatórias', items: INSPECTION_ITEMS.filter(i => i.section === 'required') },
+    { id: 'optional', title: '📷 Fotos Opcionais', items: INSPECTION_ITEMS.filter(i => i.section === 'optional') },
+    { id: 'questions', title: '📋 Perguntas Qualificadoras', items: INSPECTION_ITEMS.filter(i => i.section === 'questions') },
+  ];
+
+  main.innerHTML = sections.map(section => `
+    <div class="section">
+      <div class="section-title">${section.title}</div>
+      ${section.items.map(item => renderItem(item)).join('')}
+    </div>
+  `).join('');
+  updateProgress();
+}
+
+function renderItem(item) {
+  const isCompleted = isItemCompleted(item);
+  const completedClass = isCompleted ? 'completed' : '';
+
+  if (item.category === 'foto') {
+    const preview = responses[item.id]?.preview;
+    const paths = responses[item.id]?.pathologies || [];
+    const activePaths = paths.filter(p => p.id !== 'nenhuma');
+    const maxSeverity = activePaths.length > 0 ? Math.max(...activePaths.map(p => p.severity || 1)) : 0;
+    const isStructural = STRUCTURAL_ITEMS.includes(item.id);
+    const pathBadge = preview && activePaths.length > 0
+      ? `<div class="path-badge level-${maxSeverity}" onclick="showPathologyModal('${item.id}')">⚠️ ${activePaths.length} patologia${activePaths.length > 1 ? 's' : ''} detectada${activePaths.length > 1 ? 's' : ''}</div>`
+      : (preview && isStructural && paths.length === 0
+        ? `<div class="path-badge" style="background:#DBEAFE;color:#1E40AF;" onclick="showPathologyModal('${item.id}')">🔍 Analisar patologias</div>`
+        : '');
+
+    return `
+      <div class="item ${completedClass}" id="item-${item.id}">
+        <div class="item-header">
+          <div>
+            <div class="item-title">${item.label}${item.required ? '<span class="required-dot"></span>' : ''}</div>
+          </div>
+          ${isCompleted ? '<div class="check-icon">✓</div>' : ''}
+        </div>
+        <div class="item-description">${item.description}</div>
+        ${preview ? `
+          <img class="photo-preview" src="${preview}" alt="${item.label}">
+          ${pathBadge}
+          <div class="photo-actions">
+            <button onclick="triggerCapture('${item.id}')">🔄 Refazer</button>
+            <button class="danger" onclick="removePhoto('${item.id}')">🗑 Remover</button>
+          </div>
+        ` : `
+          <div class="photo-btn-group">
+            <button class="photo-btn" onclick="triggerCapture('${item.id}', 'camera')">
+              📸 Câmera
+            </button>
+            <button class="photo-btn gallery" onclick="triggerCapture('${item.id}', 'gallery')">
+              📁 Galeria
+            </button>
+          </div>
+        `}
+        <input type="file" accept="image/*" capture="environment" class="photo-input"
+               id="input-${item.id}" onchange="handlePhoto('${item.id}', this)">
+        <input type="file" accept="image/*" class="photo-input"
+               id="gallery-${item.id}" onchange="handlePhoto('${item.id}', this)">
+      </div>
+    `;
+  } else {
+    const answer = responses[item.id]?.answer;
+    const multi = item.multi;
+    const selected = multi ? (answer ? answer.split(',') : []) : [answer];
+
+    return `
+      <div class="item ${completedClass}" id="item-${item.id}">
+        <div class="item-header">
+          <div>
+            <div class="item-title">${item.label}${item.required ? '<span class="required-dot"></span>' : ''}</div>
+          </div>
+          ${isCompleted ? '<div class="check-icon">✓</div>' : ''}
+        </div>
+        <div class="options ${multi ? 'multi' : 'single'}">
+          ${item.options.map(opt => {
+            const isSel = selected.includes(opt);
+            const cls = multi ? (isSel ? 'multi-selected' : '') : (isSel ? 'selected' : '');
+            return `<button class="option ${cls}" onclick="selectOption('${item.id}', '${opt}', ${multi})">${opt}</button>`;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }
+}
+
+function isItemCompleted(item) {
+  const r = responses[item.id];
+  if (!r) return false;
+  if (item.category === 'foto') return !!r.preview;
+  return !!r.answer;
+}
+
+// ============================================
+// MODAL CONTROLS
+// ============================================
+function openModal(id) {
+  document.getElementById(id).classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// ============================================
+// SKILL 1: SHOW PHOTO GUIDE BEFORE CAPTURE
+// ============================================
+let currentCaptureMode = 'camera'; // 'camera' | 'gallery'
+
+function showPhotoGuide(itemId) {
+  const guide = PHOTO_GUIDANCE[itemId];
+  if (!guide) {
+    const inputId = currentCaptureMode === 'gallery' ? `gallery-${itemId}` : `input-${itemId}`;
+    document.getElementById(inputId).click();
+    return;
+  }
+
+  document.getElementById('guideIcon').textContent = guide.icon;
+  document.getElementById('guideTitle').textContent = guide.title;
+
+  const body = document.getElementById('guideBody');
+  body.innerHTML = `
+    <div class="guide-section">
+      <div class="guide-section-icon">📏</div>
+      <div class="guide-section-content">
+        <div class="guide-section-label">Distância</div>
+        <div class="guide-section-text">${guide.distance}</div>
+      </div>
+    </div>
+    <div class="guide-section">
+      <div class="guide-section-icon">📐</div>
+      <div class="guide-section-content">
+        <div class="guide-section-label">Posição</div>
+        <div class="guide-section-text">${guide.position}</div>
+      </div>
+    </div>
+    <div class="guide-section">
+      <div class="guide-section-icon">🎯</div>
+      <div class="guide-section-content">
+        <div class="guide-section-label">Ângulo</div>
+        <div class="guide-section-text">${guide.angle}</div>
+      </div>
+    </div>
+    <div class="guide-section">
+      <div class="guide-section-icon">💡</div>
+      <div class="guide-section-content">
+        <div class="guide-section-label">Iluminação</div>
+        <div class="guide-section-text">${guide.lighting}</div>
+      </div>
+    </div>
+    <div class="guide-section">
+      <div class="guide-section-icon">🖼️</div>
+      <div class="guide-section-content">
+        <div class="guide-section-label">Enquadramento</div>
+        <div class="guide-section-text">${guide.framing}</div>
+      </div>
+    </div>
+    <div class="guide-lists">
+      <div class="guide-list include">
+        <div class="guide-list-title include">✅ Incluir na foto</div>
+        <ul>${guide.include.map(i => `<li>${i}</li>`).join('')}</ul>
+      </div>
+      <div class="guide-list avoid">
+        <div class="guide-list-title avoid">❌ Evitar</div>
+        <ul>${guide.avoid.map(i => `<li>${i}</li>`).join('')}</ul>
+      </div>
+    </div>
+  `;
+
+  // Wire the action button based on mode
+  const startBtn = document.getElementById('guideStart');
+  startBtn.textContent = currentCaptureMode === 'gallery'
+    ? '📁 Entendi, escolher arquivo'
+    : '📸 Entendi, tirar foto';
+  startBtn.onclick = () => {
+    closeModal('guideModal');
+    const inputId = currentCaptureMode === 'gallery' ? `gallery-${itemId}` : `input-${itemId}`;
+    setTimeout(() => document.getElementById(inputId).click(), 200);
+  };
+
+  openModal('guideModal');
+}
+
+function triggerCapture(itemId, mode) {
+  // mode: 'camera' | 'gallery' | undefined (defaults to existing mode)
+  if (mode) currentCaptureMode = mode;
+  showPhotoGuide(itemId);
+}
+
+function handlePhoto(itemId, input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const preview = e.target.result;
+    compressImage(preview, 1200, 0.7).then(compressed => {
+      responses[itemId] = { ...responses[itemId], preview: compressed, filename: file.name };
+      saveToStorage();
+      renderItems();
+      showToast('Foto capturada!', 'success');
+
+      // If structural item, auto-open pathology modal
+      if (STRUCTURAL_ITEMS.includes(itemId)) {
+        setTimeout(() => showPathologyModal(itemId), 500);
+      }
+    });
+  };
+  reader.readAsDataURL(file);
+}
+
+// ============================================
+// SKILL 3: TECHNICAL OBSERVATION AUTO-FILL
+// Generates NBR-compliant text based on detected pathologies
+// ============================================
+const NBR_REFERENCES = {
+  'trinca-fissura': { norma: 'NBR 15575 / NBR 9575', elemento: 'sistema estrutural ou de vedação' },
+  'infiltracao': { norma: 'NBR 9574 / NBR 9575', elemento: 'sistema de impermeabilização' },
+  'bolor-mofo': { norma: 'NBR 16747', elemento: 'vedação e acabamento' },
+  'descolamento': { norma: 'NBR 13749', elemento: 'revestimento' },
+  'eflorescencia': { norma: 'NBR 15258', elemento: 'alvenaria' },
+  'oxidacao': { norma: 'NBR 6118 / NBR 14931', elemento: 'elemento metálico/estrutural' },
+  'desgaste-pintura': { norma: 'NBR 13245', elemento: 'sistema de pintura' },
+  'danos-cobertura': { norma: 'NBR 15575-5', elemento: 'sistema de cobertura' }
+};
+
+const SEVERITY_DESCRIPTORS = {
+  1: { adj: 'leve', verb: 'apresentam-se de forma incipiente', acao: 'recomenda-se monitoramento periódico' },
+  2: { adj: 'moderada', verb: 'apresentam intensidade significativa', acao: 'recomenda-se intervenção corretiva em prazo adequado' },
+  3: { adj: 'grave', verb: 'apresentam-se de forma pronunciada', acao: 'recomenda-se intervenção técnica imediata por profissional habilitado' }
+};
+
+const ITEM_LOCATIONS = {
+  'fachada-frontal': 'fachada frontal',
+  'fachada-lateral': 'fachada lateral',
+  'detalhe-estrutural': 'elemento construtivo inspecionado',
+  'telhado-cobertura': 'sistema de cobertura',
+  'area-interna': 'ambiente interno',
+  'quintal-fundo': 'área dos fundos / quintal'
+};
+
+function generateTechnicalObservation(itemId, pathologies) {
+  const active = pathologies.filter(p => p.id !== 'nenhuma');
+  if (active.length === 0) {
+    return `Inspeção visual do(a) ${ITEM_LOCATIONS[itemId] || 'elemento'} não identificou manifestações patológicas aparentes. Elemento em estado adequado de conservação no momento da vistoria, conforme ABNT NBR 14653-2.`;
+  }
+
+  const location = ITEM_LOCATIONS[itemId] || 'elemento inspecionado';
+  const parts = [];
+  parts.push(`Na inspeção visual do(a) ${location}, constatou-se as seguintes manifestações patológicas:`);
+
+  active.forEach((p, i) => {
+    const def = PATHOLOGIES.find(x => x.id === p.id);
+    const nbr = NBR_REFERENCES[p.id];
+    const sev = SEVERITY_DESCRIPTORS[p.severity || 1];
+    const num = active.length > 1 ? `(${i + 1}) ` : '';
+    parts.push(`${num}${def.label.toLowerCase()} de intensidade ${sev.adj} — ${sev.verb}${nbr ? `, observadas no ${nbr.elemento}` : ''}.`);
+  });
+
+  // Recommendations summary
+  const maxSev = Math.max(...active.map(p => p.severity || 1));
+  const sevDesc = SEVERITY_DESCRIPTORS[maxSev];
+  parts.push(`Considerando o grau de manifestação identificado, ${sevDesc.acao}.`);
+
+  // NBR references
+  const normas = [...new Set(active.map(p => NBR_REFERENCES[p.id]?.norma).filter(Boolean))];
+  if (normas.length > 0) {
+    parts.push(`Referências normativas aplicáveis: ${normas.join('; ')}.`);
+  }
+
+  parts.push('Análise pertinente à vistoria realizada conforme ABNT NBR 14653-2 (Avaliação de Bens — Imóveis Urbanos) e ABNT NBR 16747 (Inspeção Predial).');
+
+  return parts.join(' ');
+}
+
+// ============================================
+// SKILL 4: NORMATIVE TEXT REVIEW
+// Reviews user text for quality + technical language
+// ============================================
+const INFORMAL_REPLACEMENTS = [
+  { find: /\btem\b/gi, replace: 'apresenta', issue: 'uso informal' },
+  { find: /\btá\b/gi, replace: 'está', issue: 'abreviação informal' },
+  { find: /\bpra\b/gi, replace: 'para', issue: 'abreviação informal' },
+  { find: /\bmuito\s+ruim\b/gi, replace: 'em estado de conservação precário', issue: 'termo impreciso' },
+  { find: /\bmuito\s+bom\b/gi, replace: 'em excelente estado de conservação', issue: 'termo impreciso' },
+  { find: /\brachadura\b/gi, replace: 'fissura', issue: 'terminologia técnica' },
+  { find: /\bquebrad[oa]\b/gi, replace: 'rompido', issue: 'terminologia técnica' },
+  { find: /\bsujeira\b/gi, replace: 'acúmulo de material/depósitos', issue: 'terminologia técnica' },
+  { find: /\bmofo\b/gi, replace: 'manifestação de bolor/mofo', issue: 'especificação técnica' },
+  { find: /\bagua\b/gi, replace: 'água (infiltração)', issue: 'precisão técnica' },
+  { find: /\bperigo\b/gi, replace: 'risco estrutural', issue: 'terminologia técnica' },
+  { find: /\bfeio\b/gi, replace: 'com deficiência estética', issue: 'termo subjetivo' },
+  { find: /\bgrande\b/gi, replace: 'de dimensão considerável', issue: 'quantificação' },
+  { find: /\bpequen[oa]\b/gi, replace: 'de pequena dimensão', issue: 'quantificação' }
+];
+
+function reviewText(text) {
+  const issues = [];
+  let improved = text;
+
+  // Check 1: too short
+  if (text.length < 30) {
+    issues.push({
+      type: 'length',
+      message: 'Descrição muito curta para padrão técnico.'
+    });
+  }
+
+  // Check 2: informal language / imprecise terms
+  INFORMAL_REPLACEMENTS.forEach(rule => {
+    if (rule.find.test(improved)) {
+      issues.push({ type: 'language', message: rule.issue });
+      improved = improved.replace(rule.find, rule.replace);
+      rule.find.lastIndex = 0;
+    }
+  });
+
+  // Check 3: missing normative reference
+  if (!/NBR\s*\d+/i.test(improved) && improved.length > 30) {
+    issues.push({
+      type: 'reference',
+      message: 'Ausência de referência normativa'
+    });
+    improved += ' Conforme critérios da ABNT NBR 14653-2 e NBR 16747.';
+  }
+
+  // Check 4: capitalize first letter
+  if (improved && improved[0] !== improved[0].toUpperCase()) {
+    improved = improved[0].toUpperCase() + improved.slice(1);
+    issues.push({ type: 'format', message: 'Capitalização inicial' });
+  }
+
+  // Check 5: ensure ends with period
+  if (improved && !/[.!?]$/.test(improved.trim())) {
+    improved = improved.trim() + '.';
+  }
+
+  return {
+    hasIssues: issues.length > 0,
+    issues,
+    original: text,
+    improved,
+    changed: text !== improved
+  };
+}
+
+// ============================================
+// SKILL 2: PATHOLOGY ASSESSMENT MODAL
+// ============================================
+function showPathologyModal(itemId) {
+  currentPathologyItemId = itemId;
+  const existing = responses[itemId] || {};
+  pathologyDraft = {
+    pathologies: existing.pathologies ? [...existing.pathologies] : [],
+    notes: existing.notes || ''
+  };
+
+  document.getElementById('pathPreview').src = existing.preview || '';
+  // Auto-fill suggestion if notes is empty and we have pathologies context
+  const textArea = document.getElementById('pathNotes');
+  textArea.value = pathologyDraft.notes;
+  textArea.dataset.autofilled = 'false';
+
+  renderPathologyList();
+  refreshSuggestion();
+  openModal('pathologyModal');
+}
+
+function refreshSuggestion() {
+  const textArea = document.getElementById('pathNotes');
+  const hintEl = document.getElementById('pathHint');
+  if (!hintEl) return;
+
+  const suggestion = generateTechnicalObservation(currentPathologyItemId, pathologyDraft.pathologies);
+  hintEl.dataset.suggestion = suggestion;
+
+  // Auto-fill only if textarea is empty OR was previously auto-filled
+  const currentValue = textArea.value.trim();
+  const wasAutofilled = textArea.dataset.autofilled === 'true';
+
+  if (currentValue === '' || wasAutofilled) {
+    textArea.value = suggestion;
+    textArea.dataset.autofilled = 'true';
+    hintEl.innerHTML = '<span style="color:var(--success);">✨ Texto técnico sugerido automaticamente — edite se necessário</span>';
+  } else {
+    hintEl.innerHTML = '<button type="button" class="suggest-btn" onclick="applySuggestion()">✨ Usar sugestão técnica automática</button>';
+  }
+}
+
+function applySuggestion() {
+  const textArea = document.getElementById('pathNotes');
+  const hintEl = document.getElementById('pathHint');
+  const suggestion = hintEl.dataset.suggestion;
+  if (suggestion) {
+    textArea.value = suggestion;
+    textArea.dataset.autofilled = 'true';
+    hintEl.innerHTML = '<span style="color:var(--success);">✨ Sugestão aplicada — edite se necessário</span>';
+  }
+}
+
+function renderPathologyList() {
+  const list = document.getElementById('pathList');
+  list.innerHTML = PATHOLOGIES.map(p => {
+    const found = pathologyDraft.pathologies.find(x => x.id === p.id);
+    const selected = !!found;
+    const severity = found?.severity || 0;
+    return `
+      <div class="path-item ${selected ? 'selected' : ''}" id="path-${p.id}">
+        <div class="path-item-header" onclick="togglePathology('${p.id}')">
+          <div class="path-checkbox">${selected ? '✓' : ''}</div>
+          <div class="path-icon">${p.icon}</div>
+          <div class="path-info">
+            <div class="path-label">${p.label}</div>
+            <div class="path-desc">${p.description}</div>
+          </div>
+        </div>
+        ${p.id !== 'nenhuma' ? `
+          <div class="path-severity">
+            ${SEVERITY_LEVELS.map(s => `
+              <button class="sev-btn sev-${s.value} ${severity === s.value ? 'active' : ''}"
+                      onclick="setSeverity('${p.id}', ${s.value}); event.stopPropagation();">
+                ${s.label}
+              </button>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function togglePathology(id) {
+  const idx = pathologyDraft.pathologies.findIndex(p => p.id === id);
+  if (idx >= 0) {
+    pathologyDraft.pathologies.splice(idx, 1);
+  } else {
+    if (id === 'nenhuma') {
+      pathologyDraft.pathologies = [{ id: 'nenhuma', severity: 0 }];
+    } else {
+      pathologyDraft.pathologies = pathologyDraft.pathologies.filter(p => p.id !== 'nenhuma');
+      pathologyDraft.pathologies.push({ id, severity: 1 });
+    }
+  }
+  renderPathologyList();
+  refreshSuggestion();
+}
+
+function setSeverity(id, level) {
+  const p = pathologyDraft.pathologies.find(x => x.id === id);
+  if (p) {
+    p.severity = level;
+    renderPathologyList();
+    refreshSuggestion();
+  }
+}
+
+function savePathology() {
+  if (!currentPathologyItemId) return;
+  const rawNotes = document.getElementById('pathNotes').value.trim();
+
+  // SKILL 4: Normative text review before final save
+  if (rawNotes.length > 0) {
+    const review = reviewText(rawNotes);
+    if (review.hasIssues && review.changed) {
+      // Show review modal offering improved version
+      showReviewModal(review, (finalText) => {
+        commitPathologySave(finalText);
+      });
+      return;
+    }
+  }
+
+  commitPathologySave(rawNotes);
+}
+
+function commitPathologySave(notes) {
+  responses[currentPathologyItemId] = {
+    ...responses[currentPathologyItemId],
+    pathologies: pathologyDraft.pathologies,
+    notes: notes
+  };
+  saveToStorage();
+  renderItems();
+  closeModal('pathologyModal');
+  closeModal('reviewModal');
+  const count = pathologyDraft.pathologies.filter(p => p.id !== 'nenhuma').length;
+  showToast(count > 0 ? `${count} patologia(s) registrada(s)` : 'Análise salva', 'success');
+  currentPathologyItemId = null;
+}
+
+function showReviewModal(review, onDone) {
+  const modal = document.getElementById('reviewModal');
+  const issuesEl = document.getElementById('reviewIssues');
+  const originalEl = document.getElementById('reviewOriginal');
+  const improvedEl = document.getElementById('reviewImproved');
+
+  issuesEl.innerHTML = review.issues.map(i =>
+    `<li><strong>${i.type}:</strong> ${i.message}</li>`
+  ).join('');
+  originalEl.textContent = review.original;
+  improvedEl.textContent = review.improved;
+
+  document.getElementById('reviewKeep').onclick = () => onDone(review.original);
+  document.getElementById('reviewAccept').onclick = () => onDone(review.improved);
+  document.getElementById('reviewClose').onclick = () => closeModal('reviewModal');
+
+  openModal('reviewModal');
+}
+
+function compressImage(dataUrl, maxWidth, quality) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      let w = img.width, h = img.height;
+      if (w > maxWidth) {
+        h = (maxWidth / w) * h;
+        w = maxWidth;
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.src = dataUrl;
+  });
+}
+
+function removePhoto(itemId) {
+  delete responses[itemId];
+  saveToStorage();
+  renderItems();
+  showToast('Foto removida');
+}
+
+function selectOption(itemId, option, isMulti) {
+  if (isMulti) {
+    const current = responses[itemId]?.answer ? responses[itemId].answer.split(',') : [];
+    const newValues = current.includes(option)
+      ? current.filter(v => v !== option)
+      : [...current, option];
+    responses[itemId] = { ...responses[itemId], answer: newValues.join(',') };
+  } else {
+    responses[itemId] = { ...responses[itemId], answer: option };
+  }
+  saveToStorage();
+  renderItems();
+}
+
+function updateProgress() {
+  const total = INSPECTION_ITEMS.length;
+  const completed = INSPECTION_ITEMS.filter(isItemCompleted).length;
+  const pct = Math.round((completed / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `${completed} de ${total} itens preenchidos (${pct}%)`;
+
+  const requiredCompleted = INSPECTION_ITEMS.filter(i => i.required).every(isItemCompleted);
+  document.getElementById('finishBtn').disabled = !requiredCompleted;
+}
+
+function saveToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(responses));
+  } catch (e) {
+    showToast('Erro ao salvar: armazenamento cheio', 'error');
+  }
+}
+
+function saveProgress() {
+  saveToStorage();
+  showToast('✅ Progresso salvo!', 'success');
+}
+
+function finishInspection() {
+  const requiredItems = INSPECTION_ITEMS.filter(i => i.required);
+  const missing = requiredItems.filter(i => !isItemCompleted(i));
+
+  if (missing.length > 0) {
+    showToast(`Faltam ${missing.length} itens obrigatórios`, 'error');
+    return;
+  }
+
+  // Generate summary with pathology analysis
+  const summary = {
+    imovel: 'Rua Ramos Ferreira, 1000 - Centro, Manaus/AM',
+    data: new Date().toISOString(),
+    fotos: {},
+    respostas: {},
+    resumo_patologias: { total: 0, graves: 0, moderadas: 0, leves: 0 }
+  };
+
+  INSPECTION_ITEMS.forEach(item => {
+    const r = responses[item.id];
+    if (!r) return;
+    if (item.category === 'foto' && r.preview) {
+      const activePaths = (r.pathologies || []).filter(p => p.id !== 'nenhuma');
+      const pathList = activePaths.map(p => {
+        const def = PATHOLOGIES.find(x => x.id === p.id);
+        const sev = SEVERITY_LEVELS.find(s => s.value === p.severity);
+        summary.resumo_patologias.total += 1;
+        if (p.severity === 3) summary.resumo_patologias.graves += 1;
+        else if (p.severity === 2) summary.resumo_patologias.moderadas += 1;
+        else summary.resumo_patologias.leves += 1;
+        return {
+          id: p.id,
+          label: def?.label || p.id,
+          severidade: p.severity,
+          gravidade: sev?.label || 'N/A'
+        };
+      });
+      summary.fotos[item.id] = {
+        label: item.label,
+        filename: r.filename || 'photo.jpg',
+        patologias: pathList,
+        observacoes: r.notes || ''
+      };
+    } else if (item.category === 'pergunta' && r.answer) {
+      summary.respostas[item.id] = { pergunta: item.label, resposta: r.answer };
+    }
+  });
+
+  // Create downloadable JSON
+  const json = JSON.stringify(summary, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `vistoria-manaus-${Date.now()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+
+  showToast('✅ Vistoria concluída! JSON baixado.', 'success');
+}
+
+function showToast(message, type = '') {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.className = 'toast show ' + type;
+  setTimeout(() => toast.className = 'toast', 3000);
+}
+
+// Initial render
+renderItems();
+
+// Save state on visibility change (iOS background)
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) saveToStorage();
+});
+
+// iOS: prevent pull-to-refresh and overscroll
+document.addEventListener('touchmove', (e) => {
+  if (e.target.closest('.modal-overlay, textarea, .photo-preview, main')) return;
+  // Allow scrolling inside scrollable elements only
+}, { passive: true });
+
+// iOS: double-tap zoom prevention for buttons
+let lastTouchEnd = 0;
+document.addEventListener('touchend', (e) => {
+  const now = Date.now();
+  if (now - lastTouchEnd <= 300) e.preventDefault();
+  lastTouchEnd = now;
+}, { passive: false });
+
+// Register Service Worker for offline support (iOS 16.4+ supports this)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {
+      // Silent fail — service worker is enhancement only
+    });
+  });
+}
+
+// Check if running as installed PWA (add-to-home-screen)
+if (window.navigator.standalone === true) {
+  document.documentElement.classList.add('pwa-standalone');
+}
+</script>
+
+</body>
+</html>
