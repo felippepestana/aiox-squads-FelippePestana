@@ -227,6 +227,21 @@ main {
   color: var(--primary);
   border: 2px solid var(--primary);
 }
+.photo-btn-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.photo-btn-group .photo-btn {
+  font-size: 14px;
+  padding: 10px 8px;
+  min-height: 52px;
+}
+.photo-btn-group .photo-btn.gallery {
+  background: white;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
 .photo-input { display: none; }
 
 .photo-preview {
@@ -665,6 +680,84 @@ main {
   outline: none;
   border-color: var(--primary);
 }
+.path-hint {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.suggest-btn {
+  background: #F0FDF4;
+  color: var(--primary);
+  border: 1px solid var(--success);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  touch-action: manipulation;
+  min-height: 40px;
+}
+
+/* Review modal specific */
+.review-section {
+  margin-bottom: 16px;
+}
+.review-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.review-text {
+  background: #F8F6F1;
+  border-left: 3px solid var(--border);
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+  white-space: pre-wrap;
+}
+.review-text.improved {
+  background: #F0FDF4;
+  border-left-color: var(--success);
+}
+.review-text.original {
+  background: #FEF3C7;
+  border-left-color: #F59E0B;
+}
+.review-issues {
+  background: #FFFBEB;
+  border: 1px solid #FBBF24;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+.review-issues-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #92400E;
+  margin-bottom: 8px;
+}
+.review-issues ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+.review-issues li {
+  font-size: 13px;
+  color: #78350F;
+  padding: 3px 0 3px 16px;
+  position: relative;
+}
+.review-issues li::before {
+  content: '⚠';
+  position: absolute;
+  left: 0;
+}
 
 /* Pathology badge on item card */
 .path-badge {
@@ -764,13 +857,46 @@ main {
       <div class="path-subtitle">Marque as patologias que você observa nesta foto:</div>
       <div class="path-list" id="pathList"></div>
       <div class="path-notes">
-        <label for="pathNotes">📝 Observações adicionais</label>
-        <textarea id="pathNotes" placeholder="Ex: umidade no canto inferior esquerdo, trinca vertical com ~30cm..."></textarea>
+        <label for="pathNotes">📝 Observações técnicas da vistoria</label>
+        <textarea id="pathNotes" placeholder="Descrição técnica da inspeção..."></textarea>
+        <div class="path-hint" id="pathHint"></div>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn-cancel" onclick="closeModal('pathologyModal')">Pular</button>
       <button class="btn-primary" onclick="savePathology()">✅ Salvar análise</button>
+    </div>
+  </div>
+</div>
+
+<!-- Normative Review Modal -->
+<div class="modal-overlay" id="reviewModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <button class="modal-close" id="reviewClose">×</button>
+      <div class="modal-icon">📐</div>
+      <div class="modal-title">Revisão Normativa</div>
+    </div>
+    <div class="modal-body">
+      <div class="review-issues">
+        <div class="review-issues-title">Sugestões para adequação técnica:</div>
+        <ul id="reviewIssues"></ul>
+      </div>
+      <div class="review-section">
+        <div class="review-label">📝 Texto original</div>
+        <div class="review-text original" id="reviewOriginal"></div>
+      </div>
+      <div class="review-section">
+        <div class="review-label">✨ Versão sugerida (padrão normativo)</div>
+        <div class="review-text improved" id="reviewImproved"></div>
+      </div>
+      <p style="font-size:13px;color:var(--muted);text-align:center;margin-top:8px;">
+        Você pode manter o texto original ou aceitar a versão adequada ao padrão NBR.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" id="reviewKeep">Manter original</button>
+      <button class="btn-primary" id="reviewAccept">✨ Usar versão sugerida</button>
     </div>
   </div>
 </div>
@@ -996,12 +1122,19 @@ function renderItem(item) {
             <button class="danger" onclick="removePhoto('${item.id}')">🗑 Remover</button>
           </div>
         ` : `
-          <button class="photo-btn" onclick="triggerCapture('${item.id}')">
-            📸 Tirar Foto
-          </button>
+          <div class="photo-btn-group">
+            <button class="photo-btn" onclick="triggerCapture('${item.id}', 'camera')">
+              📸 Câmera
+            </button>
+            <button class="photo-btn gallery" onclick="triggerCapture('${item.id}', 'gallery')">
+              📁 Galeria
+            </button>
+          </div>
         `}
         <input type="file" accept="image/*" capture="environment" class="photo-input"
                id="input-${item.id}" onchange="handlePhoto('${item.id}', this)">
+        <input type="file" accept="image/*" class="photo-input"
+               id="gallery-${item.id}" onchange="handlePhoto('${item.id}', this)">
       </div>
     `;
   } else {
@@ -1051,11 +1184,13 @@ function closeModal(id) {
 // ============================================
 // SKILL 1: SHOW PHOTO GUIDE BEFORE CAPTURE
 // ============================================
+let currentCaptureMode = 'camera'; // 'camera' | 'gallery'
+
 function showPhotoGuide(itemId) {
   const guide = PHOTO_GUIDANCE[itemId];
   if (!guide) {
-    // Fallback: open camera directly
-    document.getElementById(`input-${itemId}`).click();
+    const inputId = currentCaptureMode === 'gallery' ? `gallery-${itemId}` : `input-${itemId}`;
+    document.getElementById(inputId).click();
     return;
   }
 
@@ -1111,16 +1246,23 @@ function showPhotoGuide(itemId) {
     </div>
   `;
 
-  // Wire the "Entendi, tirar foto" button
-  document.getElementById('guideStart').onclick = () => {
+  // Wire the action button based on mode
+  const startBtn = document.getElementById('guideStart');
+  startBtn.textContent = currentCaptureMode === 'gallery'
+    ? '📁 Entendi, escolher arquivo'
+    : '📸 Entendi, tirar foto';
+  startBtn.onclick = () => {
     closeModal('guideModal');
-    setTimeout(() => document.getElementById(`input-${itemId}`).click(), 200);
+    const inputId = currentCaptureMode === 'gallery' ? `gallery-${itemId}` : `input-${itemId}`;
+    setTimeout(() => document.getElementById(inputId).click(), 200);
   };
 
   openModal('guideModal');
 }
 
-function triggerCapture(itemId) {
+function triggerCapture(itemId, mode) {
+  // mode: 'camera' | 'gallery' | undefined (defaults to existing mode)
+  if (mode) currentCaptureMode = mode;
   showPhotoGuide(itemId);
 }
 
@@ -1147,6 +1289,141 @@ function handlePhoto(itemId, input) {
 }
 
 // ============================================
+// SKILL 3: TECHNICAL OBSERVATION AUTO-FILL
+// Generates NBR-compliant text based on detected pathologies
+// ============================================
+const NBR_REFERENCES = {
+  'trinca-fissura': { norma: 'NBR 15575 / NBR 9575', elemento: 'sistema estrutural ou de vedação' },
+  'infiltracao': { norma: 'NBR 9574 / NBR 9575', elemento: 'sistema de impermeabilização' },
+  'bolor-mofo': { norma: 'NBR 16747', elemento: 'vedação e acabamento' },
+  'descolamento': { norma: 'NBR 13749', elemento: 'revestimento' },
+  'eflorescencia': { norma: 'NBR 15258', elemento: 'alvenaria' },
+  'oxidacao': { norma: 'NBR 6118 / NBR 14931', elemento: 'elemento metálico/estrutural' },
+  'desgaste-pintura': { norma: 'NBR 13245', elemento: 'sistema de pintura' },
+  'danos-cobertura': { norma: 'NBR 15575-5', elemento: 'sistema de cobertura' }
+};
+
+const SEVERITY_DESCRIPTORS = {
+  1: { adj: 'leve', verb: 'apresentam-se de forma incipiente', acao: 'recomenda-se monitoramento periódico' },
+  2: { adj: 'moderada', verb: 'apresentam intensidade significativa', acao: 'recomenda-se intervenção corretiva em prazo adequado' },
+  3: { adj: 'grave', verb: 'apresentam-se de forma pronunciada', acao: 'recomenda-se intervenção técnica imediata por profissional habilitado' }
+};
+
+const ITEM_LOCATIONS = {
+  'fachada-frontal': 'fachada frontal',
+  'fachada-lateral': 'fachada lateral',
+  'detalhe-estrutural': 'elemento construtivo inspecionado',
+  'telhado-cobertura': 'sistema de cobertura',
+  'area-interna': 'ambiente interno',
+  'quintal-fundo': 'área dos fundos / quintal'
+};
+
+function generateTechnicalObservation(itemId, pathologies) {
+  const active = pathologies.filter(p => p.id !== 'nenhuma');
+  if (active.length === 0) {
+    return `Inspeção visual do(a) ${ITEM_LOCATIONS[itemId] || 'elemento'} não identificou manifestações patológicas aparentes. Elemento em estado adequado de conservação no momento da vistoria, conforme ABNT NBR 14653-2.`;
+  }
+
+  const location = ITEM_LOCATIONS[itemId] || 'elemento inspecionado';
+  const parts = [];
+  parts.push(`Na inspeção visual do(a) ${location}, constatou-se as seguintes manifestações patológicas:`);
+
+  active.forEach((p, i) => {
+    const def = PATHOLOGIES.find(x => x.id === p.id);
+    const nbr = NBR_REFERENCES[p.id];
+    const sev = SEVERITY_DESCRIPTORS[p.severity || 1];
+    const num = active.length > 1 ? `(${i + 1}) ` : '';
+    parts.push(`${num}${def.label.toLowerCase()} de intensidade ${sev.adj} — ${sev.verb}${nbr ? `, observadas no ${nbr.elemento}` : ''}.`);
+  });
+
+  // Recommendations summary
+  const maxSev = Math.max(...active.map(p => p.severity || 1));
+  const sevDesc = SEVERITY_DESCRIPTORS[maxSev];
+  parts.push(`Considerando o grau de manifestação identificado, ${sevDesc.acao}.`);
+
+  // NBR references
+  const normas = [...new Set(active.map(p => NBR_REFERENCES[p.id]?.norma).filter(Boolean))];
+  if (normas.length > 0) {
+    parts.push(`Referências normativas aplicáveis: ${normas.join('; ')}.`);
+  }
+
+  parts.push('Análise pertinente à vistoria realizada conforme ABNT NBR 14653-2 (Avaliação de Bens — Imóveis Urbanos) e ABNT NBR 16747 (Inspeção Predial).');
+
+  return parts.join(' ');
+}
+
+// ============================================
+// SKILL 4: NORMATIVE TEXT REVIEW
+// Reviews user text for quality + technical language
+// ============================================
+const INFORMAL_REPLACEMENTS = [
+  { find: /\btem\b/gi, replace: 'apresenta', issue: 'uso informal' },
+  { find: /\btá\b/gi, replace: 'está', issue: 'abreviação informal' },
+  { find: /\bpra\b/gi, replace: 'para', issue: 'abreviação informal' },
+  { find: /\bmuito\s+ruim\b/gi, replace: 'em estado de conservação precário', issue: 'termo impreciso' },
+  { find: /\bmuito\s+bom\b/gi, replace: 'em excelente estado de conservação', issue: 'termo impreciso' },
+  { find: /\brachadura\b/gi, replace: 'fissura', issue: 'terminologia técnica' },
+  { find: /\bquebrad[oa]\b/gi, replace: 'rompido', issue: 'terminologia técnica' },
+  { find: /\bsujeira\b/gi, replace: 'acúmulo de material/depósitos', issue: 'terminologia técnica' },
+  { find: /\bmofo\b/gi, replace: 'manifestação de bolor/mofo', issue: 'especificação técnica' },
+  { find: /\bagua\b/gi, replace: 'água (infiltração)', issue: 'precisão técnica' },
+  { find: /\bperigo\b/gi, replace: 'risco estrutural', issue: 'terminologia técnica' },
+  { find: /\bfeio\b/gi, replace: 'com deficiência estética', issue: 'termo subjetivo' },
+  { find: /\bgrande\b/gi, replace: 'de dimensão considerável', issue: 'quantificação' },
+  { find: /\bpequen[oa]\b/gi, replace: 'de pequena dimensão', issue: 'quantificação' }
+];
+
+function reviewText(text) {
+  const issues = [];
+  let improved = text;
+
+  // Check 1: too short
+  if (text.length < 30) {
+    issues.push({
+      type: 'length',
+      message: 'Descrição muito curta para padrão técnico.'
+    });
+  }
+
+  // Check 2: informal language / imprecise terms
+  INFORMAL_REPLACEMENTS.forEach(rule => {
+    if (rule.find.test(improved)) {
+      issues.push({ type: 'language', message: rule.issue });
+      improved = improved.replace(rule.find, rule.replace);
+      rule.find.lastIndex = 0;
+    }
+  });
+
+  // Check 3: missing normative reference
+  if (!/NBR\s*\d+/i.test(improved) && improved.length > 30) {
+    issues.push({
+      type: 'reference',
+      message: 'Ausência de referência normativa'
+    });
+    improved += ' Conforme critérios da ABNT NBR 14653-2 e NBR 16747.';
+  }
+
+  // Check 4: capitalize first letter
+  if (improved && improved[0] !== improved[0].toUpperCase()) {
+    improved = improved[0].toUpperCase() + improved.slice(1);
+    issues.push({ type: 'format', message: 'Capitalização inicial' });
+  }
+
+  // Check 5: ensure ends with period
+  if (improved && !/[.!?]$/.test(improved.trim())) {
+    improved = improved.trim() + '.';
+  }
+
+  return {
+    hasIssues: issues.length > 0,
+    issues,
+    original: text,
+    improved,
+    changed: text !== improved
+  };
+}
+
+// ============================================
 // SKILL 2: PATHOLOGY ASSESSMENT MODAL
 // ============================================
 function showPathologyModal(itemId) {
@@ -1158,9 +1435,46 @@ function showPathologyModal(itemId) {
   };
 
   document.getElementById('pathPreview').src = existing.preview || '';
-  document.getElementById('pathNotes').value = pathologyDraft.notes;
+  // Auto-fill suggestion if notes is empty and we have pathologies context
+  const textArea = document.getElementById('pathNotes');
+  textArea.value = pathologyDraft.notes;
+  textArea.dataset.autofilled = 'false';
+
   renderPathologyList();
+  refreshSuggestion();
   openModal('pathologyModal');
+}
+
+function refreshSuggestion() {
+  const textArea = document.getElementById('pathNotes');
+  const hintEl = document.getElementById('pathHint');
+  if (!hintEl) return;
+
+  const suggestion = generateTechnicalObservation(currentPathologyItemId, pathologyDraft.pathologies);
+  hintEl.dataset.suggestion = suggestion;
+
+  // Auto-fill only if textarea is empty OR was previously auto-filled
+  const currentValue = textArea.value.trim();
+  const wasAutofilled = textArea.dataset.autofilled === 'true';
+
+  if (currentValue === '' || wasAutofilled) {
+    textArea.value = suggestion;
+    textArea.dataset.autofilled = 'true';
+    hintEl.innerHTML = '<span style="color:var(--success);">✨ Texto técnico sugerido automaticamente — edite se necessário</span>';
+  } else {
+    hintEl.innerHTML = '<button type="button" class="suggest-btn" onclick="applySuggestion()">✨ Usar sugestão técnica automática</button>';
+  }
+}
+
+function applySuggestion() {
+  const textArea = document.getElementById('pathNotes');
+  const hintEl = document.getElementById('pathHint');
+  const suggestion = hintEl.dataset.suggestion;
+  if (suggestion) {
+    textArea.value = suggestion;
+    textArea.dataset.autofilled = 'true';
+    hintEl.innerHTML = '<span style="color:var(--success);">✨ Sugestão aplicada — edite se necessário</span>';
+  }
 }
 
 function renderPathologyList() {
@@ -1199,16 +1513,15 @@ function togglePathology(id) {
   if (idx >= 0) {
     pathologyDraft.pathologies.splice(idx, 1);
   } else {
-    // If selecting "nenhuma", clear others
     if (id === 'nenhuma') {
       pathologyDraft.pathologies = [{ id: 'nenhuma', severity: 0 }];
     } else {
-      // Remove "nenhuma" if user selects something else
       pathologyDraft.pathologies = pathologyDraft.pathologies.filter(p => p.id !== 'nenhuma');
       pathologyDraft.pathologies.push({ id, severity: 1 });
     }
   }
   renderPathologyList();
+  refreshSuggestion();
 }
 
 function setSeverity(id, level) {
@@ -1216,12 +1529,30 @@ function setSeverity(id, level) {
   if (p) {
     p.severity = level;
     renderPathologyList();
+    refreshSuggestion();
   }
 }
 
 function savePathology() {
   if (!currentPathologyItemId) return;
-  const notes = document.getElementById('pathNotes').value.trim();
+  const rawNotes = document.getElementById('pathNotes').value.trim();
+
+  // SKILL 4: Normative text review before final save
+  if (rawNotes.length > 0) {
+    const review = reviewText(rawNotes);
+    if (review.hasIssues && review.changed) {
+      // Show review modal offering improved version
+      showReviewModal(review, (finalText) => {
+        commitPathologySave(finalText);
+      });
+      return;
+    }
+  }
+
+  commitPathologySave(rawNotes);
+}
+
+function commitPathologySave(notes) {
   responses[currentPathologyItemId] = {
     ...responses[currentPathologyItemId],
     pathologies: pathologyDraft.pathologies,
@@ -1230,9 +1561,29 @@ function savePathology() {
   saveToStorage();
   renderItems();
   closeModal('pathologyModal');
+  closeModal('reviewModal');
   const count = pathologyDraft.pathologies.filter(p => p.id !== 'nenhuma').length;
   showToast(count > 0 ? `${count} patologia(s) registrada(s)` : 'Análise salva', 'success');
   currentPathologyItemId = null;
+}
+
+function showReviewModal(review, onDone) {
+  const modal = document.getElementById('reviewModal');
+  const issuesEl = document.getElementById('reviewIssues');
+  const originalEl = document.getElementById('reviewOriginal');
+  const improvedEl = document.getElementById('reviewImproved');
+
+  issuesEl.innerHTML = review.issues.map(i =>
+    `<li><strong>${i.type}:</strong> ${i.message}</li>`
+  ).join('');
+  originalEl.textContent = review.original;
+  improvedEl.textContent = review.improved;
+
+  document.getElementById('reviewKeep').onclick = () => onDone(review.original);
+  document.getElementById('reviewAccept').onclick = () => onDone(review.improved);
+  document.getElementById('reviewClose').onclick = () => closeModal('reviewModal');
+
+  openModal('reviewModal');
 }
 
 function compressImage(dataUrl, maxWidth, quality) {

@@ -2,7 +2,7 @@
  * Service Worker — Property Data Vistoria
  * Offline-first cache for iPhone standalone mode
  */
-const CACHE_NAME = 'vistoria-v2';
+const CACHE_NAME = 'vistoria-v3';
 const ASSETS = [
   './',
   './index.html',
