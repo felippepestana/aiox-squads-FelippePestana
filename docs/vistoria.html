@@ -377,6 +377,279 @@ main {
   min-width: 240px;
   min-height: 56px;
 }
+
+/* === MODAL BASE (guide + pathology) === */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 400;
+  display: none;
+  overflow-y: auto;
+  padding: 16px;
+  padding-top: env(safe-area-inset-top, 16px);
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.modal-overlay.show { display: block; }
+.modal-box {
+  background: white;
+  border-radius: 16px;
+  max-width: 500px;
+  margin: 0 auto;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.modal-header {
+  background: var(--primary);
+  color: white;
+  padding: 20px 20px 16px;
+  position: relative;
+}
+.modal-icon { font-size: 36px; margin-bottom: 8px; }
+.modal-title { font-size: 20px; font-weight: 700; line-height: 1.2; }
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: manipulation;
+}
+.modal-body { padding: 20px; }
+.modal-footer {
+  padding: 16px 20px calc(16px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  gap: 10px;
+  border-top: 1px solid var(--border);
+  background: #FAFAFA;
+}
+.modal-footer button {
+  flex: 1;
+  min-height: 52px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  touch-action: manipulation;
+}
+
+/* === GUIDE MODAL === */
+.guide-section {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.guide-section:last-child { border-bottom: none; }
+.guide-section-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  width: 32px;
+  text-align: center;
+}
+.guide-section-content { flex: 1; }
+.guide-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--primary);
+  margin-bottom: 2px;
+}
+.guide-section-text { font-size: 15px; color: var(--text); line-height: 1.4; }
+
+.guide-lists {
+  display: grid;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 2px solid var(--border);
+}
+.guide-list-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.guide-list-title.include { color: var(--success); }
+.guide-list-title.avoid { color: var(--danger); }
+.guide-list ul {
+  list-style: none;
+  padding-left: 0;
+}
+.guide-list li {
+  font-size: 14px;
+  padding: 6px 0 6px 24px;
+  position: relative;
+  color: var(--text);
+  line-height: 1.4;
+}
+.guide-list.include li::before {
+  content: '✓';
+  position: absolute;
+  left: 4px;
+  color: var(--success);
+  font-weight: 700;
+}
+.guide-list.avoid li::before {
+  content: '✗';
+  position: absolute;
+  left: 4px;
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.modal-footer .btn-cancel {
+  background: white;
+  color: var(--muted);
+  border: 2px solid var(--border);
+}
+.modal-footer .btn-primary {
+  background: var(--primary);
+  color: white;
+}
+.modal-footer .btn-primary.ghost {
+  background: white;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+
+/* === PATHOLOGY MODAL === */
+.path-preview {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 16px;
+}
+.path-subtitle {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.path-list { display: grid; gap: 8px; }
+.path-item {
+  background: white;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  transition: all 0.2s;
+}
+.path-item.selected {
+  border-color: var(--primary);
+  background: #F0FDF4;
+}
+.path-item-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 44px;
+}
+.path-checkbox {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-weight: 700;
+  color: white;
+  background: white;
+}
+.path-item.selected .path-checkbox {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+.path-icon { font-size: 22px; }
+.path-info { flex: 1; min-width: 0; }
+.path-label { font-size: 15px; font-weight: 600; color: var(--text); }
+.path-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.path-severity {
+  display: none;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
+.path-item.selected .path-severity { display: flex; }
+.sev-btn {
+  flex: 1;
+  min-height: 42px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text);
+  touch-action: manipulation;
+}
+.sev-btn.active.sev-1 { background: #FEF3C7; border-color: #FBBF24; color: #92400E; }
+.sev-btn.active.sev-2 { background: #FFEDD5; border-color: #F97316; color: #9A3412; }
+.sev-btn.active.sev-3 { background: #FEE2E2; border-color: #DC2626; color: #991B1B; }
+
+.path-notes {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.path-notes label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 6px;
+}
+.path-notes textarea {
+  width: 100%;
+  min-height: 72px;
+  padding: 10px 12px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+}
+.path-notes textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Pathology badge on item card */
+.path-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #FEE2E2;
+  color: #991B1B;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 8px;
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 28px;
+}
+.path-badge.level-1 { background: #FEF3C7; color: #92400E; }
+.path-badge.level-2 { background: #FFEDD5; color: #9A3412; }
+.path-badge.level-3 { background: #FEE2E2; color: #991B1B; }
 </style>
 </head>
 <body>
@@ -427,6 +700,46 @@ main {
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
+<!-- Photo Guide Modal -->
+<div class="modal-overlay" id="guideModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('guideModal')">×</button>
+      <div class="modal-icon" id="guideIcon">🏠</div>
+      <div class="modal-title" id="guideTitle">Guia Técnico</div>
+    </div>
+    <div class="modal-body" id="guideBody"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('guideModal')">Cancelar</button>
+      <button class="btn-primary" id="guideStart">📸 Entendi, tirar foto</button>
+    </div>
+  </div>
+</div>
+
+<!-- Pathology Assessment Modal -->
+<div class="modal-overlay" id="pathologyModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal('pathologyModal')">×</button>
+      <div class="modal-icon">🔍</div>
+      <div class="modal-title">Análise de Patologias</div>
+    </div>
+    <div class="modal-body">
+      <img class="path-preview" id="pathPreview" alt="Foto capturada">
+      <div class="path-subtitle">Marque as patologias que você observa nesta foto:</div>
+      <div class="path-list" id="pathList"></div>
+      <div class="path-notes">
+        <label for="pathNotes">📝 Observações adicionais</label>
+        <textarea id="pathNotes" placeholder="Ex: umidade no canto inferior esquerdo, trinca vertical com ~30cm..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('pathologyModal')">Pular</button>
+      <button class="btn-primary" onclick="savePathology()">✅ Salvar análise</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const INSPECTION_ITEMS = [
   // Fotos obrigatórias
@@ -451,6 +764,149 @@ const INSPECTION_ITEMS = [
   { id: 'infraestrutura-rua', category: 'pergunta', label: 'Infraestrutura da rua? (marque todas)', required: false, section: 'questions', options: ['Asfalto', 'Calçada', 'Iluminação', 'Rede de esgoto', 'Água encanada'], multi: true },
   { id: 'acesso', category: 'pergunta', label: 'Conseguiu acesso ao interior?', required: true, section: 'questions', options: ['Sim', 'Não', 'Parcial'], multi: false },
 ];
+
+// ============================================
+// SKILL 1: PHOTO GUIDANCE (pre-capture)
+// ============================================
+const PHOTO_GUIDANCE = {
+  'fachada-frontal': {
+    icon: '🏠',
+    title: 'Fachada Frontal — Guia Técnico',
+    distance: '5 a 10 metros do imóvel',
+    position: 'De frente, centralizado com o imóvel',
+    angle: 'Câmera horizontal, altura do peito',
+    lighting: 'Evite contraluz. Prefira manhã ou fim de tarde',
+    framing: 'Imóvel completo com ~10% de margem nas bordas',
+    include: ['Número da casa/prédio visível', 'Parte da rua/calçada', 'Muro ou portão de entrada', 'Pessoa (~1.7m) ou porta (~2.1m) como escala'],
+    avoid: ['Sombras grandes cobrindo fachada', 'Carros estacionados tampando a frente', 'Zoom digital (caminhe até o local)', 'Reflexos fortes em vidros']
+  },
+  'fachada-lateral': {
+    icon: '🏠',
+    title: 'Fachada Lateral — Guia Técnico',
+    distance: '3 a 6 metros',
+    position: 'Na diagonal para capturar profundidade',
+    angle: 'Câmera horizontal',
+    lighting: 'Luz lateral favorece contornos',
+    framing: 'Mostre 2 faces: frente e lado',
+    include: ['Limite com vizinho', 'Altura total visível', 'Janelas laterais', 'Muro divisório'],
+    avoid: ['Apenas uma face', 'Perspectiva muito inclinada', 'Vegetação tampando a lateral']
+  },
+  'entrada-principal': {
+    icon: '🚪',
+    title: 'Entrada Principal — Guia Técnico',
+    distance: '2 a 3 metros',
+    position: 'Centralizado com a porta/portão',
+    angle: 'Câmera horizontal, altura média',
+    lighting: 'Luz natural frontal',
+    framing: 'Porta completa + soleira + 1m acima',
+    include: ['Porta/portão fechado', 'Campainha/interfone', 'Soleira/degrau', 'Número da casa se próximo'],
+    avoid: ['Sombra pesada sobre a porta', 'Reflexos em vidro', 'Foto muito próxima']
+  },
+  'telhado-cobertura': {
+    icon: '🏘️',
+    title: 'Telhado/Cobertura — Guia Técnico',
+    distance: '10 a 20 metros (se possível afastar)',
+    position: 'Posição elevada ou de longe',
+    angle: 'Ligeiramente para cima',
+    lighting: 'Evite sol direto no sensor',
+    framing: 'Telhado completo visível com inclinação',
+    include: ['Tipo de telha (cerâmica, fibra, laje)', 'Calhas e rufos', 'Chaminés ou antenas', 'Manchas/umidade visíveis'],
+    avoid: ['Foto só do beiral', 'Obstruções de árvores', 'Foto por baixo apenas']
+  },
+  'rua-entorno': {
+    icon: '🛣️',
+    title: 'Rua e Entorno — Guia Técnico',
+    distance: 'Variável',
+    position: '2 fotos: uma para cada sentido da rua',
+    angle: 'Câmera horizontal',
+    lighting: 'Qualquer horário',
+    framing: 'Rua em perspectiva com vizinhança',
+    include: ['Pavimentação', 'Calçada e iluminação pública', 'Imóveis vizinhos', 'Largura da via'],
+    avoid: ['Apenas a fachada sem contexto', 'Trânsito cobrindo a via']
+  },
+  'area-interna': {
+    icon: '🛋️',
+    title: 'Área Interna — Guia Técnico',
+    distance: '2 a 4 metros (do canto do ambiente)',
+    position: 'De um canto para diagonal oposta',
+    angle: 'Câmera horizontal, altura do peito',
+    lighting: 'Luz natural + artificial se necessário',
+    framing: 'Enquadre 3 paredes + piso + teto parcial',
+    include: ['Estado do piso', 'Estado das paredes', 'Altura do pé-direito', 'Janelas/portas internas'],
+    avoid: ['Contraluz de janela', 'Móveis tampando totalmente', 'Distorção de lente']
+  },
+  'quintal-fundo': {
+    icon: '🌳',
+    title: 'Quintal/Fundos — Guia Técnico',
+    distance: '3 a 5 metros',
+    position: 'De frente para o fundo',
+    angle: 'Câmera horizontal',
+    lighting: 'Luz natural',
+    framing: 'Fundo completo + divisas',
+    include: ['Muro dos fundos', 'Solo (piso, terra, grama)', 'Edificações auxiliares', 'Árvores/vegetação'],
+    avoid: ['Apenas um canto', 'Vegetação tampando divisa']
+  },
+  'garagem': {
+    icon: '🚗',
+    title: 'Garagem/Vagas — Guia Técnico',
+    distance: '2 a 4 metros',
+    position: 'Da entrada para dentro',
+    angle: 'Câmera horizontal',
+    lighting: 'Flash se necessário',
+    framing: 'Vaga completa + cobertura',
+    include: ['Número de vagas', 'Tipo de piso', 'Cobertura (laje, telha, descoberta)', 'Porta/portão'],
+    avoid: ['Carros parados tampando']
+  },
+  'placa-numero': {
+    icon: '🔢',
+    title: 'Placa/Número — Guia Técnico',
+    distance: '1 a 2 metros',
+    position: 'Frontal à placa',
+    angle: 'Reta, sem distorção',
+    lighting: 'Boa legibilidade',
+    framing: 'Placa inteira legível',
+    include: ['Número completo', 'Nome da rua se próximo', 'CEP se visível'],
+    avoid: ['Foto tremida', 'Reflexo', 'Zoom digital']
+  },
+  'detalhe-estrutural': {
+    icon: '⚠️',
+    title: 'Detalhe Estrutural — Guia Técnico',
+    distance: '30 cm a 1 metro',
+    position: 'Diretamente na frente do defeito',
+    angle: 'Perpendicular à superfície',
+    lighting: 'Evite sombras próprias',
+    framing: 'Defeito completo + referência de escala',
+    include: ['Trinca/fissura completa', 'Régua, dedo ou moeda como escala', 'Contexto: qual parede/elemento', 'Severidade aparente'],
+    avoid: ['Distância excessiva', 'Foto sem escala de referência', 'Desfocado']
+  }
+};
+
+// ============================================
+// SKILL 2: PATHOLOGY DETECTION (post-capture)
+// ============================================
+const PATHOLOGIES = [
+  { id: 'trinca-fissura', label: 'Trincas / Fissuras', icon: '⚡', description: 'Rachaduras na alvenaria' },
+  { id: 'infiltracao', label: 'Infiltração / Umidade', icon: '💧', description: 'Manchas úmidas ou secas' },
+  { id: 'bolor-mofo', label: 'Bolor / Mofo', icon: '🟢', description: 'Manchas escuras/verdes de fungos' },
+  { id: 'descolamento', label: 'Descolamento de Revestimento', icon: '🧱', description: 'Reboco, pintura ou cerâmica soltando' },
+  { id: 'eflorescencia', label: 'Eflorescência', icon: '❄️', description: 'Manchas brancas cristalinas' },
+  { id: 'oxidacao', label: 'Oxidação / Corrosão', icon: '🔩', description: 'Ferro ou metal enferrujado' },
+  { id: 'desgaste-pintura', label: 'Desgaste de Pintura', icon: '🎨', description: 'Pintura desbotada ou descascada' },
+  { id: 'danos-cobertura', label: 'Danos na Cobertura', icon: '🏚️', description: 'Telhas quebradas ou calhas' },
+  { id: 'nenhuma', label: 'Nenhuma patologia visível', icon: '✅', description: 'Elemento em bom estado' }
+];
+
+const SEVERITY_LEVELS = [
+  { value: 1, label: 'Leve' },
+  { value: 2, label: 'Moderada' },
+  { value: 3, label: 'Grave' }
+];
+
+// Items that trigger pathology modal after capture
+const STRUCTURAL_ITEMS = ['fachada-frontal', 'fachada-lateral', 'detalhe-estrutural', 'telhado-cobertura', 'area-interna', 'quintal-fundo'];
+
+let currentPathologyItemId = null;
+let pathologyDraft = { pathologies: [], notes: '' };
 
 const STORAGE_KEY = 'vistoria-demo-manaus';
 let responses = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
@@ -478,6 +934,16 @@ function renderItem(item) {
 
   if (item.category === 'foto') {
     const preview = responses[item.id]?.preview;
+    const paths = responses[item.id]?.pathologies || [];
+    const activePaths = paths.filter(p => p.id !== 'nenhuma');
+    const maxSeverity = activePaths.length > 0 ? Math.max(...activePaths.map(p => p.severity || 1)) : 0;
+    const isStructural = STRUCTURAL_ITEMS.includes(item.id);
+    const pathBadge = preview && activePaths.length > 0
+      ? `<div class="path-badge level-${maxSeverity}" onclick="showPathologyModal('${item.id}')">⚠️ ${activePaths.length} patologia${activePaths.length > 1 ? 's' : ''} detectada${activePaths.length > 1 ? 's' : ''}</div>`
+      : (preview && isStructural && paths.length === 0
+        ? `<div class="path-badge" style="background:#DBEAFE;color:#1E40AF;" onclick="showPathologyModal('${item.id}')">🔍 Analisar patologias</div>`
+        : '');
+
     return `
       <div class="item ${completedClass}" id="item-${item.id}">
         <div class="item-header">
@@ -489,6 +955,7 @@ function renderItem(item) {
         <div class="item-description">${item.description}</div>
         ${preview ? `
           <img class="photo-preview" src="${preview}" alt="${item.label}">
+          ${pathBadge}
           <div class="photo-actions">
             <button onclick="triggerCapture('${item.id}')">🔄 Refazer</button>
             <button class="danger" onclick="removePhoto('${item.id}')">🗑 Remover</button>
@@ -534,8 +1001,92 @@ function isItemCompleted(item) {
   return !!r.answer;
 }
 
+// ============================================
+// MODAL CONTROLS
+// ============================================
+function openModal(id) {
+  document.getElementById(id).classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+// ============================================
+// SKILL 1: SHOW PHOTO GUIDE BEFORE CAPTURE
+// ============================================
+function showPhotoGuide(itemId) {
+  const guide = PHOTO_GUIDANCE[itemId];
+  if (!guide) {
+    // Fallback: open camera directly
+    document.getElementById(`input-${itemId}`).click();
+    return;
+  }
+
+  document.getElementById('guideIcon').textContent = guide.icon;
+  document.getElementById('guideTitle').textContent = guide.title;
+
+  const body = document.getElementById('guideBody');
+  body.innerHTML = `
+    <div class="guide-section">
+      <div class="guide-section-icon">📏</div>
+      <div class="guide-section-content">
+        <div class="guide-section-label">Distância</div>
+        <div class="guide-section-text">${guide.distance}</div>
+      </div>
+    </div>
+    <div class="guide-section">
+      <div class="guide-section-icon">📐</div>
+      <div class="guide-section-content">
+        <div class="guide-section-label">Posição</div>
+        <div class="guide-section-text">${guide.position}</div>
+      </div>
+    </div>
+    <div class="guide-section">
+      <div class="guide-section-icon">🎯</div>
+      <div class="guide-section-content">
+        <div class="guide-section-label">Ângulo</div>
+        <div class="guide-section-text">${guide.angle}</div>
+      </div>
+    </div>
+    <div class="guide-section">
+      <div class="guide-section-icon">💡</div>
+      <div class="guide-section-content">
+        <div class="guide-section-label">Iluminação</div>
+        <div class="guide-section-text">${guide.lighting}</div>
+      </div>
+    </div>
+    <div class="guide-section">
+      <div class="guide-section-icon">🖼️</div>
+      <div class="guide-section-content">
+        <div class="guide-section-label">Enquadramento</div>
+        <div class="guide-section-text">${guide.framing}</div>
+      </div>
+    </div>
+    <div class="guide-lists">
+      <div class="guide-list include">
+        <div class="guide-list-title include">✅ Incluir na foto</div>
+        <ul>${guide.include.map(i => `<li>${i}</li>`).join('')}</ul>
+      </div>
+      <div class="guide-list avoid">
+        <div class="guide-list-title avoid">❌ Evitar</div>
+        <ul>${guide.avoid.map(i => `<li>${i}</li>`).join('')}</ul>
+      </div>
+    </div>
+  `;
+
+  // Wire the "Entendi, tirar foto" button
+  document.getElementById('guideStart').onclick = () => {
+    closeModal('guideModal');
+    setTimeout(() => document.getElementById(`input-${itemId}`).click(), 200);
+  };
+
+  openModal('guideModal');
+}
+
 function triggerCapture(itemId) {
-  document.getElementById(`input-${itemId}`).click();
+  showPhotoGuide(itemId);
 }
 
 function handlePhoto(itemId, input) {
@@ -545,15 +1096,108 @@ function handlePhoto(itemId, input) {
   const reader = new FileReader();
   reader.onload = (e) => {
     const preview = e.target.result;
-    // Compress to fit localStorage (max ~500KB per image)
     compressImage(preview, 1200, 0.7).then(compressed => {
       responses[itemId] = { ...responses[itemId], preview: compressed, filename: file.name };
       saveToStorage();
       renderItems();
       showToast('Foto capturada!', 'success');
+
+      // If structural item, auto-open pathology modal
+      if (STRUCTURAL_ITEMS.includes(itemId)) {
+        setTimeout(() => showPathologyModal(itemId), 500);
+      }
     });
   };
   reader.readAsDataURL(file);
+}
+
+// ============================================
+// SKILL 2: PATHOLOGY ASSESSMENT MODAL
+// ============================================
+function showPathologyModal(itemId) {
+  currentPathologyItemId = itemId;
+  const existing = responses[itemId] || {};
+  pathologyDraft = {
+    pathologies: existing.pathologies ? [...existing.pathologies] : [],
+    notes: existing.notes || ''
+  };
+
+  document.getElementById('pathPreview').src = existing.preview || '';
+  document.getElementById('pathNotes').value = pathologyDraft.notes;
+  renderPathologyList();
+  openModal('pathologyModal');
+}
+
+function renderPathologyList() {
+  const list = document.getElementById('pathList');
+  list.innerHTML = PATHOLOGIES.map(p => {
+    const found = pathologyDraft.pathologies.find(x => x.id === p.id);
+    const selected = !!found;
+    const severity = found?.severity || 0;
+    return `
+      <div class="path-item ${selected ? 'selected' : ''}" id="path-${p.id}">
+        <div class="path-item-header" onclick="togglePathology('${p.id}')">
+          <div class="path-checkbox">${selected ? '✓' : ''}</div>
+          <div class="path-icon">${p.icon}</div>
+          <div class="path-info">
+            <div class="path-label">${p.label}</div>
+            <div class="path-desc">${p.description}</div>
+          </div>
+        </div>
+        ${p.id !== 'nenhuma' ? `
+          <div class="path-severity">
+            ${SEVERITY_LEVELS.map(s => `
+              <button class="sev-btn sev-${s.value} ${severity === s.value ? 'active' : ''}"
+                      onclick="setSeverity('${p.id}', ${s.value}); event.stopPropagation();">
+                ${s.label}
+              </button>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function togglePathology(id) {
+  const idx = pathologyDraft.pathologies.findIndex(p => p.id === id);
+  if (idx >= 0) {
+    pathologyDraft.pathologies.splice(idx, 1);
+  } else {
+    // If selecting "nenhuma", clear others
+    if (id === 'nenhuma') {
+      pathologyDraft.pathologies = [{ id: 'nenhuma', severity: 0 }];
+    } else {
+      // Remove "nenhuma" if user selects something else
+      pathologyDraft.pathologies = pathologyDraft.pathologies.filter(p => p.id !== 'nenhuma');
+      pathologyDraft.pathologies.push({ id, severity: 1 });
+    }
+  }
+  renderPathologyList();
+}
+
+function setSeverity(id, level) {
+  const p = pathologyDraft.pathologies.find(x => x.id === id);
+  if (p) {
+    p.severity = level;
+    renderPathologyList();
+  }
+}
+
+function savePathology() {
+  if (!currentPathologyItemId) return;
+  const notes = document.getElementById('pathNotes').value.trim();
+  responses[currentPathologyItemId] = {
+    ...responses[currentPathologyItemId],
+    pathologies: pathologyDraft.pathologies,
+    notes: notes
+  };
+  saveToStorage();
+  renderItems();
+  closeModal('pathologyModal');
+  const count = pathologyDraft.pathologies.filter(p => p.id !== 'nenhuma').length;
+  showToast(count > 0 ? `${count} patologia(s) registrada(s)` : 'Análise salva', 'success');
+  currentPathologyItemId = null;
 }
 
 function compressImage(dataUrl, maxWidth, quality) {
@@ -629,19 +1273,40 @@ function finishInspection() {
     return;
   }
 
-  // Generate summary
+  // Generate summary with pathology analysis
   const summary = {
     imovel: 'Rua Ramos Ferreira, 1000 - Centro, Manaus/AM',
     data: new Date().toISOString(),
     fotos: {},
     respostas: {},
+    resumo_patologias: { total: 0, graves: 0, moderadas: 0, leves: 0 }
   };
 
   INSPECTION_ITEMS.forEach(item => {
     const r = responses[item.id];
     if (!r) return;
     if (item.category === 'foto' && r.preview) {
-      summary.fotos[item.id] = { label: item.label, filename: r.filename || 'photo.jpg' };
+      const activePaths = (r.pathologies || []).filter(p => p.id !== 'nenhuma');
+      const pathList = activePaths.map(p => {
+        const def = PATHOLOGIES.find(x => x.id === p.id);
+        const sev = SEVERITY_LEVELS.find(s => s.value === p.severity);
+        summary.resumo_patologias.total += 1;
+        if (p.severity === 3) summary.resumo_patologias.graves += 1;
+        else if (p.severity === 2) summary.resumo_patologias.moderadas += 1;
+        else summary.resumo_patologias.leves += 1;
+        return {
+          id: p.id,
+          label: def?.label || p.id,
+          severidade: p.severity,
+          gravidade: sev?.label || 'N/A'
+        };
+      });
+      summary.fotos[item.id] = {
+        label: item.label,
+        filename: r.filename || 'photo.jpg',
+        patologias: pathList,
+        observacoes: r.notes || ''
+      };
     } else if (item.category === 'pergunta' && r.answer) {
       summary.respostas[item.id] = { pergunta: item.label, resposta: r.answer };
     }
