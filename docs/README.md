@@ -1,6 +1,15 @@
 # Property Data — Demo iPhone (GitHub Pages)
 
-Demo standalone da vistoria mobile, servida via GitHub Pages.
+Demo standalone da vistoria mobile, servida via GitHub Pages — **otimizado para iPhone 17 / iOS 18+**.
+
+## Novidades v2
+
+- ✅ **Guia técnico de foto** pré-captura (distância, posição, ângulo, iluminação, enquadramento)
+- ✅ **Detecção de 8 patologias** prediais com 3 níveis de severidade
+- ✅ **PWA instalável** via "Adicionar à Tela de Início"
+- ✅ **Service Worker** para funcionamento offline
+- ✅ **iPhone 17 / iOS 18+** com Dynamic Island e safe-area
+- ✅ **Manifest.json** com ícones SVG e atalhos
 
 ## Como Publicar (30 segundos)
 

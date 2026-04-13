@@ -2,13 +2,23 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#2D5016">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="theme-color" content="#2D5016" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a3a0c" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light">
+<meta name="format-detection" content="telephone=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Vistoria">
+<meta name="application-name" content="Vistoria">
+<meta name="description" content="Vistoria fotográfica de imóvel com guia técnico e detecção de patologias">
 <title>Vistoria — Rua Ramos Ferreira, 1000</title>
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%232D5016'/%3E%3Ctext x='50' y='65' text-anchor='middle' font-size='60' fill='white'%3E🏠%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon-192.svg">
+<link rel="apple-touch-icon" href="icon-192.svg">
+<link rel="apple-touch-icon" sizes="192x192" href="icon-192.svg">
+<link rel="apple-touch-icon" sizes="512x512" href="icon-512.svg">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 :root {
@@ -22,19 +32,44 @@
   --border: #E5DDD0;
   --success: #16A34A;
   --danger: #DC2626;
+  /* iOS 18 / iPhone 17 dynamic viewport heights */
+  --vh-full: 100dvh;
+  --vh-small: 100svh;
 }
 html, body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
   font-size: 16px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Prevent iOS rubber-band scrolling on body */
+  overscroll-behavior-y: none;
 }
 body {
   max-width: 100vw;
+  min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
   padding-bottom: env(safe-area-inset-bottom);
+  /* iOS smooth scrolling */
+  -webkit-overflow-scrolling: touch;
+  /* Prevent text selection on touch targets */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+/* Allow text selection in inputs and textareas */
+input, textarea, [contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+/* Prevent iOS auto-zoom on input focus (font-size must be >= 16px) */
+input, textarea, select, button {
+  font-size: 16px;
+  font-family: inherit;
 }
 
 /* Header */
@@ -1339,6 +1374,34 @@ renderItems();
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) saveToStorage();
 });
+
+// iOS: prevent pull-to-refresh and overscroll
+document.addEventListener('touchmove', (e) => {
+  if (e.target.closest('.modal-overlay, textarea, .photo-preview, main')) return;
+  // Allow scrolling inside scrollable elements only
+}, { passive: true });
+
+// iOS: double-tap zoom prevention for buttons
+let lastTouchEnd = 0;
+document.addEventListener('touchend', (e) => {
+  const now = Date.now();
+  if (now - lastTouchEnd <= 300) e.preventDefault();
+  lastTouchEnd = now;
+}, { passive: false });
+
+// Register Service Worker for offline support (iOS 16.4+ supports this)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {
+      // Silent fail — service worker is enhancement only
+    });
+  });
+}
+
+// Check if running as installed PWA (add-to-home-screen)
+if (window.navigator.standalone === true) {
+  document.documentElement.classList.add('pwa-standalone');
+}
 </script>
 
 </body>
