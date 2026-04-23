@@ -10,6 +10,7 @@
     "build": "tsc -p tsconfig.server.json && vite build --config client/vite.config.ts",
     "build:worker": "tsc -p tsconfig.server.json && vite build --config client/vite.config.ts && node scripts/bundle-squads.mjs",
     "deploy": "npm run build:worker && npx wrangler deploy",
+    "deploy:preview": "bash scripts/deploy-preview.sh",
     "start": "node dist/server/index.js",
     "preview": "vite preview --config client/vite.config.ts",
     "test:smoke": "node scripts/smoke-api.mjs"
