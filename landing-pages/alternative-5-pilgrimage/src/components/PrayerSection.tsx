@@ -18,7 +18,7 @@ export default function PrayerSection() {
     try {
       const { error } = await supabase
         .from('prayer_intentions')
-        .insert([{ prayer, name: name || 'Peregrino(a) anônimo(a)', source: 'pilgrimage-landing' }]);
+        .insert([{ intention: prayer, author_name: name || null, is_anonymous: !name.trim() }]);
 
       if (error) throw error;
     } catch {
