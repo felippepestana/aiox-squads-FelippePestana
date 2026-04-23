@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Dark premium palette — Legendários */
+    --background: 240 10% 4%;       /* #0A0A0F — noite profunda */
+    --foreground: 210 20% 96%;      /* #F1F5F9 — branco-platina */
+
+    --card: 240 10% 7%;             /* #111118 — superfície */
+    --card-foreground: 210 20% 96%;
+
+    --popover: 240 10% 10%;
+    --popover-foreground: 210 20% 96%;
+
+    --primary: 43 55% 55%;          /* #C9A84C — ouro Legendários */
+    --primary-foreground: 240 10% 4%;
+
+    --secondary: 240 5% 15%;        /* #242430 */
+    --secondary-foreground: 210 15% 75%;
+
+    --muted: 240 5% 12%;            /* #1C1C26 */
+    --muted-foreground: 215 15% 55%;
+
+    --accent: 240 5% 18%;
+    --accent-foreground: 43 55% 55%;
+
+    --destructive: 0 72% 51%;       /* vermelho */
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 76% 36%;         /* verde */
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;          /* âmbar */
+    --warning-foreground: 240 10% 4%;
+
+    --danger: 0 72% 51%;
+    --danger-foreground: 0 0% 100%;
+
+    --border: 240 5% 14%;           /* #1F1F2C */
+    --input: 240 5% 14%;
+    --ring: 43 55% 55%;
+
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans), 'Inter', system-ui, sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  ::selection {
+    background-color: hsl(43 55% 55% / 0.25);
+    color: hsl(43 55% 80%);
+  }
+}
+
+/* ─── Scrollbar premium ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(43 55% 55% / 0.4);
+}
+
+/* ─── Gold glow utilities ─── */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .gold-glow {
+    box-shadow: 0 0 20px hsl(43 55% 55% / 0.15), 0 0 40px hsl(43 55% 55% / 0.08);
+  }
+
+  .gold-border {
+    border-color: hsl(43 55% 55% / 0.35);
+  }
+
+  .gold-text {
+    background: linear-gradient(135deg, #E2AF30 0%, #C9A84C 50%, #A87A12 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glass {
+    backdrop-filter: blur(12px) saturate(150%);
+    background: hsl(var(--card) / 0.85);
+    border: 1px solid hsl(var(--border) / 0.6);
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite linear;
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--muted) / 0.5) 50%,
+      hsl(var(--muted)) 100%
+    );
+    background-size: 200% 100%;
+  }
+
+  .semaforo-verde {
+    @apply bg-success/15 text-success border border-success/30;
+  }
+
+  .semaforo-amarelo {
+    @apply bg-warning/15 text-warning border border-warning/30;
+  }
+
+  .semaforo-vermelho {
+    @apply bg-destructive/15 text-destructive border border-destructive/30;
+  }
+
+  .card-hover {
+    @apply transition-all duration-200 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5;
+  }
+}
+
+/* ─── Chart tooltips ─── */
+.recharts-tooltip-wrapper {
+  outline: none !important;
+}
+
+.recharts-default-tooltip {
+  background-color: hsl(var(--card)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: calc(var(--radius) - 2px) !important;
+  color: hsl(var(--foreground)) !important;
+  padding: 10px 14px !important;
+}
+
+/* ─── Agent panel streaming cursor ─── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.streaming-cursor::after {
+  content: "▋";
+  animation: blink 1s step-end infinite;
+  color: hsl(var(--primary));
+  font-size: 0.9em;
+  margin-left: 1px;
+}
