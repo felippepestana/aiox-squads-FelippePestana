@@ -5,7 +5,12 @@
 
 -- Extensions
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE EXTENSION IF NOT EXISTS "pg_cron";
+-- pg_cron only available in production/Cloud Supabase — skip locally
+DO $$ BEGIN
+  CREATE EXTENSION IF NOT EXISTS "pg_cron";
+EXCEPTION WHEN OTHERS THEN
+  RAISE NOTICE 'pg_cron not available — scheduled jobs disabled in local dev';
+END $$;
 
 -- ─── CIDADES ──────────────────────────────────────────────────────────────────
 

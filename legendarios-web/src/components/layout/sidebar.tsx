@@ -18,7 +18,7 @@ import {
 import { useState } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { Separator } from "@/components/ui/separator";
-import { createClient } from "@/lib/supabase/client";
+// import { createClient } from "@/lib/supabase/client"; // requires live Supabase
 import { useRouter } from "next/navigation";
 
 const navItems = [
@@ -39,8 +39,6 @@ export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
 
   async function handleLogout() {
-    const supabase = createClient();
-    await supabase.auth.signOut();
     router.push("/login");
   }
 

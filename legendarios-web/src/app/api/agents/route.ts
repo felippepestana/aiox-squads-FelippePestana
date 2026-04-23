@@ -8,11 +8,13 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
-  // Auth check
-  const supabase = await createServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) {
-    return new Response("Unauthorized", { status: 401 });
+  // Auth check — skip in dev mode without Supabase
+  if (process.env.NODE_ENV !== "development") {
+    const supabase = await createServerClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return new Response("Unauthorized", { status: 401 });
+    }
   }
 
   const body = await req.json() as {
@@ -33,18 +35,23 @@ export async function POST(req: NextRequest) {
     return new Response(`Unknown agent: ${agentId}`, { status: 400 });
   }
 
-  // Fetch evento context if provided
+  // Fetch evento context if provided (only with live Supabase)
   let eventoContext = "";
-  if (eventoId) {
-    const { data: evento } = await supabase
-      .from("eventos")
-      .select("*, cidades(nome, estado)")
-      .eq("id", eventoId)
-      .single();
+  if (eventoId && process.env.NODE_ENV !== "development") {
+    try {
+      const supabase = await createServerClient();
+      const { data: evento } = await supabase
+        .from("eventos")
+        .select("*, cidades(nome, estado)")
+        .eq("id", eventoId)
+        .single();
 
-    if (evento) {
-      eventoContext = `\n\nEVENTO ATIVO:\n- Nome: ${evento.nome}\n- Tipo: ${evento.tipo}\n- Status: ${evento.status}\n- Capacidade meta: ${evento.capacidade_meta}\n- Budget marketing: R$ ${evento.budget_marketing?.toLocaleString("pt-BR") ?? "não definido"}`;
-    }
+      if (evento) {
+        eventoContext = `\n\nEVENTO ATIVO:\n- Nome: ${evento.nome}\n- Tipo: ${evento.tipo}\n- Status: ${evento.status}\n- Capacidade meta: ${evento.capacidade_meta}\n- Budget marketing: R$ ${evento.budget_marketing?.toLocaleString("pt-BR") ?? "não definido"}`;
+      }
+    } catch {}
+  } else if (eventoId) {
+    eventoContext = "\n\nEVENTO ATIVO: TOP - Destemidos Pioneiros | Porto Velho/RO | 400 participantes meta | Budget R$ 25.000";
   }
 
   // Stream response
@@ -66,18 +73,15 @@ export async function POST(req: NextRequest) {
           controller.enqueue(encoder.encode(chunk));
         }
 
-        // Save conversation to Supabase (non-blocking)
-        supabase
-          .from("conversas_ia")
-          .insert({
+        // Save conversation to Supabase in production (non-blocking)
+        if (process.env.NODE_ENV !== "development") {
+          const supabase = await createServerClient();
+          supabase.from("conversas_ia").insert({
             evento_id: eventoId ?? null,
             agente: agentId,
-            mensagens: [
-              ...messages,
-              { role: "assistant", content: "[streaming]" },
-            ] as unknown as Parameters<typeof supabase.from>[0],
-          })
-          .then(() => {});
+            mensagens: messages as unknown as Parameters<typeof supabase.from>[0],
+          }).then(() => {});
+        }
       } catch (err) {
         const msg = err instanceof Error ? err.message : "Unknown error";
         controller.enqueue(encoder.encode(`\n\nErro: ${msg}`));

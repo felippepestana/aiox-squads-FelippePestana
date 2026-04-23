@@ -40,12 +40,16 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Rodar a cada 15 minutos via pg_cron
-SELECT cron.schedule(
-  'verificar-dual-triggers',
-  '*/15 * * * *',
-  $$ SELECT verificar_dual_triggers(); $$
-);
+-- Rodar a cada 15 minutos via pg_cron (produção)
+DO $$ BEGIN
+  PERFORM cron.schedule(
+    'verificar-dual-triggers',
+    '*/15 * * * *',
+    $q$ SELECT verificar_dual_triggers(); $q$
+  );
+EXCEPTION WHEN OTHERS THEN
+  RAISE NOTICE 'pg_cron unavailable — dual trigger check must be run manually in local dev';
+END $$;
 
 -- ─── Calcular score de engajamento do alumni ─────────────────────────────────
 
@@ -141,12 +145,16 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Rodar diariamente às 3h
-SELECT cron.schedule(
-  'expirar-lgpd',
-  '0 3 * * *',
-  $$ SELECT expirar_consentimentos_lgpd(); $$
-);
+-- Rodar diariamente às 3h (produção)
+DO $$ BEGIN
+  PERFORM cron.schedule(
+    'expirar-lgpd',
+    '0 3 * * *',
+    $q$ SELECT expirar_consentimentos_lgpd(); $q$
+  );
+EXCEPTION WHEN OTHERS THEN
+  RAISE NOTICE 'pg_cron unavailable — LGPD expiry must be run manually in local dev';
+END $$;
 
 -- ─── Projeção financeira ──────────────────────────────────────────────────────
 

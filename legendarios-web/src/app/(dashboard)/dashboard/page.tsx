@@ -1,4 +1,3 @@
-import { createServerClient } from "@/lib/supabase/server";
 import { formatBRL, formatNumber, formatPercent, semaforoStatus } from "@/lib/utils";
 import { KpiCard } from "@/components/dashboard/kpi-card";
 import { SemaforoGeral } from "@/components/dashboard/semaforo-badge";
@@ -59,7 +58,7 @@ const MOCK_CHART_DATA = [
   { semana: "Sem 7", inscritos: 187, meta: 233, benchmark: 297 },
 ];
 
-export default async function DashboardPage() {
+export default function DashboardPage() {
   const pctInscritos = (MOCK_KPIs.inscritos / MOCK_KPIs.meta) * 100;
   const pctReceita = (MOCK_KPIs.receita / MOCK_KPIs.receita_meta) * 100;
   const semanasRestantes = MOCK_KPIs.semanas_total - MOCK_KPIs.semana_atual;
