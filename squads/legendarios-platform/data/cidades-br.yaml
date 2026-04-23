@@ -1,0 +1,126 @@
+metadata:
+  version: "1.0"
+  updated: "2026-04-23"
+  source: "Pesquisa web + dados oficiais Legendários Brasil"
+  description: "Cidades com atividade Legendários no Brasil + score de expansão"
+
+# Cidade de referência principal (benchmark)
+benchmark_cidade:
+  nome: "Balneário Camboriú"
+  estado: "SC"
+  status: "hq_brasil"
+  eventos_realizados:
+    - "TOP #555 — Vale Europeu"
+    - "TOP #644 — Vale Europeu"
+  capacidade_tipica: 500
+  score_maturidade: 10  # max 10
+  instagram_local: "@legendariossul"
+  notas: "Sede brasileira do Movimento — Igreja Embaixada. Referência de padrão operacional."
+
+# Cidade alvo principal deste squad
+cidade_alvo:
+  nome: "Porto Velho"
+  estado: "RO"
+  regiao: "Norte"
+  status: "expansao_ativa"
+  evento_alvo: "TOP - Destemidos Pioneiros"
+  capacidade_meta: 400
+  score_maturidade: 3  # 1ª edição, 0 histórico local
+  score_potencial: 8   # Alta demanda estimada — Amazon evangélica
+  perfil_demografico:
+    populacao_estimada: "590.000"
+    perfil_religioso: "Alta penetração evangélica (Norte do Brasil)"
+    perfil_economico: "Classe média urbana, empreendedores rurais"
+    faixa_etaria_alvo: "25-50"
+  influencia_regional: ["Rondônia", "Acre", "Sul do Amazonas"]
+  canais_recomendados:
+    primario: "WhatsApp (98%+ penetração)"
+    secundario: "Instagram"
+    terciario: "YouTube"
+  observacoes: "1ª edição na Amazônia — participantes pioneiros têm alto LTV e engajamento"
+
+# Outras cidades com atividade Legendários no Brasil
+cidades_ativas:
+  - nome: "Balneário Camboriú"
+    estado: "SC"
+    status: "ativa"
+    score_maturidade: 10
+    instagram: "@legendariossul"
+  - nome: "Brusque"
+    estado: "SC"
+    status: "ativa"
+    score_maturidade: 8
+  - nome: "Curitiba"
+    estado: "PR"
+    status: "ativa"
+    score_maturidade: 7
+    instagram: "@legendariosorgbr"
+  - nome: "Maringá"
+    estado: "PR"
+    status: "ativa"
+    score_maturidade: 6
+    instagram: "@legendariosmaringa"
+  - nome: "São Paulo"
+    estado: "SP"
+    status: "ativa"
+    score_maturidade: 7
+    instagram: "@legendariossaopaulo"
+  - nome: "Cuiabá"
+    estado: "MT"
+    status: "ativa"
+    score_maturidade: 5
+    instagram: "@legendarioscuiaba"
+  - nome: "Anápolis"
+    estado: "GO"
+    status: "ativa"
+    score_maturidade: 5
+  - nome: "Betim"
+    estado: "MG"
+    status: "ativa"
+    score_maturidade: 5
+    evento_realizado: "2º REM MG | 4º Edição REM MG"
+  - nome: "Espírito Santo"
+    estado: "ES"
+    status: "ativa"
+    score_maturidade: 4
+    instagram: "@legendarios.es"
+  - nome: "Pernambuco"
+    estado: "PE"
+    status: "ativa"
+    score_maturidade: 4
+    instagram: "@legendariospernambuco"
+  - nome: "Porto Velho"
+    estado: "RO"
+    status: "expansao_ativa"
+    score_maturidade: 3
+
+# Score de expansão para cidades não ainda cobertas
+score_expansao_criterios:
+  populacao: "Peso 20% — base de 200K+ habitantes"
+  penetracao_evangelica: "Peso 30% — região com alta concentração cristã"
+  presenca_liderancas: "Peso 25% — igrejas e pastores locais que podem ancorar o movimento"
+  capacidade_logistica: "Peso 15% — local para evento de 200-500 pessoas"
+  historico_eventos_masculinos: "Peso 10% — cidade já recebeu eventos similares"
+
+# Cidades candidatas à expansão (estimado)
+cidades_candidatas_expansao:
+  - nome: "Manaus"
+    estado: "AM"
+    score_expansao: 8.2
+    justificativa: "2M habitantes, alta penetração evangélica, próxima de Porto Velho"
+  - nome: "Belém"
+    estado: "PA"
+    score_expansao: 7.8
+    justificativa: "1.5M habitantes, Norte do Brasil, crescimento evangélico"
+  - nome: "Rio Branco"
+    estado: "AC"
+    score_expansao: 6.5
+    justificativa: "Município de fronteira, influência de Porto Velho"
+  - nome: "Campo Grande"
+    estado: "MS"
+    score_expansao: 7.2
+    justificativa: "Agronegócio + fé cristã, perfil ideal para Legendários"
+  - nome: "Palmas"
+    estado: "TO"
+    score_expansao: 6.8
+    justificativa: "Capital jovem, rápido crescimento evangélico"

@@ -1,0 +1,279 @@
+metadata:
+  version: "1.0"
+  created: "2026-04-23"
+  squad: "legendarios-platform"
+
+squad:
+  name: "legendarios-platform"
+  display_name: "Legendários Platform"
+  icon: "🏔️"
+  version: "1.0.0"
+  status: "production"
+  domain: "Event Management & Digital Marketing — Movimento Legendários"
+  description: |
+    Squad full-service para o ciclo completo dos eventos do Movimento Legendários (TOP, REM, LEGADO):
+    divulgação digital (Meta Ads, Instagram, WhatsApp, email, influenciadores), gestão de inscrições
+    (Ticket and GO / Sympla / PIX), operação D-day, pós-evento e comunidade alumni.
+    Referência primária: Balneário Camboriú (SC). Alvo: Porto Velho/RO (TOP - Destemidos Pioneiros).
+  philosophy: |
+    "Cada homem que entra num TOP precisa ser conquistado, preparado e retido — do primeiro anúncio
+    ao último RPM. Automação serve à transformação, nunca a substitui."
+  target_user: "Coordenadores regionais Legendários, HQ Brasil (Balneário Camboriú)"
+  keywords:
+    - legendarios
+    - movimento-legendarios
+    - eventos-masculinos
+    - TOP
+    - REM
+    - LEGADO
+    - marketing-digital
+    - meta-ads
+    - whatsapp-business
+    - ticket-and-go
+    - sympla
+    - pix
+    - porto-velho
+    - balneario-camboriu
+    - brasil
+    - evento-cristao
+  entry_agent: legendarios-chief
+
+tiers:
+  tier_0:
+    name: "Orquestração"
+    agents: [legendarios-chief]
+    purpose: "Classifica UC, roteia para módulos e enforça quality gates."
+  tier_1:
+    name: "Masters — Módulos Principais"
+    agents: [marketing-master, event-master, community-master]
+    purpose: "Responsáveis por cada módulo; coordenam especialistas Tier 2."
+  tier_2:
+    name: "Specialists — Execução Tática"
+    agents: [conteudo-instagram, ads-meta, whatsapp-automator, email-marketer, influencer-scout, check-in-coordinator, crm-manager]
+    purpose: "Especialistas de nicho acionados pelos Masters. Execução paralela quando possível."
+  tier_3:
+    name: "Support — Analytics e Qualidade"
+    agents: [analytics-reporter]
+    purpose: "Relatórios, dashboards, ROI e projeções financeiras."
+
+agents:
+  legendarios-chief:
+    file: agents/legendarios-chief.md
+    tier: tier_0
+    icon: "🏔️"
+    focus: "Orquestração geral, classificação de UC, roteamento, quality gates"
+  marketing-master:
+    file: agents/marketing-master.md
+    tier: tier_1
+    icon: "📣"
+    focus: "Estratégia de marketing 360° (Meta Ads, Instagram, WhatsApp, email, influenciadores)"
+  event-master:
+    file: agents/event-master.md
+    tier: tier_1
+    icon: "🎯"
+    focus: "Logística de evento, lotes de inscrição, checklist operacional, D-day"
+  community-master:
+    file: agents/community-master.md
+    tier: tier_1
+    icon: "🤝"
+    focus: "Pós-evento, CRM alumni, RPM, cross-sell REM/LEGADO, indicações"
+  conteudo-instagram:
+    file: agents/conteudo-instagram.md
+    tier: tier_2
+    icon: "📸"
+    focus: "Calendário de conteúdo, copy de Reels/Stories/Feed, roteiros de vídeo"
+  ads-meta:
+    file: agents/ads-meta.md
+    tier: tier_2
+    icon: "🎯"
+    focus: "Estrutura de campanhas Meta Ads (públicos, criativos, orçamento, fases)"
+  whatsapp-automator:
+    file: agents/whatsapp-automator.md
+    tier: tier_2
+    icon: "💬"
+    focus: "Sequências WhatsApp Business (6 fases: descoberta → pós-evento)"
+  email-marketer:
+    file: agents/email-marketer.md
+    tier: tier_2
+    icon: "✉️"
+    focus: "Sequências de email (8 disparos pré + pós-evento)"
+  influencer-scout:
+    file: agents/influencer-scout.md
+    tier: tier_2
+    icon: "🔍"
+    focus: "Identificação e briefing de influenciadores locais/regionais"
+  check-in-coordinator:
+    file: agents/check-in-coordinator.md
+    tier: tier_2
+    icon: "✅"
+    focus: "Protocolo de credenciamento, briefing de voluntários, comunicação D-day"
+  crm-manager:
+    file: agents/crm-manager.md
+    tier: tier_2
+    icon: "🗂️"
+    focus: "Segmentação alumni, cross-sell, programa de indicação, depoimentos"
+  analytics-reporter:
+    file: agents/analytics-reporter.md
+    tier: tier_3
+    icon: "📊"
+    focus: "Dashboard de vendas, ROI de marketing, projeção financeira, relatórios"
+
+handoffs:
+  legendarios-chief:
+    routes_to: [marketing-master, event-master, community-master, analytics-reporter]
+  marketing-master:
+    coordinates: [conteudo-instagram, ads-meta, whatsapp-automator, email-marketer, influencer-scout]
+    returns_to: [legendarios-chief]
+  event-master:
+    coordinates: [check-in-coordinator]
+    returns_to: [legendarios-chief]
+  community-master:
+    coordinates: [crm-manager]
+    returns_to: [legendarios-chief]
+  conteudo-instagram:
+    returns_to: [marketing-master]
+  ads-meta:
+    returns_to: [marketing-master]
+  whatsapp-automator:
+    returns_to: [marketing-master]
+  email-marketer:
+    returns_to: [marketing-master]
+  influencer-scout:
+    returns_to: [marketing-master]
+  check-in-coordinator:
+    returns_to: [event-master]
+  crm-manager:
+    returns_to: [community-master]
+  analytics-reporter:
+    returns_to: [legendarios-chief]
+
+pipeline:
+  use_cases:
+    UC-LP-001:
+      name: "Criar Campanha de Marketing para Evento"
+      trigger_patterns: ["criar campanha", "marketing TOP", "divulgar evento", "estratégia de marketing"]
+      tier_1_agent: marketing-master
+      tier_2_agents: [conteudo-instagram, ads-meta, whatsapp-automator, email-marketer, influencer-scout]
+      output: "Pacote completo de marketing (calendário, ads, sequências, briefings)"
+    UC-LP-002:
+      name: "Planejar Operação do Evento"
+      trigger_patterns: ["planejar evento", "operação", "checklist", "D-day", "logística"]
+      tier_1_agent: event-master
+      tier_2_agents: [check-in-coordinator]
+      output: "Checklist operacional + briefing de voluntários salvo via Write"
+    UC-LP-003:
+      name: "Configurar Inscrições e Lotes"
+      trigger_patterns: ["configurar inscrições", "lotes de preço", "ingresso", "ticket and go", "sympla"]
+      tier_1_agent: event-master
+      tier_2_agents: []
+      output: "Config de lotes + template de formulário de inscrição"
+    UC-LP-004:
+      name: "Gestão Pós-Evento e Comunidade"
+      trigger_patterns: ["pós-evento", "follow-up", "alumni", "comunidade", "RPM", "indicação"]
+      tier_1_agent: community-master
+      tier_2_agents: [crm-manager]
+      output: "Sequência de retenção + cross-sell + programa de indicação"
+    UC-LP-005:
+      name: "Encontrar Influenciadores Locais"
+      trigger_patterns: ["influenciadores", "influencers", "parceiros", "embaixadores", "scout"]
+      tier_1_agent: marketing-master
+      tier_2_agents: [influencer-scout]
+      output: "Lista ranqueada de influenciadores + briefings individuais"
+    UC-LP-006:
+      name: "Relatório e Analytics"
+      trigger_patterns: ["relatório", "dashboard", "vendas", "ROI", "analytics", "projeção"]
+      tier_1_agent: analytics-reporter
+      tier_2_agents: []
+      output: "Dashboard de vendas + ROI de marketing + projeção financeira"
+    UC-LP-007:
+      name: "PRD Completo do Evento"
+      trigger_patterns: ["PRD", "documento de requisitos", "planejamento completo", "full service"]
+      tier_1_agent: marketing-master
+      tier_2_agents: [conteudo-instagram, ads-meta, whatsapp-automator, email-marketer, influencer-scout, check-in-coordinator, crm-manager, analytics-reporter]
+      output: "PRD completo do evento salvo via Write"
+
+quality_gates:
+  QG-LP-001:
+    name: "Briefing de Evento Confirmado"
+    agent: legendarios-chief
+    criteria: "Cidade, tipo de evento (TOP/REM/LEGADO), data, capacidade e orçamento de mkt definidos"
+  QG-LP-002:
+    name: "Pacote de Marketing Completo"
+    agent: marketing-master
+    criteria: "Todos os sub-agentes de marketing retornaram outputs; calendário + ads + WhatsApp + email entregues"
+  QG-LP-003:
+    name: "Checklist Operacional Salvo"
+    agent: event-master
+    criteria: "Write executado com arquivo de checklist salvo no workspace"
+  QG-LP-004:
+    name: "CRM Alumni Atualizado"
+    agent: community-master
+    criteria: "Segmentação por status marital/paternidade/cidade definida; sequência de retenção criada"
+  QG-LP-005:
+    name: "Relatório Rastreado"
+    agent: analytics-reporter
+    criteria: "Write executado; dados de vendas, ROI e projeção financeira presentes"
+
+tools:
+  WebSearch:
+    used_by: [influencer-scout, marketing-master]
+    purpose: "Pesquisa de influenciadores, tendências de marketing e benchmarks de eventos"
+  Read:
+    used_by: [event-master, community-master, analytics-reporter, crm-manager]
+    purpose: "Leitura de dados de eventos, listas de inscritos, relatórios anteriores"
+  Write:
+    used_by: [event-master, analytics-reporter, marketing-master, community-master]
+    purpose: "Salvar checklists, relatórios, calendários e PRDs no workspace"
+
+paths:
+  agents: "agents/"
+  tasks: "tasks/"
+  templates: "templates/"
+  checklists: "checklists/"
+  data: "data/"
+
+model_routing:
+  opus:
+    - "Estratégia de campanha de marketing 360°"
+    - "PRD completo do evento (UC-LP-007)"
+    - "Arquitetura de funil e segmentação de públicos"
+    - "Análise de escala multi-cidade"
+  sonnet:
+    - "Criação de conteúdo (posts, copy, roteiros)"
+    - "Sequências de email e WhatsApp"
+    - "Checklist operacional e briefing de voluntários"
+    - "Relatórios e dashboards"
+    - "Briefings de influenciadores"
+  haiku:
+    - "Validações de qualidade"
+    - "Checklists de verificação"
+    - "Extração de dados de formulários"
+    - "Confirmações automatizadas"
+
+settings:
+  activation:
+    prefix: "legendarios-platform"
+    example: "@legendarios-platform:legendarios-chief"
+  greeting:
+    show_use_cases: true
+    show_pipeline_status: true
+  language: "pt-BR"
+  tone: "cristão, inspiracional, orientado a transformação masculina"
+
+quality_standards:
+  min_score: 8.0
+  smoke_tests:
+    - "Criar campanha TOP Porto Velho — 300 participantes, 10 semanas, R$ 20.000 budget mkt"
+    - "Gerar checklist operacional completo para TOP com 400 homens"
+    - "Identificar influenciadores para Rondônia/Norte do Brasil"
+    - "Gerar sequência de WhatsApp para participante inscrito no TOP"
+    - "Relatório de vendas com projeção financeira do evento"
+
+stats:
+  total_agents: 12
+  total_tasks: 10
+  total_templates: 7
+  total_checklists: 2
+  total_data_files: 4
+  total_use_cases: 7
+  total_quality_gates: 5

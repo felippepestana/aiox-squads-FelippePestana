@@ -1,0 +1,196 @@
+metadata:
+  version: "1.0"
+  updated: "2026-04-23"
+  description: "Dados de eventos Legendários de referência — usados como benchmark pelo squad"
+
+# Movimento Legendários — Contexto Geral
+movimento_legendarios:
+  fundacao:
+    data: "23 de julho de 2015"
+    local: "Guatemala"
+    fundador: "Pastor Chepe Putzu"
+    igreja_origem: "Casa de Dios (Guatemala)"
+  chegada_brasil:
+    ano: 2017
+    introdutor: "Pastor Ricardo Bernardes"
+    sede_brasil: "Igreja Embaixada, Balneário Camboriú/SC"
+  valores_centrais:
+    - "Amor (A)"
+    - "Honra (H)"
+    - "Unidade (U)"
+    - "AHU — grito de guerra do movimento"
+  referencia_espiritual: "Legendário #001 — Jesus Cristo"
+  missao: "Transformar homens e devolver o herói às famílias"
+  escala_global_2026:
+    membros_totais: "85.000+"
+    cidades: "170+"
+    paises: 20
+    continentes: 3
+  escala_brasil_2026:
+    participantes: "25.000+"
+    estados: 18
+    crescimento_anual: "30%+"
+  redes_sociais:
+    instagram_brasil: "@legendariosbrasil (545K+ seguidores)"
+    instagram_global: "@legendariosglobal (248K+ seguidores)"
+    youtube_brasil: "@legendariosbrasil"
+    youtube_global: "@legendarios"
+
+# Tipos de Eventos
+tipos_eventos:
+  TOP:
+    nome_completo: "Track Outdoor de Potencial"
+    publico: "Homens"
+    duracao_dias: "3-4"
+    formato: "Quinta à noite → Domingo"
+    atividades:
+      - "Trilha e desafios físicos (montanha/natureza)"
+      - "Reflexão espiritual e oração"
+      - "Compartilhamento e depoimentos em grupo"
+      - "Desafios de liderança e caráter"
+    protocolo_celular: "Recolhidos ou desligados na entrada"
+    numeracao: "TOPs numerados sequencialmente globalmente (TOP #001, #002, ...)"
+    preco_padrao_br:
+      minimo: 990
+      maximo: 1790
+      premium_pantanal_rio: "R$ 81.490-81.590"
+      jovens_solteiros: 450
+  REM:
+    nome_completo: "Retiro de Empoderamento Matrimonial"
+    publico: "Casais"
+    duracao_dias: 2
+    formato: "Intensivo de fim de semana"
+    objetivo: "Fortalecer o casamento, restaurar relacionamentos"
+    preco_padrao_br:
+      casal_minimo: 1500
+      casal_maximo: 1990
+  LEGADO:
+    nome_completo: "LEGADO"
+    publico: "Pais e filhos"
+    duracao_dias: "2-3"
+    objetivo: "Fortalecer vínculo pai-filho, transmitir valores, criar memórias"
+    preco_padrao_br:
+      dupla_minimo: 1000
+      dupla_maximo: 1500
+    instagram: "@legadolegendariosbrasil"
+  RPM:
+    nome_completo: "Reunião de Potencial Masculino"
+    publico: "Homens (prioritariamente alumni)"
+    frequencia: "Mensal"
+    formato: "1º sábado do mês, manhã (7h)"
+    local: "Espaço público (praça, parque)"
+    objetivo: "Manutenção da comunidade entre eventos"
+    custo: "Gratuito"
+    exemplo_referencia: "Praça Sesquicentenário, Balneário Camboriú, 1º sábado, 7h"
+
+# Eventos de Referência (Benchmark)
+eventos_referencia:
+  TOP_555_balneario:
+    id: "TOP #555"
+    local: "Vale Europeu / Balneário Camboriú, SC"
+    status: "Realizado"
+    capacidade_estimada: 500
+    tipo: "TOP"
+    referencia_marketing: "Padrão de campanha orgânica + influenciadores"
+    notas: "Referência máxima de organização e experiência participante no Brasil"
+  TOP_644_balneario:
+    id: "TOP #644"
+    local: "Vale Europeu / Balneário Camboriú, SC"
+    status: "Realizado"
+    capacidade_estimada: 500
+    tipo: "TOP"
+    notas: "Segunda grande edição em Balneário — confirma maturidade da praça"
+  REM_MG_betim:
+    id: "2º REM MG | 4ª Edição REM MG"
+    local: "Betim, MG"
+    status: "Realizado"
+    tipo: "REM"
+    plataforma_inscricao: "e-inscricao.com"
+    notas: "Referência de REM em Minas Gerais"
+
+# Evento Alvo do Squad
+evento_alvo:
+  nome: "TOP - Destemidos Pioneiros"
+  tipo: "TOP"
+  cidade: "Porto Velho"
+  estado: "RO"
+  regiao: "Norte / Amazônia"
+  status: "Planejamento"
+  data_prevista: "Agosto/2026"
+  significado: "1ª edição TOP na região Amazônica — participantes são pioneiros históricos do movimento no Norte"
+  capacidade_meta: 400
+  capacidade_minima_viavel: 150
+  plataforma_inscricao: "Ticket and GO (primário)"
+  referencia_benchmark: "TOP #555 e TOP #644 — Balneário Camboriú (70-80% dos KPIs)"
+
+# Participantes Famosos Verificados
+participantes_famosos:
+  descricao: "Participantes verificados de TOPs — usados como prova social nas campanhas"
+  lista:
+    - nome: "Neymar Santos Sr. (Neymar Pai)"
+      perfil: "Pai do jogador Neymar Jr."
+      instagram: "@neymarpaizao"
+      alcance_estimado: "5M+ seguidores"
+    - nome: "Joel Jota"
+      perfil: "Influencer de liderança, palestrante"
+      instagram: "@joeljota"
+      alcance_estimado: "6M+ seguidores"
+    - nome: "Thiago Nigro (Primo Rico)"
+      perfil: "Influencer financeiro"
+      instagram: "@thiago.nigro"
+      alcance_estimado: "8M+ seguidores"
+    - nome: "Pablo Marçal"
+      perfil: "Empresário, coach, político"
+      instagram: "@pablomarcal"
+      alcance_estimado: "14M+ seguidores"
+    - nome: "Eliezer"
+      perfil: "Influencer, ex-BBB"
+      instagram: "@eliezer"
+      alcance_estimado: "6M+ seguidores"
+    - nome: "Ronaldo Jacaré"
+      perfil: "Lutador de MMA"
+      alcance_estimado: "500K+ seguidores"
+    - nome: "Kaká Diniz"
+      perfil: "Empresário"
+      alcance_estimado: "500K+ seguidores"
+    - nome: "Tirulipa"
+      perfil: "Comediante"
+      alcance_estimado: "2M+ seguidores"
+    - nome: "Tiago Brunet"
+      perfil: "Pastor, palestrante, YouTube"
+      alcance_estimado: "1M+ seguidores"
+    - nome: "Caio Carneiro"
+      perfil: "Influencer cristão"
+      alcance_estimado: "500K+ seguidores"
+  alcance_combinado_estimado: "170M+ seguidores entre todos os participantes famosos"
+  instrucoes_uso:
+    - "Use apenas em conteúdo orgânico com base em declarações públicas dos participantes"
+    - "Não implique endosso pago sem contrato vigente"
+    - "Cite a fonte quando possível (Stories/posts públicos dos próprios influenciadores)"
+
+# Plataformas de Inscrição Utilizadas
+plataformas_inscricao:
+  ticket_and_go:
+    status: "PRIMARIO — Plataforma oficial do Movimento Legendários"
+    url: "https://www.ticketandgo.com.br/"
+    app_checkin: "Legendários - Check-in (Android + iOS)"
+    funcionalidades:
+      - "QR code check-in"
+      - "Impressão de crachás via Bluetooth"
+      - "Controle de fluxo em tempo real"
+      - "Lista offline"
+      - "Conta de participante para ver ingressos"
+    integracao_legendarios: "App customizado já existe — integração nativa"
+  sympla:
+    status: "SECUNDARIO — Canal de descoberta e backup"
+    url: "https://www.sympla.com.br/"
+    taxa: "10% + 2-2.5% processing (mín. R$ 3,99)"
+    api: "REST API disponível publicamente"
+    vantagem: "Maior marketplace de eventos do Brasil — 273M tickets/ano"
+  e_inscricao:
+    status: "UTILIZADO para REM MG"
+    url: "https://www.e-inscricao.com/"
+    notas: "Alternativa para eventos menores"
+  eventbrite:
+    status: "INATIVO — encerrou operações no Brasil em dezembro/2025"
+    notas: "Não usar"

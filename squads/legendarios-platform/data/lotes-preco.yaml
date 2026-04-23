@@ -1,0 +1,135 @@
+metadata:
+  version: "1.0"
+  updated: "2026-04-23"
+  description: "Estrutura padrão de lotes de preço para eventos Legendários no Brasil"
+
+# Estrutura padrão TOP (homens)
+top_lotes_padrao:
+  descricao: "Estrutura de 5 lotes para eventos TOP com 300-500 participantes"
+  moeda: "BRL"
+  lotes:
+    - id: "L1"
+      nome: "Lote Pioneiro"
+      preco: 990
+      vagas_percentual: 20  # 20% da capacidade total
+      vagas_exemplo_400: 80
+      gatilho_quantidade: "Primeiros X inscritos pagos"
+      gatilho_data: "12 semanas antes do evento"
+      gatilho_regra: "O que ocorrer primeiro"
+      publico_especial: false
+      notas: "Menor preço — exclusivo para inscrições antecipadas"
+    - id: "L2"
+      nome: "Early Bird"
+      preco: 1190
+      vagas_percentual: 25
+      vagas_exemplo_400: 100
+      gatilho_quantidade: "Lote 1 esgotado"
+      gatilho_data: "10 semanas antes do evento"
+      gatilho_regra: "O que ocorrer primeiro"
+      publico_especial: false
+    - id: "L3"
+      nome: "Lote Regular"
+      preco: 1490
+      vagas_percentual: 25
+      vagas_exemplo_400: 100
+      gatilho_quantidade: "Lote 2 esgotado"
+      gatilho_data: "6 semanas antes do evento"
+      gatilho_regra: "O que ocorrer primeiro"
+      publico_especial: false
+      notas: "Referenciado como preço 'padrão' em comunicações"
+    - id: "L4"
+      nome: "Lote Final"
+      preco: 1690
+      vagas_percentual: 20
+      vagas_exemplo_400: 80
+      gatilho_quantidade: "Lote 3 esgotado"
+      gatilho_data: "3 semanas antes do evento"
+      gatilho_regra: "O que ocorrer primeiro"
+      publico_especial: false
+    - id: "L5"
+      nome: "Last Call"
+      preco: 1790
+      vagas_percentual: 10
+      vagas_exemplo_400: 40
+      gatilho_quantidade: "Lote 4 esgotado"
+      gatilho_data: "1 semana antes do evento"
+      gatilho_regra: "O que ocorrer primeiro"
+      publico_especial: false
+      notas: "Último lote — sem prorrogação ou exceção"
+    - id: "LE"
+      nome: "Jovens Solteiros"
+      preco: 450
+      vagas_fixas: 30
+      vagas_percentual: null
+      gatilho_quantidade: "30 vagas disponíveis"
+      gatilho_data: "Mesmo prazo do L5"
+      gatilho_regra: "O que ocorrer primeiro"
+      publico_especial: true
+      criterios_elegibilidade:
+        - "Homens entre 18 e 30 anos"
+        - "Nunca casados (declaração no formulário)"
+        - "Declaração de solteiro assinada na inscrição"
+      notas: "Vagas adicionais — não contam nas vagas principais do evento"
+
+  ticket_medio_ponderado:
+    capacidade_400: 1490  # ponderado pelos lotes principais (sem jovens)
+    receita_maxima_400: 596000  # sem jovens solteiros
+    receita_maxima_400_com_jovens: 609500
+
+# Lotes alumni (para ex-participantes)
+alumni_pricing:
+  descricao: "Preços especiais para ex-participantes de TOPs anteriores"
+  beneficios:
+    - "Acesso garantido ao Lote 1 (independente de outros lotes terem encerrado)"
+    - "10% de desconto em REM para alumni do TOP"
+    - "10% de desconto em LEGADO para alumni do TOP"
+  notas: "Válido mediante apresentação de comprovante de participação anterior"
+
+# Lotes REM (casais)
+rem_lotes_padrao:
+  descricao: "Estrutura de lotes para evento REM (2 dias, casais)"
+  moeda: "BRL"
+  lotes:
+    - id: "REM-L1"
+      nome: "Lote Casal Early"
+      preco_casal: 1500
+      preco_individual: 750
+      vagas_casais: 40
+      gatilho_data: "8 semanas antes do evento"
+    - id: "REM-L2"
+      nome: "Lote Casal Regular"
+      preco_casal: 1800
+      preco_individual: 900
+      vagas_casais: 50
+      gatilho_data: "4 semanas antes do evento"
+    - id: "REM-L3"
+      nome: "Lote Casal Final"
+      preco_casal: 1990
+      preco_individual: 995
+      vagas_casais: 30
+      gatilho_data: "2 semanas antes do evento"
+
+# Configuração de pagamento
+pagamento:
+  metodos:
+    pix:
+      status: "PRIMARIO"
+      adocao_brasil: "93%"
+      liquidacao: "Imediata"
+      taxa_organizador: 0  # sem taxa de processamento na maioria dos casos
+      instrucoes: "QR Code gerado automaticamente no Ticket and GO"
+    cartao_credito:
+      status: "SECUNDARIO"
+      parcelamento_maximo: 12
+      taxa_estimada_processadora: "2.5-3%"
+    boleto:
+      status: "NAO_RECOMENDADO"
+      motivo: "Prazo de compensação de 3 dias incompatível com urgência de lotes"
+
+# Política de cancelamento
+cancelamento:
+  plataforma_referencia: "Ticket and GO"
+  janela_reembolso_total: "7 dias corridos a partir da compra"
+  apos_7_dias: "Sem reembolso financeiro — crédito para próximo evento Legendários"
+  excecoes: "Caso de falecimento comprovado ou emergência médica documentada"
+  lgpd: "Dados do participante cancelado retidos por 30 dias após cancelamento, depois excluídos"

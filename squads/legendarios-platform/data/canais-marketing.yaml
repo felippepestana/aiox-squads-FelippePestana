@@ -1,0 +1,212 @@
+metadata:
+  version: "1.0"
+  updated: "2026-04-23"
+  description: "Especificações técnicas e benchmarks de cada canal de marketing digital para eventos Legendários"
+
+# WhatsApp Business
+whatsapp_business:
+  status: "CANAL_PRIMARIO"
+  penetracao_brasil: "98% dos smartphones"
+  usuarios_brasil: "139.3 milhões"
+  taxa_abertura_media: "85-98%"
+  taxa_resposta_media: "15-20%"
+  tipo_conta:
+    recomendado: "WhatsApp Business API"
+    alternativa: "WhatsApp Business App (limitado a 1 dispositivo, sem automação)"
+  providers_api_recomendados:
+    - "Twilio"
+    - "360dialog"
+    - "Take.io (BR)"
+    - "Zenvia (BR)"
+  tipos_mensagem:
+    template_hsm:
+      descricao: "Highly Structured Message — aprovada pela Meta para envio em massa"
+      uso: "Primeiros contatos, broadcasts para não-inscritos"
+      prazo_aprovacao: "24-48h"
+    session_message:
+      descricao: "Mensagem dentro de janela de 24h após contato do usuário"
+      uso: "Respostas em conversa ativa, respostas a opt-in"
+  features_recomendadas:
+    - "WhatsApp Flows (formulários dentro do app)"
+    - "Listas de transmissão (broadcast)"
+    - "Grupos de alumni (comunidade)"
+    - "Botões de resposta rápida (CTA binário)"
+  lgpd:
+    optin: "Obrigatório antes de qualquer envio automatizado"
+    optout: "Resposta SAIR → remover em até 24h"
+    retencao: "Contatos retidos por 6 meses após o evento"
+  benchmarks_legendarios:
+    taxa_abertura_sequencia: "≥ 85%"
+    taxa_resposta: "≥ 15%"
+    taxa_conversao_inscricao: "≥ 8%"
+
+# Meta Ads (Facebook + Instagram)
+meta_ads:
+  status: "CANAL_PAGO_PRIMARIO"
+  plataformas: ["Facebook Feed", "Instagram Feed", "Instagram Reels", "Instagram Stories", "Facebook Stories", "Audience Network"]
+  objetivo_por_fase:
+    awareness: "Alcance ou Brand Awareness"
+    interesse: "Geração de Leads (Lead Ads) ou Tráfego"
+    conversao: "Conversão (Purchase) no Ticket and GO"
+  meta_advantage_plus:
+    descricao: "Automação de otimização de campanha — audiences, placements e criativos"
+    uso_recomendado: "Campanha de conversão — ativar após 50+ eventos/semana"
+  tracking_obrigatorio:
+    - "Meta Pixel na landing page do evento"
+    - "Conversions API (server-side) — obrigatório pós-iOS 14"
+    - "Eventos mapeados: PageView, Lead, InitiateCheckout, Purchase"
+  formatos_criativos:
+    video:
+      uso: "Principal — 40% superior a imagem para este público"
+      specs_reels: "9:16, 1080x1920px, 15-60s, MP4"
+      specs_feed: "1:1, 1080x1080px, 15-60s, MP4"
+      specs_stories: "9:16, 1080x1920px, 15s, MP4"
+    imagem:
+      uso: "Urgência e last call"
+      specs_feed: "1:1, 1080x1080px, JPG/PNG"
+    carrossel:
+      uso: "Conteúdo educativo ('7 motivos para fazer o TOP')"
+      specs: "2-10 cards, 1:1, 1080x1080px por card"
+  segmentacao_recomendada:
+    demografico: "Homens, 25-55 anos"
+    geografico: "Cidade-alvo + raio de 100km"
+    interesses: ["fé cristã", "liderança", "empreendedorismo", "esportes de aventura", "família"]
+    lookalike: "LAL 1-3% de lista de alumni anteriores"
+  benchmarks:
+    cpm_awareness: "≤ R$ 8"
+    cpl_leads: "≤ R$ 15"
+    cpa_inscricao: "≤ R$ 125"
+    roas_meta: "≥ 8:1"
+    ctr_medio: "≥ 1.5%"
+    frequencia_remarketing: "≥ 3.5"
+
+# Instagram Orgânico
+instagram_organico:
+  status: "CANAL_ORGANICO_PRIMARIO"
+  contas_oficiais:
+    brasil: "@legendariosbrasil (545K+ seguidores)"
+    global: "@legendariosglobal (248K+ seguidores)"
+    legado: "@legadolegendariosbrasil"
+  frequencia_recomendada: "3 publicações/semana (seg, qua, sex)"
+  mix_conteudo:
+    reels: "40%"
+    stories: "30%"
+    feed_imagem: "20%"
+    cta_direto: "10%"
+  formato_reels:
+    duracao: "30-90s"
+    hook: "Primeiros 3 segundos decidem se o usuário para"
+    specs: "9:16, 1080x1920px, MP4"
+  hashtags_base:
+    - "#MovimentoLegendarios"
+    - "#TOP"
+    - "#LegendariosBrasil"
+    - "#HomensDeTransformacao"
+    - "#AHU"
+  hashtags_locais: "#[Cidade]Legendarios, #[Estado]Cristao, #TOP[Cidade]"
+  benchmarks:
+    engajamento_medio: "≥ 2.5%"
+    alcance_organico_reels: "3-5x seguidores do perfil"
+
+# Email Marketing
+email_marketing:
+  status: "CANAL_NUTRICAO"
+  ferramentas_recomendadas:
+    - "ActiveCampaign (automação avançada)"
+    - "RD Station (líder Brasil)"
+    - "Mailchimp (básico)"
+  frequencia: "Máx 2 emails/semana por contato"
+  benchmarks_industria_eventos:
+    taxa_abertura: "≥ 35%"
+    taxa_clique: "≥ 4%"
+    taxa_conversao_email: "≥ 3%"
+  benchmarks_legendarios:
+    taxa_abertura_meta: "≥ 40%"
+    taxa_clique_meta: "≥ 5%"
+    email_confirmacao_abertura: "≥ 80%"
+  lgpd:
+    unsubscribe: "Link obrigatório em todo email"
+    double_optin: "Recomendado para maior qualidade de lista"
+    retencao: "6 meses após evento"
+  specs_tecnicos:
+    largura_max: "600px (compatibilidade mobile)"
+    ratio_texto_imagem: "60/40 (mínimo)"
+    preview_text: "Obrigatório em todo email"
+
+# YouTube
+youtube:
+  status: "CANAL_APOIO"
+  contas_oficiais:
+    - "@legendariosbrasil"
+    - "@legendariosglobal"
+  uso_recomendado:
+    - "Depoimentos longos (2-10 min)"
+    - "Documentários de TOPs anteriores"
+    - "Conteúdo de liderança e fé (SEO)"
+  youtube_shorts:
+    uso: "Reaproveitamento de Reels do Instagram"
+    specs: "9:16, 60s máximo"
+  benchmarks:
+    views_video_evento: "5.000-50.000 (variável por alcance do canal)"
+
+# Influencer Marketing
+influencer_marketing:
+  status: "CANAL_AMPLIFICACAO"
+  tiers:
+    nano:
+      seguidores: "1.000-5.000"
+      budget_estimado: "R$ 0-200 (troca por ingresso)"
+      taxa_engajamento_minima: "5%"
+      uso: "Alcance local hipersegmentado"
+    micro:
+      seguidores: "5.000-50.000"
+      budget_estimado: "R$ 300-1.500"
+      taxa_engajamento_minima: "3%"
+      uso: "Comunidade qualificada e confiante — IDEAL para este público"
+    mid:
+      seguidores: "50.000-500.000"
+      budget_estimado: "R$ 1.500-8.000"
+      taxa_engajamento_minima: "1%"
+      uso: "Alcance regional — considerar quando budget > R$ 10.000"
+    macro:
+      seguidores: "500.000+"
+      budget_estimado: "R$ 8.000+"
+      taxa_engajamento_minima: "0.5%"
+      uso: "Apenas para lançamentos nacionais — não recomendado para cidades específicas"
+  criterios_fit_legendarios:
+    obrigatorio:
+      - "Perfil masculino ou audiência ≥ 60% masculina"
+      - "Valores cristãos/conservadores evidentes no conteúdo"
+      - "Taxa de seguidores reais ≥ 80%"
+    desejavel:
+      - "Localização na cidade-alvo ou estado"
+      - "Conteúdo de família, paternidade ou liderança"
+      - "Histórico de parceria com marcas religiosas"
+  prova_social_gratuita:
+    descricao: "Participantes famosos verificados — uso gratuito em conteúdo orgânico"
+    participantes:
+      - nome: "Neymar Sr. (Neymar Santos)"
+        instagram: "@neymarpaizao"
+        tipo: "Participante verificado — TOP"
+      - nome: "Joel Jota"
+        instagram: "@joeljota"
+        tipo: "Participante verificado — TOP"
+      - nome: "Thiago Nigro (Primo Rico)"
+        instagram: "@thiago.nigro"
+        tipo: "Participante verificado — TOP"
+      - nome: "Pablo Marçal"
+        instagram: "@pablomarcal"
+        tipo: "Participante verificado — TOP"
+      - nome: "Eliezer (influencer/ex-BBB)"
+        instagram: "@eliezer"
+        tipo: "Participante verificado — TOP"
+      - nome: "Ronaldo Jacaré (MMA)"
+        tipo: "Participante verificado — TOP"
+      - nome: "Tirulipa (comediante)"
+        tipo: "Participante verificado — TOP"
+      - nome: "Tiago Brunet"
+        tipo: "Participante verificado — TOP"
+    nota_juridica: "Use apenas imagens/citações de domínio público. Evite dar a impressão de endosso pago sem contrato."
+  tracking:
+    utm_por_influenciador: "Obrigatório — ?utm_source=influencer&utm_medium=instagram&utm_campaign=[nome-influenciador]"
+    codigo_rastreio: "Recomendado código único por influenciador para atribuição direta"
