@@ -11,6 +11,7 @@ cd "$(dirname "$0")/.."
 step "Checking dependencies"
 command -v node  >/dev/null || err "node not found — install Node.js 20+"
 command -v npx   >/dev/null || err "npx not found — install Node.js 20+"
+npx wrangler whoami >/dev/null 2>&1 || err "not logged in — run: npx wrangler login"
 
 step "Installing dependencies"
 npm install --silent
@@ -19,8 +20,11 @@ step "Building project (client + server + squads bundle)"
 npm run build:worker
 
 step "Setting ANTHROPIC_API_KEY secret on Cloudflare Workers"
-if [ -f .env ] && grep -q "^ANTHROPIC_API_KEY=." .env; then
-    ANTHROPIC_API_KEY=$(grep -m 1 "^ANTHROPIC_API_KEY=" .env | cut -d= -f2-)
+if [ -f .env ] && grep -qE "^(export[[:space:]]+)?ANTHROPIC_API_KEY=." .env; then
+    ANTHROPIC_API_KEY=$(grep -m 1 -E "^(export[[:space:]]+)?ANTHROPIC_API_KEY=" .env | cut -d= -f2-)
+    ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY%$'\r'}"
+    ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY#"${ANTHROPIC_API_KEY%%[![:space:]]*}"}"
+    ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY%"${ANTHROPIC_API_KEY##*[![:space:]]}"}"
     ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY%\"}"; ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY#\"}"
     ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY%\'}"; ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY#\'}"
     if [ -z "$ANTHROPIC_API_KEY" ]; then
