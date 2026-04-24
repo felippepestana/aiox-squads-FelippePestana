@@ -9,8 +9,8 @@ step() { echo -e "\n\033[36m→ $1\033[0m"; }
 cd "$(dirname "$0")/.."
 
 step "Checking dependencies"
-command -v node  >/dev/null || err "node not found — install Node.js 18+"
-command -v npx   >/dev/null || err "npx not found — install Node.js 18+"
+command -v node  >/dev/null || err "node not found — install Node.js 20+"
+command -v npx   >/dev/null || err "npx not found — install Node.js 20+"
 
 step "Installing dependencies"
 npm install --silent
@@ -20,8 +20,13 @@ npm run build:worker
 
 step "Setting ANTHROPIC_API_KEY secret on Cloudflare Workers"
 if [ -f .env ] && grep -q "^ANTHROPIC_API_KEY=." .env; then
-    ANTHROPIC_API_KEY=$(grep "^ANTHROPIC_API_KEY=" .env | cut -d= -f2-)
-    echo "$ANTHROPIC_API_KEY" | npx wrangler secret put ANTHROPIC_API_KEY
+    ANTHROPIC_API_KEY=$(grep -m 1 "^ANTHROPIC_API_KEY=" .env | cut -d= -f2-)
+    ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY%\"}"; ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY#\"}"
+    ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY%\'}"; ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY#\'}"
+    if [ -z "$ANTHROPIC_API_KEY" ]; then
+        err "ANTHROPIC_API_KEY present in .env but empty after parsing"
+    fi
+    printf '%s' "$ANTHROPIC_API_KEY" | npx wrangler secret put ANTHROPIC_API_KEY
     ok "ANTHROPIC_API_KEY configured from .env"
 else
     warn ".env not found or ANTHROPIC_API_KEY is empty"
