@@ -6,6 +6,7 @@ Este é o repositório da comunidade para compartilhar, descobrir e contribuir s
 
 ## Linguagem
 
+- Respostas do Claude (chat, explicações, perguntas ao usuário): **português brasileiro**
 - Código, commits e nomes de variáveis: **inglês**
 - Documentação voltada ao usuário (README, docs): **português brasileiro**
 - Comentários no código: inglês
