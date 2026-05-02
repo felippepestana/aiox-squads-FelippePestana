@@ -93,7 +93,7 @@ Sem métricas de commit, satisfação ou sucesso, você não tem um loop de feed
 
 **Exemplo:**
 ```bash
-mkdir -p .claude/skills/commit && echo '# Skill de Commit\nRevise as mudanças staged, escreva uma mensagem de commit convencional e execute `git commit`.' > .claude/skills/commit/SKILL.md
+mkdir -p .claude/skills/commit && printf '# Skill de Commit\nRevise as mudanças staged, escreva uma mensagem de commit convencional e execute git commit.\n' > .claude/skills/commit/SKILL.md
 ```
 
 #### Servidores MCP
@@ -112,8 +112,9 @@ claude mcp add github -- npx -y @modelcontextprotocol/server-github
 **Por que para você:** Hooks garantem qualidade de código automaticamente, sem que você precise lembrar de rodar formatadores ou linters após cada edição.
 
 **Exemplo:**
+Arquivo: `.claude/settings.json`
+
 ```json
-// .claude/settings.json
 {
   "hooks": {
     "PostToolUse": [{"matcher": "Edit|Write", "hooks": [{"type": "command", "command": "npx prettier --write $CLAUDE_FILE_PATHS"}]}]
@@ -190,4 +191,4 @@ Sem sessões, sem mensagens, sem commits — apenas um conjunto de dados vazio e
 
 ---
 
-*Relatório original (HTML): `file:///root/.claude/usage-data/report.html`*
+*Relatório original (HTML): `~/.claude/usage-data/report.html`*
