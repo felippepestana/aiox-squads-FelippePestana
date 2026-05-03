@@ -64,16 +64,17 @@ case "$PLATFORM" in
     CAMERA_COUNT=$(system_profiler SPUSBDataType 2>/dev/null | grep -ic "obsbot" || true)
     ;;
   windows)
-    # PowerShell fallback; best-effort
+    # PowerShell fallback; best-effort. @() forces array semantics so .Count
+    # is well-defined even when PowerShell 5.1 returns a single object.
     if command -v powershell.exe >/dev/null 2>&1; then
-      CAMERA_COUNT=$(powershell.exe -Command "(Get-PnpDevice -Class Camera -Status OK | Where-Object FriendlyName -match 'OBSBOT').Count" 2>/dev/null | tr -d '\r' || echo "0")
+      CAMERA_COUNT=$(powershell.exe -Command "@(Get-PnpDevice -Class Camera -Status OK | Where-Object FriendlyName -match 'OBSBOT').Count" 2>/dev/null | tr -d '\r' || echo "0")
     fi
     ;;
 esac
 
-if [ "$CAMERA_COUNT" -eq "$EXPECTED_CAMERAS" ]; then
+if [ "${CAMERA_COUNT:-0}" -eq "$EXPECTED_CAMERAS" ]; then
   ok "Found $CAMERA_COUNT OBSBOT cameras (expected $EXPECTED_CAMERAS)"
-elif [ "$CAMERA_COUNT" -gt 0 ]; then
+elif [ "${CAMERA_COUNT:-0}" -gt 0 ]; then
   warn "Found $CAMERA_COUNT OBSBOT cameras (expected $EXPECTED_CAMERAS)"
   FAILURES=$((FAILURES + 1))
 else
@@ -82,10 +83,23 @@ else
 fi
 
 # 3. Check SuperSpeed negotiation (Linux only — most actionable)
+# `lsusb -t` does not include vendor names, so we identify OBSBOT cameras by
+# vendor id via /sys/bus/usb/devices/*/idVendor and read the negotiated speed
+# from /sys/bus/usb/devices/*/speed (in Mbit/s).
 if [ "$PLATFORM" = "linux" ]; then
   step "Checking SuperSpeed negotiation"
-  HISPEED_COUNT=$(lsusb -t 2>/dev/null | grep -i "obsbot" | grep -c "Speed=480M" || true)
-  SUPERSPEED_COUNT=$(lsusb -t 2>/dev/null | grep -i "obsbot" | grep -c "Speed=5000M\|Speed=10000M" || true)
+  HISPEED_COUNT=0
+  SUPERSPEED_COUNT=0
+  for dev in /sys/bus/usb/devices/*/; do
+    [ -f "${dev}idVendor" ] || continue
+    if [ "$(cat "${dev}idVendor" 2>/dev/null)" = "$OBSBOT_VID" ]; then
+      speed=$(cat "${dev}speed" 2>/dev/null || echo "")
+      case "$speed" in
+        5000|10000) SUPERSPEED_COUNT=$((SUPERSPEED_COUNT + 1)) ;;
+        480)        HISPEED_COUNT=$((HISPEED_COUNT + 1)) ;;
+      esac
+    fi
+  done
 
   if [ "$HISPEED_COUNT" -gt 0 ]; then
     err "$HISPEED_COUNT camera(s) negotiated only Hi-Speed (480M). Should be SuperSpeed."

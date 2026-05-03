@@ -49,8 +49,8 @@ def main() -> int:
     except ImportError:
         fail("obsws-python not installed. Run: pip install obsws-python")
 
-    host = os.environ.get("OBS_WS_HOST", "localhost")
-    port = int(os.environ.get("OBS_WS_PORT", "4455"))
+    host = os.environ.get("OBS_WS_HOST") or "localhost"
+    port = int(os.environ.get("OBS_WS_PORT") or "4455")
     password = os.environ.get("OBS_WS_PASSWORD", "")
 
     if not password:
@@ -67,7 +67,7 @@ def main() -> int:
     except Exception as exc:
         fail(f"Failed to fetch scenes: {exc}")
 
-    available = {s["sceneName"] for s in scene_list.scenes}
+    available = {s.scene_name for s in scene_list.scenes}
 
     missing = [name for name in EXPECTED_SCENES if name not in available]
     if missing:
