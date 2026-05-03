@@ -1,0 +1,50 @@
+# USB topology — port to camera mapping
+# Goal: distribute 4 cameras across distinct root hubs to avoid bandwidth contention.
+# Validate with USBTreeView (Windows) or system_profiler SPUSBDataType (macOS).
+
+topology:
+  strategy: "Distribute across 2 root hubs"
+  rule: "Per root hub, keep allocated bandwidth < 70% of theoretical 5 Gbps SuperSpeed"
+
+mapping:
+  CAM1:
+    role: "Palco principal"
+    port: "Rear USB-C #1"
+    root_hub: "USB xHCI Controller A"
+    expected_bandwidth_mbps: 120  # 1080p30 MJPEG
+  CAM2:
+    role: "Plateia"
+    port: "Rear USB-C #2"
+    root_hub: "USB xHCI Controller A"
+    expected_bandwidth_mbps: 120
+  CAM3:
+    role: "Closeup"
+    port: "Rear USB-A #1"
+    root_hub: "USB xHCI Controller B"
+    expected_bandwidth_mbps: 120
+  CAM4:
+    role: "Geral"
+    port: "Rear USB-A #2"
+    root_hub: "USB xHCI Controller B"
+    expected_bandwidth_mbps: 120
+
+forbidden_ports:
+  - "Dell D6000 (any port)"
+  - "Front panel headers (less stable than rear)"
+  - "USB 2.0 ports (insufficient bandwidth for Tiny 2)"
+
+fallback_with_hub:
+  when: "Host has fewer than 4 rear USB 3.x ports"
+  layout:
+    - hub: "Anker A7515 (powered)"
+      connected_to: "Single rear USB-A 3.x of host"
+      cameras: [CAM1, CAM2, CAM3, CAM4]
+  note: "Single hub is acceptable as long as bandwidth stays < 70% and hub has external power"
+
+validation_steps:
+  - "Open USBTreeView (Win) or IORegistryExplorer (Mac)"
+  - "Identify each Tiny 2 camera by VID/PID"
+  - "Confirm each negotiates SuperSpeed (USB 3.0 / 5 Gbps)"
+  - "Sum bandwidth per root hub: must be < 3.5 Gbps"
+  - "Run 30 min smoke test with all cameras streaming 1080p30: 0 disconnections allowed"
+  - "Document actual root hub assignment in pre-event checklist"
