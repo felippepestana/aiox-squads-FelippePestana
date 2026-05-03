@@ -48,7 +48,8 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ github.repository }}/chatbot
           tags: |
             type=ref,event=branch
-            type=sha,prefix={{branch}}-
+            type=ref,event=pr
+            type=sha,prefix=sha-
             type=semver,pattern={{version}}
             type=raw,value=latest,enable={{is_default_branch}}
 
@@ -89,7 +90,8 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ github.repository }}/web
           tags: |
             type=ref,event=branch
-            type=sha,prefix={{branch}}-
+            type=ref,event=pr
+            type=sha,prefix=sha-
             type=semver,pattern={{version}}
             type=raw,value=latest,enable={{is_default_branch}}
 
