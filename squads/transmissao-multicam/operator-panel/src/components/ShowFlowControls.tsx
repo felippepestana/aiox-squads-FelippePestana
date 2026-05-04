@@ -8,53 +8,33 @@ export function ShowFlowControls() {
   const connected = useOperator((s) => s.connected);
   const setActiveScene = useOperator((s) => s.setActiveScene);
 
-  const goLive = async () => {
+  const go = async (scene: (typeof SCENES)[keyof typeof SCENES]) => {
     if (!connected) return;
     try {
-      await setProgramScene(SCENES.CAM1);
-      setActiveScene(SCENES.CAM1);
+      await setProgramScene(scene);
+      setActiveScene(scene);
     } catch (err) {
-      console.error("GO LIVE failed:", err);
-    }
-  };
-
-  const standby = async () => {
-    if (!connected) return;
-    try {
-      await setProgramScene(SCENES.STANDBY);
-      setActiveScene(SCENES.STANDBY);
-    } catch (err) {
-      console.error("Standby failed:", err);
-    }
-  };
-
-  const closeShow = async () => {
-    if (!connected) return;
-    try {
-      await setProgramScene(SCENES.ENCERRAMENTO);
-      setActiveScene(SCENES.ENCERRAMENTO);
-    } catch (err) {
-      console.error("Close show failed:", err);
+      console.error(`Switch to ${scene} failed:`, err);
     }
   };
 
   return (
-    <div className="panel col-3">
-      <h2>Show flow</h2>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        <button onClick={standby} disabled={!connected}>
-          ⏱ STANDBY
+    <div className="card">
+      <div className="card-header">
+        <div className="card-title"><span className="card-title-icon">📺</span>Show Flow</div>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "var(--sp-2)" }}>
+        <button className="btn" onClick={() => go(SCENES.STANDBY)} disabled={!connected}
+          style={{ justifyContent: "flex-start", gap: "var(--sp-3)" }}>
+          <span>⏸️</span> STANDBY
         </button>
-        <button
-          onClick={goLive}
-          disabled={!connected}
-          className="primary"
-          style={{ padding: 12 }}
-        >
+        <button className="btn btn-success btn-lg" onClick={() => go(SCENES.CAM1)} disabled={!connected}
+          style={{ width: "100%", justifyContent: "center" }}>
           🔴 GO LIVE
         </button>
-        <button onClick={closeShow} disabled={!connected}>
-          🎬 ENCERRAMENTO
+        <button className="btn" onClick={() => go(SCENES.ENCERRAMENTO)} disabled={!connected}
+          style={{ justifyContent: "flex-start", gap: "var(--sp-3)" }}>
+          <span>🎬</span> ENCERRAMENTO
         </button>
       </div>
     </div>

@@ -8,30 +8,50 @@ import { AudioMixer } from "@/components/AudioMixer";
 import { loadOperationConfig } from "@/lib/mic-loader";
 
 export default function OperatorPage() {
-  // Read everything operational from data/mic-mapping.yaml at request time
-  // so the panel and the F6 engine share a single source of truth. Falls
-  // back to typed defaults if the YAML is missing.
   const op = loadOperationConfig();
 
   return (
-    <main className="app">
-      <header className="panel col-12" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1 style={{ margin: 0, fontSize: 18 }}>📡 Transmissão Multicam — Operator</h1>
-        <ConnectionStatus />
-      </header>
+    <>
+      <div className="top-bar">
+        <div className="top-bar-title">Console do Operador</div>
+        <div className="top-bar-actions">
+          <ConnectionStatus />
+        </div>
+      </div>
 
-      <SceneSwitcher />
-      <LayoutControls />
+      <div className="page-content">
+        <div className="grid" style={{ gridTemplateColumns: "1fr 1fr 1fr", gap: "var(--sp-4)" }}>
 
-      <PipControls pip={op.pip} />
-      <ModeToggle />
-      <ShowFlowControls />
+          {/* Full-width: Scene switcher */}
+          <div style={{ gridColumn: "1 / -1" }}>
+            <SceneSwitcher />
+          </div>
 
-      <AudioMixer channels={op.channels} />
+          {/* Col 1 & 2: Layout + PiP */}
+          <div>
+            <LayoutControls />
+          </div>
+          <div>
+            <PipControls pip={op.pip} />
+          </div>
 
-      <footer className="muted col-12" style={{ fontSize: 12 }}>
-        Atalhos: Ctrl+1..4 câmeras · Ctrl+5 GRID · Ctrl+6 SLIDES · Ctrl+7 SLIDES_PIP · Ctrl+8 TELA_PIP · Ctrl+0 STANDBY
-      </footer>
-    </main>
+          {/* Col 3: Mode + Show flow */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--sp-4)" }}>
+            <ModeToggle />
+            <ShowFlowControls />
+          </div>
+
+          {/* Full-width: Audio mixer */}
+          <div style={{ gridColumn: "1 / -1" }}>
+            <AudioMixer channels={op.channels} />
+          </div>
+
+        </div>
+
+        <footer style={{ marginTop: "var(--sp-6)", fontSize: "11px", color: "var(--fg-faint)" }}>
+          Atalhos: Ctrl+1..4 câmeras · Ctrl+5 GRID · Ctrl+6 SLIDES · Ctrl+7 SLIDES_PIP · Ctrl+8 TELA_PIP · Ctrl+0 STANDBY
+        </footer>
+      </div>
+    </>
   );
 }

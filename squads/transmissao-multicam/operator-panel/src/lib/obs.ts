@@ -126,13 +126,11 @@ export function subscribeToVolumeMeters(
   handler: VolumeMetersHandler,
 ): () => void {
   const c = getClient();
-  const listener = (data: {
-    inputs: Array<{
-      inputName: string;
-      inputLevelsMul: number[][];
-    }>;
-  }) => {
-    const meters = data.inputs.map((input) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const listener = (data: any) => {
+    const inputs: Array<{ inputName: string; inputLevelsMul: number[][] }> =
+      data?.inputs ?? [];
+    const meters = inputs.map((input) => {
       const peakMul = Math.max(
         0,
         ...input.inputLevelsMul.flat().filter((v) => Number.isFinite(v)),

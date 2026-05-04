@@ -17,6 +17,7 @@ from .engine import SwitchEngine
 from .health import HealthMonitor
 from .metrics import Metrics, start_metrics_server
 from .motion import MotionDetector
+from .supabase_writer import get_writer as get_supabase_writer
 
 LOG = logging.getLogger("tx-auto-switch")
 
@@ -82,6 +83,10 @@ def run() -> int:  # pragma: no cover — thin glue layer
         start_metrics_server(metrics, port=args.metrics_port)
         LOG.info("Metrics exporter listening on :%d/metrics", args.metrics_port)
 
+    sb = get_supabase_writer()
+    if sb.enabled:
+        LOG.info("Supabase switch-log persistence enabled")
+
     try:
         import obsws_python as obs
         from obsws_python.subs import Subs
@@ -123,13 +128,18 @@ def run() -> int:  # pragma: no cover — thin glue layer
         target = engine.on_meters(now_ms, peaks)
         if target:
             metrics.record_switch(target)
+            trigger = "motion" if engine.last_motion_triggered else "audio"
             if engine.last_motion_triggered:
                 metrics.record_motion_trigger()
+
+            t_before = time.monotonic()
             if not args.dry_run:
                 try:
                     req.set_current_program_scene(target)
                 except Exception:  # noqa: BLE001
                     LOG.exception("SetCurrentProgramScene(%s) failed", target)
+            latency_ms = int((time.monotonic() - t_before) * 1000)
+
             entry = {
                 "ts_ms": now_ms,
                 "target": target,
@@ -138,11 +148,22 @@ def run() -> int:  # pragma: no cover — thin glue layer
                 "motion": engine.last_motion_triggered,
             }
             LOG.info(
-                "switch → %s%s", target, " (motion)" if engine.last_motion_triggered else ""
+                "switch → %s%s (latency %dms)",
+                target,
+                " (motion)" if engine.last_motion_triggered else "",
+                latency_ms,
             )
             if switch_log:
                 switch_log.write(json.dumps(entry) + "\n")
                 switch_log.flush()
+
+            # Persist to Supabase (no-op if not configured)
+            sb.log_switch(
+                from_scene=engine.current_scene,
+                to_scene=target,
+                trigger=trigger,
+                latency_ms=latency_ms,
+            )
 
     def on_custom_event(data) -> None:
         payload = getattr(data, "event_data", None) or getattr(data, "eventData", {})

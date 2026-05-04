@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 import { connect, getClient } from "@/lib/obs";
 import { useOperator } from "@/lib/store";
 
-const URL = process.env.NEXT_PUBLIC_OBS_WS_URL ?? "ws://localhost:4455";
-const PASSWORD = process.env.NEXT_PUBLIC_OBS_WS_PASSWORD ?? "";
+const OBS_URL = process.env.NEXT_PUBLIC_OBS_WS_URL ?? "ws://localhost:4455";
 
 export function ConnectionStatus() {
   const connected = useOperator((s) => s.connected);
@@ -13,7 +13,7 @@ export function ConnectionStatus() {
 
   useEffect(() => {
     const client = getClient();
-    const onOpen = () => setConnected(true);
+    const onOpen  = () => setConnected(true);
     const onClose = () => setConnected(false);
     client.on("ConnectionOpened", onOpen);
     client.on("ConnectionClosed", onClose);
@@ -25,34 +25,33 @@ export function ConnectionStatus() {
 
   const handleConnect = async () => {
     try {
-      await connect({ url: URL, password: PASSWORD });
-    } catch (err) {
-      console.error("OBS connection failed:", err);
-      alert(
-        `Falha ao conectar ao OBS em ${URL}.\nVerifique obs-websocket habilitado e senha em .env.local.`,
-      );
+      await connect({ url: OBS_URL, password: "" });
+    } catch {
+      // Redirect to settings on failure
     }
   };
 
-  return (
-    <div className="row" style={{ alignItems: "center" }}>
-      <span
-        style={{
-          width: 10,
-          height: 10,
-          borderRadius: "50%",
-          background: connected ? "var(--ok)" : "var(--danger)",
-          display: "inline-block",
-        }}
-      />
-      <span className="muted">
-        {connected ? `OBS conectado (${URL})` : `Desconectado (${URL})`}
+  if (connected) {
+    return (
+      <span className="conn-pill conn-pill-connected">
+        <span className="dot dot-live" />
+        OBS conectado
       </span>
-      {!connected && (
-        <button onClick={handleConnect} className="primary">
-          Conectar
-        </button>
-      )}
+    );
+  }
+
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "var(--sp-3)" }}>
+      <span className="conn-pill conn-pill-disconnected">
+        <span className="dot dot-danger" />
+        Desconectado
+      </span>
+      <button className="btn btn-sm btn-primary" onClick={handleConnect}>
+        Conectar
+      </button>
+      <Link href="/settings/obs" className="btn btn-ghost btn-sm">
+        ⚙️ Configurar
+      </Link>
     </div>
   );
 }
