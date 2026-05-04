@@ -1,0 +1,116 @@
+# Mapeamento de microfones — canal ↔ microfone ↔ câmera ↔ papel
+# Consumido por:
+#   - F5 painel operador (renderiza mixer + VU)
+#   - F6 motor IA (lê thresholds para auto-switch via VAD)
+# Editar antes de cada evento conforme posicionamento de microfones e câmeras.
+
+audio_interface:
+  model: "Behringer UMC404HD"
+  total_channels: 4
+  sample_rate_hz: 48000
+  bit_depth: 24
+  driver: "ASIO (Win) / CoreAudio (macOS)"
+
+obs_audio_sources:
+  description: |
+    No OBS, cada canal da interface entra como fonte separada do tipo
+    "Captura de Áudio de Entrada", nomeada como "MIC_<n>". O motor de
+    IA (F6) lê os medidores via obs-websocket InputVolumeMeters event.
+  source_naming_pattern: "MIC_{channel_number}"
+
+channels:
+  - id: 1
+    obs_source_name: "MIC_1"
+    mic_label: "Lapela palestrante principal"
+    mic_model: "<preencher>"
+    role: "principal_speaker"
+    camera_target: "CAM1"
+    fader_db: 0.0
+    mute_default: false
+    vad_threshold_dbfs: -32  # calibrar com *calibrate-vad
+    vad_min_speech_ms: 500
+    notes: |
+      Canal mais importante. Sempre desmutado durante PROGRAM.
+      Threshold conservador (mais alto) para evitar pingue-pongue.
+
+  - id: 2
+    obs_source_name: "MIC_2"
+    mic_label: "Mesa de plateia (audiência)"
+    mic_model: "<preencher>"
+    role: "audience"
+    camera_target: "CAM2"
+    fader_db: -3.0
+    mute_default: true  # liberado só durante Q&A
+    vad_threshold_dbfs: -28
+    vad_min_speech_ms: 800
+    notes: |
+      Mantido mutado por padrão. Operador libera durante Q&A.
+      Threshold mais alto porque captação em campo aberto pega ruído.
+
+  - id: 3
+    obs_source_name: "MIC_3"
+    mic_label: "Lapela co-apresentador"
+    mic_model: "<preencher>"
+    role: "co_speaker"
+    camera_target: "CAM3"
+    fader_db: 0.0
+    mute_default: false
+    vad_threshold_dbfs: -32
+    vad_min_speech_ms: 500
+    notes: |
+      Closeup quando esse canal fala.
+
+  - id: 4
+    obs_source_name: "MIC_4"
+    mic_label: "Mesa geral / ambiente"
+    mic_model: "<preencher>"
+    role: "ambient"
+    camera_target: null  # ambiente não dispara troca de câmera
+    fader_db: -12.0
+    mute_default: false
+    vad_threshold_dbfs: -20  # threshold alto: evitar trigger
+    vad_min_speech_ms: 2000
+    notes: |
+      Captura ambiente. NÃO dispara auto-switch (camera_target=null).
+      Útil para reverb e presença de sala na mixagem.
+
+global_controls:
+  master_fader_db: 0.0
+  master_mute: false
+  emergency_mute_hotkey: "Ctrl+Shift+M"  # configurar em OBS atalhos
+
+vad_engine:
+  algorithm: "OBS InputVolumeMeters event (peak dBFS)"
+  rationale: |
+    Em vez de capturar áudio diretamente em Python, o motor de IA assina
+    o evento `InputVolumeMeters` do obs-websocket que chega a ~10 Hz com
+    peak em dBFS por canal. Isso evita captura paralela do dispositivo
+    de áudio e mantém a fonte de verdade no OBS.
+  evaluation_window_ms: 500
+  cooldown_ms: 1500
+  manual_override_ms: 10000
+
+vu_display:
+  refresh_hz: 30
+  range_db_min: -60
+  range_db_max: 0
+  warning_threshold_db: -6   # amarelo
+  clip_threshold_db: -3      # vermelho
+
+handoff:
+  to_panel:
+    consumes:
+      - obs_source_name
+      - mic_label
+      - role
+      - fader_db
+      - mute_default
+      - vad_threshold_dbfs
+  to_engine:
+    consumes:
+      - obs_source_name
+      - camera_target
+      - vad_threshold_dbfs
+      - vad_min_speech_ms
+      - vad_engine.cooldown_ms
+      - vad_engine.manual_override_ms

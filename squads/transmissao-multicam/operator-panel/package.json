@@ -1,0 +1,32 @@
+{
+  "name": "transmissao-multicam-operator-panel",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Operator panel for the transmissao-multicam squad (F5). Connects to OBS via obs-websocket v5 and exposes camera, layout, PiP, mic and show-flow controls.",
+  "scripts": {
+    "dev": "next dev -p 3030",
+    "build": "next build",
+    "start": "next start -p 3030",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "14.2.5",
+    "obs-websocket-js": "5.0.6",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "yaml": "2.5.0",
+    "zustand": "4.5.4"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.0",
+    "@types/react": "18.3.3",
+    "@types/react-dom": "18.3.0",
+    "eslint": "8.57.0",
+    "eslint-config-next": "14.2.5",
+    "typescript": "5.5.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

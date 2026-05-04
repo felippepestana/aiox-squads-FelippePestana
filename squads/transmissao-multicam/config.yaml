@@ -72,7 +72,8 @@ tier_structure:
       - obs-scenes-architect
       - obsbot-controller
       - meet-integration
-    purpose: "Montagem de cenas/PiP/standby, controle PTZ via OBSBOT Plugin, integração Meet/Workspace"
+      - audio-controller
+    purpose: "Montagem de cenas/PiP/standby, controle PTZ via OBSBOT Plugin, integração Meet/Workspace, mapeamento e calibração de áudio"
 
   tier_3:
     name: "Support"
@@ -130,6 +131,9 @@ pattern_library:
     - id: TM-AP-003
       name: "Manual Override"
       description: "Operator command suspends auto-switch for 10s or until toggled back."
+    - id: TM-AP-004
+      name: "VAD via OBS Meters"
+      description: "Motor de IA assina InputVolumeMeters do obs-websocket; threshold por canal calibrado em sala. Evita captura paralela de áudio."
     - id: TM-IP-001
       name: "OBS WebSocket Control"
       description: "obs-websocket v5 commands for scene change, source mirror update, timer trigger."
@@ -267,6 +271,17 @@ quality_gates:
       - "Auto-transition STANDBY → CAM1 fires on zero (when flag enabled)"
       - "Scene ENCERRAMENTO created with credits"
       - "obs-advanced-timer plugin installed and configured"
+
+  - id: "QG-AUDIO"
+    name: "Audio Channels Mapped and Calibrated"
+    transition: "F2 → F4"
+    type: "blocking"
+    criteria:
+      - "Each active channel has obs_source_name, role, camera_target set in data/mic-mapping.yaml"
+      - "VAD threshold per channel calibrated against real room noise floor + 12 dB"
+      - "Conversational speech crosses threshold reliably"
+      - "Master mute hotkey configured in OBS"
+      - "Mixer reflected in operator panel (F5) if provisioned"
 
   - id: "QG-LIVE-READY"
     name: "End-to-End Smoke Test"
@@ -424,13 +439,13 @@ roadmap:
     - "F2 — 4 câmeras + cenas base (CAM1-4, GRID)"
     - "F3 — PiP modes (SLIDES_FULL, SLIDES_PIP, TELA_PIP) com Source Mirror"
     - "F4 — Show flow (STANDBY com cronômetro + ENCERRAMENTO + Meet integration)"
+    - "F5 — Painel operador (Next.js + obs-websocket v5 + mixer de áudio)"
+    - "F6 — Motor de auto-switch (Python + meters do OBS + cooldown + override)"
+    - "Audio mapping & VAD calibration (data/mic-mapping.yaml + tasks/configure-audio.md)"
   future:
-    - phase: "F5"
-      name: "Painel operador"
-      stack: "Next.js + WebSocket + obs-websocket v5"
-    - phase: "F6"
-      name: "Motor de IA Python"
-      stack: "asyncio + WebRTC VAD + OpenCV + obs-websocket v5"
     - phase: "F7"
       name: "Hardening"
       stack: "Failover, métricas Grafana, ensaios automatizados"
+    - phase: "F8"
+      name: "Detecção de movimento por IA"
+      stack: "OpenCV + Auto-Track OBSBOT como fallback de áudio"

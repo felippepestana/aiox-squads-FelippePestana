@@ -3,7 +3,7 @@
 > Squad AIOX para transmissões ao vivo com **até 4 câmeras OBSBOT Tiny 2 / Tiny 2 Lite**, saída pelo **Google Meet (Workspace Enterprise Plus)** via OBS Virtual Camera. Inclui composições com slides + câmera em PiP, tela de espera com cronômetro regressivo, e fundação para troca automática (IA por áudio + movimento) ou manual pelo operador.
 
 **Versão:** `1.0.0`
-**Status desta release:** F1 → F4 (bancada → show flow). Painel operador (F5) e motor de IA (F6) ficam no roadmap.
+**Status desta release:** F1 → F6 entregues (bancada → show flow → painel operador Next.js → motor de auto-switch Python com testes). Hardening (F7) e detecção de movimento (F8) ficam no roadmap.
 
 ---
 
@@ -184,10 +184,24 @@ squads/transmissao-multicam/
 │   ├── pre-event.md            # T-24h, T-2h, T-30min, T-5min
 │   ├── usb-bandwidth.md        # Validação USBTreeView
 │   └── post-event.md           # 30min, 1h, 24h após
-└── scripts/
-    ├── validate_cameras.sh     # Detecção UVC + SuperSpeed
-    └── obs-headless-check.py   # Smoke E2E via obs-websocket
+├── scripts/
+│   ├── validate_cameras.sh     # Detecção UVC + SuperSpeed
+│   └── obs-headless-check.py   # Smoke E2E via obs-websocket
+├── operator-panel/             # F5 — painel Next.js (App Router + obs-websocket-js)
+│   ├── src/app/
+│   ├── src/components/         # Scenes, Layout, PiP, Mode, ShowFlow, AudioMixer
+│   ├── src/lib/                # obs.ts, store.ts, scenes.ts, mic-config.ts
+│   └── package.json            # Next 14, React 18, obs-websocket-js 5
+└── auto-switch-engine/         # F6 — motor Python
+    ├── src/auto_switch/
+    │   ├── config.py           # Carrega mic-mapping.yaml em dataclasses
+    │   ├── engine.py           # Lógica pura: VAD + cooldown + override
+    │   └── main.py             # Glue obs-websocket + decisão
+    ├── tests/                  # 10 testes pytest (cobre cooldown, override, protected)
+    └── pyproject.toml
 ```
+
+Agentes incluem `audio-controller` (Tier 2) responsável por mapeamento de microfones e calibração de VAD. Dados em `data/mic-mapping.yaml` consumidos por F5 e F6.
 
 Estrutura segue a anatomia padrão dos squads AIOX (tiers, pattern library, quality gates). Convenções em `CLAUDE.md` (idioma pt-BR para docs, inglês para código).
 
@@ -265,12 +279,14 @@ Detalhes em `config.yaml` → `quality_gates`.
 - ✅ F2 — 4 câmeras + cenas base (CAM1-4, GRID)
 - ✅ F3 — PiP modes (SLIDES_FULL, SLIDES_PIP, TELA_PIP) com Source Mirror
 - ✅ F4 — Show flow (STANDBY com cronômetro + ENCERRAMENTO + Meet integration)
+- ✅ F5 — Painel operador (Next.js 14 + obs-websocket-js v5, mixer com VU + fader + mute por canal e mute master)
+- ✅ F6 — Motor de auto-switch (Python, regras puras testadas: VAD por canal, cooldown 1.5s, min_speech 0.5s, override 10s, cenas protegidas)
+- ✅ Audio mapping & VAD calibration (`audio-controller` agent + `data/mic-mapping.yaml` + `tasks/configure-audio.md`)
 
 ### Futuro
 
-- ⏳ **F5 — Painel operador** (Next.js + WebSocket + obs-websocket v5)
-- ⏳ **F6 — Motor de IA Python** (asyncio + WebRTC VAD + OpenCV + obs-websocket)
 - ⏳ **F7 — Hardening** (failover, métricas Grafana, ensaios automatizados)
+- ⏳ **F8 — Detecção de movimento por IA** (OpenCV + Auto-Track OBSBOT como fallback quando ninguém fala)
 
 ---
 
