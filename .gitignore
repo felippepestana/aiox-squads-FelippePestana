@@ -14,3 +14,5 @@ analista-processual-web/node_modules/
 analista-processual-web/.env*
 analista-processual-web/dist/
 analista-processual-web/.next/
+squads/transmissao-multicam/auto-switch-engine/src/tx_multicam_auto_switch.egg-info/
+squads/transmissao-multicam/operator-panel/tsconfig.tsbuildinfo
