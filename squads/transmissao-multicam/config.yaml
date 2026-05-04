@@ -1,0 +1,472 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# TRANSMISSAO-MULTICAM SQUAD - Configuration
+# Version: 1.0.0
+# Purpose: Live broadcast pipeline with 4 OBSBOT cameras + Google Meet
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: transmissao-multicam
+version: 1.0.0
+
+pack:
+  name: transmissao-multicam
+  version: 1.0.0
+  short-title: Transmissão Multicam Squad
+  description: >-
+    Squad para transmissões ao vivo com até 4 câmeras OBSBOT Tiny 2 / Tiny 2 Lite,
+    saída pelo Google Meet (Workspace Enterprise Plus) via OBS Virtual Camera.
+    Inclui composições com slides + câmera em PiP, tela de espera com cronômetro
+    regressivo, e troca automática (IA por áudio + fallback de movimento) ou
+    manual pelo operador. Esta release entrega F1–F6 (bancada → show flow →
+    painel operador → motor de auto-switch + métricas + failover); F7 hardening
+    e F8 detecção de movimento avançada ficam no roadmap.
+  author: AIOX Community
+  icon: "📡"
+  slashPrefix: transmissaoMulticam
+
+entry_agent: tx-chief
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CORE PRINCIPLES
+# ═══════════════════════════════════════════════════════════════════════════════
+
+core_principles:
+  - name: "USB DIRETO NO HOST"
+    rule: "Câmeras OBSBOT NUNCA são plugadas no Dell D6000 ou em hub DisplayLink. Conexão direta às portas USB 3.x traseiras do host, ou via hub USB 3.2 alimentado."
+
+  - name: "OBS PLUGIN ÚNICO"
+    rule: "Controle das câmeras via OBSBOT OBS Plugin. OBSBOT Center é usado APENAS para atualização de firmware e desinstalado da máquina de transmissão para evitar disputa pelo UVC Extension Unit."
+
+  - name: "CÂMERA VIRTUAL LIMPA"
+    rule: "OBS Virtual Camera entrega vídeo já tratado. Studio Look / Lighting / Sound do Meet ficam DESLIGADOS na conta de transmissão para não reprocessar a imagem."
+
+  - name: "PIP NÃO COMPROMETE LEITURA"
+    rule: "Em SLIDES_PIP / TELA_PIP, o PiP da câmera ocupa no máximo 30% da tela e fica fixado no canto inferior direito por padrão, com margem mínima de 30 px."
+
+  - name: "BANDA USB SOB CONTROLE"
+    rule: "Cada barramento USB do host opera abaixo de 70% de banda alocada. Validação obrigatória via USBTreeView (Windows) ou IORegistryExplorer (macOS) antes de cada evento."
+
+  - name: "SHOW FLOW EXPLÍCITO"
+    rule: "Toda transmissão começa em STANDBY com cronômetro regressivo e termina em ENCERRAMENTO. Transição GO LIVE pode ser automática (cronômetro zerado) ou manual."
+
+  - name: "FAILOVER MANUAL"
+    rule: "Operador humano sempre tem override sobre qualquer automação. Toggle Auto/Manual é instantâneo e a IA respeita cooldown mínimo de 1,5 s entre trocas."
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TIER STRUCTURE
+# ═══════════════════════════════════════════════════════════════════════════════
+
+tier_structure:
+  orchestrator:
+    agent: tx-chief
+    role: "Route requests, coordinate tiers, manage event lifecycle (pre/live/post)"
+
+  tier_1:
+    name: "Production"
+    agents:
+      - producer
+      - auto-switch-engineer
+    purpose: "Comando de cena (operador IA) e regras de troca automática por áudio/movimento"
+
+  tier_2:
+    name: "Specialists"
+    agents:
+      - obs-scenes-architect
+      - obsbot-controller
+      - meet-integration
+      - audio-controller
+      - touchosc-controller
+    purpose: "Montagem de cenas/PiP/standby, controle PTZ via OBSBOT Plugin, integração Meet/Workspace, mapeamento e calibração de áudio, surface físico TouchOSC"
+
+  tier_3:
+    name: "Support"
+    agents:
+      - pre-show-runner
+    purpose: "Cronômetro regressivo, fade-in, trigger GO LIVE, validações QA"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PATTERN LIBRARY
+# ═══════════════════════════════════════════════════════════════════════════════
+
+pattern_library:
+  prefix: TM
+  naming_convention:
+    format: "{PREFIX}-{CATEGORY}-{NUMBER}"
+    example: "TM-TP-001"
+  categories:
+    - id: TP
+      name: "Task Patterns"
+      description: "Patterns for broadcast task structure"
+    - id: EP
+      name: "Executor Patterns"
+      description: "Patterns for executor selection (human operator, agent, hybrid, worker)"
+    - id: SP
+      name: "Scene Patterns"
+      description: "Patterns for OBS scene composition (full cam, slides, PiP, standby)"
+    - id: AP
+      name: "Automation Patterns"
+      description: "Patterns for auto-switch logic (audio VAD, motion detection, cooldowns)"
+    - id: IP
+      name: "Integration Patterns"
+      description: "Patterns for OBSBOT SDK / obs-websocket / Meet integration"
+  patterns:
+    - id: TM-SP-001
+      name: "Full Camera"
+      description: "Single camera fills the 1920×1080 canvas. Used for CAM1..CAM4 scenes."
+    - id: TM-SP-002
+      name: "Grid 2x2"
+      description: "Mosaic of 4 cameras in 2x2 layout. Used for panel/debate scenes."
+    - id: TM-SP-003
+      name: "Slides Full"
+      description: "Window/Display Capture fills the canvas. Audio comes from active camera."
+    - id: TM-SP-004
+      name: "Slides + PiP"
+      description: "Slides at 100% canvas + camera mirror at 25% in bottom-right corner. PiP follows the active camera."
+    - id: TM-SP-005
+      name: "Standby Countdown"
+      description: "Branded background + logo + countdown timer + session title. Auto-transition to CAM1 when timer hits zero."
+    - id: TM-AP-001
+      name: "Audio Auto-Switch"
+      description: "VAD per channel selects program camera. Cooldown 1.5s, min speech 0.5s."
+    - id: TM-AP-002
+      name: "Motion Auto-Switch"
+      description: "Fallback when no audio activity > 3s. Uses on-camera Auto-Track + OpenCV heuristics."
+    - id: TM-AP-003
+      name: "Manual Override"
+      description: "Operator command suspends auto-switch for 10s or until toggled back."
+    - id: TM-AP-004
+      name: "VAD via OBS Meters"
+      description: "Motor de IA assina InputVolumeMeters do obs-websocket; threshold por canal calibrado em sala. Evita captura paralela de áudio."
+    - id: TM-IP-001
+      name: "OBS WebSocket Control"
+      description: "obs-websocket v5 commands for scene change, source mirror update, timer trigger."
+    - id: TM-IP-002
+      name: "OBSBOT Plugin PTZ"
+      description: "OBSBOT OBS Plugin for PTZ, presets, Auto-Track, Gesture toggle per camera."
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TASK STANDARDS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+task_standards:
+  enforce_anatomy: true
+  validator: "TM-TP-001"
+  required_fields:
+    - task_name
+    - status
+    - responsible_executor
+    - execution_type
+    - input
+    - output
+    - action_items
+    - acceptance_criteria
+  optional_fields:
+    - estimated_time
+    - dependencies
+    - templates
+    - quality_gate
+    - handoff
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# EXECUTOR TYPES
+# ═══════════════════════════════════════════════════════════════════════════════
+
+executor_types:
+  human:
+    id: "TM-EP-001"
+    name: "Human Executor"
+    use_for:
+      - "Final GO LIVE decision"
+      - "Manual scene switching during event"
+      - "PTZ adjustments and presets curation"
+      - "Approval of pre-event checklist"
+  agent:
+    id: "TM-EP-002"
+    name: "Agent Executor (AI)"
+    use_for:
+      - "Audio VAD-based auto-switch"
+      - "Motion detection auto-switch"
+      - "Scene pack generation suggestions"
+      - "Post-event analysis (drops, latency, switches)"
+  hybrid:
+    id: "TM-EP-003"
+    name: "Hybrid Executor"
+    use_for:
+      - "Validation of auto-switch decisions during rehearsals"
+      - "Pre-event quality gate sign-off"
+      - "PiP layout review per event type"
+  worker:
+    id: "TM-EP-004"
+    name: "Worker Executor"
+    use_for:
+      - "USB topology validation (validate_cameras.sh)"
+      - "OBS smoke test via obs-websocket (obs-headless-check.py)"
+      - "Firmware version check"
+      - "Recording archive transfer"
+
+executor_selection:
+  requires_creativity: human
+  requires_judgment: [human, hybrid]
+  requires_speed: [agent, worker]
+  requires_consistency: worker
+  requires_validation: hybrid
+  requires_learning: agent
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# WORKFLOW CONFIGURATION
+# ═══════════════════════════════════════════════════════════════════════════════
+
+workflow_config:
+  checkpoint_policy: always_active
+  checkpoint_modes:
+    always_active: "Every checkpoint MUST pass"
+    skip_on_override: "Can skip with manual approval"
+    advisory: "Only alerts, doesn't block"
+  fail_fast: true
+  allow_manual_override: false
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# QUALITY GATES
+# ═══════════════════════════════════════════════════════════════════════════════
+
+quality_gates:
+  - id: "QG-USB"
+    name: "USB Bandwidth Validated"
+    transition: "Setup → F2 (multicam)"
+    type: "blocking"
+    criteria:
+      - "All 4 cameras enumerate as SuperSpeed UVC devices"
+      - "Bandwidth allocated per root hub < 70%"
+      - "0 disconnections during 30 min smoke run"
+      - "Cameras NOT plugged into Dell D6000"
+    if_fails:
+      action: "Re-distribute cameras across host root hubs; consider powered hub"
+      rework_limit: 3
+
+  - id: "QG-SCENES"
+    name: "Scene Pack Built"
+    transition: "F2 → F3 (PiP modes)"
+    type: "blocking"
+    criteria:
+      - "Scenes CAM1, CAM2, CAM3, CAM4, GRID exist"
+      - "Each camera has 3 PTZ presets configured via OBSBOT Plugin"
+      - "Cut and Fade(300ms) transitions configured"
+      - "Canvas 1920x1080 @ 30fps validated"
+
+  - id: "QG-PIP"
+    name: "PiP Legibility Verified"
+    transition: "F3 → F4 (show flow)"
+    type: "blocking"
+    criteria:
+      - "Scenes SLIDES_FULL, SLIDES_PIP, TELA_PIP exist"
+      - "PiP follows active camera via Source Mirror within 300ms"
+      - "Slide text legible at 1080p with PiP at 25% bottom-right"
+      - "Border 2px white + drop shadow applied"
+      - "PiP can switch corners (4 presets) and sizes (20/25/30%)"
+
+  - id: "QG-STANDBY"
+    name: "Show Flow Ready"
+    transition: "F4 → Live Ready"
+    type: "blocking"
+    criteria:
+      - "Scene STANDBY shows branded background + logo + 'A transmissão iniciará em' + countdown + session title"
+      - "Countdown precision ±1s over 5min run"
+      - "Auto-transition STANDBY → CAM1 fires on zero (when flag enabled)"
+      - "Scene ENCERRAMENTO created with credits"
+      - "obs-advanced-timer plugin installed and configured"
+
+  - id: "QG-AUDIO"
+    name: "Audio Channels Mapped and Calibrated"
+    transition: "F2 → F4"
+    type: "blocking"
+    criteria:
+      - "Each active channel has obs_source_name, role, camera_target set in data/mic-mapping.yaml"
+      - "VAD threshold per channel calibrated against real room noise floor + 12 dB"
+      - "Conversational speech crosses threshold reliably"
+      - "Master mute hotkey configured in OBS"
+      - "Mixer reflected in operator panel (F5) if provisioned"
+
+  - id: "QG-LIVE-READY"
+    name: "End-to-End Smoke Test"
+    transition: "F4 → Production"
+    type: "blocking"
+    criteria:
+      - "OBS Virtual Camera selected as webcam in Meet (Workspace Enterprise Plus account)"
+      - "Studio Look/Lighting/Sound DISABLED on broadcast account"
+      - "Cloud recording auto-start ON"
+      - "Live streaming enabled in Admin Console"
+      - "60min load test: CPU < 70%, frame drops < 0.5%, recording intact"
+      - "obs-headless-check.py returns OK for all 10 scenes"
+
+  - id: "QG-TOUCHOSC"
+    name: "TouchOSC Surface Bridged"
+    transition: "F5 → F9 (TouchOSC)"
+    type: "non-blocking"
+    criteria:
+      - "OSC bridge listening on configured UDP port (/api/osc/status confirms)"
+      - "All 10 scenes switch via TouchOSC button in < 200ms"
+      - "Audio mute + fader work for every mapped channel"
+      - "Feedback (scene active, VU meters, OBS connected) reaches the tablet"
+      - "Bridge survives obs-websocket reconnect without restart"
+      - "Engine F6 OSC feedback emits (when [osc] extra installed)"
+    if_fails:
+      action: "Fall back to operator-panel web UI; investigate via /api/osc/status; re-run setup-touchosc.md"
+      rework_limit: 2
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# OUTPUT FORMATS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+output_formats:
+  scene_collection:
+    description: "OBS scene collection JSON exported from a validated host"
+    template: "templates/obs-scene-collection.json"
+    output_path: "templates/obs-scene-collection.json"
+
+  pip_layout:
+    description: "PiP positions, sizes, corners reference"
+    template: "templates/pip-layout.yaml"
+
+  standby_image_spec:
+    description: "Visual spec for the STANDBY background image"
+    template: "templates/standby-image-spec.md"
+
+  event_runbook:
+    description: "Operational runbook for a live event (pt-BR)"
+    template: "templates/runbook-evento.md"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SCENE PACK
+# ═══════════════════════════════════════════════════════════════════════════════
+
+scene_pack:
+  canvas:
+    width: 1920
+    height: 1080
+    fps: 30
+  scenes:
+    - name: STANDBY
+      pattern: TM-SP-005
+      use: "Pré-show com cronômetro regressivo"
+    - name: CAM1
+      pattern: TM-SP-001
+      use: "Palco principal"
+    - name: CAM2
+      pattern: TM-SP-001
+      use: "Plateia"
+    - name: CAM3
+      pattern: TM-SP-001
+      use: "Closeup"
+    - name: CAM4
+      pattern: TM-SP-001
+      use: "Geral"
+    - name: GRID
+      pattern: TM-SP-002
+      use: "Debate / painel (mosaico 2x2)"
+    - name: SLIDES_FULL
+      pattern: TM-SP-003
+      use: "Conteúdo dominante (slides ocupam canvas)"
+    - name: SLIDES_PIP
+      pattern: TM-SP-004
+      use: "Slides + câmera ativa em PiP no canto inferior direito"
+    - name: TELA_PIP
+      pattern: TM-SP-004
+      use: "Tela cheia (qualquer app) + câmera em PiP"
+    - name: ENCERRAMENTO
+      pattern: TM-SP-005
+      use: "Créditos finais"
+  pip_default:
+    width: 480
+    height: 270
+    x: 1410
+    y: 780
+    border_px: 2
+    border_color: "#FFFFFF"
+    drop_shadow: true
+    margin_px: 30
+    corner: bottom_right
+    size_percent: 25
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# EXTERNAL DEPENDENCIES
+# ═══════════════════════════════════════════════════════════════════════════════
+
+dependencies:
+  software:
+    - name: "OBS Studio"
+      min_version: "30.0"
+      url: "https://obsproject.com/download"
+      purpose: "Mixer e câmera virtual"
+    - name: "OBSBOT OBS Plugin"
+      url: "https://www.obsbot.com/download"
+      purpose: "Controle PTZ, presets, Auto-Track, Gesture"
+    - name: "obs-advanced-timer"
+      purpose: "Cronômetro regressivo na cena STANDBY"
+    - name: "obs-websocket"
+      min_version: "5.0"
+      purpose: "Automação remota (incluso no OBS 28+)"
+
+  hardware:
+    - name: "PC host"
+      spec: "Win 11, CPU 8c+, GPU NVENC, 32GB RAM, USB 3.x traseiras"
+    - name: "OBSBOT Tiny 2 / Tiny 2 Lite"
+      qty: 4
+    - name: "Hub backup"
+      spec: "USB 3.2 Gen1 alimentado (ex.: Anker A7515)"
+    - name: "OBSBOT Remote"
+      spec: "Controle físico Bluetooth (failover manual)"
+    - name: "Dell Docking Station D6000"
+      note: "APENAS periféricos. NÃO conectar câmeras."
+
+  platform:
+    - name: "Google Workspace Enterprise Plus"
+      participants_limit: 1000
+      target_usage: "até 300 participantes"
+      features_required:
+        - "Cloud recording"
+        - "Live streaming in-domain"
+        - "Companion mode"
+        - "Noise cancellation"
+      features_disabled_on_broadcast_account:
+        - "Studio Look"
+        - "Studio Lighting"
+        - "Studio Sound"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# HANDOFFS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+handoffs:
+  receives_from:
+    - agent: "user (organizer)"
+      what: "Event briefing: data, horário, título, número de participantes, modo (auto/manual)"
+
+  delivers_to:
+    - agent: "human operator"
+      what: "Scene pack OBS + runbook pt-BR + checklist pré-evento"
+    - agent: "audience (Meet participants)"
+      what: "Stream com câmera virtual + gravação na nuvem"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ROADMAP
+# ═══════════════════════════════════════════════════════════════════════════════
+
+roadmap:
+  delivered_in_v1:
+    - "F1 — Bancada (2 câmeras + OBS + Virtual Cam no Meet)"
+    - "F2 — 4 câmeras + cenas base (CAM1-4, GRID)"
+    - "F3 — PiP modes (SLIDES_FULL, SLIDES_PIP, TELA_PIP) com Source Mirror"
+    - "F4 — Show flow (STANDBY com cronômetro + ENCERRAMENTO + Meet integration)"
+    - "F5 — Painel operador (Next.js + obs-websocket v5 + mixer de áudio)"
+    - "F6 — Motor de auto-switch (Python + meters do OBS + cooldown + override)"
+    - "F9 — TouchOSC bridge (operator-panel ↔ TouchOSC iPad/Android via OSC/UDP)"
+    - "Audio mapping & VAD calibration (data/mic-mapping.yaml + tasks/configure-audio.md)"
+  future:
+    - phase: "F7"
+      name: "Hardening"
+      stack: "Failover, métricas Grafana, ensaios automatizados"
+    - phase: "F8"
+      name: "Detecção de movimento por IA"
+      stack: "OpenCV + Auto-Track OBSBOT como fallback de áudio"
+    - phase: "F10"
+      name: "OSC bridge standalone"
+      stack: "Pacote Node.js separado para deployments onde operator-panel não é local"

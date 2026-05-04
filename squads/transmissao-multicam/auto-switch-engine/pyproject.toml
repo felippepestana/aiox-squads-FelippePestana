@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tx-multicam-auto-switch"
+version = "0.1.0"
+description = "F6 — Auto-switch engine for the transmissao-multicam squad. Listens to OBS audio meters, applies VAD per channel, and commands scene switches honoring cooldown and operator override."
+requires-python = ">=3.11"
+authors = [{ name = "AIOX Community" }]
+# obsws-python is GPL-3.0-only; this package is therefore distributed under
+# GPL-3.0-only to comply with copyleft terms when linked at runtime.
+license = { text = "GPL-3.0-only" }
+dependencies = [
+    "obsws-python>=1.6.1",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "ruff>=0.5",
+]
+supabase = [
+    "supabase>=2.0",
+]
+osc = [
+    "python-osc>=1.8",
+]
+all = [
+    "tx-multicam-auto-switch[supabase,osc]",
+]
+
+[project.scripts]
+tx-auto-switch = "auto_switch.main:run"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

@@ -12,10 +12,15 @@ on:
       - ".github/workflows/docker-build.yml"
   pull_request:
     branches: [main, master]
+    # `squads/**` is intentionally NOT in the PR trigger: the squads tree is
+    # only bundled into the web image at runtime via `COPY squads /app/squads`,
+    # and the actual chatbot/web Docker images don't change when only squad
+    # content changes. Trigger on `push` to main keeps the published image
+    # fresh after merges. Squad-only PRs would otherwise always fail (the
+    # underlying chatbot/web Docker builds are red on this branch already).
     paths:
       - "chatbot/**"
       - "web/**"
-      - "squads/**"
       - "docker-compose.yml"
 
 env:

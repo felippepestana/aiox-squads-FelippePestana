@@ -1,0 +1,75 @@
+# PiP Layout — coordenadas e variantes
+# Canvas base: 1920x1080
+# Aplicado às cenas SLIDES_PIP e TELA_PIP
+
+canvas:
+  width: 1920
+  height: 1080
+  fps: 30
+
+default:
+  size_percent: 25
+  width: 480
+  height: 270
+  corner: bottom_right
+  x: 1410
+  y: 780
+  border_px: 2
+  border_color: "#FFFFFF"
+  drop_shadow:
+    enabled: true
+    offset_x: 4
+    offset_y: 4
+    opacity: 60
+    blur_px: 8
+  margin_px: 30
+
+sizes:
+  small:
+    percent: 20
+    width: 384
+    height: 216
+  medium:
+    percent: 25
+    width: 480
+    height: 270
+  large:
+    percent: 30
+    width: 576
+    height: 324
+
+corners:
+  top_left:
+    x: 30
+    y: 30
+  top_right:
+    x: "canvas.width - pip.width - 30"
+    y: 30
+  bottom_left:
+    x: 30
+    y: "canvas.height - pip.height - 30"
+  bottom_right:
+    x: "canvas.width - pip.width - 30"
+    y: "canvas.height - pip.height - 30"
+
+source_mirror:
+  source_name: "CamAtivaMirror"
+  initial_target: "CAM1"
+  update_via: "obs-websocket SetInputSettings"
+  expected_update_latency_ms_max: 300
+
+scenes_using_pip:
+  - SLIDES_PIP
+  - TELA_PIP
+
+operator_controls:
+  toggle_pip: "Botão PiP On/Off no painel operador (F5)"
+  swap_camera: "Seletor 'Câmera no PiP' (CAM1/CAM2/CAM3/CAM4)"
+  swap_corner: "4 botões: ⌜ ⌝ ⌞ ⌟"
+  swap_size: "Slider 20%/25%/30%"
+
+constraints:
+  - "PiP NUNCA cobre o centro do slide"
+  - "Margem mínima de 30px de qualquer borda"
+  - "Border 2px branca obrigatória para destacar do fundo"
+  - "Drop shadow para evitar fusão visual com slide claro"
