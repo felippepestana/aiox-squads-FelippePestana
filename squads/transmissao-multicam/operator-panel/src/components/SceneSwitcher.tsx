@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { setProgramScene } from "@/lib/obs";
 import { useOperator } from "@/lib/store";
 import { CAMERAS, SCENES, SceneName } from "@/lib/scenes";
@@ -29,7 +29,7 @@ export function SceneSwitcher() {
   const setActiveScene = useOperator((s) => s.setActiveScene);
   const connected = useOperator((s) => s.connected);
 
-  const cut = async (scene: SceneName) => {
+  const cut = useCallback(async (scene: SceneName) => {
     if (!connected) return;
     try {
       await setProgramScene(scene);
@@ -37,7 +37,7 @@ export function SceneSwitcher() {
     } catch (err) {
       console.error("Cut failed:", err);
     }
-  };
+  }, [connected, setActiveScene]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -47,7 +47,7 @@ export function SceneSwitcher() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  });
+  }, [cut]);
 
   return (
     <div className="card">

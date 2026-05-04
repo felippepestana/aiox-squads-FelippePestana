@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 
 const schema = z.object({
@@ -31,15 +31,40 @@ export default function MeetSettingsPage() {
   const [form, setForm] = useState<FormData>(DEFAULTS);
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
   const [saved, setSaved] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Hydrate from the API on mount
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/settings/meet")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!alive || !data) return;
+        setForm((prev) => ({
+          ...prev,
+          account_email:           data.account_email           ?? prev.account_email,
+          default_room_url:        data.default_room_url        ?? prev.default_room_url,
+          auto_record:             data.auto_record             ?? prev.auto_record,
+          studio_effects_disabled: data.studio_effects_disabled ?? prev.studio_effects_disabled,
+          live_streaming_enabled:  data.live_streaming_enabled  ?? prev.live_streaming_enabled,
+          workspace_admin_email:   data.workspace_admin_email   ?? prev.workspace_admin_email,
+          max_participants:        data.max_participants        ?? prev.max_participants,
+          notes:                   data.notes                   ?? prev.notes,
+        }));
+      })
+      .catch(() => { /* offline */ });
+    return () => { alive = false; };
+  }, []);
 
   const set = <K extends keyof FormData>(key: K, value: FormData[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
     setErrors((prev) => ({ ...prev, [key]: undefined }));
     setSaved(false);
+    setSaveError(null);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const result = schema.safeParse(form);
     if (!result.success) {
       const errs: typeof errors = {};
@@ -49,19 +74,22 @@ export default function MeetSettingsPage() {
       setErrors(errs);
       return;
     }
-    startTransition(async () => {
-      try {
-        const res = await fetch("/api/settings/meet", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(result.data),
-        });
-        if (res.ok) setSaved(true);
-      } catch {
-        // Supabase not configured; ignore and show saved locally
-        setSaved(true);
-      }
-    });
+    setIsSaving(true);
+    setSaveError(null);
+    try {
+      const res = await fetch("/api/settings/meet", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(result.data),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setSaved(true);
+    } catch (err) {
+      setSaved(false);
+      setSaveError(err instanceof Error ? err.message : "Falha ao salvar");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -69,8 +97,9 @@ export default function MeetSettingsPage() {
       <div className="top-bar">
         <div className="top-bar-title">📹 Google Meet</div>
         <div className="top-bar-actions">
-          <button className="btn btn-primary" onClick={handleSave} disabled={isPending}>
-            {isPending ? "Salvando…" : "Salvar"}
+          {saveError && <span className="badge badge-danger" title={saveError}>Erro</span>}
+          <button className="btn btn-primary" onClick={handleSave} disabled={isSaving}>
+            {isSaving ? "Salvando…" : "Salvar"}
           </button>
         </div>
       </div>

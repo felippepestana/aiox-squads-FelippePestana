@@ -915,6 +915,18 @@ hr, .divider {
 ::-webkit-scrollbar-thumb { background: var(--border-default); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
 
+/* ── Settings hub cards (hover via CSS, not JS) ──────────── */
+.settings-card {
+  cursor: pointer;
+  transition: border-color var(--t-fast), transform var(--t-fast);
+  border-color: var(--border-subtle);
+}
+.settings-card:hover,
+.settings-card:focus-within {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
 /* ── Connection status pill ──────────────────────────────── */
 .conn-pill {
   display: inline-flex;

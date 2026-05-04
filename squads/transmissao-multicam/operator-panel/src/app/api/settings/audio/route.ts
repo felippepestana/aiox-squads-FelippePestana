@@ -32,11 +32,19 @@ export async function PUT(req: NextRequest) {
   const sb = createSupabaseServerClient();
   if (!sb) return NextResponse.json({ saved: true, mode: "local" });
 
-  // Replace all channels for simplicity (small table)
-  await sb.from("mic_channels").delete().neq("channel", -9999);
+  // Replace all channels for simplicity (small table). Channel numbers are
+  // always >= 1 per schema, so .gt("channel", 0) selects every existing row.
+  const { error: deleteError } = await sb
+    .from("mic_channels")
+    .delete()
+    .gt("channel", 0);
+  if (deleteError) {
+    return NextResponse.json({ error: deleteError.message }, { status: 500 });
+  }
+
   const rows = parsed.data.map((c) => ({ ...c, updated_at: new Date().toISOString() }));
   const { data, error } = await sb.from("mic_channels").insert(rows).select();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
+  return NextResponse.json({ saved: true, channels: data });
 }

@@ -61,9 +61,9 @@ CREATE TABLE IF NOT EXISTS camera_configs (
 -- ─────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS mic_channels (
   id             uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  channel        integer     NOT NULL,          -- 1-based physical channel
+  channel        integer     NOT NULL UNIQUE,    -- 1-based physical channel; unique enables upsert
   label          text        NOT NULL,
-  input_name     text        NOT NULL,          -- OBS input name
+  input_name     text        NOT NULL,           -- OBS input name
   camera_id      text        REFERENCES camera_configs(camera_id),
   role           text        NOT NULL DEFAULT 'speaker'
                              CHECK (role IN ('speaker','host','aux')),

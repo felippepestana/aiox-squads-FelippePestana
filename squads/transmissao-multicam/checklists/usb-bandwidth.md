@@ -37,8 +37,8 @@ Anotar:
 
 Critério:
 
-- [ ] Pelo menos **2 root hubs** distintos hospedando câmeras
-- [ ] Nenhum root hub com 4 câmeras simultâneas (a menos que seja USB 3.2 Gen2 = 10 Gbps)
+- [ ] Pelo menos **2 root hubs** distintos hospedando câmeras **ou** todas em hub powered USB 3.x externo (ver `data/usb-topology.yaml`)
+- [ ] Se 4 câmeras compartilharem o mesmo root hub / hub powered: confirmar **alimentação externa**, banda total **< 70%** e smoke de 30 min sem desconexões
 
 ### 5. Estimar banda alocada
 

@@ -12,7 +12,11 @@ export async function GET() {
   const sb = createSupabaseServerClient();
   if (!sb) return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
 
-  const { data, error } = await sb.from("obs_settings").select("*").limit(1).single();
+  const { data, error } = await sb
+    .from("obs_settings")
+    .select("*")
+    .limit(1)
+    .maybeSingle();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
 }
@@ -27,11 +31,21 @@ export async function PUT(req: NextRequest) {
   const sb = createSupabaseServerClient();
   if (!sb) return NextResponse.json({ saved: true, mode: "local" });
 
-  const { data, error } = await sb
+  // The table has a singleton constraint (UNIQUE INDEX on `(true)`) which is
+  // an expression index, so plain upsert() can't auto-detect the conflict.
+  // Look up the existing row and choose update-vs-insert explicitly.
+  const { data: existing, error: lookupErr } = await sb
     .from("obs_settings")
-    .upsert({ ...parsed.data, updated_at: new Date().toISOString() })
-    .select()
-    .single();
+    .select("id")
+    .limit(1)
+    .maybeSingle();
+  if (lookupErr) return NextResponse.json({ error: lookupErr.message }, { status: 500 });
+
+  const payload = { ...parsed.data, updated_at: new Date().toISOString() };
+
+  const { data, error } = existing?.id
+    ? await sb.from("obs_settings").update(payload).eq("id", existing.id).select().single()
+    : await sb.from("obs_settings").insert(payload).select().single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);

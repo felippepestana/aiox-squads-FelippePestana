@@ -21,6 +21,22 @@ export function AudioMixer({ channels }: AudioMixerProps) {
     Object.fromEntries(channels.map((c) => [c.obsSourceName, c.faderDb])),
   );
 
+  // Resync local mixer state when the channels list changes (e.g. after the
+  // operator edits the mic mapping). Preserve existing per-channel state for
+  // unchanged sources; seed new sources from their declared defaults.
+  useEffect(() => {
+    setMuted((prev) =>
+      Object.fromEntries(
+        channels.map((c) => [c.obsSourceName, prev[c.obsSourceName] ?? c.muteDefault]),
+      ),
+    );
+    setFaders((prev) =>
+      Object.fromEntries(
+        channels.map((c) => [c.obsSourceName, prev[c.obsSourceName] ?? c.faderDb]),
+      ),
+    );
+  }, [channels]);
+
   useEffect(() => {
     if (!connected) return;
     const unsubscribe = subscribeToVolumeMeters((meters) => {
@@ -38,8 +54,10 @@ export function AudioMixer({ channels }: AudioMixerProps) {
   };
 
   const onMute = async (input: string) => {
-    let next = false;
-    setMuted((s) => { next = !s[input]; return { ...s, [input]: next }; });
+    // Compute next from the current muted snapshot (no setState side effect)
+    // so the OBS call uses the exact value we put on the UI.
+    const next = !(muted[input] ?? false);
+    setMuted((s) => ({ ...s, [input]: next }));
     if (connected) {
       try { await setInputMute(input, next); }
       catch (err) { console.error("Mute update failed:", err); }
@@ -115,10 +133,10 @@ export function AudioMixer({ channels }: AudioMixerProps) {
               {/* Fader */}
               <div>
                 <label className="label" style={{ marginBottom: 4 }}>
-                  Fader: {faders[ch.obsSourceName].toFixed(1)} dB
+                  Fader: {(faders[ch.obsSourceName] ?? ch.faderDb).toFixed(1)} dB
                 </label>
                 <input type="range" min={-60} max={6} step={0.5}
-                  value={faders[ch.obsSourceName]}
+                  value={faders[ch.obsSourceName] ?? ch.faderDb}
                   disabled={!connected}
                   style={{ width: "100%", accentColor: "var(--accent)" }}
                   onChange={(e) => void onFader(ch.obsSourceName, Number(e.target.value))} />

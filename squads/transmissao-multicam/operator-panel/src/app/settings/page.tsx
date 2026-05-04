@@ -57,14 +57,7 @@ export default function SettingsHubPage() {
         <div className="grid grid-2" style={{ gap: "var(--sp-4)" }}>
           {CARDS.map((card) => (
             <Link key={card.href} href={card.href} style={{ textDecoration: "none" }}>
-              <div className="card" style={{
-                cursor: "pointer",
-                transition: "all var(--t-fast)",
-                borderColor: "var(--border-subtle)",
-              }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--accent)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = "var(--border-subtle)"; }}
-              >
+              <div className="card settings-card">
                 <div className="card-header" style={{ marginBottom: "var(--sp-3)" }}>
                   <div>
                     <div className="card-title" style={{ fontSize: 16 }}>

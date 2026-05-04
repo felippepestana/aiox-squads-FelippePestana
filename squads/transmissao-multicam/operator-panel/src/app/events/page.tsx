@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { getSupabaseClient } from "@/lib/supabase/client";
 import type { BroadcastEvent, EventStatus } from "@/lib/supabase/types";
@@ -42,7 +42,7 @@ export default function EventsPage() {
   const [editId, setEditId] = useState<string | null>(null);
   const [form, setForm] = useState<FormData>(EMPTY_FORM);
   const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
-  const [isPending, startTransition] = useTransition();
+  const [isSaving, setIsSaving] = useState(false);
 
   // Load events from Supabase or use local state
   useEffect(() => {
@@ -71,7 +71,7 @@ export default function EventsPage() {
     setErrors((prev) => ({ ...prev, [key]: undefined }));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const result = schema.safeParse(form);
     if (!result.success) {
       const errs: typeof errors = {};
@@ -80,31 +80,40 @@ export default function EventsPage() {
       return;
     }
 
-    startTransition(async () => {
-      const payload = {
+    setIsSaving(true);
+    try {
+      // Status is managed exclusively via the action buttons; never overwrite
+      // it on edit (would knock a live broadcast offline mid-stream).
+      const basePayload = {
         ...result.data,
-        scheduled_at: result.data.scheduled_at || null,
+        scheduled_at:  result.data.scheduled_at  || null,
         meet_room_url: result.data.meet_room_url || null,
-        notes: result.data.notes || null,
+        notes:         result.data.notes         || null,
         session_topic: result.data.session_topic || null,
-        status: "planned" as EventStatus,
       };
 
       const sb = getSupabaseClient();
       if (sb) {
         if (editId) {
-          const { data } = await sb.from("events").update(payload).eq("id", editId).select().single();
+          const { data } = await sb.from("events").update(basePayload).eq("id", editId).select().single();
           if (data) setEvents((prev) => prev.map((e) => e.id === editId ? data : e));
         } else {
-          const { data } = await sb.from("events").insert(payload).select().single();
+          const { data } = await sb
+            .from("events")
+            .insert({ ...basePayload, status: "planned" as EventStatus })
+            .select()
+            .single();
           if (data) setEvents((prev) => [data, ...prev]);
         }
       } else {
-        // Offline: add locally
+        // Offline: preserve current status when editing, otherwise default to planned
+        const currentStatus: EventStatus = editId
+          ? events.find((e) => e.id === editId)?.status ?? "planned"
+          : "planned";
         const fake: BroadcastEvent = {
-          id: Date.now().toString(),
-          ...payload,
-          status: "planned",
+          id: editId ?? Date.now().toString(),
+          ...basePayload,
+          status:     currentStatus,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         };
@@ -115,7 +124,9 @@ export default function EventsPage() {
       setShowForm(false);
       setEditId(null);
       setForm(EMPTY_FORM);
-    });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const startEdit = (ev: BroadcastEvent) => {
@@ -215,8 +226,8 @@ export default function EventsPage() {
               </div>
 
               <div className="row">
-                <button className="btn btn-primary" onClick={handleSave} disabled={isPending}>
-                  {isPending ? "Salvando…" : editId ? "Atualizar" : "Criar evento"}
+                <button className="btn btn-primary" onClick={handleSave} disabled={isSaving}>
+                  {isSaving ? "Salvando…" : editId ? "Atualizar" : "Criar evento"}
                 </button>
                 <button className="btn btn-ghost" onClick={() => { setShowForm(false); setEditId(null); }}>
                   Cancelar

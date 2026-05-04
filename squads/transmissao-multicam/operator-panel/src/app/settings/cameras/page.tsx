@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 
 interface Camera {
   camera_id: string;
@@ -40,7 +40,21 @@ export default function CamerasSettingsPage() {
   const [cameras, setCameras] = useState<Camera[]>(DEFAULTS);
   const [selected, setSelected] = useState<string>("CAM1");
   const [saved, setSaved] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Hydrate from the API on mount so previously saved camera config is shown.
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/settings/cameras")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: Camera[] | null) => {
+        if (!alive) return;
+        if (Array.isArray(data) && data.length > 0) setCameras(data);
+      })
+      .catch(() => { /* offline: keep DEFAULTS */ });
+    return () => { alive = false; };
+  }, []);
 
   const cam = cameras.find((c) => c.camera_id === selected)!;
 
@@ -49,19 +63,28 @@ export default function CamerasSettingsPage() {
       prev.map((c) => c.camera_id === selected ? { ...c, [key]: value } : c),
     );
     setSaved(false);
+    setError(null);
   };
 
-  const handleSave = () => {
-    startTransition(async () => {
-      try {
-        await fetch("/api/settings/cameras", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(cameras),
-        });
-      } catch { /* offline */ }
+  // Plain async handler — `startTransition(async ...)` resolves isPending too
+  // early in React 18, which would re-enable the button mid-flight.
+  const handleSave = async () => {
+    setIsSaving(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/settings/cameras", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(cameras),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setSaved(true);
-    });
+    } catch (err) {
+      setSaved(false);
+      setError(err instanceof Error ? err.message : "Falha ao salvar");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -70,8 +93,9 @@ export default function CamerasSettingsPage() {
         <div className="top-bar-title">🎥 Câmeras</div>
         <div className="top-bar-actions">
           {saved && <span className="badge badge-ok">Salvo</span>}
-          <button className="btn btn-primary" onClick={handleSave} disabled={isPending}>
-            {isPending ? "Salvando…" : "Salvar todas"}
+          {error && <span className="badge badge-danger" title={error}>Erro</span>}
+          <button className="btn btn-primary" onClick={handleSave} disabled={isSaving}>
+            {isSaving ? "Salvando…" : "Salvar todas"}
           </button>
         </div>
       </div>

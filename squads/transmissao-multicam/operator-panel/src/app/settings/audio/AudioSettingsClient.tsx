@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState } from "react";
 import type { Channel } from "./page";
 
 const CAMERA_OPTIONS = [
@@ -20,13 +20,15 @@ const ROLE_OPTIONS = [
 export function AudioSettingsClient({ initialChannels }: { initialChannels: Channel[] }) {
   const [channels, setChannels] = useState<Channel[]>(initialChannels);
   const [saved, setSaved] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const updateChannel = <K extends keyof Channel>(index: number, key: K, value: Channel[K]) => {
     setChannels((prev) =>
       prev.map((ch, i) => i === index ? { ...ch, [key]: value } : ch),
     );
     setSaved(false);
+    setError(null);
   };
 
   const addChannel = () => {
@@ -42,17 +44,25 @@ export function AudioSettingsClient({ initialChannels }: { initialChannels: Chan
     );
   };
 
-  const handleSave = () => {
-    startTransition(async () => {
-      try {
-        await fetch("/api/settings/audio", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(channels),
-        });
-      } catch { /* offline */ }
-      setSaved(true);
-    });
+  const handleSave = async () => {
+    setIsSaving(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/settings/audio", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(channels),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const body = await res.json().catch(() => null);
+      // The API returns { saved: true, ... } on success.
+      setSaved(body?.saved === true);
+    } catch (err) {
+      setSaved(false);
+      setError(err instanceof Error ? err.message : "Falha ao salvar");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -61,9 +71,10 @@ export function AudioSettingsClient({ initialChannels }: { initialChannels: Chan
         <div className="top-bar-title">🎙️ Áudio / Microfones</div>
         <div className="top-bar-actions">
           {saved && <span className="badge badge-ok">Salvo</span>}
+          {error && <span className="badge badge-danger" title={error}>Erro</span>}
           <button className="btn" onClick={addChannel}>+ Canal</button>
-          <button className="btn btn-primary" onClick={handleSave} disabled={isPending}>
-            {isPending ? "Salvando…" : "Salvar"}
+          <button className="btn btn-primary" onClick={handleSave} disabled={isSaving}>
+            {isSaving ? "Salvando…" : "Salvar"}
           </button>
         </div>
       </div>

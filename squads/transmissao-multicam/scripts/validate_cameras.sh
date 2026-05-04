@@ -107,8 +107,12 @@ if [ "$PLATFORM" = "linux" ]; then
     err "$HISPEED_COUNT camera(s) negotiated only Hi-Speed (480M). Should be SuperSpeed."
     FAILURES=$((FAILURES + 1))
   fi
-  if [ "$SUPERSPEED_COUNT" -gt 0 ]; then
+  if [ "$SUPERSPEED_COUNT" -eq "$EXPECTED_CAMERAS" ]; then
     ok "$SUPERSPEED_COUNT camera(s) at SuperSpeed (5G+)"
+  elif [ "${CAMERA_COUNT:-0}" -gt 0 ]; then
+    # QG-USB requires ALL cameras at SuperSpeed; partial coverage is a fail.
+    err "Only $SUPERSPEED_COUNT/$EXPECTED_CAMERAS camera(s) negotiated SuperSpeed."
+    FAILURES=$((FAILURES + 1))
   fi
 fi
 

@@ -135,16 +135,22 @@ class SwitchEngine:
 
     def _resolve_healthy(self, target: str, now_ms: int) -> str | None:
         """If the target camera is unhealthy, pick another camera with
-        recent speech activity that IS healthy, or return None if no
-        viable alternative exists."""
+        sustained speech activity (debounced by min_speech_ms) that IS
+        healthy, or return None if no viable alternative exists.
+
+        The min_speech_ms debounce is preserved on the failover path so a
+        short blip on a backup channel cannot bypass the same anti-ping-pong
+        rule used for the primary election.
+        """
         if self.health is None or self.health.is_healthy(target, now_ms):
             return target
-        # Try another channel whose camera is healthy and is currently speaking.
         for ch in self.config.channels:
             if ch.camera_target is None or ch.camera_target == target:
                 continue
             state = self._state[ch.obs_source_name]
             if state.speech_started_at_ms is None:
+                continue
+            if now_ms - state.speech_started_at_ms < ch.min_speech_ms:
                 continue
             if self.health.is_healthy(ch.camera_target, now_ms):
                 return ch.camera_target

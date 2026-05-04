@@ -170,7 +170,18 @@ def run() -> int:  # pragma: no cover — thin glue layer
         if not isinstance(payload, dict):
             return
         if payload.get("type") == "operator-override":
-            expires = int(payload.get("expires_at", 0))
+            # Prefer duration_ms (clock-skew safe). Fall back to expires_at
+            # for backwards compatibility with older panel builds.
+            now_ms = int(time.time() * 1000)
+            duration = payload.get("duration_ms")
+            if duration is not None:
+                try:
+                    expires = now_ms + int(duration)
+                except (TypeError, ValueError):
+                    LOG.warning("invalid duration_ms in override event: %r", duration)
+                    return
+            else:
+                expires = int(payload.get("expires_at", 0))
             engine.apply_override(expires)
             metrics.record_override()
             LOG.info("operator override until %s", expires)

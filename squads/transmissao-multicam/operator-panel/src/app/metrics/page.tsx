@@ -183,6 +183,7 @@ const TRIGGER_LABELS: Record<string, string> = {
 export default function MetricsPage() {
   const prometheus = usePrometheusMetrics();
   const logs = useSwitchLogs();
+  const latencySamples = logs.filter((l) => l.latency_ms != null);
 
   const chartProps = {
     margin: { top: 4, right: 4, left: -10, bottom: 0 },
@@ -206,10 +207,23 @@ export default function MetricsPage() {
         {/* Summary KPIs */}
         <div className="grid grid-4" style={{ marginBottom: "var(--sp-5)" }}>
           {[
-            { label: "Trocas totais", value: logs.length, unit: "" },
-            { label: "CPU OBS",  value: prometheus.cpu.at(-1)?.value?.toFixed(1) ?? "—", unit: "%" },
+            // Logs is the most recent N entries from Supabase, not a global
+            // total — label accordingly so the operator isn't misled.
+            { label: "Trocas (recentes)", value: logs.length, unit: "" },
+            { label: "CPU OBS",   value: prometheus.cpu.at(-1)?.value?.toFixed(1) ?? "—", unit: "%" },
             { label: "Frame drops", value: prometheus.drops.at(-1)?.value?.toFixed(2) ?? "—", unit: "%" },
-            { label: "Latência avg", value: logs.length ? (logs.reduce((a, l) => a + (l.latency_ms ?? 0), 0) / logs.length).toFixed(0) : "—", unit: " ms" },
+            {
+              label: "Latência avg",
+              // Average only over rows that actually have a latency sample;
+              // otherwise null entries skew the average toward 0.
+              value: latencySamples.length
+                ? (
+                    latencySamples.reduce((a, l) => a + (l.latency_ms ?? 0), 0) /
+                    latencySamples.length
+                  ).toFixed(0)
+                : "—",
+              unit: " ms",
+            },
           ].map(({ label, value, unit }) => (
             <div className="card" key={label} style={{ textAlign: "center" }}>
               <div style={{ fontSize: 28, fontWeight: 700, color: "var(--accent)", fontFamily: "var(--font-mono)" }}>

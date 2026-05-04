@@ -1,13 +1,15 @@
 -- Seed default rows so settings pages render immediately without empty states.
 -- Safe to re-run (INSERT ... ON CONFLICT DO NOTHING).
 
+-- Singleton tables use expression-based unique indexes; ON CONFLICT must
+-- target the constraint by name explicitly.
 INSERT INTO obs_settings (host, port, use_tls)
 VALUES ('localhost', 4455, false)
-ON CONFLICT DO NOTHING;
+ON CONFLICT ON CONSTRAINT obs_settings_singleton DO NOTHING;
 
 INSERT INTO meet_settings (auto_record, studio_effects_disabled, live_streaming_enabled, max_participants)
 VALUES (true, true, false, 300)
-ON CONFLICT DO NOTHING;
+ON CONFLICT ON CONSTRAINT meet_settings_singleton DO NOTHING;
 
 INSERT INTO camera_configs (camera_id, display_name, vid, role, preset_1_name, preset_2_name, preset_3_name, auto_track)
 VALUES
@@ -22,4 +24,4 @@ VALUES
   (1, 'Mic Palestrante', 'Mic Palestrante', 'CAM1', 'speaker', -40),
   (2, 'Mic Host',        'Mic Host',        'CAM2', 'host',    -40),
   (3, 'Mic Aux',         'Mic Aux',         null,   'aux',     -35)
-ON CONFLICT DO NOTHING;
+ON CONFLICT (channel) DO NOTHING;

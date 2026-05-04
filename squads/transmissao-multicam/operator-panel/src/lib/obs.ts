@@ -107,13 +107,18 @@ export async function setPipLayout(
 }
 
 // Broadcast operator override so the F6 engine suspends auto-switch.
+//
+// We send a *duration* (not an absolute expires_at) so the engine can compute
+// expiry against its own clock — clock skew between the operator's browser and
+// the engine host could otherwise make a "10s override" expire instantly or
+// last several minutes.
 export async function broadcastOperatorOverride(
   durationMs: number,
 ): Promise<void> {
   await getClient().call("BroadcastCustomEvent", {
     eventData: {
       type: "operator-override",
-      expires_at: Date.now() + durationMs,
+      duration_ms: durationMs,
     },
   });
 }

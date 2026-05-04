@@ -67,24 +67,28 @@ A cada 10 min, registrar:
 - [ ] OBS Stats: drops (%), CPU OBS (%), latência render
 - [ ] Latência percebida no Meet (cronometrar troca de cena)
 
-### 6. Smoke E2E via script
-
-- [ ] Em paralelo (último 10min) rodar:
-  ```bash
-  # Substituir <PASSWORD> pela senha configurada em OBS → Tools → WebSocket Server.
-  export OBS_WS_HOST=localhost OBS_WS_PORT=4455 OBS_WS_PASSWORD=<PASSWORD>
-  python3 squads/transmissao-multicam/scripts/obs-headless-check.py
-  ```
-- [ ] Script trocará por cada uma das 10 cenas e medirá tempo de resposta
-- [ ] Validar OK em todas
-
-### 7. Encerrar
+### 6. Encerrar
 
 - [ ] Selecionar ENCERRAMENTO
 - [ ] Aguardar 60s
 - [ ] Parar gravação Meet
 - [ ] Sair da sala
 - [ ] Parar Virtual Camera no OBS
+
+### 7. Smoke E2E via script (após encerrar Virtual Camera, com OBS ainda aberto)
+
+> Importante: rodar **após** o encerramento. O script força trocas rápidas
+> entre as 10 cenas (~20s) e interferiria com a rotação manual da step 4 e
+> com as métricas coletadas na step 5 se executado durante o show ao vivo.
+
+- [ ] Com OBS ainda aberto e Virtual Camera parada, executar:
+  ```bash
+  # Substituir <PASSWORD> pela senha configurada em OBS → Tools → WebSocket Server.
+  export OBS_WS_HOST=localhost OBS_WS_PORT=4455 OBS_WS_PASSWORD=<PASSWORD>
+  python3 squads/transmissao-multicam/scripts/obs-headless-check.py
+  ```
+- [ ] Script troca por cada uma das 10 cenas e mede tempo de resposta
+- [ ] Validar OK em todas
 
 ### 8. Validar gravação
 
