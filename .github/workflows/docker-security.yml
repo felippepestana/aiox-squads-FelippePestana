@@ -11,13 +11,15 @@ on:
   pull_request:
     branches: [main, master]
     # The scan only builds and inspects chatbot/Dockerfile and web/Dockerfile.
-    # Mirror the push trigger so squad-only PRs (which never touch those paths)
-    # don't fire a job that would always fail with a "Set up job" error.
+    # Mirror the push trigger but DO NOT re-include this workflow file in the
+    # PR paths: that self-reference forces the job to re-run every time the
+    # workflow itself is edited, even on PRs that don't touch chatbot/web,
+    # producing spurious "Set up job" failures. The push trigger to main still
+    # exercises the workflow when it changes upstream.
     paths:
       - "chatbot/**"
       - "web/**"
       - "docker-compose.yml"
-      - ".github/workflows/docker-security.yml"
 
 jobs:
   scan:
