@@ -17,6 +17,7 @@ from .engine import SwitchEngine
 from .health import HealthMonitor
 from .metrics import Metrics, start_metrics_server
 from .motion import MotionDetector
+from .osc_feedback import get_emitter as get_osc_emitter
 from .supabase_writer import get_writer as get_supabase_writer
 
 LOG = logging.getLogger("tx-auto-switch")
@@ -86,6 +87,10 @@ def run() -> int:  # pragma: no cover — thin glue layer
     sb = get_supabase_writer()
     if sb.enabled:
         LOG.info("Supabase switch-log persistence enabled")
+
+    osc = get_osc_emitter()
+    if osc.enabled:
+        LOG.info("OSC feedback emitter enabled (TouchOSC tablet)")
 
     try:
         import obsws_python as obs
@@ -165,6 +170,9 @@ def run() -> int:  # pragma: no cover — thin glue layer
                 latency_ms=latency_ms,
             )
 
+            # Push tablet state via OSC (no-op if not configured)
+            osc.emit_scene(target)
+
     def on_custom_event(data) -> None:
         payload = getattr(data, "event_data", None) or getattr(data, "eventData", {})
         if not isinstance(payload, dict):
@@ -185,6 +193,8 @@ def run() -> int:  # pragma: no cover — thin glue layer
             engine.apply_override(expires)
             metrics.record_override()
             LOG.info("operator override until %s", expires)
+            # Tell the tablet whether we're in manual or auto mode now.
+            osc.emit_mode(manual_override=(expires > now_ms))
 
     def on_current_program_scene_changed(data) -> None:
         scene_name = getattr(data, "scene_name", None) or getattr(
@@ -204,9 +214,11 @@ def run() -> int:  # pragma: no cover — thin glue layer
             return
         if active:
             health.mark_active(source_name, int(time.time() * 1000))
+            osc.emit_health(source_name, healthy=True)
         else:
             health.mark_inactive(source_name)
             metrics.record_dropout()
+            osc.emit_health(source_name, healthy=False)
 
     events.callback.register(on_input_volume_meters)
     events.callback.register(on_custom_event)

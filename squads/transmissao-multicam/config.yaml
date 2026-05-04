@@ -74,7 +74,8 @@ tier_structure:
       - obsbot-controller
       - meet-integration
       - audio-controller
-    purpose: "Montagem de cenas/PiP/standby, controle PTZ via OBSBOT Plugin, integração Meet/Workspace, mapeamento e calibração de áudio"
+      - touchosc-controller
+    purpose: "Montagem de cenas/PiP/standby, controle PTZ via OBSBOT Plugin, integração Meet/Workspace, mapeamento e calibração de áudio, surface físico TouchOSC"
 
   tier_3:
     name: "Support"
@@ -296,6 +297,21 @@ quality_gates:
       - "60min load test: CPU < 70%, frame drops < 0.5%, recording intact"
       - "obs-headless-check.py returns OK for all 10 scenes"
 
+  - id: "QG-TOUCHOSC"
+    name: "TouchOSC Surface Bridged"
+    transition: "F5 → F9 (TouchOSC)"
+    type: "non-blocking"
+    criteria:
+      - "OSC bridge listening on configured UDP port (/api/osc/status confirms)"
+      - "All 10 scenes switch via TouchOSC button in < 200ms"
+      - "Audio mute + fader work for every mapped channel"
+      - "Feedback (scene active, VU meters, OBS connected) reaches the tablet"
+      - "Bridge survives obs-websocket reconnect without restart"
+      - "Engine F6 OSC feedback emits (when [osc] extra installed)"
+    if_fails:
+      action: "Fall back to operator-panel web UI; investigate via /api/osc/status; re-run setup-touchosc.md"
+      rework_limit: 2
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # OUTPUT FORMATS
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -442,6 +458,7 @@ roadmap:
     - "F4 — Show flow (STANDBY com cronômetro + ENCERRAMENTO + Meet integration)"
     - "F5 — Painel operador (Next.js + obs-websocket v5 + mixer de áudio)"
     - "F6 — Motor de auto-switch (Python + meters do OBS + cooldown + override)"
+    - "F9 — TouchOSC bridge (operator-panel ↔ TouchOSC iPad/Android via OSC/UDP)"
     - "Audio mapping & VAD calibration (data/mic-mapping.yaml + tasks/configure-audio.md)"
   future:
     - phase: "F7"
@@ -450,3 +467,6 @@ roadmap:
     - phase: "F8"
       name: "Detecção de movimento por IA"
       stack: "OpenCV + Auto-Track OBSBOT como fallback de áudio"
+    - phase: "F10"
+      name: "OSC bridge standalone"
+      stack: "Pacote Node.js separado para deployments onde operator-panel não é local"

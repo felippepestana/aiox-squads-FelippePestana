@@ -53,7 +53,7 @@ Use este squad quando precisar:
          ├─ Cenas pré-prontas (10): STANDBY, CAM1-4, GRID, SLIDES_FULL, SLIDES_PIP, TELA_PIP, ENCERRAMENTO
          ├─ Source Mirror dinâmica (PiP segue câmera ativa)
          ├─ obs-advanced-timer (cronômetro regressivo)
-         └─ obs-websocket v5 (automação futura — F5/F6)
+         └─ obs-websocket v5 (F5 painel + F6 engine + F9 TouchOSC bridge)
          │
          ▼
 [OBS Virtual Camera] ──▶ [Google Meet (Workspace Enterprise Plus)]
@@ -62,6 +62,36 @@ Use este squad quando precisar:
                                     ├─ Live streaming in-domain (até 100k)
                                     └─ Captions + Gemini (Take notes)
 ```
+
+### 🎛️ TouchOSC (F9) — surface físico complementar
+
+Operadores podem usar um **iPad/tablet com TouchOSC** lado-a-lado com o
+painel web. Comandos viajam por OSC/UDP até um bridge que roda dentro do
+processo Next.js do `operator-panel/`:
+
+```
+┌─────────────────────┐         ┌──────────────────────────┐
+│  TouchOSC iPad/PC   │  OSC    │  OSC Bridge (Next.js)    │
+│  operator.tosc      │◄──UDP──►│  /api/osc no panel       │
+└─────────────────────┘  :9300  │   - dgram socket         │
+                         :9301  │   - obs-websocket client │
+                                └─────────────┬────────────┘
+                                              │ obs-websocket v5
+                                              ▼
+                                        [OBS Studio]
+```
+
+- **Layouts**: `templates/touchosc/operator.layout.json` (master) +
+  variantes `debate.layout.json` e `apresentacao-corp.layout.json`. Spec
+  textual completa em `templates/touchosc/README.md`.
+- **Protocolo**: `data/osc-mapping.yaml` é a fonte de verdade
+  (TouchOSC → OBS comandos + OBS/engine → TouchOSC feedback).
+- **Bridge**: `operator-panel/src/server/osc-bridge.ts`, ativado via
+  `OSC_BRIDGE_ENABLED=true` no `.env.local`.
+- **Engine F6** opcionalmente emite feedback OSC quando troca cena
+  automaticamente — instalar com `pip install -e ".[osc]"` e configurar
+  `OSC_FEEDBACK_HOST` apontando para o IP do tablet.
+- **Validação**: `checklists/touchosc-validation.md` (QG-TOUCHOSC, 8 testes).
 
 ---
 
@@ -258,6 +288,7 @@ Aprovação: todas as 5 quality gates verdes.
 | **QG-STANDBY** | Show flow pronto | Cronômetro ±1 s, trigger configurável |
 | **QG-AUDIO** | Áudio mapeado e calibrado | Canais ↔ câmeras, threshold VAD (ruído + 12 dB), mute master configurado |
 | **QG-LIVE-READY** | Smoke E2E | Virtual Cam no Meet, Studio* OFF, gravação ON, load test 60 min OK |
+| **QG-TOUCHOSC** | Surface TouchOSC ativo (não-bloqueante) | Bridge UDP escuta, 10/10 cenas trocam < 200 ms via tablet, feedback chega |
 
 Detalhes em `config.yaml` → `quality_gates`.
 
@@ -285,6 +316,7 @@ Detalhes em `config.yaml` → `quality_gates`.
 - ✅ F4 — Show flow (STANDBY com cronômetro + ENCERRAMENTO + Meet integration)
 - ✅ F5 — Painel operador (Next.js 14 + obs-websocket-js v5, mixer com VU + fader + mute por canal e mute master)
 - ✅ F6 — Motor de auto-switch (Python, regras puras testadas: VAD por canal, cooldown 1.5s, min_speech 0.5s, override 10s, cenas protegidas)
+- ✅ F9 — TouchOSC bridge (operator-panel ↔ tablet via OSC/UDP, layouts versionados em `templates/touchosc/`, feedback do engine F6 opcional)
 - ✅ Audio mapping & VAD calibration (`audio-controller` agent + `data/mic-mapping.yaml` + `tasks/configure-audio.md`)
 
 ### Futuro

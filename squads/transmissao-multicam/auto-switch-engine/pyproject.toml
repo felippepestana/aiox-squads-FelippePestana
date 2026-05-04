@@ -25,8 +25,11 @@ dev = [
 supabase = [
     "supabase>=2.0",
 ]
+osc = [
+    "python-osc>=1.8",
+]
 all = [
-    "tx-multicam-auto-switch[supabase]",
+    "tx-multicam-auto-switch[supabase,osc]",
 ]
 
 [project.scripts]
