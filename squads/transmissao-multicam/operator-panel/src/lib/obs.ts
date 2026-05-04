@@ -2,7 +2,7 @@
 
 "use client";
 
-import OBSWebSocket from "obs-websocket-js";
+import OBSWebSocket, { EventSubscription } from "obs-websocket-js";
 import {
   PIP_MIRROR_SOURCE,
   PipCorner,
@@ -25,9 +25,16 @@ export interface ConnectOptions {
   password: string;
 }
 
+// obs-websocket v5 only delivers high-volume events (InputVolumeMeters,
+// InputActiveStateChanged, etc.) when the client opts in. The panel's
+// audio mixer depends on InputVolumeMeters, so we subscribe to All.
+const EVENT_SUBSCRIPTIONS = EventSubscription.All;
+
 export async function connect(opts: ConnectOptions): Promise<void> {
   const c = getClient();
-  await c.connect(opts.url, opts.password);
+  await c.connect(opts.url, opts.password, {
+    eventSubscriptions: EVENT_SUBSCRIPTIONS,
+  });
 }
 
 export async function disconnect(): Promise<void> {

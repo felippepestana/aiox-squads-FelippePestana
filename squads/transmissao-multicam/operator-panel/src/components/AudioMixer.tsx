@@ -7,9 +7,14 @@ import {
   subscribeToVolumeMeters,
 } from "@/lib/obs";
 import { useOperator } from "@/lib/store";
-import { MIC_CHANNELS } from "@/lib/mic-config";
+import type { MicChannel } from "@/lib/mic-config";
 
-export function AudioMixer() {
+interface AudioMixerProps {
+  channels: MicChannel[];
+}
+
+export function AudioMixer({ channels }: AudioMixerProps) {
+  const MIC_CHANNELS = channels;
   const connected = useOperator((s) => s.connected);
   const micLevels = useOperator((s) => s.micLevels);
   const setMicLevel = useOperator((s) => s.setMicLevel);
@@ -59,11 +64,25 @@ export function AudioMixer() {
       MIC_CHANNELS.map((c) => [c.obsSourceName, true]),
     );
     setMuted(next);
-    if (connected) {
-      await Promise.all(
-        MIC_CHANNELS.map((c) => setInputMute(c.obsSourceName, true)),
-      );
+
+    if (!connected) {
+      return;
     }
+
+    // Use allSettled so that a single failed mute does not cancel the rest
+    // and so we never raise an unhandled promise rejection.
+    const results = await Promise.allSettled(
+      MIC_CHANNELS.map((c) => setInputMute(c.obsSourceName, true)),
+    );
+    results.forEach((result, idx) => {
+      if (result.status === "rejected") {
+        const ch = MIC_CHANNELS[idx];
+        console.error(
+          `MuteAll: failed to mute "${ch.obsSourceName}":`,
+          result.reason,
+        );
+      }
+    });
   };
 
   return (

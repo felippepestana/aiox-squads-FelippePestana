@@ -14,6 +14,9 @@ from pathlib import Path
 
 from .config import load_engine_config
 from .engine import SwitchEngine
+from .health import HealthMonitor
+from .metrics import Metrics, start_metrics_server
+from .motion import MotionDetector
 
 LOG = logging.getLogger("tx-auto-switch")
 
@@ -36,11 +39,23 @@ def _peak_dbfs_from_levels(levels: list[list[float]]) -> float:
 
 
 def run() -> int:  # pragma: no cover — thin glue layer
-    parser = argparse.ArgumentParser(description="Auto-switch engine (F6).")
+    parser = argparse.ArgumentParser(description="Auto-switch engine (F6+F7+F8).")
     parser.add_argument("--mic-mapping", default=os.environ.get("MIC_MAPPING"))
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--log-switches", default=None)
     parser.add_argument("--log-level", default="INFO")
+    parser.add_argument(
+        "--metrics-port",
+        type=int,
+        default=int(os.environ.get("METRICS_PORT", "0")),
+        help="HTTP port for Prometheus exporter. 0 disables. Default 0.",
+    )
+    parser.add_argument(
+        "--enable-motion",
+        action="store_true",
+        help="Enable motion-detection fallback (F8). Requires periodic frames "
+        "to be fed into the engine; in this scaffold motion is left as a stub.",
+    )
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -53,10 +68,23 @@ def run() -> int:  # pragma: no cover — thin glue layer
         return 2
 
     config = load_engine_config(Path(args.mic_mapping))
-    engine = SwitchEngine(config=config)
+    metrics = Metrics()
+    health = HealthMonitor(timeout_ms=3_000)
+    motion = MotionDetector() if args.enable_motion else None
+
+    engine = SwitchEngine(
+        config=config,
+        health=health,
+        on_motion_request=(lambda _now: motion.best_target() if motion else None),
+    )
+
+    if args.metrics_port > 0:
+        start_metrics_server(metrics, port=args.metrics_port)
+        LOG.info("Metrics exporter listening on :%d/metrics", args.metrics_port)
 
     try:
         import obsws_python as obs
+        from obsws_python.subs import Subs
     except ImportError:
         LOG.error("obsws-python not installed. Run: pip install obsws-python")
         return 2
@@ -67,55 +95,91 @@ def run() -> int:  # pragma: no cover — thin glue layer
 
     LOG.info("Connecting to obs-websocket at %s:%d", host, port)
     req = obs.ReqClient(host=host, port=port, password=password, timeout=5)
-    events = obs.EventClient(host=host, port=port, password=password, timeout=5)
+    # ALL = LOW_VOLUME | HIGH_VOLUME. The high-volume mask is required for
+    # InputVolumeMeters and InputActiveStateChanged events; without it the
+    # engine never receives meter snapshots and switching is disabled.
+    events = obs.EventClient(
+        host=host,
+        port=port,
+        password=password,
+        timeout=5,
+        subs=int(Subs.ALL),
+    )
 
     switch_log = (
         open(args.log_switches, "a", encoding="utf-8") if args.log_switches else None
     )
 
-    def on_meters(data) -> None:
+    # obsws-python dispatches by function name → on_<snake_case_event_name>.
+    # Renaming below is required, otherwise none of these callbacks fire.
+
+    def on_input_volume_meters(data) -> None:
+        now_ms = int(time.time() * 1000)
         peaks: dict[str, float] = {}
         for inp in getattr(data, "inputs", []):
             peaks[inp["inputName"]] = _peak_dbfs_from_levels(
                 inp.get("inputLevelsMul", [])
             )
-        target = engine.on_meters(int(time.time() * 1000), peaks)
-        if target and not args.dry_run:
-            try:
-                req.set_current_program_scene(target)
-            except Exception:  # noqa: BLE001
-                LOG.exception("SetCurrentProgramScene(%s) failed", target)
+        target = engine.on_meters(now_ms, peaks)
         if target:
+            metrics.record_switch(target)
+            if engine.last_motion_triggered:
+                metrics.record_motion_trigger()
+            if not args.dry_run:
+                try:
+                    req.set_current_program_scene(target)
+                except Exception:  # noqa: BLE001
+                    LOG.exception("SetCurrentProgramScene(%s) failed", target)
             entry = {
-                "ts_ms": int(time.time() * 1000),
+                "ts_ms": now_ms,
                 "target": target,
                 "peaks": peaks,
                 "dry_run": args.dry_run,
+                "motion": engine.last_motion_triggered,
             }
-            LOG.info("switch → %s", target)
+            LOG.info(
+                "switch → %s%s", target, " (motion)" if engine.last_motion_triggered else ""
+            )
             if switch_log:
                 switch_log.write(json.dumps(entry) + "\n")
                 switch_log.flush()
 
-    def on_custom(data) -> None:
+    def on_custom_event(data) -> None:
         payload = getattr(data, "event_data", None) or getattr(data, "eventData", {})
         if not isinstance(payload, dict):
             return
         if payload.get("type") == "operator-override":
             expires = int(payload.get("expires_at", 0))
             engine.apply_override(expires)
+            metrics.record_override()
             LOG.info("operator override until %s", expires)
 
-    def on_scene(data) -> None:
+    def on_current_program_scene_changed(data) -> None:
         scene_name = getattr(data, "scene_name", None) or getattr(
             data, "sceneName", None
         )
         if scene_name:
             engine.set_current_scene(scene_name)
 
-    events.callback.register(on_meters)
-    events.callback.register(on_custom)
-    events.callback.register(on_scene)
+    def on_input_active_state_changed(data) -> None:
+        source_name = getattr(data, "input_name", None) or getattr(
+            data, "inputName", None
+        )
+        active = getattr(data, "video_active", None) or getattr(
+            data, "videoActive", None
+        )
+        if not source_name:
+            return
+        if active:
+            health.mark_active(source_name, int(time.time() * 1000))
+        else:
+            health.mark_inactive(source_name)
+            metrics.record_dropout()
+
+    events.callback.register(on_input_volume_meters)
+    events.callback.register(on_custom_event)
+    events.callback.register(on_current_program_scene_changed)
+    events.callback.register(on_input_active_state_changed)
 
     LOG.info("Engine running. Mode: %s", "dry-run" if args.dry_run else "live")
 

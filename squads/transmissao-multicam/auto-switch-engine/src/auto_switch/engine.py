@@ -3,9 +3,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Mapping
+from typing import Callable, Mapping, Protocol
 
 from .config import EngineConfig
+
+
+class _HealthLike(Protocol):
+    def is_healthy(self, source_name: str, now_ms: int) -> bool: ...
 
 
 @dataclass
@@ -28,6 +32,10 @@ class SwitchEngine:
     # Far in the past so the first switch is never gated by cooldown.
     last_switch_at_ms: int = -(10**18)
     override_until_ms: int = 0
+    health: _HealthLike | None = None
+    silence_fallback_ms: int = 3_000
+    on_motion_request: Callable[[int], str | None] | None = None
+    last_audio_activity_ms: int = -(10**18)
     _state: dict[str, _ChannelState] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
@@ -51,6 +59,8 @@ class SwitchEngine:
     ) -> str | None:
         """Feed an audio meter snapshot; return target scene or ``None``."""
 
+        any_above_threshold = False
+
         # Update per-channel speech-start tracking.
         for ch in self.config.channels:
             peak = peaks_dbfs.get(ch.obs_source_name, -90.0)
@@ -59,8 +69,18 @@ class SwitchEngine:
             if peak >= ch.threshold_dbfs:
                 if state.speech_started_at_ms is None:
                     state.speech_started_at_ms = now_ms
+                if ch.camera_target is not None:
+                    any_above_threshold = True
             else:
                 state.speech_started_at_ms = None
+
+        if any_above_threshold:
+            self.last_audio_activity_ms = now_ms
+        elif self.last_audio_activity_ms == -(10**18):
+            # Engine just started: anchor the silence clock to the first
+            # observation so motion fallback waits for real elapsed silence
+            # rather than firing on tick zero.
+            self.last_audio_activity_ms = now_ms
 
         # Honor manual override.
         if now_ms < self.override_until_ms:
@@ -91,12 +111,53 @@ class SwitchEngine:
                 best_duration = duration
                 best_channel = ch
 
-        if best_channel is None:
-            return None
-        if best_channel.camera_target == self.current_scene:
-            return None
+        if best_channel is not None:
+            target = self._resolve_healthy(best_channel.camera_target, now_ms)
+            if target is None or target == self.current_scene:
+                return None
+            return self._commit_switch(target, now_ms)
 
+        # Audio-silent fallback: ask motion detector for a target.
+        silence = now_ms - self.last_audio_activity_ms
+        if (
+            self.on_motion_request is not None
+            and silence >= self.silence_fallback_ms
+        ):
+            motion_target = self.on_motion_request(now_ms)
+            if motion_target and motion_target != self.current_scene:
+                resolved = self._resolve_healthy(motion_target, now_ms)
+                if resolved is not None and resolved != self.current_scene:
+                    return self._commit_switch(resolved, now_ms, motion=True)
+
+        return None
+
+    last_motion_triggered: bool = field(default=False, init=False, repr=False)
+
+    def _resolve_healthy(self, target: str, now_ms: int) -> str | None:
+        """If the target camera is unhealthy, pick another camera with
+        recent speech activity that IS healthy, or return None if no
+        viable alternative exists."""
+        if self.health is None or self.health.is_healthy(target, now_ms):
+            return target
+        # Try another channel whose camera is healthy and is currently speaking.
+        for ch in self.config.channels:
+            if ch.camera_target is None or ch.camera_target == target:
+                continue
+            state = self._state[ch.obs_source_name]
+            if state.speech_started_at_ms is None:
+                continue
+            if self.health.is_healthy(ch.camera_target, now_ms):
+                return ch.camera_target
+        return None
+
+    def _commit_switch(
+        self,
+        target: str,
+        now_ms: int,
+        *,
+        motion: bool = False,
+    ) -> str:
         self.last_switch_at_ms = now_ms
-        target = best_channel.camera_target
-        self.current_scene = target  # type: ignore[assignment]
+        self.current_scene = target
+        self.last_motion_triggered = motion
         return target
