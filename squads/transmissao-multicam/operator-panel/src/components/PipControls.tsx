@@ -4,6 +4,7 @@ import { setPipCamera, setPipLayout } from "@/lib/obs";
 import { useOperator } from "@/lib/store";
 import {
   CAMERAS,
+  PipConfig,
   PipCorner,
   PipSize,
   SceneName,
@@ -16,9 +17,12 @@ const CORNERS: { value: PipCorner; label: string }[] = [
   { value: "bottom_right", label: "↘" },
 ];
 
-const SIZES: PipSize[] = [20, 25, 30];
+interface PipControlsProps {
+  pip: PipConfig;
+}
 
-export function PipControls() {
+export function PipControls({ pip }: PipControlsProps) {
+  const SIZES = pip.availableSizesPercent;
   const pipCamera = useOperator((s) => s.pipCamera);
   const pipCorner = useOperator((s) => s.pipCorner);
   const pipSize = useOperator((s) => s.pipSize);
@@ -41,8 +45,8 @@ export function PipControls() {
   const applyLayout = async (size: PipSize, corner: PipCorner) => {
     if (!connected) return;
     try {
-      await setPipLayout("SLIDES_PIP", size, corner);
-      await setPipLayout("TELA_PIP", size, corner);
+      await setPipLayout("SLIDES_PIP", size, corner, pip);
+      await setPipLayout("TELA_PIP", size, corner, pip);
     } catch (err) {
       console.error("PiP layout update failed:", err);
     }

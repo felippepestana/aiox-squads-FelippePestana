@@ -3,8 +3,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import {
-  PIP_DEFAULT_CORNER,
-  PIP_DEFAULT_SIZE,
+  PIP_FALLBACK,
   PipCorner,
   PipSize,
   SCENES,
@@ -49,8 +48,8 @@ export const useOperator = create<OperatorState>()(
       setActiveScene: (s) => set({ activeScene: s }),
 
       pipCamera: SCENES.CAM1,
-      pipCorner: PIP_DEFAULT_CORNER,
-      pipSize: PIP_DEFAULT_SIZE,
+      pipCorner: PIP_FALLBACK.defaultCorner,
+      pipSize: PIP_FALLBACK.defaultSizePercent,
       setPipCamera: (c) => set({ pipCamera: c }),
       setPipCorner: (c) => set({ pipCorner: c }),
       setPipSize: (s) => set({ pipSize: s }),

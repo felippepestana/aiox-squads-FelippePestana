@@ -1,8 +1,8 @@
-# Mapeamento de microfones — canal ↔ microfone ↔ câmera ↔ papel
-# Consumido por:
-#   - F5 painel operador (renderiza mixer + VU)
-#   - F6 motor IA (lê thresholds para auto-switch via VAD)
-# Editar antes de cada evento conforme posicionamento de microfones e câmeras.
+# Configuração operacional do squad — fonte única de verdade para parâmetros
+# que precisam estar consistentes entre F5 (painel) e F6 (motor IA).
+# Cobre: mapeamento de microfones, cenas protegidas, layout de PiP, parâmetros
+# do motor de auto-switch.
+# Editar antes de cada evento conforme sala, microfones e câmeras.
 
 audio_interface:
   model: "Behringer UMC404HD"
@@ -78,6 +78,34 @@ global_controls:
   master_fader_db: 0.0
   master_mute: false
   emergency_mute_hotkey: "Ctrl+Shift+M"  # configurar em OBS atalhos
+
+# Cenas em que o motor IA NÃO força troca de cena (apenas atualiza câmera no
+# PiP). Espelhada nos testes do motor e na lógica de troca em F5/F6.
+protected_scenes:
+  - SLIDES_FULL
+  - SLIDES_PIP
+  - TELA_PIP
+  - STANDBY
+  - ENCERRAMENTO
+
+# Layout do PiP (picture-in-picture) usado em SLIDES_PIP e TELA_PIP.
+# Dimensões em pixels; canto e tamanho são defaults do operador (alteráveis).
+pip:
+  canvas:
+    width: 1920
+    height: 1080
+  default_size_percent: 25
+  default_corner: bottom_right  # one of: top_left | top_right | bottom_left | bottom_right
+  available_sizes_percent: [20, 25, 30]
+  margin_px: 30
+  border_px: 2
+  border_color: "#FFFFFF"
+  drop_shadow:
+    enabled: true
+    offset_x: 4
+    offset_y: 4
+    opacity: 60
+    blur_px: 8
 
 vad_engine:
   algorithm: "OBS InputVolumeMeters event (peak dBFS)"

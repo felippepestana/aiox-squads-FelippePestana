@@ -31,7 +31,7 @@ export const CONTENT_LAYOUTS: SceneName[] = [
 
 export const SHOW_FLOW: SceneName[] = [SCENES.STANDBY, SCENES.ENCERRAMENTO];
 
-// PiP corner presets (see templates/pip-layout.yaml).
+// PiP corner presets (see data/mic-mapping.yaml -> pip).
 export type PipCorner =
   | "top_left"
   | "top_right"
@@ -40,9 +40,6 @@ export type PipCorner =
 
 export type PipSize = 20 | 25 | 30;
 
-export const PIP_DEFAULT_CORNER: PipCorner = "bottom_right";
-export const PIP_DEFAULT_SIZE: PipSize = 25;
-
 export interface PipGeometry {
   width: number;
   height: number;
@@ -50,24 +47,41 @@ export interface PipGeometry {
   y: number;
 }
 
-const CANVAS_WIDTH = 1920;
-const CANVAS_HEIGHT = 1080;
-const MARGIN_PX = 30;
+export interface PipConfig {
+  canvasWidth: number;
+  canvasHeight: number;
+  defaultSizePercent: PipSize;
+  defaultCorner: PipCorner;
+  availableSizesPercent: PipSize[];
+  marginPx: number;
+}
+
+// Hardcoded fallback used only when YAML loading fails (dev). Production
+// loads from data/mic-mapping.yaml -> pip via mic-loader.ts.
+export const PIP_FALLBACK: PipConfig = {
+  canvasWidth: 1920,
+  canvasHeight: 1080,
+  defaultSizePercent: 25,
+  defaultCorner: "bottom_right",
+  availableSizesPercent: [20, 25, 30],
+  marginPx: 30,
+};
 
 export function pipGeometry(
   size: PipSize,
   corner: PipCorner,
+  cfg: PipConfig = PIP_FALLBACK,
 ): PipGeometry {
-  const width = Math.round((CANVAS_WIDTH * size) / 100);
-  const height = Math.round((CANVAS_HEIGHT * size) / 100);
+  const width = Math.round((cfg.canvasWidth * size) / 100);
+  const height = Math.round((cfg.canvasHeight * size) / 100);
   const x =
     corner === "top_left" || corner === "bottom_left"
-      ? MARGIN_PX
-      : CANVAS_WIDTH - width - MARGIN_PX;
+      ? cfg.marginPx
+      : cfg.canvasWidth - width - cfg.marginPx;
   const y =
     corner === "top_left" || corner === "top_right"
-      ? MARGIN_PX
-      : CANVAS_HEIGHT - height - MARGIN_PX;
+      ? cfg.marginPx
+      : cfg.canvasHeight - height - cfg.marginPx;
   return { width, height, x, y };
 }
 

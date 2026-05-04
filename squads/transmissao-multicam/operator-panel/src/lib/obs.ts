@@ -4,7 +4,9 @@
 
 import OBSWebSocket, { EventSubscription } from "obs-websocket-js";
 import {
+  PIP_FALLBACK,
   PIP_MIRROR_SOURCE,
+  PipConfig,
   PipCorner,
   PipSize,
   SceneName,
@@ -78,6 +80,7 @@ export async function setPipLayout(
   scene: "SLIDES_PIP" | "TELA_PIP",
   size: PipSize,
   corner: PipCorner,
+  pipCfg: PipConfig = PIP_FALLBACK,
 ): Promise<void> {
   const c = getClient();
   const items = (await c.call("GetSceneItemList", { sceneName: scene })) as {
@@ -87,7 +90,7 @@ export async function setPipLayout(
     (it) => it.sourceName === PIP_MIRROR_SOURCE,
   );
   if (!mirror) return;
-  const geo = pipGeometry(size, corner);
+  const geo = pipGeometry(size, corner, pipCfg);
   await c.call("SetSceneItemTransform", {
     sceneName: scene,
     sceneItemId: mirror.sceneItemId,

@@ -52,10 +52,16 @@ def load_engine_config(path: str | Path) -> EngineConfig:
         )
         for ch in raw.get("channels", [])
     )
+    yaml_protected = raw.get("protected_scenes")
+    protected = (
+        frozenset(str(s) for s in yaml_protected)
+        if isinstance(yaml_protected, list) and yaml_protected
+        else _DEFAULT_PROTECTED
+    )
     return EngineConfig(
         cooldown_ms=int(vad.get("cooldown_ms", 1500)),
         manual_override_ms=int(vad.get("manual_override_ms", 10_000)),
         evaluation_window_ms=int(vad.get("evaluation_window_ms", 500)),
         channels=channels,
-        protected_scenes=_DEFAULT_PROTECTED,
+        protected_scenes=protected,
     )
