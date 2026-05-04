@@ -113,7 +113,11 @@ export default function MeetSettingsPage() {
       <div className="top-bar">
         <div className="top-bar-title">📹 Google Meet</div>
         <div className="top-bar-actions">
-          {saveError && <span className="badge badge-danger" title={saveError}>Erro</span>}
+          {saveError && (
+            <span className="badge badge-danger" role="alert" title={saveError}>
+              Erro: {saveError.length > 80 ? `${saveError.slice(0, 80)}…` : saveError}
+            </span>
+          )}
           <button className="btn btn-primary" onClick={handleSave} disabled={isSaving}>
             {isSaving ? "Salvando…" : "Salvar"}
           </button>
@@ -158,14 +162,26 @@ export default function MeetSettingsPage() {
                 placeholder="admin@seudominio.com"
                 onChange={(e) => set("workspace_admin_email", e.target.value)} />
               <span className="form-hint">Necessário para habilitar live streaming via Admin Console</span>
+              {errors.workspace_admin_email && (
+                <span className="form-error">{errors.workspace_admin_email}</span>
+              )}
             </div>
 
             <div className="form-group">
               <label className="label">Máximo de participantes</label>
-              <input type="number" className="input" value={form.max_participants}
+              <input type="number" className="input" value={form.max_participants ?? ""}
                 min={1} max={10000}
-                onChange={(e) => set("max_participants", Number(e.target.value))} />
+                onChange={(e) => {
+                  // Preserve "" so the Zod min(1) check can fire and the error
+                  // message renders below; Number("") would silently coerce
+                  // to 0 and the user wouldn't see why Save stays disabled.
+                  const v = e.target.value;
+                  set("max_participants", v === "" ? ("" as unknown as number) : Number(v));
+                }} />
               <span className="form-hint">Enterprise Plus suporta até 1.000 participantes em vídeo</span>
+              {errors.max_participants && (
+                <span className="form-error">{errors.max_participants}</span>
+              )}
             </div>
           </div>
         </div>

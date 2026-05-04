@@ -24,6 +24,11 @@ on:
 jobs:
   scan:
     runs-on: ubuntu-latest
+    # Required for github/codeql-action/upload-sarif. Without this the
+    # SARIF upload returns 403 on repos that default to read-only tokens.
+    permissions:
+      contents: read
+      security-events: write
 
     steps:
       - uses: actions/checkout@v4
@@ -47,15 +52,18 @@ jobs:
           load: true
           tags: aiox-web:scan
 
+      # aquasecurity/trivy-action 0.28.0 was within the GHSA-69fq-xp46-6x23
+      # supply-chain attack window (CVE-2026-33634, March 19 2026). Pinned
+      # to v0.35.0 by full commit SHA so the contents can't drift again.
       - name: Run Trivy vulnerability scanner on chatbot
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1  # v0.35.0
         with:
           image-ref: aiox-chatbot:scan
           format: sarif
           output: chatbot-trivy.sarif
 
       - name: Run Trivy vulnerability scanner on web
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1  # v0.35.0
         with:
           image-ref: aiox-web:scan
           format: sarif

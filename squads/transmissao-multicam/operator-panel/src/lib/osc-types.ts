@@ -45,6 +45,12 @@ export interface OscFeedback {
   /** Glob template to zero-out other indicators after a switch. */
   reset_others_template?: string;
   reset_value?: number;
+  /**
+   * False for entries that document direct OSC paths (e.g., engine F6 →
+   * tablet via python-osc). The bridge ignores these; they live in YAML so
+   * layout designers know the full address surface.
+   */
+  bridge_handles?: boolean;
 }
 
 export interface OscMapping {

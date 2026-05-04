@@ -82,18 +82,23 @@ output:
   - (Opcional) Zeroconf: ON
 - [ ] Salvar e voltar ao layout
 
-### 6. Smoke test (preview do QG-TOUCHOSC)
+### 6. Smoke test
 
 Para cada teste, observar tanto o tablet quanto o OBS preview:
 
-- [ ] **T1**: Tocar CAM1 no tablet → OBS troca para CAM1 + botão CAM1 no tablet acende
-- [ ] **T2**: Tocar todos 10 botões de cena, todos respondem em < 200ms
-- [ ] **T3**: Tocar MUTE no canal 1 → OBS canal vai para mudo + botão MUTE acende
-- [ ] **T4**: Mover fader 1 do extremo inferior ao topo → OBS muda volume linearmente
-- [ ] **T5**: Trocar cena via painel web → indicador no tablet acompanha
-- [ ] **T6**: Falar no microfone do canal 1 → VU meter no tablet responde
-- [ ] **T7**: Parar Next.js → comandos OSC viram no-op (tablet permanece operável visualmente); religar Next.js → bridge volta automaticamente
-- [ ] **T8** (opcional, requer F6 com [osc]): Engine decide auto-switch CAM1→CAM2 → tablet destaca CAM2 sem polling
+- [ ] Tocar CAM1 no tablet → OBS troca para CAM1 + botão CAM1 no tablet acende
+- [ ] Tocar todos 10 botões de cena, todos respondem em < 200 ms
+- [ ] Tocar MUTE no canal 1 → OBS canal vai para mudo + botão MUTE acende
+- [ ] Mover fader 1 do extremo inferior ao topo → OBS muda volume linearmente
+- [ ] Trocar cena via painel web → indicador no tablet acompanha
+- [ ] Falar no microfone do canal 1 → VU meter no tablet responde
+- [ ] Parar Next.js → comandos OSC viram no-op (tablet permanece operável visualmente); religar Next.js → bridge volta automaticamente
+- [ ] (opcional, requer F6 com `[osc]`) Engine decide auto-switch CAM1→CAM2 → tablet destaca CAM2 sem polling
+
+> Para o QG-TOUCHOSC completo com numeração canônica T1–T8, ver
+> `checklists/touchosc-validation.md`. Os T-numbers naquele arquivo são a
+> referência durante incidentes; os bullets acima são a versão livre de
+> rotulagem para evitar conflito.
 
 ### 7. Habilitar feedback do engine F6 (opcional)
 

@@ -26,18 +26,8 @@ import {
 import type {
   OscArgValue,
   OscBridgeStatus,
-  OscCommand,
-  OscFeedback,
   OscMapping,
 } from "@/lib/osc-types";
-
-const PROTECTED_SCENES = new Set([
-  "STANDBY",
-  "ENCERRAMENTO",
-  "SLIDES_FULL",
-  "SLIDES_PIP",
-  "TELA_PIP",
-]);
 
 interface OscRawMessage {
   address: string;
@@ -92,18 +82,14 @@ export async function startOscBridge(): Promise<void> {
   const obsPort = Number(process.env.OBS_WS_PORT ?? "4455");
   const obsPassword = process.env.OSC_OBS_PASSWORD ?? "";
 
-  let obsConnected = false;
-
   const connectObs = async () => {
     try {
       await obs.connect(`ws://${obsHost}:${obsPort}`, obsPassword, {
         eventSubscriptions: EventSubscription.All,
       });
-      obsConnected = true;
       console.log("[osc-bridge] obs-websocket connected");
       sendFeedback("/tx/feedback/connected", [1]);
     } catch (err) {
-      obsConnected = false;
       console.warn(
         "[osc-bridge] obs-websocket connection failed; bridge will retry on demand:",
         err instanceof Error ? err.message : err,
@@ -112,7 +98,6 @@ export async function startOscBridge(): Promise<void> {
   };
 
   obs.on("ConnectionClosed", () => {
-    obsConnected = false;
     sendFeedback("/tx/feedback/connected", [0]);
   });
 
@@ -319,12 +304,10 @@ async function dispatchCommand(
       console.warn(`[osc-bridge] unhandled action: ${_exhaustive}`);
     }
   }
-
-  // Protected scenes → also publish the indicator immediately even though
-  // CurrentProgramSceneChanged will fire — keeps the tablet snappy.
-  if (cmd.action === "setProgramScene" && PROTECTED_SCENES.has(String(resolved.scene))) {
-    // No-op marker; the real feedback comes from obs-websocket event.
-  }
+  // Note: scene-active feedback is published from the
+  // CurrentProgramSceneChanged listener above, not here. We rely on OBS
+  // confirming the switch before lighting up the tablet indicator so a
+  // failed/refused switch doesn't show a false-positive on the surface.
 }
 
 function resolveArgs(

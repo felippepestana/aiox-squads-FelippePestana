@@ -44,7 +44,7 @@ Use este squad quando precisar:
 
 ## 🏗 Arquitetura
 
-```
+```text
 [4× OBSBOT Tiny 2 / Tiny 2 Lite]
          │
          ▼ USB 3.0 (direto no host — NÃO no Dell D6000)
@@ -69,7 +69,7 @@ Operadores podem usar um **iPad/tablet com TouchOSC** lado-a-lado com o
 painel web. Comandos viajam por OSC/UDP até um bridge que roda dentro do
 processo Next.js do `operator-panel/`:
 
-```
+```text
 ┌─────────────────────┐         ┌──────────────────────────┐
 │  TouchOSC iPad/PC   │  OSC    │  OSC Bridge (Next.js)    │
 │  operator.tosc      │◄──UDP──►│  /api/osc no panel       │
@@ -159,7 +159,7 @@ Especificação completa em `templates/pip-layout.yaml`.
 
 ## 🎯 Show flow
 
-```
+```text
 STANDBY ──(cronômetro=0 ou GO LIVE manual)──▶ CAM1 ──▶ PROGRAM ──▶ ENCERRAMENTO ──▶ POST
    │                                                       │
    └─ tela de espera                                       └─ producer humano comanda cenas
@@ -179,7 +179,7 @@ Runbook completo em `templates/runbook-evento.md`.
 
 ## 📁 Anatomia do squad
 
-```
+```text
 squads/transmissao-multicam/
 ├── config.yaml                 # Metadata, tiers, pattern library (TM), quality gates
 ├── README.md                   # (este arquivo)
@@ -246,7 +246,7 @@ Estrutura segue a anatomia padrão dos squads AIOX (tiers, pattern library, qual
 
 Comando do entry agent:
 
-```
+```text
 @tx-chief
 ```
 
@@ -267,7 +267,7 @@ Cada comando carrega a task correspondente em `tasks/`.
 
 ### Sequência F1 → F4 (provisionamento desta release)
 
-```
+```text
 F1 — Bancada (1 sem)        → setup-host-pc + provision-cameras (2 câmeras)
 F2 — Multicam (2 sem)       → provision-cameras (4 câmeras) + build-scene-pack
 F3 — PiP modes (2 sem)      → configure-pip

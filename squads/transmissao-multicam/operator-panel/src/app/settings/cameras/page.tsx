@@ -74,13 +74,35 @@ export default function CamerasSettingsPage() {
     setIsSaving(true);
     setError(null);
     try {
+      // The API's Zod schema uses `z.string().transform(v => v || null)`,
+      // and `.transform()` runs AFTER validation — so a literal null in the
+      // payload makes z.string() fail before the transform can normalize it.
+      // Round-tripping through Supabase persists nulls, so without this
+      // normalization the second PUT would always 400.
+      const payload = cameras.map((c) => ({
+        ...c,
+        usb_port: c.usb_port ?? "",
+        notes:    c.notes    ?? "",
+      }));
       const res = await fetch("/api/settings/cameras", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(cameras),
+        body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const body = await res.json().catch(() => null) as
+        | { mode?: string; saved?: boolean; error?: unknown }
+        | null;
+      if (!res.ok) {
+        const msg =
+          (typeof body?.error === "string" ? body.error : null) ??
+          `HTTP ${res.status}`;
+        throw new Error(msg);
+      }
       setSaved(true);
+      if (body?.mode === "local") {
+        // Supabase wasn't configured. Don't pretend the change is durable.
+        setError("Salvo localmente — Supabase indisponível, dados não persistidos no BD.");
+      }
     } catch (err) {
       setSaved(false);
       setError(err instanceof Error ? err.message : "Falha ao salvar");
@@ -94,8 +116,12 @@ export default function CamerasSettingsPage() {
       <div className="top-bar">
         <div className="top-bar-title">🎥 Câmeras</div>
         <div className="top-bar-actions">
-          {saved && <span className="badge badge-ok">Salvo</span>}
-          {error && <span className="badge badge-danger" title={error}>Erro</span>}
+          {saved && !error && <span className="badge badge-ok">Salvo</span>}
+          {error && (
+            <span className="badge badge-danger" role="alert" title={error}>
+              {error.length > 60 ? `${error.slice(0, 60)}…` : error}
+            </span>
+          )}
           <button className="btn btn-primary" onClick={handleSave} disabled={isSaving}>
             {isSaving ? "Salvando…" : "Salvar todas"}
           </button>

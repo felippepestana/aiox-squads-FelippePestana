@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { connect, getClient } from "@/lib/obs";
 import { useOperator } from "@/lib/store";
 import type { OscBridgeStatus } from "@/lib/osc-types";
@@ -39,6 +40,7 @@ function useOscBridgeStatus(): OscBridgeStatus | null {
 }
 
 export function ConnectionStatus() {
+  const router = useRouter();
   const connected = useOperator((s) => s.connected);
   const setConnected = useOperator((s) => s.setConnected);
   const osc = useOscBridgeStatus();
@@ -58,8 +60,12 @@ export function ConnectionStatus() {
   const handleConnect = async () => {
     try {
       await connect({ url: OBS_URL, password: "" });
-    } catch {
-      // Redirect to settings on failure
+    } catch (err) {
+      // The default connection attempt has no password — most failures here
+      // are because the operator hasn't filled credentials yet. Push them to
+      // settings instead of leaving the pill silently red.
+      console.warn("OBS connection failed; redirecting to settings:", err);
+      router.push("/settings/obs");
     }
   };
 

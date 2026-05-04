@@ -42,6 +42,11 @@ export async function connect(opts: ConnectOptions): Promise<void> {
 export async function disconnect(): Promise<void> {
   if (client) {
     await client.disconnect();
+    // Clear the singleton so the next getClient() builds a fresh socket
+    // without inherited listeners (subscribeToVolumeMeters et al register
+    // on the client; without nulling we'd accumulate stale handlers across
+    // reconnects).
+    client = null;
   }
 }
 

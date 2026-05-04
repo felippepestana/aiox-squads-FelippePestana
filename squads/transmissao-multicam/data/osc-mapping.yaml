@@ -167,13 +167,23 @@ feedback:
     address: "/tx/feedback/connected"
     payload: 0.0
 
-  # Engine F6 → mode/health (emitido por osc_feedback.py)
-  - event: EngineSwitchDecided
+  # ────────────────────────────────────────────────────────────────
+  # The three entries below are DOCUMENTATION-ONLY: they describe the
+  # OSC addresses that the F6 engine sends DIRECTLY to the tablet via
+  # python-osc (auto_switch/osc_feedback.py). They never traverse this
+  # Next.js bridge — the bridge subscribes only to obs-websocket events
+  # and these are not OBS events. They are listed here so layout
+  # designers know the full set of TouchOSC addresses they may receive.
+  # ────────────────────────────────────────────────────────────────
+  - event: EngineSwitchDecided      # direct from engine, NOT via bridge
     address_template: "/tx/feedback/scene/{scene_name}"
     payload: 1.0
-  - event: EngineModeChanged
+    bridge_handles: false
+  - event: EngineModeChanged        # direct from engine, NOT via bridge
     address: "/tx/feedback/mode"
-    payload: mode_value   # 1.0 = manual override, 0.0 = auto
-  - event: EngineHealthChanged
+    payload: mode_value             # 1.0 = manual override, 0.0 = auto
+    bridge_handles: false
+  - event: EngineHealthChanged      # direct from engine, NOT via bridge
     address_template: "/tx/feedback/health/{camera_id}"
-    payload: healthy_value   # 1.0 = healthy, 0.0 = dropout
+    payload: healthy_value          # 1.0 = healthy, 0.0 = dropout
+    bridge_handles: false
