@@ -40,7 +40,9 @@ _DEFAULT_PROTECTED = frozenset(
 def load_engine_config(path: str | Path) -> EngineConfig:
     """Parse mic-mapping.yaml into an EngineConfig."""
 
-    raw = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+    # yaml.safe_load returns None for an empty document; coerce to {} so the
+    # subsequent .get(...) calls degrade gracefully into defaults.
+    raw = yaml.safe_load(Path(path).read_text(encoding="utf-8")) or {}
     vad = raw.get("vad_engine", {})
     channels = tuple(
         ChannelConfig(

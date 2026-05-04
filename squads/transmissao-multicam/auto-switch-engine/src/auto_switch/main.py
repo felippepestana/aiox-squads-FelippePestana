@@ -106,9 +106,9 @@ def run() -> int:  # pragma: no cover — thin glue layer
         subs=int(Subs.ALL),
     )
 
-    switch_log = (
-        open(args.log_switches, "a", encoding="utf-8") if args.log_switches else None
-    )
+    # File handle and clients are opened inside the try/finally guard below to
+    # avoid resource leaks if callback registration or signal setup raise.
+    switch_log = None  # set inside try block
 
     # obsws-python dispatches by function name → on_<snake_case_event_name>.
     # Renaming below is required, otherwise none of these callbacks fire.
@@ -192,9 +192,16 @@ def run() -> int:  # pragma: no cover — thin glue layer
     signal.signal(signal.SIGTERM, _shutdown)
 
     try:
+        if args.log_switches:
+            switch_log = open(args.log_switches, "a", encoding="utf-8")
         while not stop["flag"]:
             time.sleep(0.5)
     finally:
+        for client in (events, req):
+            try:
+                client.disconnect()
+            except Exception:  # noqa: BLE001
+                LOG.debug("client disconnect raised", exc_info=True)
         if switch_log:
             switch_log.close()
 

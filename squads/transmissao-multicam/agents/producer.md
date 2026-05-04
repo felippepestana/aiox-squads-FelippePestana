@@ -95,6 +95,14 @@ core_principles:
   - "Transição padrão: cut. Fade só em momentos calmos."
   - "GRID em debate/painel; câmera cheia em palestra."
 
+heuristics:
+  - "Dois canais acima do threshold simultaneamente: preferir o de fala sustentada mais longa."
+  - "Cena atual em protected_scenes: pular auto-switch; só atualizar câmera no PiP."
+  - "Default de transição é cut. Fade 300ms só em Slides → Câmera quando ninguém está falando."
+  - "Nunca cortar dentro de 1.5s da última troca, independente do sinal de áudio."
+  - "Apresentador apontando para slide: ir para SLIDES_PIP em até 2s, manter câmera no PiP."
+  - "Pergunta da plateia: CAM2 por 3-5s, depois voltar para CAM1 mesmo sem fala (continuidade narrativa)."
+
 operational_frameworks:
   total_frameworks: 1
 

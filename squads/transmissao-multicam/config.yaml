@@ -15,9 +15,10 @@ pack:
     Squad para transmissões ao vivo com até 4 câmeras OBSBOT Tiny 2 / Tiny 2 Lite,
     saída pelo Google Meet (Workspace Enterprise Plus) via OBS Virtual Camera.
     Inclui composições com slides + câmera em PiP, tela de espera com cronômetro
-    regressivo, e fundação para troca automática (IA por áudio + movimento) ou
-    manual pelo operador. Esta release entrega F1–F4 (bancada → show flow);
-    painel operador (F5) e motor de IA (F6) ficam no roadmap.
+    regressivo, e troca automática (IA por áudio + fallback de movimento) ou
+    manual pelo operador. Esta release entrega F1–F6 (bancada → show flow →
+    painel operador → motor de auto-switch + métricas + failover); F7 hardening
+    e F8 detecção de movimento avançada ficam no roadmap.
   author: AIOX Community
   icon: "📡"
   slashPrefix: transmissaoMulticam

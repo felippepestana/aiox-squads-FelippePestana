@@ -71,8 +71,7 @@ output:
 
 - [ ] OBS → Iniciar Câmera Virtual (botão na coluna de controles)
 - [ ] Confirmar que aparece como webcam:
-  - Windows: Gerenciador de Dispositivos → Câmeras → "OBS Virtual Camera"
-  - macOS: System Information → Camera → "OBS Virtual Camera"
+  - Windows (default desta task): Gerenciador de Dispositivos → Câmeras → "OBS Virtual Camera"
 
 ### 8. Validar canvas + Studio Mode
 

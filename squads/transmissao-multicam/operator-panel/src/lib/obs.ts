@@ -67,10 +67,12 @@ export async function setInputVolumeDb(
 }
 
 // Update the Source Mirror so SLIDES_PIP / TELA_PIP reflect the chosen camera.
+// The scene_source_mirror plugin uses the "mirror_of" settings key — using
+// "source" silently no-ops without erroring.
 export async function setPipCamera(camera: SceneName): Promise<void> {
   await getClient().call("SetInputSettings", {
     inputName: PIP_MIRROR_SOURCE,
-    inputSettings: { source: camera },
+    inputSettings: { mirror_of: camera },
     overlay: true,
   });
 }

@@ -92,6 +92,13 @@ core_principles:
   - "VU meters sempre visíveis no painel operador."
   - "Fonte de áudio externa (interface multicanal) é pré-mixada antes do OBS — controle no OBS é apenas sobre nível do canal e gating fino."
 
+heuristics:
+  - "Canal presente na interface mas ausente em mic-mapping.yaml: tratar como ambiente (camera_target=null), notificar operador para confirmar mapeamento antes do GO LIVE."
+  - "Calibração produz threshold > -20 dBFS: travar em -20 dBFS, registrar warning, exigir recalibração — sala provavelmente está ruidosa demais ou mic mal posicionado."
+  - "Canal do palestrante principal clipando (peak ≥ -3 dBFS sustentado): ativar atenuação de 6 dB no fader, alertar operador, considerar troca para microfone backup se persistir."
+  - "Canal mutado por default (mute_default=true) liberado durante evento: lembrar de mutar de novo no fim do bloco para evitar microfonia em momento crítico."
+  - "Mute master acionado: independente de canais individuais, NADA chega ao OBS — usar apenas em emergência (microfonia agressiva, conteúdo sensível inadvertido)."
+
 operational_frameworks:
   total_frameworks: 2
 

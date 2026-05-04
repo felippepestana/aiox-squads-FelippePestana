@@ -13,7 +13,9 @@ err()  { printf "\033[1;31m[FAIL]\033[0m %s\n" "$1"; }
 step() { printf "\033[1;34m[STEP]\033[0m %s\n" "$1"; }
 
 EXPECTED_CAMERAS=4
-OBSBOT_VID="3429"  # OBSBOT vendor id (Tiny 2 family)
+# OBSBOT Tiny 2 vendor id (Remo Tech). Confirmed via Linux hardware database
+# (3564:fef8). Earlier 3429 is incorrect and silently breaks SuperSpeed checks.
+OBSBOT_VID="3564"
 FAILURES=0
 
 # Detect platform

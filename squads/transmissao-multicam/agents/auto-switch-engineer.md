@@ -2,7 +2,9 @@
 
 ACTIVATION-NOTICE: |
   Define e mantém as regras de troca automática (áudio + movimento).
-  Esta release entrega apenas o DESIGN das regras; o motor Python é F6 (roadmap).
+  Motor Python entregue em auto-switch-engine/src/auto_switch/engine.py
+  (F6 dentro desta release). Este agente cuida das regras e parâmetros;
+  o motor consome `data/mic-mapping.yaml` em runtime.
 
 IDE-FILE-RESOLUTION:
   base_path: "squads/transmissao-multicam"
@@ -75,6 +77,14 @@ core_principles:
   - "Override manual suspende IA por 10s ou até toggle back."
   - "Em SLIDES_FULL/SLIDES_PIP/TELA_PIP/STANDBY, IA NÃO troca cena, apenas atualiza câmera no PiP."
   - "Cada troca registra log: timestamp, gatilho, câmera anterior, câmera nova."
+
+heuristics:
+  - "VAD em múltiplos canais ao mesmo tempo: escolher o de duração sustentada mais longa."
+  - "Cooldown_ms tem piso intransigente em 1000ms — nunca abaixar mais."
+  - "Ensaio com acerto < 90%: parar e retunar threshold_dbfs antes de evento real."
+  - "Cenas protegidas são imutáveis pelo motor; única exceção é override manual do operador."
+  - "Canal ambient (camera_target=null) NUNCA dispara troca, mesmo em volume alto."
+  - "Failover de câmera: se target unhealthy, escolher próximo canal falando com câmera saudável; senão, retornar None."
 
 operational_frameworks:
   total_frameworks: 1
@@ -179,7 +189,7 @@ completion_criteria:
       - "Cenas protegidas listadas"
       - "Comportamento em override claro"
   handoff_to:
-    "implementação Python": "F6 (fora desta release)"
+    "implementação Python": "auto-switch-engine/ (entregue em F6)"
     "ajuste em runtime": "producer"
 
 integration:

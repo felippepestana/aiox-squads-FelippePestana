@@ -68,4 +68,4 @@ operator-panel/
 - Sem autenticação — assume rede local da operação.
 - Preview de câmeras não embute vídeo no painel (ficaria mais leve manter no OBS preview). Futuro: Picture-in-Picture HTML5 via WebRTC do OBS.
 - Persistência do estado é via `localStorage` (zustand persist) — sem servidor.
-- Atalhos de teclado: implementação inicial cobre cenas (Ctrl+1..0). Atalhos avançados de PiP/canto ficam para iteração.
+- Atalhos de teclado: implementação inicial cobre cenas (Ctrl+1 a Ctrl+8 para CAM1..GRID..TELA_PIP e Ctrl+0 para STANDBY). Atalhos avançados de PiP/canto ficam para iteração.

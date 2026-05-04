@@ -48,8 +48,14 @@ export function AudioMixer({ channels }: AudioMixerProps) {
   };
 
   const onMute = async (input: string) => {
-    const next = !muted[input];
-    setMuted((s) => ({ ...s, [input]: next }));
+    // Toggle from the latest committed state to avoid stale-closure issues on
+    // rapid double-clicks. We snapshot the new value via the updater so OBS
+    // receives the same value the UI reflects.
+    let next: boolean = false;
+    setMuted((s) => {
+      next = !s[input];
+      return { ...s, [input]: next };
+    });
     if (connected) {
       try {
         await setInputMute(input, next);

@@ -27,7 +27,7 @@ export const MIC_CHANNELS: MicChannel[] = [
   {
     id: 2,
     obsSourceName: "MIC_2",
-    micLabel: "Mesa de plateia",
+    micLabel: "Mesa de plateia (audiência)",
     role: "audience",
     cameraTarget: "CAM2",
     faderDb: -3.0,
@@ -47,7 +47,7 @@ export const MIC_CHANNELS: MicChannel[] = [
   {
     id: 4,
     obsSourceName: "MIC_4",
-    micLabel: "Ambiente",
+    micLabel: "Mesa geral / ambiente",
     role: "ambient",
     cameraTarget: null,
     faderDb: -12.0,

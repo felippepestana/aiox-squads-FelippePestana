@@ -81,6 +81,13 @@ core_principles:
   - "Música de fundo opcional, com fade-out na transição."
   - "Imagem branded a 1920×1080. Texto principal centralizado e legível a 3 metros."
 
+heuristics:
+  - "Operador não confirmou precisão do cronômetro em ±1s no ensaio: NÃO permitir trigger automático; usar manual."
+  - "Eventos com horário marcado: usar modo absoluto. Modo relativo só em ensaio."
+  - "Glitch visual no primeiro teste de transição STANDBY→CAM1: verificar fontes ausentes (CAM1 desconectada, Source Mirror sem alvo) antes do GO LIVE."
+  - "Música de fundo: fade-out de 1.5s antes da transição; nunca cortar áudio abruptamente."
+  - "Cronômetro a 30s do fim: piscar suavemente (filtro de cor) para alertar o operador que o GO LIVE está próximo."
+
 operational_frameworks:
   total_frameworks: 1
   framework_1:

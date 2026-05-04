@@ -8,7 +8,9 @@ version = "0.1.0"
 description = "F6 — Auto-switch engine for the transmissao-multicam squad. Listens to OBS audio meters, applies VAD per channel, and commands scene switches honoring cooldown and operator override."
 requires-python = ">=3.11"
 authors = [{ name = "AIOX Community" }]
-license = { text = "MIT" }
+# obsws-python is GPL-3.0-only; this package is therefore distributed under
+# GPL-3.0-only to comply with copyleft terms when linked at runtime.
+license = { text = "GPL-3.0-only" }
 dependencies = [
     "obsws-python>=1.6.1",
     "PyYAML>=6.0",

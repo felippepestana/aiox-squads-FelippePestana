@@ -12,14 +12,24 @@ export function ModeToggle() {
 
   const toggle = async () => {
     const next = mode === "auto" ? "manual" : "auto";
-    setMode(next);
     if (next === "manual" && connected) {
+      // Only commit the manual mode after the override is broadcast — otherwise
+      // the UI claims MANUAL while the engine keeps auto-switching.
       try {
         await broadcastOperatorOverride(OVERRIDE_MS);
+        setMode(next);
       } catch (err) {
         console.error("Override broadcast failed:", err);
+        if (typeof window !== "undefined") {
+          window.alert(
+            "Falha ao sincronizar modo manual com o motor de IA. Tente novamente.",
+          );
+        }
       }
+      return;
     }
+    // Switching to auto (or while disconnected) is a UI-only change.
+    setMode(next);
   };
 
   return (

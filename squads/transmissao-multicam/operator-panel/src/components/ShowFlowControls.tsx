@@ -28,13 +28,13 @@ export function ShowFlowControls() {
     }
   };
 
-  const encerrar = async () => {
+  const closeShow = async () => {
     if (!connected) return;
     try {
       await setProgramScene(SCENES.ENCERRAMENTO);
       setActiveScene(SCENES.ENCERRAMENTO);
     } catch (err) {
-      console.error("Encerramento failed:", err);
+      console.error("Close show failed:", err);
     }
   };
 
@@ -53,7 +53,7 @@ export function ShowFlowControls() {
         >
           🔴 GO LIVE
         </button>
-        <button onClick={encerrar} disabled={!connected}>
+        <button onClick={closeShow} disabled={!connected}>
           🎬 ENCERRAMENTO
         </button>
       </div>

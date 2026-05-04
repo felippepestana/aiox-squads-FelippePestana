@@ -50,7 +50,7 @@ tx-auto-switch --log-switches=switches.jsonl
 | Mínimo de fala contínua | 500 ms | `channels[*].vad_min_speech_ms` |
 | Threshold por canal | -32 dBFS (default) | `channels[*].vad_threshold_dbfs` |
 | Override manual | 10000 ms | `mic-mapping.yaml.vad_engine.manual_override_ms` |
-| Cenas protegidas | SLIDES_*, TELA_PIP, STANDBY, ENCERRAMENTO | hardcoded em `engine.py` |
+| Cenas protegidas | SLIDES_*, TELA_PIP, STANDBY, ENCERRAMENTO | `protected_scenes` em `mic-mapping.yaml` (fallback `_DEFAULT_PROTECTED` em `config.py`) |
 
 ## Override do operador (F5 ↔ F6)
 

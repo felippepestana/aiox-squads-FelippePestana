@@ -7,6 +7,7 @@ import {
   PipConfig,
   PipCorner,
   PipSize,
+  SCENES,
   SceneName,
 } from "@/lib/scenes";
 
@@ -45,8 +46,8 @@ export function PipControls({ pip }: PipControlsProps) {
   const applyLayout = async (size: PipSize, corner: PipCorner) => {
     if (!connected) return;
     try {
-      await setPipLayout("SLIDES_PIP", size, corner, pip);
-      await setPipLayout("TELA_PIP", size, corner, pip);
+      await setPipLayout(SCENES.SLIDES_PIP, size, corner, pip);
+      await setPipLayout(SCENES.TELA_PIP, size, corner, pip);
     } catch (err) {
       console.error("PiP layout update failed:", err);
     }

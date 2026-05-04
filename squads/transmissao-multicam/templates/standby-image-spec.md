@@ -13,7 +13,7 @@ e exibe um cronômetro regressivo até o início da transmissão.
 
 ## Layout
 
-```
+```text
 ┌──────────────────────────────────────────────┐  1920px
 │                                              │
 │              [LOGO 400×200]                  │

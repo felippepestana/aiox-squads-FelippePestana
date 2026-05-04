@@ -79,7 +79,7 @@ usb_validation:
 - [ ] Câmera em Hi-Speed: trocar de porta (preferir porta marcada SS ou SS10)
 - [ ] Drops > 0.5%: redistribuir para mais root hubs ou usar hub powered separado
 - [ ] Desconexões: verificar cabo (passivo > 2m frequentemente falha) e firmware
-- [ ] Banda > 70%: reduzir resolução para 1080p ou usar MJPEG (não YUYV)
+- [ ] Banda > 70%: reduzir resolução para 720p30 (1280×720) ou reduzir FPS para 24/15 ou usar MJPEG (não YUYV)
 
 ## Atenção: D6000
 

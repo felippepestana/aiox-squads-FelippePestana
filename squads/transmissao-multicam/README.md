@@ -153,22 +153,25 @@ Runbook completo em `templates/runbook-evento.md`.
 squads/transmissao-multicam/
 ├── config.yaml                 # Metadata, tiers, pattern library (TM), quality gates
 ├── README.md                   # (este arquivo)
-├── agents/                     # 7 agentes especialistas
+├── agents/                     # 8 agentes especialistas
 │   ├── tx-chief.md             # Tier 0 — orquestrador
 │   ├── producer.md             # Tier 1 — comando de cena ao vivo
-│   ├── auto-switch-engineer.md # Tier 1 — regras de IA (F6 implementa)
+│   ├── auto-switch-engineer.md # Tier 1 — regras de IA
 │   ├── obs-scenes-architect.md # Tier 2 — composição de cenas e PiP
 │   ├── obsbot-controller.md    # Tier 2 — PTZ, presets, Auto-Track
 │   ├── meet-integration.md     # Tier 2 — Workspace + Virtual Cam
+│   ├── audio-controller.md     # Tier 2 — mapeamento de mic e calibração VAD
 │   └── pre-show-runner.md      # Tier 3 — cronômetro e GO LIVE
-├── tasks/                      # 8 tasks executáveis (F1 → F4)
+├── tasks/                      # 10 tasks executáveis (F1 → F6 + ensaio)
 │   ├── setup-host-pc.md
 │   ├── provision-cameras.md
 │   ├── build-scene-pack.md
 │   ├── configure-pip.md
 │   ├── configure-standby.md
 │   ├── configure-meet.md
+│   ├── configure-audio.md
 │   ├── run-load-test.md
+│   ├── run-rehearsal.md
 │   └── ship-checklist.md
 ├── templates/
 │   ├── obs-scene-collection.json   # Skeleton de coleção de cenas
@@ -253,6 +256,7 @@ Aprovação: todas as 5 quality gates verdes.
 | **QG-SCENES** | Pacote de cenas pronto | 10 cenas, transições Cut/Fade, presets PTZ |
 | **QG-PIP** | PiP legível | Source Mirror < 300 ms, slides legíveis com PiP a 25% |
 | **QG-STANDBY** | Show flow pronto | Cronômetro ±1 s, trigger configurável |
+| **QG-AUDIO** | Áudio mapeado e calibrado | Canais ↔ câmeras, threshold VAD (ruído + 12 dB), mute master configurado |
 | **QG-LIVE-READY** | Smoke E2E | Virtual Cam no Meet, Studio* OFF, gravação ON, load test 60 min OK |
 
 Detalhes em `config.yaml` → `quality_gates`.

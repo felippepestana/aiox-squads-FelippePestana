@@ -70,8 +70,10 @@ A cada 10 min, registrar:
 ### 6. Smoke E2E via script
 
 - [ ] Em paralelo (último 10min) rodar:
-  ```
-  python3 scripts/obs-headless-check.py
+  ```bash
+  # Substituir <PASSWORD> pela senha configurada em OBS → Tools → WebSocket Server.
+  export OBS_WS_HOST=localhost OBS_WS_PORT=4455 OBS_WS_PASSWORD=<PASSWORD>
+  python3 squads/transmissao-multicam/scripts/obs-headless-check.py
   ```
 - [ ] Script trocará por cada uma das 10 cenas e medirá tempo de resposta
 - [ ] Validar OK em todas

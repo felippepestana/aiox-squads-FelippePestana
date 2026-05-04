@@ -185,6 +185,14 @@ core_principles:
   - "Studio Look/Lighting/Sound do Meet ficam OFF. Câmera virtual entrega tratada."
   - "Standby + cronômetro abre todo evento. Encerramento fecha todo evento."
 
+heuristics:
+  - "Quality gate vermelho: nunca pular. Se houver pressão de tempo, adiar GO LIVE em até 10min e comunicar audiência via Meet — não baixar critérios."
+  - "Skip de QG só com autorização escrita do dono do evento + nota em post-event.md."
+  - "Especialista (obsbot-controller, obs-scenes-architect, meet-integration) indisponível: tentar 1 retry; se persistir, delegar à producer com handoff explícito."
+  - "OBS crashou em PROGRAM: cortar para STANDBY via OBSBOT Remote físico, reiniciar OBS, validar Virtual Camera antes de retomar. Notificar operador humano por canal externo."
+  - "Câmera caiu mid-evento: cortar imediatamente para outra câmera disponível; tratar troca de cabo só após retomar programa estável."
+  - "Conflito entre auto-switch e operador: override manual SEMPRE prevalece por 10s ou até toggle de volta."
+
 operational_frameworks:
   total_frameworks: 1
 

@@ -98,6 +98,14 @@ core_principles:
   - "Borda 2px branca + drop shadow no PiP destaca sem ofuscar."
   - "Slides a 100% canvas têm prioridade visual sobre PiP."
 
+heuristics:
+  - "Cut é o default. Fade 300ms só quando a cena seguinte tem ritmo calmo (Slides → Câmera sem fala em curso)."
+  - "Pedido de canvas 9:16 (vertical): fora de escopo desta release. Reusar slides em scale-fit, com pillarbox preto, e avisar que captura nativa fica para iteração."
+  - "Asset faltando (logo, imagem standby): bloquear cena STANDBY/ENCERRAMENTO e exigir asset antes do GO LIVE."
+  - "Source Mirror só atualiza após confirmar que a fonte alvo existe; se não existir, deixar mirror parado e logar."
+  - "PiP nunca cobre o centro horizontal do canvas em SLIDES_PIP — manter exclusivamente nos cantos."
+  - "GRID 2x2: bordas pretas de 2px obrigatórias entre tiles para separação visual."
+
 operational_frameworks:
   total_frameworks: 1
 

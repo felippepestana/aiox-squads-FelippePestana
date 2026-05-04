@@ -90,6 +90,13 @@ core_principles:
   - "Gravação na nuvem inicia automaticamente quando o host entra."
   - "Live streaming é habilitado APENAS quando há audiência além dos 300 ativos."
 
+heuristics:
+  - "OBS Virtual Camera não aparece na lista de câmeras do Meet: reiniciar Virtual Camera no OBS, atualizar permissões do navegador (chrome://settings/content/camera), e como último recurso usar 'Compartilhar tela' com janela do OBS."
+  - "Streaming in-domain falhou (Workspace policy / latência): cair para gravação local OBS + distribuir link da gravação após o evento; nunca improvisar RTMP externo sem aprovação prévia."
+  - "Gravação não iniciou ao entrar na sala: parar/reiniciar reunião uma vez; se persistir, gravar localmente no OBS como backup e seguir o evento."
+  - "Operador relata reverb/eco na sala: não tocar no Studio Sound (continua OFF); investigar mix externo na interface multicanal."
+  - "Companion mode em tablet do operador: usado SOMENTE para chat e Q&A; nunca habilitar câmera/mic no companion para evitar duplicar entrada."
+
 operational_frameworks:
   total_frameworks: 1
 

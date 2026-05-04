@@ -93,6 +93,14 @@ core_principles:
   - "Auto-Track on-camera enquadra dentro da câmera. Não decide qual câmera vai ao programa."
   - "OBSBOT Remote Bluetooth é failover físico — sempre disponível."
 
+heuristics:
+  - "Nunca conectar uma segunda câmera enquanto a primeira não confirmar SuperSpeed em USBTreeView (Win) / lsusb -t (Linux)."
+  - "Banda por root hub aproximando 70%: redistribuir para outro controlador raiz antes de continuar."
+  - "Update de firmware: instalar OBSBOT Center temporariamente, atualizar, e DESINSTALAR em seguida — Center coexistir com OBS Plugin gera disputa pelo UVC Extension Unit."
+  - "PTZ não responde no primeiro teste: quase sempre é Center/Start ainda em background; matar processo OBSBOT Center antes de qualquer outro debug."
+  - "Câmera negociou Hi-Speed (480M) em vez de SuperSpeed: trocar de porta (preferir traseiras marcadas SS/SS10) ou usar cabo OBSBOT original certificado."
+  - "Auto-Track flagrando no rosto errado: alternar para preset Wide e desativar AT até reposicionar."
+
 operational_frameworks:
   total_frameworks: 1
 
