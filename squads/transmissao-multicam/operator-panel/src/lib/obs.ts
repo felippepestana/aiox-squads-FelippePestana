@@ -91,7 +91,14 @@ export async function setPipLayout(
   const mirror = items.sceneItems.find(
     (it) => it.sourceName === PIP_MIRROR_SOURCE,
   );
-  if (!mirror) return;
+  if (!mirror) {
+    // Surfacing this lets the operator catch out-of-sync OBS scene
+    // collections (e.g. SLIDES_PIP rebuilt manually without the mirror
+    // source). Silently returning hid the misconfiguration.
+    throw new Error(
+      `Scene "${scene}" is missing required source "${PIP_MIRROR_SOURCE}"`,
+    );
+  }
   const geo = pipGeometry(size, corner, pipCfg);
   await c.call("SetSceneItemTransform", {
     sceneName: scene,

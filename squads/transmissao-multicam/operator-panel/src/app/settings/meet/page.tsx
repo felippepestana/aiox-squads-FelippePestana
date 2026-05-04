@@ -82,7 +82,23 @@ export default function MeetSettingsPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(result.data),
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      // Read body before branching so structured Zod validation messages
+      // (formErrors / fieldErrors / per-key error string) reach the operator.
+      const body = await res.json().catch(() => null);
+      if (!res.ok) {
+        const msg =
+          body?.error?.formErrors?.[0] ??
+          (typeof body?.error === "string" ? body.error : null) ??
+          `HTTP ${res.status}`;
+        throw new Error(msg);
+      }
+      if (body?.mode === "local") {
+        // Supabase isn't configured. The server returned 200 to keep the UI
+        // responsive in dev, but persistence didn't happen — surface that.
+        setSaved(false);
+        setSaveError("Supabase offline — alterações não foram persistidas.");
+        return;
+      }
       setSaved(true);
     } catch (err) {
       setSaved(false);

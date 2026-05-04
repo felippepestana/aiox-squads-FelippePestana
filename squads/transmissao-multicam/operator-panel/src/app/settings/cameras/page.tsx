@@ -5,14 +5,16 @@ import { useEffect, useState } from "react";
 interface Camera {
   camera_id: string;
   display_name: string;
-  usb_port: string;
+  // API/DB use null for "not set"; align local type so we don't silently
+  // assign null into non-nullable controlled-input props.
+  usb_port: string | null;
   vid: string;
   role: string;
   preset_1_name: string;
   preset_2_name: string;
   preset_3_name: string;
   auto_track: boolean;
-  notes: string;
+  notes: string | null;
 }
 
 const ROLES = [
@@ -152,9 +154,9 @@ export default function CamerasSettingsPage() {
                 <div className="form-row">
                   <div className="form-group">
                     <label className="label">Porta USB</label>
-                    <input type="text" className="input" value={cam.usb_port}
+                    <input type="text" className="input" value={cam.usb_port ?? ""}
                       placeholder="ex: USB-A traseira esquerda"
-                      onChange={(e) => update("usb_port", e.target.value)} />
+                      onChange={(e) => update("usb_port", e.target.value || null)} />
                     <span className="form-hint">Identificação física para facilitar reconexão</span>
                   </div>
                   <div className="form-group">
@@ -195,9 +197,9 @@ export default function CamerasSettingsPage() {
 
                 <div className="form-group">
                   <label className="label">Notas</label>
-                  <textarea className="input" rows={2} value={cam.notes}
+                  <textarea className="input" rows={2} value={cam.notes ?? ""}
                     placeholder="Posicionamento, ângulo preferido, calibrações especiais…"
-                    onChange={(e) => update("notes", e.target.value)} />
+                    onChange={(e) => update("notes", e.target.value || null)} />
                 </div>
               </div>
             </div>

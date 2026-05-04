@@ -60,7 +60,9 @@ step "Detecting OBSBOT cameras"
 CAMERA_COUNT=0
 case "$PLATFORM" in
   linux)
-    CAMERA_COUNT=$(lsusb | grep -ic "obsbot\|${OBSBOT_VID}" || true)
+    # Anchor the VID to the lsusb "ID VVVV:PPPP" field so we don't count
+    # devices whose PID happens to contain the substring 3564.
+    CAMERA_COUNT=$(lsusb | grep -ic "obsbot\| ${OBSBOT_VID}:" || true)
     ;;
   macos)
     CAMERA_COUNT=$(system_profiler SPUSBDataType 2>/dev/null | grep -ic "obsbot" || true)

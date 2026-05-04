@@ -45,36 +45,54 @@ export function AudioMixer({ channels }: AudioMixerProps) {
     return unsubscribe;
   }, [connected, setMicLevel]);
 
+  // All three handlers below apply optimistic updates first and roll the
+  // local state back when the OBS write fails, so the UI never displays a
+  // value that the actual OBS mixer rejected.
+
   const onFader = async (input: string, db: number) => {
+    const prev = faders[input] ?? 0;
     setFaders((s) => ({ ...s, [input]: db }));
-    if (connected) {
-      try { await setInputVolumeDb(input, db); }
-      catch (err) { console.error("Fader update failed:", err); }
+    if (!connected) return;
+    try {
+      await setInputVolumeDb(input, db);
+    } catch (err) {
+      setFaders((s) => ({ ...s, [input]: prev }));
+      console.error("Fader update failed:", err);
     }
   };
 
   const onMute = async (input: string) => {
-    // Compute next from the current muted snapshot (no setState side effect)
-    // so the OBS call uses the exact value we put on the UI.
-    const next = !(muted[input] ?? false);
+    const prev = muted[input] ?? false;
+    const next = !prev;
     setMuted((s) => ({ ...s, [input]: next }));
-    if (connected) {
-      try { await setInputMute(input, next); }
-      catch (err) { console.error("Mute update failed:", err); }
+    if (!connected) return;
+    try {
+      await setInputMute(input, next);
+    } catch (err) {
+      setMuted((s) => ({ ...s, [input]: prev }));
+      console.error("Mute update failed:", err);
     }
   };
 
   const muteAll = async () => {
+    const prev = muted;
     const next = Object.fromEntries(channels.map((c) => [c.obsSourceName, true]));
     setMuted(next);
     if (!connected) return;
     const results = await Promise.allSettled(
       channels.map((c) => setInputMute(c.obsSourceName, true)),
     );
-    results.forEach((result, idx) => {
-      if (result.status === "rejected") {
-        console.error(`MuteAll: failed to mute "${channels[idx].obsSourceName}":`, result.reason);
-      }
+    // Repair any channels whose mute call was rejected by OBS.
+    setMuted((state) => {
+      const repaired = { ...state };
+      results.forEach((result, idx) => {
+        if (result.status === "rejected") {
+          const source = channels[idx].obsSourceName;
+          repaired[source] = prev[source] ?? false;
+          console.error(`MuteAll: failed to mute "${source}":`, result.reason);
+        }
+      });
+      return repaired;
     });
   };
 

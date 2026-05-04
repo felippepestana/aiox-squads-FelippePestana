@@ -53,9 +53,20 @@ export function AudioSettingsClient({ initialChannels }: { initialChannels: Chan
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(channels),
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      // Read the body BEFORE branching on res.ok so structured API errors
+      // (e.g. Zod validation messages) are surfaced to the operator.
       const body = await res.json().catch(() => null);
-      // The API returns { saved: true, ... } on success.
+      if (!res.ok) {
+        const msg = typeof body?.error === "string" ? body.error : `HTTP ${res.status}`;
+        throw new Error(msg);
+      }
+      if (body?.mode === "local") {
+        // API responded 200 but Supabase isn't configured. Don't claim the
+        // settings were durably saved — the engine F6 won't see them.
+        setSaved(false);
+        setError("Supabase offline — alterações não foram persistidas.");
+        return;
+      }
       setSaved(body?.saved === true);
     } catch (err) {
       setSaved(false);
@@ -126,7 +137,7 @@ export function AudioSettingsClient({ initialChannels }: { initialChannels: Chan
                         onChange={(e) => updateChannel(i, "input_name", e.target.value)} />
                     </td>
                     <td>
-                      <select className="input" value={ch.camera_id} style={{ width: 190 }}
+                      <select className="input" value={ch.camera_id ?? ""} style={{ width: 190 }}
                         onChange={(e) => updateChannel(i, "camera_id", e.target.value)}>
                         {CAMERA_OPTIONS.map((o) => (
                           <option key={o.value} value={o.value}>{o.label}</option>
