@@ -10,6 +10,14 @@ on:
       - ".github/workflows/docker-security.yml"
   pull_request:
     branches: [main, master]
+    # The scan only builds and inspects chatbot/Dockerfile and web/Dockerfile.
+    # Mirror the push trigger so squad-only PRs (which never touch those paths)
+    # don't fire a job that would always fail with a "Set up job" error.
+    paths:
+      - "chatbot/**"
+      - "web/**"
+      - "docker-compose.yml"
+      - ".github/workflows/docker-security.yml"
 
 jobs:
   scan:
