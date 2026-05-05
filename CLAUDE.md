@@ -88,6 +88,19 @@ MCPs são servidores que estendem as capacidades do Claude Code. Este projeto ut
   - Sempre disponível no sistema
   - Requer aprovação explícita no Claude Code
 
+- **ClickUp** (opcional): Integração com ClickUp para gerenciamento de tarefas
+  - Pacote recomendado: `@taazkareem/clickup-mcp-server` (v0.14.4+)
+  - Requer: Token de API do ClickUp
+  - Obtenção do token: https://app.clickup.com/settings/apps
+  - Instalação:
+    ```bash
+    npm install -g @taazkareem/clickup-mcp-server
+    export CLICKUP_API_TOKEN="seu_token_aqui"
+    claude mcp add ClickUp \
+      -e CLICKUP_API_TOKEN=$CLICKUP_API_TOKEN \
+      -- npx @taazkareem/clickup-mcp-server
+    ```
+
 ### Diagnóstico e Resolução de MCPs
 
 Caso encontre erros de conexão com MCPs:
