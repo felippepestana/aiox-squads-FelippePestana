@@ -49,7 +49,7 @@ DOCKER_MCP=$(npm list -g docker-mcp 2>&1 | grep "docker-mcp@" | head -1 || echo 
 BASH_MCP=$(npm list -g @anthropic-ai/mcp-server-bash 2>&1 | grep "mcp-server-bash" | head -1 || echo "")
 
 if [ -n "$DOCKER_MCP" ]; then
-  ok "docker-mcp: $(echo $DOCKER_MCP | grep -oP '\d+\.\d+\.\d+' | head -1)"
+  ok "docker-mcp: $(echo "$DOCKER_MCP" | cut -d'@' -f2)"
 else
   warn "docker-mcp não instalado globalmente"
 fi
@@ -102,8 +102,10 @@ fi
 
 echo ""
 echo "7️⃣ Variáveis de Ambiente (Credenciais):"
-if env | grep -qi "CLICKUP\|API\|TOKEN\|SECRET" | head -3; then
-  ok "Credenciais encontradas (parcialmente exibidas)"
+VARS=$(env | cut -d= -f1 | grep -iE "CLICKUP|API|TOKEN|SECRET" | head -n 3)
+if [ -n "$VARS" ]; then
+  ok "Credenciais encontradas (apenas nomes exibidos):"
+  echo "$VARS" | sed 's/^/   - /'
 else
   warn "Nenhuma credencial de API detectada (ClickUp, etc)"
 fi

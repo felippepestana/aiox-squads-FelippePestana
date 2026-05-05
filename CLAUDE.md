@@ -90,7 +90,7 @@ MCPs são servidores que estendem as capacidades do Claude Code. Este projeto ut
 
 ### Diagnóstico e Resolução de MCPs
 
-Caso encuentre erros de conexão com MCPs:
+Caso encontre erros de conexão com MCPs:
 
 1. **Executar script de diagnóstico:**
    ```bash

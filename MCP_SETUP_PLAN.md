@@ -198,7 +198,7 @@ echo "✨ Concluído!"
 
 ### Diagnóstico Rápido
 ```bash
-/home/user/aiox-squads-FelippePestana/fix-mcp.sh
+./fix-mcp.sh
 ```
 
 ---
