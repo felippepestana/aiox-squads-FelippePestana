@@ -53,7 +53,7 @@ jobs:
 
       - name: Build for Cloudflare Workers
         working-directory: ./web
-        run: npm run build:worker
+        run: npm run build
 
       - name: Deploy to Cloudflare Workers
         working-directory: ./web
