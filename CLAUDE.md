@@ -71,3 +71,48 @@ squads/<nome>/
 - Firewall via iptables (init-firewall.sh)
 - Firewall restringe egress, mas `--dangerously-skip-permissions` permite alterações irrestritas no workspace — use apenas com repositórios confiáveis
 - Volumes persistentes para histórico de comandos e config do Claude
+
+## Model Context Protocol (MCP)
+
+MCPs são servidores que estendem as capacidades do Claude Code. Este projeto utiliza os seguintes MCPs:
+
+### MCPs Configurados
+
+- **MCP_DOCKER**: Gerenciar containers e imagens Docker
+  - Pacote: `docker-mcp`
+  - Requer: Docker daemon rodando (acesso ao `/var/run/docker.sock`)
+  - Instalação: `npm install -g docker-mcp`
+
+- **shell**: Executar comandos bash
+  - Comando: `/bin/bash`
+  - Sempre disponível no sistema
+  - Requer aprovação explícita no Claude Code
+
+### Diagnóstico e Resolução de MCPs
+
+Caso encuentre erros de conexão com MCPs:
+
+1. **Executar script de diagnóstico:**
+   ```bash
+   ./fix-mcp.sh
+   ```
+
+2. **Verificar status:**
+   ```bash
+   claude mcp list
+   ```
+
+3. **Reinstalar MCPs:**
+   ```bash
+   npm install -g docker-mcp
+   claude mcp add MCP_DOCKER -- npx -y docker-mcp
+   claude mcp add shell -- /bin/bash
+   ```
+
+### Documentação Detalhada
+
+Veja `MCP_SETUP_PLAN.md` para:
+- Análise completa de erros
+- Plano de resolução com 7 passos
+- Testes de validação
+- Scripts de resolução rápida
