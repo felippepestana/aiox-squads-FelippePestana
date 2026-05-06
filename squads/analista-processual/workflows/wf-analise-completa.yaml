@@ -1,12 +1,13 @@
 workflow:
   id: wf-analise-completa
   name: "Análise Processual Completa"
-  version: "1.0.0"
+  version: "1.1.0"
   orchestrator: analista-chefe
   description: |
     Pipeline completo para análise de processo judicial com documentos.
     Ativa todos os tiers sequencialmente: Tier 0 (mapeamento/avaliação) →
-    Tier 1 (jurídico em paralelo) → Tier Síntese (relatório final MODO_JURIDICO).
+    Tier 1 (jurídico em paralelo, depois estratégico sequencial) → Tier Síntese
+    (relatório final MODO_JURIDICO).
   use_case: UC-AP-002
   estimated_duration: "15-40 min"
   language: "pt-BR"
@@ -20,6 +21,21 @@ phases:
     on_fail: "Perguntar ao usuário para esclarecer a demanda"
 
   PHASE-2:
+    name: "Tier 0 — Mapeamento e Avaliação (sequencial)"
+    execution_mode: SEQUENTIAL
+    agents:
+      - mapeador-processual
+      - avaliador-processual
+    tasks:
+      - ap-mapear-processo
+      - ap-avaliar-conformidade
+    quality_gates:
+      - QG-AP-002
+      - QG-AP-003
+    depends_on: PHASE-1
+    on_fail: "Solicitar ao mapeador ou avaliador que reprocesse"
+
+  PHASE-3:
     name: "Tier 1 — Execução Jurídica (paralelo)"
     execution_mode: PARALLEL
     agents:
@@ -28,8 +44,9 @@ phases:
     tasks:
       - ap-ler-peca
       - ap-pesquisar-jurisprudencia
+    depends_on: PHASE-2
 
-  PHASE-3:
+  PHASE-4:
     name: "Tier 1 — Análise Estratégica (sequencial)"
     execution_mode: SEQUENTIAL
     agents:
@@ -38,26 +55,28 @@ phases:
     tasks:
       - ap-analisar-estrategia
       - ap-planejar-acao
-    depends_on: PHASE-2
+    depends_on: PHASE-3
 
-  PHASE-4:
+  PHASE-5:
     name: "Síntese"
     executor: analista-chefe
     action: "Consolidar outputs de todas as fases"
     task: ap-sintetizar-analise
-    depends_on: PHASE-3
+    depends_on: PHASE-4
 
-  PHASE-5:
+  PHASE-6:
     name: "Documentação"
     executor: documentador-processual
     action: "Gerar e salvar relatório final MODO_JURIDICO"
     task: ap-gerar-relatorio
     quality_gate: QG-AP-004
-    depends_on: PHASE-4
+    depends_on: PHASE-5
     on_fail: "Reexecutar documentador com nome de arquivo alternativo"
 
 quality_checklist:
   - "[ ] Demanda classificada como UC-AP-002"
+  - "[ ] Processo mapeado com todas etapas e atores (@mapeador-processual)"
+  - "[ ] Maturidade avaliada com score 0-5 e Top-5 riscos (@avaliador-processual)"
   - "[ ] Peças processuais lidas e estruturadas (@leitor-de-pecas)"
   - "[ ] Jurisprudência pesquisada (mínimo 5 fontes) (@pesquisador-juridico)"
   - "[ ] 3 cenários com probabilidades definidos (@estrategista-processual)"
