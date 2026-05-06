@@ -121,7 +121,7 @@ pipeline:
     UC-AP-002:
       name: "Análise Jurídica Completa"
       trigger_patterns: ["processo judicial", "peças", "petição", "sentença", "recurso", "analisar processo"]
-      tier_0_active: false
+      tier_0_active: true
       tier_1_agents: [leitor-de-pecas, pesquisador-juridico, estrategista-processual, advogado-orientador]
     UC-AP-003:
       name: "Análise Estratégica"
@@ -130,7 +130,7 @@ pipeline:
       tier_1_agents: [estrategista-processual, advogado-orientador]
     UC-AP-004:
       name: "Pesquisa Jurisprudencial"
-      trigger_patterns: ["jurisprudência", "STJ", "STF", "súmula", "legislação", "precedente"]
+      trigger_patterns: ["jurisprudência", "STJ", "STF", "TRF", "súmula", "legislação", "precedente"]
       tier_0_active: false
       tier_1_agents: [pesquisador-juridico]
 
@@ -190,5 +190,5 @@ stats:
   total_tasks: 9
   total_workflows: 2
   total_checklists: 2
-  total_templates: 1
+  total_templates: 2
   total_data_files: 1
