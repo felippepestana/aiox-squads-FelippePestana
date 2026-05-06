@@ -11,7 +11,7 @@
 ```
                     analista-chefe (Orchestrator)
                            |
-              ┌───────────────┬─────────────┐
+              ┌─────────────┬─────────────┐
               |              |              |
          TIER 0         TIER 1        TIER SÍNTESE
          (Intake)       (Jurídico)    (Relatório)
@@ -34,25 +34,25 @@
 | Tier 0 | `mapeador-processual` | Mapeamento pseudo-BPMN (etapas, atores, decisões) | Read, Glob |
 | Tier 0 | `avaliador-processual` | Maturidade 0-5, gargalos, Top-5 riscos | Read |
 | Tier 1 | `leitor-de-pecas` | Extração estruturada em 7 categorias | Read, Glob, Grep |
-| Tier 1 | `pesquisador-juridico` | Jurisprudência STF/STJ/TJs, súmulas, legislação | WebSearch, Read |
+| Tier 1 | `pesquisador-juridico` | Jurisprudência STF/STJ/TJs/TRFs, súmulas, OJs, legislação | WebSearch, Read |
 | Tier 1 | `estrategista-processual` | 3 cenários (%), riscos, viabilidade de acordo | Read, Grep |
 | Tier 1 | `advogado-orientador` | Ações urgentes, plano 4-8 sem, orientação cliente | Read |
 | Tier Síntese | `documentador-processual` | Relatório dual-mode + `citacoes` + Write | Read, Write, Glob |
 
 ---
 
-## Use Cases
+## Casos de Uso
 
-| ID | Demanda | Agents | Modo | Tempo |
-|----|---------|--------|------|-------|
+| ID | Demanda | Agentes | Modo | Tempo |
+|----|---------|---------|------|-------|
 | UC-AP-001 | Mapear processo genérico | mapeador + avaliador | PROCESSUAL | 5-15 min |
-| UC-AP-002 | Análise jurídica completa | todos tier 1 | JURIDICO | 15-40 min |
-| UC-AP-003 | Análise estratégica | estrategista + orientador | JURIDICO | 10-20 min |
-| UC-AP-004 | Pesquisa jurisprudencial | pesquisador | Direto | 5-10 min |
+| UC-AP-002 | Análise jurídica completa | mapeador + avaliador → leitor + pesquisador → estrategista + orientador | JURIDICO | 15-40 min |
+| UC-AP-003 | Análise estratégica | mapeador + avaliador → estrategista + orientador | JURIDICO | 10-20 min |
+| UC-AP-004 | Pesquisa jurisprudencial | pesquisador | JURIDICO (resposta direta) | 5-10 min |
 
 ---
 
-## Quick Start
+## Início Rápido
 
 ### Ativar o Orchestrator
 
@@ -86,11 +86,11 @@
 
 ---
 
-## Quality Gates
+## Critérios de Qualidade
 
 | ID | Gate | Agente | Critério |
 |----|------|--------|----------|
-| QG-AP-001 | Classificação | analista-chefe | UC definido antes de qualquer ativation |
+| QG-AP-001 | Classificação | analista-chefe | UC definido antes de qualquer ativação |
 | QG-AP-002 | Mapeamento Completo | mapeador-processual | Todas etapas com atores e saídas |
 | QG-AP-003 | Avaliação Fundamentada | avaliador-processual | Score 0-5 + Top-5 riscos com mitigação |
 | QG-AP-004 | Relatório Salvo | documentador-processual | Write executado + citações rastreadas |
@@ -118,7 +118,7 @@ squads/analista-processual/
 ├── tasks/                          (9 task files)
 ├── workflows/                      (2 workflow files)
 ├── checklists/                     (2 checklist files)
-├── templates/                      (1 template)
+├── templates/                      (2 templates)
 └── data/                           (1 data file)
 ```
 
@@ -136,7 +136,7 @@ squads/analista-processual/
 | Tasks | 9 |
 | Workflows | 2 |
 | Checklists | 2 |
-| Templates | 1 |
+| Templates | 2 |
 | Data files | 1 |
 | Quality Gates | 4 |
 | Fontes jurídicas autorizadas | 7 |

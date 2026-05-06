@@ -14,11 +14,11 @@ O squad `analista-processual` implementa um pipeline 3-tier para análise de pro
          UC-AP-001             UC-AP-002
          UC-AP-003             UC-AP-004
               |                      |
-     TIER 0 (Sequencial)    TIER 1 (Paralelo)
-      mapeador-processual    leitor-de-pecas
-            |                pesquisador-juridico
-      avaliador-processual   estrategista-processual
-      [QG-AP-002, 003]       advogado-orientador
+     TIER 0 (Sequencial)    TIER 1 (Paralelo + Sequencial)
+      mapeador-processual    leitor-de-pecas + pesquisador (paralelo)
+            |                estrategista → advogado (sequencial)
+      avaliador-processual
+      [QG-AP-002, 003]
               |                      |
               └──────────────────────┘
                                     |
@@ -36,9 +36,9 @@ O squad `analista-processual` implementa um pipeline 3-tier para análise de pro
 | UC | Trigger | Tier 0 | Tier 1 | Modo |
 |----|---------|--------|--------|------|
 | UC-AP-001 | mapear, etapas, fluxo, BPMN | Sim | Não | PROCESSUAL |
-| UC-AP-002 | processo judicial, peças, petição | Opcional | Todos 4 | JURIDICO |
+| UC-AP-002 | processo judicial, peças, petição | Sim | Todos 4 | JURIDICO |
 | UC-AP-003 | riscos, estratégia, cenários | Sim | estrategista + orientador | JURIDICO |
-| UC-AP-004 | jurisprudência, STJ, súmula | Não | pesquisador | Direto |
+| UC-AP-004 | jurisprudência, STJ, STF, TRF, súmula | Não | pesquisador | JURIDICO (resposta direta) |
 
 ## Tier 0 — Intake e Mapeamento
 
@@ -70,7 +70,7 @@ leitor-de-pecas (paralelo com pesquisador)
 
 pesquisador-juridico (paralelo com leitor)
   - Input: questões jurídicas do leitor
-  - Output: legislação + STF/STJ + súmulas + posição majoritária
+  - Output: legislação + STF/STJ/TJs/TRFs + súmulas + OJs + posição majoritária
   - Tools: Read, Glob, Grep, WebSearch
 
 estrategista-processual (após leitor+pesquisador)
@@ -121,7 +121,7 @@ ELSE IF mensagem contém {"mapear", "etapas", "fluxo", "BPMN", "workflow"}
 ELSE IF mensagem contém {"riscos", "estratégia", "cenários", "sucumbência", "acordo"}
   → UC-AP-003 (Análise Estratégica)
 
-ELSE IF mensagem contém {"jurisprudência", "STJ", "STF", "súmula", "precedente"}
+ELSE IF mensagem contém {"jurisprudência", "STJ", "STF", "TRF", "súmula", "precedente"}
   → UC-AP-004 (Pesquisa Jurisprudencial)
 
 ELSE
