@@ -21,14 +21,14 @@ export function TransformationViewer() {
 
   const handleAnimate = () => {
     setAnimating(true)
-    setTimeout(() => setAnimating(false), 4000)
+    setTimeout(() => setAnimating(false), 8000)
   }
 
   return (
     <section id="transformacao" className="py-24 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-to-b from-anmar-navy via-anmar-navy-light/30 to-anmar-navy pointer-events-none" />
-      <div className="absolute top-1/2 left-0 w-96 h-96 bg-anmar-gold/3 rounded-full blur-[150px] -translate-y-1/2 pointer-events-none" />
+      <div className="absolute top-1/2 left-0 w-96 h-96 bg-anmar-gold/5 rounded-full blur-[150px] -translate-y-1/2 pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
         {/* Header */}
@@ -114,7 +114,7 @@ export function TransformationViewer() {
                       onClick={() => { setSelectedTreatment(t); setAnimating(false) }}
                       className={`w-full text-left px-4 py-3 rounded-xl border transition-all duration-300 ${
                         selectedTreatment.id === t.id
-                          ? 'border-anmar-gold/50 bg-anmar-gold/8 text-anmar-ivory'
+                          ? 'border-anmar-gold/50 bg-anmar-gold/10 text-anmar-ivory'
                           : 'border-transparent hover:border-white/10 text-white/60 hover:text-white/80'
                       }`}
                     >

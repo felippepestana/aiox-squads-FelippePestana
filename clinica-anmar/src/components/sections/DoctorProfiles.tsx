@@ -58,7 +58,7 @@ export function DoctorProfiles() {
               className="glass-card p-8 relative overflow-hidden group hover:border-anmar-gold/30 transition-all duration-500"
             >
               {/* Background glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-anmar-gold/0 to-anmar-gold/3 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-br from-anmar-gold/0 to-anmar-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
               <div className="relative z-10">
                 {/* Avatar placeholder */}

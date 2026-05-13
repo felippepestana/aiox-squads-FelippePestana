@@ -42,7 +42,7 @@ export const doctors: Doctor[] = [
     id: 'marina',
     name: 'Dra. Marina Mayara T. B. Pagotto',
     title: 'Ginecologista & Especialista em Emagrecimento',
-    crm: 'CRM-AM',
+    crm: 'CRM-AM (nº a confirmar)',
     specialty: 'Ginecologia, Obstetrícia & Medicina do Emagrecimento',
     subSpecialties: [
       'Emagrecimento e Sarcopenia',

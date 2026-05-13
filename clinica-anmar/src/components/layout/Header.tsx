@@ -64,7 +64,7 @@ export function Header() {
           {/* CTA */}
           <div className="hidden lg:flex items-center gap-4">
             <a
-              href="tel:+559200000000"
+              href="tel:+5592982711200"
               className="flex items-center gap-2 text-sm font-body text-white/50 hover:text-anmar-gold transition-colors duration-300"
             >
               <Phone size={14} />
@@ -93,7 +93,7 @@ export function Header() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="lg:hidden bg-anmar-navy/98 backdrop-blur-md border-t border-white/5 overflow-hidden"
+            className="lg:hidden bg-anmar-navy/95 backdrop-blur-md border-t border-white/5 overflow-hidden"
           >
             <nav className="px-6 py-6 flex flex-col gap-4">
               {navLinks.map((link) => (

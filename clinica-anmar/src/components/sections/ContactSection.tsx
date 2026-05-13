@@ -33,9 +33,8 @@ export function ContactSection() {
     resolver: zodResolver(schema),
   })
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (_data: FormData) => {
     await new Promise((r) => setTimeout(r, 1000))
-    console.log('Form submitted:', data)
     setSubmitted(true)
   }
 
@@ -154,7 +153,7 @@ export function ContactSection() {
                   <input
                     {...register('name')}
                     placeholder="Seu nome"
-                    className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm font-body text-anmar-ivory placeholder:text-white/30 focus:outline-none focus:border-anmar-gold/50 focus:bg-white/8 transition-all duration-300"
+                    className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm font-body text-anmar-ivory placeholder:text-white/30 focus:outline-none focus:border-anmar-gold/50 focus:bg-white/10 transition-all duration-300"
                   />
                   {errors.name && (
                     <p className="text-xs text-red-400 mt-1 font-body">{errors.name.message}</p>
@@ -166,7 +165,7 @@ export function ContactSection() {
                   <input
                     {...register('phone')}
                     placeholder="(92) 9xxxx-xxxx"
-                    className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm font-body text-anmar-ivory placeholder:text-white/30 focus:outline-none focus:border-anmar-gold/50 focus:bg-white/8 transition-all duration-300"
+                    className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm font-body text-anmar-ivory placeholder:text-white/30 focus:outline-none focus:border-anmar-gold/50 focus:bg-white/10 transition-all duration-300"
                   />
                   {errors.phone && (
                     <p className="text-xs text-red-400 mt-1 font-body">{errors.phone.message}</p>
@@ -195,7 +194,7 @@ export function ContactSection() {
                     {...register('message')}
                     placeholder="Conte um pouco sobre seus objetivos..."
                     rows={3}
-                    className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm font-body text-anmar-ivory placeholder:text-white/30 focus:outline-none focus:border-anmar-gold/50 focus:bg-white/8 transition-all duration-300 resize-none"
+                    className="w-full bg-white/5 border border-white/15 rounded-xl px-4 py-3 text-sm font-body text-anmar-ivory placeholder:text-white/30 focus:outline-none focus:border-anmar-gold/50 focus:bg-white/10 transition-all duration-300 resize-none"
                   />
                 </div>
 

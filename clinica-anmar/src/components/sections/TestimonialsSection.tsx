@@ -52,7 +52,7 @@ export function TestimonialsSection() {
   return (
     <section className="py-24 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-[#060E1C] to-anmar-navy pointer-events-none" />
-      <div className="absolute top-1/2 right-0 w-80 h-80 bg-anmar-gold/4 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
+      <div className="absolute top-1/2 right-0 w-80 h-80 bg-anmar-gold/5 rounded-full blur-[120px] -translate-y-1/2 pointer-events-none" />
 
       <div className="relative max-w-4xl mx-auto px-6 lg:px-8">
         {/* Header */}
@@ -103,7 +103,7 @@ export function TestimonialsSection() {
               </blockquote>
 
               {/* Result badge */}
-              <div className="inline-flex items-center gap-2 border border-anmar-gold/30 bg-anmar-gold/8 rounded-full px-5 py-2 mb-6">
+              <div className="inline-flex items-center gap-2 border border-anmar-gold/30 bg-anmar-gold/10 rounded-full px-5 py-2 mb-6">
                 <span className="text-anmar-gold text-sm font-body font-semibold">{t.result}</span>
               </div>
 
