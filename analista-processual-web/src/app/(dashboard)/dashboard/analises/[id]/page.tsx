@@ -22,7 +22,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PartiesSection, TimelineSection, ClaimsSection } from "@/components/analysis";
+import { PartiesSection, TimelineSection, ClaimsSection, DocumentsPanel } from "@/components/analysis";
 
 // Type definitions for components
 type PartyRole = "author" | "defendant" | "third_party" | "witness" | "expert";
@@ -465,50 +465,11 @@ export default function AnaliseDetailPage() {
         </TabsContent>
 
         <TabsContent value="documentos" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Documentos Analisados</CardTitle>
-              <CardDescription>
-                {analysis.documents.length} documento(s) enviado(s) para análise
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {analysis.documents.length > 0 ? (
-                <div className="space-y-2">
-                  {analysis.documents.map((doc) => (
-                    <div
-                      key={doc.id}
-                      className="flex items-center justify-between rounded-lg border p-3"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                          <FileText className="h-5 w-5 text-primary" />
-                        </div>
-                        <div>
-                          <p className="font-medium">{doc.filename}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {doc.fileType || "Tipo desconhecido"}
-                          </p>
-                        </div>
-                      </div>
-                      <Button variant="ghost" size="sm">
-                        <Download className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="flex h-[200px] items-center justify-center border-2 border-dashed">
-                  <div className="text-center">
-                    <FileText className="mx-auto h-8 w-8 text-muted-foreground" />
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      Nenhum documento enviado
-                    </p>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+          <DocumentsPanel
+            analysisId={params.id as string}
+            documents={analysis.documents}
+            isReadOnly={!isComplete}
+          />
         </TabsContent>
 
         <TabsContent value="prazos" className="space-y-4">

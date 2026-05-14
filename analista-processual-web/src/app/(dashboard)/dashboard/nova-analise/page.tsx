@@ -1,77 +1,25 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Upload, File, X, Loader2, FileText, CheckCircle } from "lucide-react";
+import { Loader2, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-
-interface FileWithPreview extends File {
-  preview?: string;
-  id: string;
-}
+import { UploadSection } from "./components/upload-section";
 
 export default function NovaAnalisePage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [isDragging, setIsDragging] = useState(false);
-  const [files, setFiles] = useState<FileWithPreview[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [processInfo, setProcessInfo] = useState({
     processNumber: "",
     court: "",
     processClass: "",
   });
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-  }, []);
-
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-  }, []);
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-
-    const droppedFiles = Array.from(e.dataTransfer.files);
-    addFiles(droppedFiles);
-  }, []);
-
-  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const selectedFiles = Array.from(e.target.files);
-      addFiles(selectedFiles);
-    }
-  }, []);
-
-  const addFiles = (newFiles: File[]) => {
-    const filesWithId = newFiles.map((file) =>
-      Object.assign(file, {
-        id: Math.random().toString(36).substring(7),
-        preview: file.type.startsWith("text/")
-          ? undefined
-          : URL.createObjectURL(file),
-      })
-    );
-    setFiles((prev) => [...prev, ...filesWithId]);
-  };
-
-  const removeFile = (id: string) => {
-    setFiles((prev) => {
-      const file = prev.find((f) => f.id === id);
-      if (file?.preview) {
-        URL.revokeObjectURL(file.preview);
-      }
-      return prev.filter((f) => f.id !== id);
-    });
-  };
 
   const handleSubmit = async () => {
     if (files.length === 0) {
@@ -248,88 +196,10 @@ export default function NovaAnalisePage() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Documentos</CardTitle>
-          <CardDescription>
-            Arraste e solte os arquivos ou clique para selecionar. Formatos aceitos:
-            PDF, DOCX, TXT, imagens.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            className={`relative flex min-h-[200px] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors ${
-              isDragging
-                ? "border-primary bg-primary/5"
-                : "border-muted-foreground/25 hover:border-primary/50 hover:bg-muted/50"
-            }`}
-          >
-            <input
-              type="file"
-              multiple
-              accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.tiff"
-              onChange={handleFileSelect}
-              className="absolute inset-0 z-10 cursor-pointer opacity-0"
-            />
-            <Upload
-              className={`h-10 w-10 ${
-                isDragging ? "text-primary" : "text-muted-foreground"
-              }`}
-            />
-            <p className="mt-4 text-sm text-muted-foreground">
-              {isDragging ? (
-                <span className="font-medium text-primary">
-                  Solte os arquivos aqui
-                </span>
-              ) : (
-                <>
-                  <span className="font-medium text-foreground">
-                    Clique para selecionar
-                  </span>{" "}
-                  ou arraste e solte
-                </>
-              )}
-            </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              PDF, DOC, DOCX, TXT até 10MB
-            </p>
-          </div>
-
-          {files.length > 0 && (
-            <div className="mt-4 space-y-2">
-              {files.map((file) => (
-                <div
-                  key={file.id}
-                  className="flex items-center justify-between rounded-lg border bg-muted/50 p-3"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                      <FileText className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">{file.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {(file.size / 1024 / 1024).toFixed(2)} MB
-                      </p>
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removeFile(file.id)}
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      <UploadSection
+        onFilesReady={setFiles}
+        isSubmitting={isUploading}
+      />
 
       <div className="flex items-center justify-end gap-4">
         <Button variant="outline" onClick={() => router.back()}>
