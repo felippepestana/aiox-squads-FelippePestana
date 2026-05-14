@@ -1,96 +1,3 @@
----
-title: "Materiais de Marketing — Clínica Estética"
----
-
-
-
----
-
-
-# Marketing — Materiais para Clínica Estética
-**Formato:** TV 16:9 (loop recepção ~90s) | **Status:** Pronto para produção
-
----
-
-## Guia Principal
-
-| Arquivo | Descrição |
-|---------|-----------|
-| [Guia de Produção](./guia-de-producao.md) | **Comece aqui.** Especificações técnicas de gravação, roteiro de ações cena a cena, textos prontos para cada imagem, estratégia dual-use TV + Reels, cases brasileiros e checklist pré-gravação |
-| [Referências Visuais](./referencias-visuais.md) | 13 referências com links e análise do que cada uma valida no formato adotado. Validação do loop de 90s. |
-
----
-
-## Foto Terapia Facial
-
-| Arquivo | Descrição |
-|---------|-----------|
-| [Roteiro de Vídeo](./foto-terapia-facial/roteiro-video.md) | Storyboard do vídeo de 15s — 3 cenas com descrição de captação, legendas e notas de produção |
-| [Slides — Imagem](./foto-terapia-facial/slides-imagem.md) | Sequência de 5 slides × 15s com textos on-screen, sugestão de foto e diretrizes de design |
-| [CTAs e Ganchos](./foto-terapia-facial/cta-hook.md) | CTA principal + 5 ganchos + 4 variações de CTA + nota regulatória CFM |
-| [Variações de Vídeo](./foto-terapia-facial/variacoes-video.md) | 5 abordagens do vídeo de 15s: problema/solução, antes/depois, curiosidade, autoridade, emocional |
-| [Variações de Slides](./foto-terapia-facial/variacoes-slides.md) | 5 variações de tom dos textos dos slides: técnico, emocional, direto, comparativo, contextual |
-
----
-
-## Botox (Toxina Botulínica)
-
-| Arquivo | Descrição |
-|---------|-----------|
-| [Roteiro de Vídeo](./botox/roteiro-video.md) | Storyboard do vídeo de 15s — 3 cenas com descrição de captação, legendas e notas de produção |
-| [Slides — Imagem](./botox/slides-imagem.md) | Sequência de 5 slides × 15s com textos on-screen, sugestão de foto e diretrizes de design |
-| [CTAs e Ganchos](./botox/cta-hook.md) | CTA principal + 5 ganchos + 5 variações de CTA + nota regulatória CFM |
-| [Variações de Vídeo](./botox/variacoes-video.md) | 5 abordagens do vídeo de 15s: problema/solução, naturalidade, praticidade, preventivo, autoridade |
-| [Variações de Slides](./botox/variacoes-slides.md) | 5 variações de tom dos textos dos slides: técnico, emocional, direto/desmistificador, preventivo, contextual |
-
----
-
-## Estrutura do Loop (90 segundos)
-
-```
-[VÍDEO 15s]  →  [SLIDE 1 — Gancho/Problema: 15s]
-             →  [SLIDE 2 — O que é: 15s]
-             →  [SLIDE 3 — Como funciona: 15s]
-             →  [SLIDE 4 — Resultados: 15s]
-             →  [SLIDE 5 — CTA: 15s]
-             →  [VÍDEO 15s]  →  LOOP ∞
-```
-
-**Transições:** cross-dissolve 1s entre slides | fade para branco 1s vídeo → slides
-
----
-
-## Conformidade Regulatória (CFM Res. 2.336/2023)
-
-Todo o conteúdo foi revisado para conformidade. Termos proibidos removidos:
-
-| Evitar | Usar no lugar |
-|--------|--------------|
-| "avaliação gratuita" | "Agende sua avaliação" |
-| "rejuvenesce / rejuvenescer" | "suaviza / renovar / revitalizar" |
-| "redução comprovada" | "auxilia na redução" |
-| "elimina rugas" | "atenua / suaviza as linhas de expressão" |
-| "Botox®" (marca) | "toxina botulínica" |
-| Duração absoluta | "em média, X meses" |
-
----
-
-## Próximos Passos
-
-- [ ] Substituir `[NOME DA CLÍNICA]` e `[CONTATO]` em todos os arquivos antes de produzir
-- [ ] Obter consentimentos de uso de imagem dos pacientes antes das gravações
-- [ ] Produzir vídeos seguindo o [Guia de Produção](./guia-de-producao.md)
-- [ ] **Fase 2:** Gerar artes no Canva (via MCP) com proporção 16:9
-- [ ] **Fase 3:** Criar squad `squads/marketing/` para reutilização futura
-
----
-
-*Gerado em maio de 2026 | PR #27 — branch `claude/marketing-materials-generation-MoqZY`*
-
-
----
-
-
 # Guia de Produção — Materiais de Marketing Clínica Estética
 **Versão:** 1.0 | **Status:** Pronto para gravação | **Formato primário:** TV 16:9 | **Formato secundário:** Corte para Reels 9:16
 
@@ -102,9 +9,11 @@ Todo o conteúdo foi revisado para conformidade. Termos proibidos removidos:
 2. [Estratégia de Captação Dual-Use TV + Redes Sociais](#2-estratégia-dual-use)
 3. [Roteiro de Ações — Foto Terapia Facial](#3-foto-terapia-facial)
 4. [Roteiro de Ações — Aplicação de Botox](#4-aplicação-de-botox)
-5. [Diretrizes Gerais de Produção](#5-diretrizes-gerais)
-6. [Cases Brasileiros de Referência](#6-cases-brasileiros)
-7. [Checklist Pré-Gravação](#7-checklist-pré-gravação)
+5. [Roteiro de Ações — Harmonização Íntima Feminina](#5-harmonização-íntima-feminina)
+6. [Roteiro de Ações — Harmonização Íntima Masculina](#6-harmonização-íntima-masculina)
+7. [Diretrizes Gerais de Produção](#7-diretrizes-gerais)
+8. [Cases Brasileiros de Referência](#8-cases-brasileiros)
+9. [Checklist Pré-Gravação](#9-checklist-pré-gravação)
 
 ---
 
@@ -580,17 +489,326 @@ na sua consulta hoje
 
 ---
 
-## 5. DIRETRIZES GERAIS DE PRODUÇÃO
+## 5. HARMONIZAÇÃO ÍNTIMA FEMININA — ROTEIRO DE AÇÕES
+
+### Contexto do Procedimento (para orientar o conteúdo das fotos)
+
+A Harmonização Íntima Feminina reúne procedimentos estéticos não cirúrgicos para a região vulvovaginal e púbica: preenchimento com ácido hialurônico nos grandes lábios, radiofrequência e laser vaginal (canal vaginal + vulva), clareamento do monte de Vênus e região vulvar, e bioestimuladores de colágeno nos grandes lábios. Indicada para flacidez pós-perda de peso, ressecamento vaginal, hiperpigmentação e recuperação de tônus pós-parto.
+
+**Mensagem central para o material:** "Cuidado com a parte de você que também merece atenção"
+
+**Nota de produção obrigatória:** Nenhuma imagem da região anatômica íntima deve aparecer. O procedimento é representado por: mãos da profissional com equipamento, expressões da paciente, ambiente clínico e infográficos educativos.
+
+---
+
+### VÍDEO (15 segundos)
+
+#### Cena 1 — [ 0s a 5s ] | O CUIDADO QUE COMEÇA EM VOCÊ
+
+**Ação a gravar:**
+- Profissional (jaleco, postura acolhedora) recebendo a paciente em consulta inicial
+- Ambiente: sala de atendimento clean, luz quente, flores ou elemento feminino discreto
+
+**Foco específico da câmera:**
+- Plano americano: profissional e paciente sentadas frente a frente
+- Expressão da profissional: empática, receptiva
+- Luz: quente e suave — diferente da frieza de um centro cirúrgico
+
+**Sugestão de chamada (legenda da cena):**
+```
+HARMONIZAÇÃO ÍNTIMA FEMININA
+Cuidado que vai além da aparência
+```
+
+---
+
+#### Cena 2 — [ 5s a 11s ] | A TECNOLOGIA E A TÉCNICA
+
+**Ação a gravar:**
+- Close nas mãos da profissional com equipamento (radiofrequência, laser ou seringa com ácido hialurônico) sobre campo cirúrgico — **sem mostrar a região anatômica**
+- OU: infográfico animado mostrando os procedimentos (preenchimento, clareamento, radiofrequência, laser) com ícones ilustrativos e elegantes
+
+**Foco específico da câmera:**
+- Enquadramento: da cintura para cima do profissional (jaleco + mãos + equipamento)
+- Campo estéril visível na mesa lateral — transmite higiene e precisão
+
+**Sugestão de chamada (legenda da cena):**
+```
+Preenchimento • Laser • Radiofrequência
+Procedimentos seguros e sem cirurgia
+```
+
+---
+
+#### Cena 3 — [ 11s a 15s ] | O RESULTADO: VOCÊ EM PLENA FORMA
+
+**Ação a gravar:**
+- Paciente saindo satisfeita — expressão de leveza, autoconfiança, sorriso genuíno
+- Plano: busto, roupa casual, ambiente clínico ao fundo
+
+**Foco específico da câmera:**
+- Expressão: leve, empoderada, bem consigo mesma
+- Luz suave, fundo levemente desfocado
+
+**Sugestão de chamada (legenda da cena):**
+```
+Bem-estar, conforto e autoestima
+de volta à sua rotina em seguida
+```
+
+---
+
+### SEQUÊNCIA DE FOTOS (5 slides × 15s)
+
+#### FOTO 1 — GANCHO / IDENTIFICAÇÃO
+
+**O que fotografar:**
+- Mulher olhando para si mesma com atenção e cuidado (espelho, não intimidade)
+- OU: duas mulheres conversando com leveza sobre cuidados pessoais
+- OU: mulher em consulta ginecológica de rotina — ambiente de saúde feminina
+
+**Texto da imagem (pronto para uso):**
+```
+Seu corpo merece o mesmo cuidado
+que você dedica ao seu rosto
+```
+
+---
+
+#### FOTO 2 — O QUE É
+
+**O que fotografar:**
+- Profissional com equipamento elegante sobre campo estéril
+- OU: infográfico clean com ícones dos procedimentos disponíveis
+- OU: ambiente da sala de procedimento: clean, moderno, sofisticado
+
+**Texto da imagem (pronto para uso):**
+```
+Harmonização Íntima Feminina
+Procedimentos não cirúrgicos
+para conforto e bem-estar
+```
+
+---
+
+#### FOTO 3 — PROCEDIMENTOS E LOCAIS
+
+**O que fotografar:**
+- Infográfico com silhueta feminina estilizada + marcadores nas regiões tratadas (representação artística abstrata — sem exposição)
+- OU: ícones dos tratamentos lado a lado em layout limpo
+
+**Texto da imagem (pronto para uso):**
+```
+✓ Preenchimento labial íntimo
+✓ Clareamento da região vulvar
+✓ Radiofrequência e laser vaginal
+✓ Remodelagem com bioestimuladores
+```
+
+> **Nota clínica para a equipe (não exibir no slide):** Preenchimento → grandes lábios; Clareamento → monte de Vênus e região vulvar; Radiofrequência/Laser → vulva externa + canal vaginal; Bioestimuladores → grandes lábios e monte de Vênus.
+
+---
+
+#### FOTO 4 — BENEFÍCIOS E INDICAÇÕES
+
+**O que fotografar:**
+- Mulher em atividade do dia a dia: yoga, caminhada, ou simplesmente sorrindo com leveza
+- OU: mulher em qualquer fase da vida — jovem, pós-parto, menopausa — sentindo-se bem
+
+**Texto da imagem (pronto para uso):**
+```
+Desconforto, flacidez, assimetria
+ou ressecamento têm solução
+
+Resultados desde a 1ª sessão
+Sem internação • Retorno imediato
+```
+
+---
+
+#### FOTO 5 — CTA
+
+**O que fotografar:**
+- Profissional sorrindo em ambiente de consultório, postura acolhedora e segura
+- Ambiente: cores quentes, luz dourada suave, sensação de acolhimento
+
+**Texto da imagem (pronto para uso):**
+```
+Você já está no lugar certo
+
+Pergunte sobre Harmonização Íntima
+na sua consulta de hoje
+
+📲 [CONTATO]
+[NOME DA CLÍNICA]
+```
+
+---
+
+## 6. HARMONIZAÇÃO ÍNTIMA MASCULINA — ROTEIRO DE AÇÕES
+
+### Contexto do Procedimento (para orientar o conteúdo das fotos)
+
+A Harmonização Íntima Masculina reúne procedimentos estéticos minimamente invasivos para a região genital masculina: bioplastia/preenchimento do pênis com ácido hialurônico (corpo e glande), scrotox com toxina botulínica (reduz suor e relaxa o músculo cremáster), clareamento da região pubiana e escrotal com laser ou peeling, e bioestimuladores de colágeno no corpo do pênis. Indicado para insatisfação estética com volume ou circunferência, hiperhidrose escrotal e hiperpigmentação.
+
+**Mensagem central para o material:** "Cuidado, confiança e autoestima — discretamente"
+
+**Nota de produção obrigatória:** Nenhuma imagem da região anatômica íntima deve aparecer. Representar por: mãos do profissional, equipamentos sobre campo estéril, expressões do paciente e infográficos.
+
+---
+
+### VÍDEO (15 segundos)
+
+#### Cena 1 — [ 0s a 5s ] | O HOMEM QUE CUIDA DE SI
+
+**Ação a gravar:**
+- Homem entre 28–50 anos em consulta — postura relaxada, conversa com profissional
+- Ambiente: sala clínica clean, iluminação neutra, sem elementos que infantilizem
+
+**Foco específico da câmera:**
+- Plano médio: homem e médico em conversa direta
+- Expressão do homem: tranquilo, seguro, confortável — sem constrangimento
+
+**Sugestão de chamada (legenda da cena):**
+```
+HARMONIZAÇÃO ÍNTIMA MASCULINA
+Cuidado, confiança e autoestima
+```
+
+---
+
+#### Cena 2 — [ 5s a 11s ] | PRECISÃO E SEGURANÇA
+
+**Ação a gravar:**
+- Close nas mãos do profissional sobre campo estéril com equipamento de aplicação
+- OU: infográfico animado dos procedimentos (bioplastia, scrotox, clareamento) com ícones técnicos neutros
+
+**Foco específico da câmera:**
+- Enquadramento: mãos + campo estéril + instrumento
+- Transmitir: precisão clínica, higiene, segurança
+
+**Sugestão de chamada (legenda da cena):**
+```
+Bioplastia • Scrotox • Clareamento
+Minimamente invasivo, sem cirurgia
+```
+
+---
+
+#### Cena 3 — [ 11s a 15s ] | CONFIANÇA RESTAURADA
+
+**Ação a gravar:**
+- Paciente pós-consulta: expressão de satisfação, postura ereta, autoconfiança
+- Plano médio, roupa casual, saindo da clínica ou em consulta de pós-procedimento
+
+**Foco específico da câmera:**
+- Energia: discretamente seguro, confortável consigo mesmo
+- Luz: neutra, ambiente profissional
+
+**Sugestão de chamada (legenda da cena):**
+```
+Resultado imediato
+Retorno às atividades em 24–48h
+```
+
+---
+
+### SEQUÊNCIA DE FOTOS (5 slides × 15s)
+
+#### FOTO 1 — GANCHO / IDENTIFICAÇÃO
+
+**O que fotografar:**
+- Homem com expressão pensativa mas confiante, olhando para frente
+- OU: homem em academia ou esporte — contexto de cuidado com o próprio corpo
+- OU: dois homens em conversa casual sobre saúde — normaliza o tema
+
+**Texto da imagem (pronto para uso):**
+```
+Homens também merecem
+se sentir bem em todos os aspectos
+```
+
+---
+
+#### FOTO 2 — O QUE É
+
+**O que fotografar:**
+- Profissional médico em postura de autoridade e competência
+- OU: ambiente da sala de procedimento: clean, tecnológico, preciso
+
+**Texto da imagem (pronto para uso):**
+```
+Harmonização Íntima Masculina
+Procedimentos estéticos
+para autoestima e conforto
+```
+
+---
+
+#### FOTO 3 — PROCEDIMENTOS E LOCAIS
+
+**O que fotografar:**
+- Infográfico com silhueta masculina estilizada + marcadores nas regiões tratadas (representação artística abstrata — sem exposição)
+- OU: ícones dos tratamentos em layout técnico e limpo
+
+**Texto da imagem (pronto para uso):**
+```
+✓ Bioplastia peniana (volume e forma)
+✓ Scrotox (conforto e estética)
+✓ Clareamento da região íntima
+✓ Bioestimuladores de colágeno
+```
+
+> **Nota clínica para a equipe (não exibir no slide):** Bioplastia → corpo do pênis (circunferência); Scrotox → escroto (músculo cremáster + sudorese); Clareamento → região pubiana, escroto e face interna das coxas; Bioestimuladores → corpo do pênis.
+
+---
+
+#### FOTO 4 — BENEFÍCIOS E INDICAÇÕES
+
+**O que fotografar:**
+- Homem praticando esporte ou em atividade de lazer — expressão de confiança e bem-estar
+- OU: homem no trabalho, postura ereta, autoconfiança natural
+
+**Texto da imagem (pronto para uso):**
+```
+Resultado imediato, sem cirurgia
+Sigilo total • Retorno em 24–48h
+
+Procedimento realizado
+por médico especialista
+```
+
+---
+
+#### FOTO 5 — CTA
+
+**O que fotografar:**
+- Médico especialista em postura de autoridade, jaleco, ambiente clean e tecnológico
+- Ambiente: clínica masculina moderna, sóbria, tecnológica
+
+**Texto da imagem (pronto para uso):**
+```
+Avaliação confidencial
+sem julgamentos
+
+Agende sua consulta:
+📲 [CONTATO]
+[NOME DA CLÍNICA]
+```
+
+---
+
+## 7. DIRETRIZES GERAIS DE PRODUÇÃO
 
 ### Paleta de Cores — Ambiente de Gravação
 
-| Elemento          | Foto Terapia Facial            | Botox                         |
-|-------------------|-------------------------------|-------------------------------|
-| Fundo principal   | Branco clínico + azul-luz     | Branco clínico + nude/bege    |
-| Acessórios        | Azul, dourado suave, verde-água| Dourado suave, off-white      |
-| Roupas paciente   | Branco, nude, cinza claro     | Branco, nude, rose            |
-| Jaleco profissional| Branco ou azul claro         | Branco                        |
-| Evitar            | Vermelho, laranja, estampado  | Vermelho, laranja, estampado  |
+| Elemento          | Foto Terapia Facial            | Botox                         | H. Íntima Feminina             | H. Íntima Masculina             |
+|-------------------|-------------------------------|-------------------------------|--------------------------------|---------------------------------|
+| Fundo principal   | Branco clínico + azul-luz     | Branco clínico + nude/bege    | Branco + rosé nude + dourado   | Branco clínico + cinza slate    |
+| Acessórios        | Azul, dourado suave, verde-água| Dourado suave, off-white      | Rosé, dourado, floral discreto | Azul petróleo, dourado discreto |
+| Roupas paciente   | Branco, nude, cinza claro     | Branco, nude, rose            | Branco, nude, rosé suave       | Casual neutro: cinza, azul, bege|
+| Jaleco profissional| Branco ou azul claro         | Branco                        | Branco + elemento feminino     | Branco ou cinza claro           |
+| Evitar            | Vermelho, laranja, estampado  | Vermelho, laranja, estampado  | Vermelho, roxo, estampado      | Vermelho, estampado, neon       |
 
 ### Trilha Sonora (Edição — não gravar)
 
@@ -622,7 +840,7 @@ na sua consulta hoje
 
 ---
 
-## 6. CASES BRASILEIROS DE REFERÊNCIA
+## 8. CASES BRASILEIROS DE REFERÊNCIA
 
 ### Para Foto Terapia Facial (Fotobiomodulação)
 
@@ -646,7 +864,7 @@ na sua consulta hoje
 
 ---
 
-## 7. CHECKLIST PRÉ-GRAVAÇÃO
+## 9. CHECKLIST PRÉ-GRAVAÇÃO
 
 ### Logística
 - [ ] Sala de procedimento limpa e organizada (sem itens fora do lugar)
@@ -673,6 +891,9 @@ na sua consulta hoje
 - [ ] Não prometer resultados absolutos (usar: "pode auxiliar", "em média", "tende a")
 - [ ] Não mencionar valores, preços ou descontos em qualquer material visual
 - [ ] Não mostrar agulha em close extremo
+- [ ] Harmonização Íntima: nenhuma imagem da região anatômica íntima — masculina ou feminina
+- [ ] Harmonização Íntima: tom é saúde/estética/autoestima — nunca sexual ou de performance
+- [ ] Harmonização Íntima: consentimento de imagem específico para procedimentos íntimos
 
 ---
 
@@ -680,172 +901,6 @@ na sua consulta hoje
 
 
 ---
-
-
-# Referências Visuais — Marketing de Procedimentos Estéticos
-**Uso:** Inspiração para produção de vídeo e slides. Análise do que funciona em cada exemplo.
-
----
-
-## VALIDAÇÃO DO FORMATO ADOTADO
-
-A pesquisa confirmou que o formato **vídeo 15s + sequência de imagens estáticas** é amplamente validado para procedimentos estéticos, com os seguintes dados de suporte:
-
-- Digital signage em salas de espera reduz o **tempo de espera percebido em até 35%** (Crown TV, 2025)
-- Clínicas com telas educativas têm **45% mais confiança** do paciente na prática (PatientPoint)
-- Ciclos de conteúdo de **1–2 minutos** são o padrão ideal para digital signage em saúde
-- **Vídeos curtos** (Reels/TikTok estilo) têm **dobro de alcance** comparado a posts estáticos para o segmento estético
-
-### Ajustes Recomendados após pesquisa:
-1. **Texto mínimo por slide:** Máximo 15 palavras — ambiente clínico tem luz suave e leitores distraídos
-2. **Fonte ≥ 44pt:** Legível a 2–3 metros sem esforço
-3. **Loop de 90s:** Ciclo ideal para sala de espera comum (3–10 min de espera)
-4. **Trilha a volume baixo:** Ambiente clínico exige discrição sonora
-5. **Cores suaves:** Azul, verde-água, branco e bege são paletas clinicamente validadas para reduzir ansiedade
-
----
-
-## REFERÊNCIAS — FOTO TERAPIA FACIAL (LED/Luz)
-
-### REF-LED-01
-**Canal:** Omnilux LED — YouTube / Instagram
-**Link:** https://omniluxled.com/
-**Por que funciona:**
-- Mostra a experiência do paciente de forma aspiracional
-- Luz LED como elemento visual central (impactante visualmente)
-- Linguagem técnica acessível: "science-backed"
-- **Aplicar no roteiro:** Cena 1 e 2 — close no equipamento e na experiência de relaxamento
-
-### REF-LED-02
-**Canal:** Harley Academy — Social Media Marketing for Aesthetics
-**Link:** https://www.harleyacademy.com/aesthetic-medicine-articles/25-social-media-marketing-ideas-for-aesthetics-practitioners-in-2025/
-**Por que funciona:**
-- Guia completo de estratégias validadas para clínicas em 2025
-- Recomenda "quick clips of applying face masks or prepping LED therapy" como conteúdo de alto engajamento
-- Confirma que conteúdo "autêntico e não polido" gera mais confiança
-- **Aplicar no roteiro:** Tom de bastidores suave na Cena 2
-
-### REF-LED-03
-**Canal:** La Jolla Cosmetic Medical Spa — LightStim LED Facial
-**Link:** https://www.ljcmedspa.com/procedures/medical-spa/laser-treatments/led-light-facial/
-**Por que funciona:**
-- Estrutura de página que vai de "o que é" → "como funciona" → "resultados" é o mesmo fluxo dos slides
-- Linguagem de benefícios clara: "clinically proven", "no downtime"
-- **Aplicar nos slides:** Mesma sequência lógica Slide 1→4
-
-### REF-LED-04
-**Fonte:** Stanford Medicine — Red Light Therapy Review (2025)
-**Link:** https://med.stanford.edu/news/insights/2025/02/red-light-therapy-skin-hair-medical-clinics.html
-**Por que funciona:**
-- Referência de autoridade científica que valida a tecnologia
-- Pode ser citada (de forma simplificada) no slide técnico ou no material impresso de apoio
-- **Aplicar:** Variação A (tom técnico) — "aprovado cientificamente"
-
-### REF-LED-05
-**Fonte:** LED Esthetics Blog — New Year Glow-Up Guide
-**Link:** https://ledesthetics.com/blogs/science/new-years-glow-up-how-led-therapy-can-revitalize-your-skin-for-2024
-**Por que funciona:**
-- Tom aspiracional sazonalizado — modelo ideal para campanhas de virada de ano
-- Conecta procedimento com "renovação" e "investimento em si mesmo"
-- **Aplicar:** Variação B (tom emocional) e campanhas de janeiro/início de ano
-
----
-
-## REFERÊNCIAS — APLICAÇÃO DE BOTOX
-
-### REF-BOT-01
-**Fonte:** Clinicgrower — 11 Botox Marketing Strategies 2025
-**Link:** https://clinicgrower.com/botox-marketing-strategies/
-**Por que funciona:**
-- Confirma que **vídeo é mais honesto que foto** para mostrar resultados de Botox
-- Recomenda mostrar o processo completo como estratégia de confiança
-- Destaca que **Botox preventivo é a tendência de maior crescimento** entre Millennials e Gen Z
-- **Aplicar no roteiro:** Base para a Variação 4 (preventivo) e Variação 2 (naturalidade)
-
-### REF-BOT-02
-**Fonte:** Grow a Salon — Glow Up Your Social Media: Botox Marketing
-**Link:** https://www.growasalon.com/post/glow-up-your-social-media-5-hacks-to-attract-new-clients-to-your-botox-marketing
-**Por que funciona:**
-- 5 estratégias validadas com foco em captação de novos clientes
-- Reels e TikTok com resultados = dobro de alcance
-- **Aplicar nos slides:** CTA com linguagem de "novos clientes" — Variação D e E
-
-### REF-BOT-03
-**Fonte:** Agência M9 — Cartaz Botox Facial
-**Link:** https://www.agenciam9.com.br/propaganda/cartaz-botox-facial/
-**Por que funciona:**
-- Exemplo real de material visual para clínica estética brasileira
-- Mostra padrão gráfico utilizado no mercado nacional
-- **Aplicar nos slides:** Referência de layout para design no Canva (Fase 2)
-
-### REF-BOT-04
-**Fonte:** BOTOX® Cosmetic — Campanha "The One & Only" (Set 2025)
-**Link:** https://news.abbvie.com/2025-09-09-BOTOX-R-Cosmetic-onabotulinumtoxinA-Unveils-The-One-Only-Campaign-Featuring-Real-People-and-Their-Distinctive-Stories
-**Por que funciona:**
-- Campanha oficial do fabricante: pessoas reais com histórias reais
-- Tom: autenticidade e singularidade — não "padrão de beleza", mas "melhor versão de si"
-- **Aplicar:** Variação B (emocional) — copiar o tom de "sua história, sua expressão"
-
-### REF-BOT-05
-**Fonte:** Oceaning Marketing — Marketing Digital para Clínica Estética Avançada (2025)
-**Link:** https://oceaning.com.br/marketing/marketing-digital-para-clinica-de-estetica-avancada/
-**Por que funciona:**
-- Estratégias específicas para o mercado brasileiro
-- Confirma que **registrar cada sessão em vídeo** é a estratégia mais eficiente para Botox
-- **Aplicar no roteiro:** Produção em sessão real (não encenada) — gera mais autenticidade e confiança
-
----
-
-## REFERÊNCIAS — DIGITAL SIGNAGE EM CLÍNICAS
-
-### REF-DS-01
-**Fonte:** Crown TV — Digital Signage for Medical Spas
-**Link:** https://www.crowntv-us.com/blog/digital-signage-for-medical-spas-in-waiting-room/
-**Por que funciona:**
-- Guia específico para spas e clínicas estéticas
-- Recomenda combinar educação + upsell + estética no mesmo loop
-- **Aplicar:** Estrutura do loop de 90s adotada no projeto
-
-### REF-DS-02
-**Fonte:** PatientPoint — Digital Signage Healthcare
-**Link:** https://patientpoint.com/blog/digital-signage-healthcare/
-**Por que funciona:**
-- Dado chave: **45% dos pacientes confiam mais em práticas digitalmente avançadas**
-- Conteúdo educativo em tela reduz perguntas repetitivas na recepção
-- **Aplicar:** Justificativa de negócio para a clínica investir no sistema
-
-### REF-DS-03
-**Fonte:** DSID — Digital Signage for Plastic & Cosmetic Surgery
-**Link:** https://www.dsid.com/plastic-surgery
-**Por que funciona:**
-- Especializado em cirurgia plástica e estética
-- Recomenda explainers de tratamento + before/after em loop
-- **Aplicar:** Confirmação do formato vídeo+slides adotado
-
----
-
-## RESUMO: O QUE CADA REFERÊNCIA CONFIRMA NO NOSSO FORMATO
-
-| Elemento do nosso formato        | Referência que valida                      |
-|----------------------------------|--------------------------------------------|
-| Vídeo 15s de abertura            | REF-LED-01, REF-BOT-05, REF-DS-03         |
-| Slides de 15s com texto curto    | REF-DS-01, REF-DS-02                      |
-| Fluxo: problema → solução → CTA  | REF-LED-03, REF-BOT-01                    |
-| Tom educativo, não publicitário  | REF-BOT-01, REF-BOT-04, REF-DS-02         |
-| CTA contextual (você está aqui)  | REF-DS-01, REF-DS-03                      |
-| Loop de ~90s                     | REF-DS-01, REF-DS-02                      |
-| Botox preventivo como variação   | REF-BOT-01, REF-BOT-02                    |
-| Autoridade científica LED        | REF-LED-04                                |
-
----
-
-*Fontes pesquisadas em maio de 2026. Links verificados na data de geração deste documento.*
-
-
----
-
-
-## FOTO TERAPIA FACIAL
 
 
 # Roteiro de Vídeo — Foto Terapia Facial
@@ -1176,177 +1231,6 @@ Pergunte sobre Foto Terapia Facial hoje mesmo.
 
 
 ---
-
-
-# Variações de Script de Vídeo — Foto Terapia Facial
-**5 abordagens de 15 segundos | Formato 16:9 | Loop recepção**
-
----
-
-## VARIAÇÃO 1 — PROBLEMA / SOLUÇÃO
-*Tom: empático e direto. Funciona melhor para público 35–55 anos.*
-
-| Tempo    | Cena                                                              | Legenda                                         |
-|----------|-------------------------------------------------------------------|-------------------------------------------------|
-| 0s – 5s  | Close em manchas ou textura irregular (pele sem tratamento)       | **"Manchas e pele apagada têm solução"**        |
-| 5s – 11s | Equipamento LED sendo posicionado, luz ativando                   | **"Foto Terapia Facial — luz que regenera"**    |
-| 11s – 15s| Pele radiante pós-procedimento, expressão de satisfação           | **"Resultado desde a 1ª sessão. Sem agulhas."** |
-
-**Gancho final (Slide 5):** "A pele que você quer começa hoje."
-
----
-
-## VARIAÇÃO 2 — RESULTADO / ANTES E DEPOIS
-*Tom: aspiracional, focado na transformação. Alto impacto visual.*
-
-| Tempo    | Cena                                                              | Legenda                                         |
-|----------|-------------------------------------------------------------------|-------------------------------------------------|
-| 0s – 5s  | Pele antes: textura irregular, manchas, aspecto opaco             | **"Antes:"** (texto simples, discreto)          |
-| 5s – 11s | Transição suave para pele tratada: uniforme, luminosa, firme      | **"Depois de Foto Terapia Facial"**             |
-| 11s – 15s| Paciente feliz, confiante, com a pele em destaque                 | **"Sua transformação pode começar hoje."**      |
-
-**Gancho final (Slide 5):** "Você está a 90 segundos de saber mais."
-
----
-
-## VARIAÇÃO 3 — CURIOSIDADE / REVELAÇÃO
-*Tom: intrigante, educativo. Ótimo para despertar interesse em quem não conhece o procedimento.*
-
-| Tempo    | Cena                                                              | Legenda                                                  |
-|----------|-------------------------------------------------------------------|----------------------------------------------------------|
-| 0s – 5s  | Close da luz LED colorida em detalhe (vermelho/azul) — visual impactante | **"Sabia que a luz pode renovar sua pele?"**      |
-| 5s – 11s | Paciente sob o painel LED relaxada, expressão serena              | **"Foto Terapia Facial — ciência e bem-estar"**          |
-| 11s – 15s| Pele com brilho natural, uniforme, jovem                          | **"Indolor, sem downtime, com resultado real."**         |
-
-**Gancho final (Slide 5):** "Pergunte sobre Foto Terapia na sua consulta hoje."
-
----
-
-## VARIAÇÃO 4 — AUTORIDADE / CREDIBILIDADE
-*Tom: técnico mas acessível. Gera confiança em procedimentos novos.*
-
-| Tempo    | Cena                                                              | Legenda                                                       |
-|----------|-------------------------------------------------------------------|---------------------------------------------------------------|
-| 0s – 5s  | Profissional (jaleco, postura segura) configurando equipamento    | **"Tecnologia LED aprovada dermatologicamente"**              |
-| 5s – 11s | Equipamento em ação, close técnico elegante                       | **"Foto Terapia Facial — procedimento não invasivo"**         |
-| 11s – 15s| Paciente sorrindo, pele visivelmente mais saudável                | **"Realizado por profissionais certificados."**               |
-
-**Gancho final (Slide 5):** "Você já está no lugar certo. Agende sua avaliação."
-
----
-
-## VARIAÇÃO 5 — EMOCIONAL / AUTOESTIMA
-*Tom: inspirador, voltado para o bem-estar. Conecta procedimento com qualidade de vida.*
-
-| Tempo    | Cena                                                              | Legenda                                                 |
-|----------|-------------------------------------------------------------------|---------------------------------------------------------|
-| 0s – 5s  | Mulher olhando para o espelho com expressão pensativa             | **"Você merece se sentir bem na própria pele."**        |
-| 5s – 11s | Sessão de Foto Terapia — ambiente acolhedor, luz suave, relaxamento | **"Foto Terapia Facial — cuidado que você merece"**  |
-| 11s – 15s| Paciente saindo com expressão de leveza e confiança               | **"Pele renovada. Autoestima renovada."**               |
-
-**Gancho final (Slide 5):** "Invista em você. Consulta hoje mesmo."
-
----
-
-## TABELA COMPARATIVA — QUANDO USAR CADA VARIAÇÃO
-
-| Variação | Perfil do Público         | Objetivo Principal         | Melhor Período       |
-|----------|---------------------------|----------------------------|----------------------|
-| 1 — Problema/Solução | 35–55 anos, pele madura | Criar urgência e relevância | O ano todo      |
-| 2 — Antes/Depois     | Todas as idades          | Mostrar resultado visível   | Relançamentos        |
-| 3 — Curiosidade      | 25–40 anos, nunca fez    | Educar e despertar interesse | Campanhas de aquisição |
-| 4 — Autoridade       | Público conservador      | Gerar confiança             | Início de parcerias  |
-| 5 — Emocional        | Mulheres 30–50           | Conectar com autoestima     | Datas comemorativas  |
-
-
----
-
-
-# Variações de Textos de Slides — Foto Terapia Facial
-**5 abordagens × 5 slides | Formato 16:9 | Loop recepção**
-
----
-
-## VARIAÇÃO A — TOM TÉCNICO / CIENTÍFICO
-*Destaque: mecanismo de ação e respaldo científico*
-
-| Slide | Texto                                                                 |
-|-------|-----------------------------------------------------------------------|
-| 1     | "A fotobiomodulação é a ciência por trás da pele saudável"            |
-| 2     | "Luz LED de comprimentos de onda específicos penetra a derme"         |
-| 3     | "Estimula ATP celular, colágeno e elastina naturalmente"               |
-| 4     | "Auxilia na redução de manchas, rugas e poros"                        |
-| 5     | "Avaliação com especialista — Agende: 📲 [CONTATO]"                  |
-
----
-
-## VARIAÇÃO B — TOM EMOCIONAL / AUTOESTIMA
-*Destaque: como o paciente vai se sentir, não o que o procedimento faz*
-
-| Slide | Texto                                                                 |
-|-------|-----------------------------------------------------------------------|
-| 1     | "Sua pele conta a sua história — deixe ela contar bem"                |
-| 2     | "Foto Terapia Facial — o cuidado que você sempre mereceu"             |
-| 3     | "Um momento só seu. Relaxe enquanto a luz cuida de você"              |
-| 4     | "Saia daqui sentindo e parecendo a melhor versão de você"             |
-| 5     | "Você merece isso. Agende agora: 📲 [CONTATO]"                       |
-
----
-
-## VARIAÇÃO C — TOM DIRETO / BENEFÍCIOS PONTUAIS
-*Destaque: lista clara de benefícios, leitura rápida*
-
-| Slide | Texto                                                                 |
-|-------|-----------------------------------------------------------------------|
-| 1     | "✓ Manchas  ✓ Rugas finas  ✓ Pele sem brilho — Resolvemos tudo isso" |
-| 2     | "Foto Terapia Facial: solução não invasiva para sua pele"             |
-| 3     | "✓ Sem dor  ✓ Sem agulhas  ✓ Sem downtime"                           |
-| 4     | "Resultado real a partir da 1ª sessão"                               |
-| 5     | "Pergunte ao seu médico hoje ou agende: 📲 [CONTATO]"                |
-
----
-
-## VARIAÇÃO D — TOM COMPARATIVO / DIFERENCIAL
-*Destaque: por que Foto Terapia é melhor/diferente de outras opções*
-
-| Slide | Texto                                                                 |
-|-------|-----------------------------------------------------------------------|
-| 1     | "Cremes prometem. Foto Terapia entrega."                              |
-| 2     | "Luz LED: ação profunda que o creme não alcança"                      |
-| 3     | "Trata a causa, não só o sintoma"                                     |
-| 4     | "Pele transformada — sem risco, sem recuperação"                      |
-| 5     | "Descubra a diferença. Agende sua avaliação: 📲 [CONTATO]"           |
-
----
-
-## VARIAÇÃO E — TOM CONTEXTUAL (sala de espera)
-*Destaque: aproveita o momento do paciente na clínica — já está aqui*
-
-| Slide | Texto                                                                 |
-|-------|-----------------------------------------------------------------------|
-| 1     | "Você está na clínica certa. Aproveite enquanto espera."              |
-| 2     | "Foto Terapia Facial — disponível aqui, hoje"                         |
-| 3     | "Procedimento rápido, pode encaixar na sua agenda"                    |
-| 4     | "Sua pele pode sair daqui diferente"                                  |
-| 5     | "Pergunte na recepção sobre disponibilidade hoje. 📲 [CONTATO]"      |
-
----
-
-## GUIA DE APLICAÇÃO
-
-| Variação | Quando usar                                   | Onde posicionar no loop        |
-|----------|-----------------------------------------------|-------------------------------|
-| A — Técnico    | Clínicas médicas, público exigente       | 2ª rotação do loop             |
-| B — Emocional  | Spas, clínicas de bem-estar, aniversários| Horários de pico da tarde      |
-| C — Direto     | Primeiras exibições do dia               | 1ª rotação da manhã            |
-| D — Comparativo| Período de captação de novos pacientes   | Campanhas de lançamento        |
-| E — Contextual | Sala de espera (uso diário recomendado)  | Sempre ativa no loop principal |
-
-
----
-
-
-## BOTOX (TOXINA BOTULÍNICA)
 
 
 # Roteiro de Vídeo — Aplicação de Botox
@@ -1690,166 +1574,783 @@ Descubra por quê — Agende sua avaliação
 ---
 
 
-# Variações de Script de Vídeo — Aplicação de Botox
-**5 abordagens de 15 segundos | Formato 16:9 | Loop recepção**
+# Roteiro de Vídeo — Harmonização Íntima Feminina
+**Formato:** 16:9 | **Duração:** 15 segundos | **Público:** Feminino | **Uso:** Loop recepção (TV)
 
 ---
 
-## VARIAÇÃO 1 — PROBLEMA / SOLUÇÃO
-*Tom: direto, empático. Perfeito para quem já pensa em fazer mas ainda não agendou.*
+## BRIEFING DO VÍDEO
 
-| Tempo    | Cena                                                                | Legenda                                               |
-|----------|---------------------------------------------------------------------|-------------------------------------------------------|
-| 0s – 5s  | Close natural nas rugas de expressão (testa, olhos, glabela)        | **"Rugas de expressão incomodam você no espelho?"**   |
-| 5s – 11s | Profissional aplicando com delicadeza, paciente tranquila           | **"Botox — precisão que suaviza"**                    |
-| 11s – 15s| Rosto descansado, expressão natural e confiante                     | **"Resultado natural. Sem cirurgia. 30 minutos."**    |
+| Campo              | Detalhe                                                                     |
+|--------------------|-----------------------------------------------------------------------------|
+| Objetivo           | Apresentar a harmonização íntima como cuidado legítimo e acessível          |
+| Tom                | Acolhedor, empoderador, clínico — jamais íntimo, sensual ou constrangedor   |
+| Abordagem          | Saúde, bem-estar e qualidade de vida — não puramente estético               |
+| Trilha sonora      | Piano suave ou ambient floral, BPM 60–70, feminino e sereno                 |
+| Paleta de cores    | Branco clínico + rosé nude + dourado suave                                  |
+| Legibilidade       | Fonte ≥ 48pt para leitura a 2–3 metros de distância                        |
 
-**Gancho final (Slide 5):** "Você já está aqui. Pergunte ao seu médico hoje."
-
----
-
-## VARIAÇÃO 2 — NATURALIDADE / DESMISTIFICAÇÃO
-*Tom: tranquilizador. Ideal para quem tem medo do aspecto "artificial".*
-
-| Tempo    | Cena                                                                | Legenda                                               |
-|----------|---------------------------------------------------------------------|-------------------------------------------------------|
-| 0s – 5s  | Paciente fazendo expressão natural — sorrindo, surpresa, sério      | **"Botox moderno não congela. Liberta."**             |
-| 5s – 11s | Procedimento discreto, profissional habilidoso, ambiente clean      | **"Técnica personalizada para resultado natural"**    |
-| 11s – 15s| Paciente com expressão genuína, pele descansada, autoconfiança      | **"Sua expressão. Só que mais jovem."**               |
-
-**Gancho final (Slide 5):** "Descubra o Botox que parece que você nunca fez."
+> **Nota de produção:** Nenhuma imagem da região anatômica deve aparecer no vídeo ou nos slides.
+> O procedimento é representado por: mãos do profissional, equipamentos, expressões da paciente,
+> ambiente clínico e infográficos educativos. A abordagem visual segue o padrão de clínicas
+> de referência no Brasil (Grupo Caru Moreno, Clínica Hartmann, Dra. Fernanda Torres).
 
 ---
 
-## VARIAÇÃO 3 — VELOCIDADE / PRATICIDADE
-*Tom: objetivo, focado no custo-benefício de tempo. Atrai perfis executivos e ocupados.*
+## STORYBOARD — 15 SEGUNDOS
 
-| Tempo    | Cena                                                                | Legenda                                               |
-|----------|---------------------------------------------------------------------|-------------------------------------------------------|
-| 0s – 5s  | Relógio, agenda ou profissional pronto em ambiente organizado       | **"30 minutos que mudam como você aparece"**          |
-| 5s – 11s | Procedimento ágil — profissional e paciente em sintonia             | **"Botox — sem internação, sem repouso"**             |
-| 11s – 15s| Paciente saindo da clínica e seguindo com o dia normal              | **"Entra com rugas. Sai pronto para o dia."**         |
+### CENA 1 — [ 0s a 5s ] | O CUIDADO QUE COMEÇA EM VOCÊ
 
-**Gancho final (Slide 5):** "Avaliação rápida — agende durante a espera: 📲 [CONTATO]"
+**O que filmar:**
+- Profissional (jaleco, postura acolhedora) recebendo a paciente em consulta
+- Ambiente: sala de atendimento clean, luz quente, flores ou elemento feminino discreto
+- Expressão da profissional: empática, receptiva
 
----
-
-## VARIAÇÃO 4 — PREVENTIVO / PÚBLICO JOVEM
-*Tom: vanguardista, empoderador. Atinge 25–35 anos com foco em prevenção.*
-
-| Tempo    | Cena                                                                | Legenda                                                  |
-|----------|---------------------------------------------------------------------|----------------------------------------------------------|
-| 0s – 5s  | Mulher jovem olhando para a pele com atenção preventiva             | **"A melhor hora para o Botox é antes das rugas virem"** |
-| 5s – 11s | Aplicação leve, expressão jovem e descontraída da paciente          | **"Botox preventivo — a escolha inteligente"**           |
-| 11s – 15s| Pele lisa, expressão jovem e autêntica                              | **"Mantenha a juventude. Não espere as marcas chegarem."**|
-
-**Gancho final (Slide 5):** "Comece cedo. Mantenha mais tempo. Avalie hoje."
+**Legenda na tela:**
+```
+╔══════════════════════════════════════════╗
+║   HARMONIZAÇÃO ÍNTIMA FEMININA           ║
+║   Cuidado que vai além da aparência      ║
+╚══════════════════════════════════════════╝
+```
 
 ---
 
-## VARIAÇÃO 5 — AUTORIDADE / CONFIANÇA
-*Tom: profissional, técnico, que gera credibilidade. Ótimo para clínicas médicas.*
+### CENA 2 — [ 5s a 11s ] | A TECNOLOGIA E A TÉCNICA
 
-| Tempo    | Cena                                                                | Legenda                                                   |
-|----------|---------------------------------------------------------------------|-----------------------------------------------------------|
-| 0s – 5s  | Médico especialista em destaque — postura de autoridade, jaleco     | **"Aplicação por médico especialista"**                   |
-| 5s – 11s | Procedimento preciso, protocolo rigoroso, mãos habilidosas          | **"Botox — segurança, técnica e personalização"**         |
-| 11s – 15s| Resultado real, paciente satisfeita, expressão de confiança         | **"Resultado que você pode mostrar com orgulho."**        |
+**O que filmar:**
+- Close nas mãos da profissional com equipamento (radiofrequência, laser ou seringa com ácido hialurônico) sobre campo cirúrgico — sem mostrar a região anatômica
+- OU: infográfico animado mostrando os procedimentos disponíveis (preenchimento, clareamento, radiofrequência, laser) com ícones ilustrativos e elegantes
+- OU: profissional explicando para paciente com diagrama didático
 
-**Gancho final (Slide 5):** "Você está nas mãos certas. Agende sua avaliação."
-
----
-
-## TABELA COMPARATIVA — QUANDO USAR CADA VARIAÇÃO
-
-| Variação | Perfil do Público           | Objetivo Principal           | Melhor Período          |
-|----------|-----------------------------|------------------------------|-------------------------|
-| 1 — Problema/Solução    | 35–55 anos, em dúvida    | Gerar urgência            | O ano todo              |
-| 2 — Naturalidade        | Todas as idades, com medo | Desmistificar             | Sempre                  |
-| 3 — Praticidade         | Executivos, mães ocupadas | Mostrar custo-benefício   | Dia a dia               |
-| 4 — Preventivo          | 25–35 anos                | Criar novo hábito         | Janeiro, aniversários   |
-| 5 — Autoridade          | Público conservador       | Construir confiança       | Inaugurações, relançamentos |
-
+**Legenda na tela:**
+```
+╔══════════════════════════════════════════╗
+║   Preenchimento • Laser • Radiofrequência║
+║   Procedimentos seguros e sem cirurgia   ║
+╚══════════════════════════════════════════╝
+```
 
 ---
 
+### CENA 3 — [ 11s a 15s ] | O RESULTADO: VOCÊ EM PLENA FORMA
 
-# Variações de Textos de Slides — Aplicação de Botox
-**5 abordagens × 5 slides | Formato 16:9 | Loop recepção**
+**O que filmar:**
+- Paciente saindo satisfeita — expressão de leveza, autoconfiança, sorriso genuíno
+- Plano: busto, roupa casual, ambiente clínico ao fundo
+- Energia: leve, empoderada, bem consigo mesma
 
----
-
-## VARIAÇÃO A — TOM TÉCNICO / CIENTÍFICO
-*Destaque: mecanismo de ação e precisão médica. Transmite credibilidade.*
-
-| Slide | Texto                                                                     |
-|-------|---------------------------------------------------------------------------|
-| 1     | "A toxina botulínica é o procedimento estético mais realizado no mundo"   |
-| 2     | "Atua nos pontos precisos que formam rugas de expressão"                  |
-| 3     | "Técnica minimamente invasiva: 20–30 min, retorno imediato"               |
-| 4     | "Resultado visível em 7–14 dias. Duração: 4 a 6 meses"                   |
-| 5     | "Aplicação por médico especialista — Avalie: 📲 [CONTATO]"               |
+**Legenda na tela:**
+```
+╔══════════════════════════════════════════╗
+║   Bem-estar, conforto e autoestima       ║
+║   de volta à sua rotina em seguida       ║
+╚══════════════════════════════════════════╝
+```
 
 ---
 
-## VARIAÇÃO B — TOM EMOCIONAL / AUTOESTIMA
-*Destaque: o estado emocional antes e depois. Conecta com qualidade de vida.*
+## PROCEDIMENTOS ABORDADOS NO MATERIAL (referência clínica)
 
-| Slide | Texto                                                                     |
-|-------|---------------------------------------------------------------------------|
-| 1     | "Você merece se olhar no espelho e sorrir"                                |
-| 2     | "Botox — porque parecer cansado não é obrigação"                          |
-| 3     | "30 minutos de cuidado que mudam como você se vê"                         |
-| 4     | "Aparência descansada. Autoconfiança de volta."                           |
-| 5     | "Você está no lugar certo. Agende agora: 📲 [CONTATO]"                   |
+| Procedimento                     | Região de aplicação                               | Técnica                                 |
+|----------------------------------|---------------------------------------------------|-----------------------------------------|
+| Preenchimento de grandes lábios  | Grandes lábios (lábios maiores da vulva)          | Ácido hialurônico ou bioestimuladores   |
+| Ninfoplastia não cirúrgica       | Pequenos lábios (ninfas / lábios menores)         | Radiofrequência ou ácido hialurônico    |
+| Clareamento íntimo               | Monte de Vênus, grandes lábios, região perianal   | Laser fracionado ou peeling químico     |
+| Radiofrequência vulvovaginal     | Vulva externa + canal vaginal (sonda interna)     | Radiofrequência monopolar/bipolar       |
+| Laser vaginal                    | Canal vaginal e introito vaginal                  | Laser de CO₂ fracionado ou Er:YAG      |
+| Bioestimulador de colágeno       | Grandes lábios e monte de Vênus                   | Ácido poli-L-láctico ou hidroxiapatita  |
 
----
-
-## VARIAÇÃO C — TOM DIRETO / DESMISTIFICADOR
-*Destaque: quebrar objeções e medos. Foca na experiência real.*
-
-| Slide | Texto                                                                     |
-|-------|---------------------------------------------------------------------------|
-| 1     | "Botox hoje não é o que você imagina"                                     |
-| 2     | "Sem rosto congelado. Resultado natural e personalizado."                 |
-| 3     | "✓ Mínimo desconforto  ✓ Sem internação  ✓ Sem repouso"                  |
-| 4     | "Sua expressão intacta — suavizando as rugas"                             |
-| 5     | "Tire suas dúvidas hoje: 📲 [CONTATO]"                                    |
+> **Nota:** A lista acima orienta o profissional durante a produção do conteúdo e consulta.
+> Nos materiais visuais finais, os nomes técnicos são substituídos por linguagem acessível.
 
 ---
 
-## VARIAÇÃO D — TOM PREVENTIVO / PÚBLICO JOVEM
-*Destaque: prevenção como investimento. Público 25–38 anos.*
+## CHECKLIST DE APROVAÇÃO
 
-| Slide | Texto                                                                     |
-|-------|---------------------------------------------------------------------------|
-| 1     | "Prevenir é mais fácil do que corrigir"                                   |
-| 2     | "Botox preventivo: o hábito das pessoas que envelhecem bem"               |
-| 3     | "Pequenas doses, grande diferença ao longo do tempo"                      |
-| 4     | "Comece cedo. Mantenha a juventude por mais tempo."                       |
-| 5     | "Avalie sua indicação agora: 📲 [CONTATO]"                               |
+- [ ] Nenhuma imagem da região anatômica íntima no vídeo
+- [ ] Tom: cuidado com saúde e bem-estar — não sensual
+- [ ] Profissional visível com jaleco e postura clínica
+- [ ] Legenda legível a 3 metros de distância
+- [ ] Consentimento de uso de imagem assinado pela paciente
+- [ ] Duração exata de 15 segundos
 
----
-
-## VARIAÇÃO E — TOM CONTEXTUAL (sala de espera)
-*Destaque: aproveita o contexto único da recepção — paciente já está lá.*
-
-| Slide | Texto                                                                     |
-|-------|---------------------------------------------------------------------------|
-| 1     | "Você está sentado numa das melhores clínicas da cidade"                  |
-| 2     | "Botox disponível aqui — com o profissional que você já confia"           |
-| 3     | "Encaixe na sua consulta de hoje"                                         |
-| 4     | "Saia daqui diferente do que entrou"                                      |
-| 5     | "Pergunte na recepção — disponibilidade hoje: 📲 [CONTATO]"              |
 
 ---
 
-## GUIA DE APLICAÇÃO
 
-| Variação | Quando usar                                        | Onde posicionar no loop       |
-|----------|----------------------------------------------------|-------------------------------|
-| A — Técnico       | Clínicas médicas, público exigente, +40 anos  | 2ª rotação do loop            |
-| B — Emocional     | Dia a dia, público feminino, datas especiais  | Horários de pico              |
-| C — Desmistificador| Público com medo ou desconhecimento           | Sempre ativo — remover objeções|
-| D — Preventivo    | Público jovem, campanhas de expansão          | Tarde e início da noite       |
-| E — Contextual    | Recepção (uso diário recomendado)             | Loop principal, sempre presente|
+# Sequência de Slides — Harmonização Íntima Feminina
+**Formato:** 16:9 | **Total:** 5 slides × ~15s = 75 segundos | **Público:** Feminino
+
+---
+
+## DIRETRIZES GERAIS DOS SLIDES
+
+| Parâmetro             | Valor recomendado                                               |
+|-----------------------|------------------------------------------------------------------|
+| Tempo por slide       | 12–15 segundos (1s de transição cross-dissolve)                  |
+| Máximo de palavras    | 12–15 palavras por slide                                         |
+| Tamanho de fonte      | Título ≥ 60pt · Subtítulo ≥ 44pt (legível a 3m)                |
+| Paleta                | Branco, rosé nude (#F2D0C0), dourado suave (#D4AF37), cinza perola|
+| Imagens               | Sem exposição da região anatômica — apenas expressões e ambiente  |
+| Tom visual            | Refinado, clínico, empoderador — semelhante a marca de skincare  |
+
+---
+
+## SLIDE 1 — GANCHO / IDENTIFICAÇÃO
+**[ 15s – 30s do loop total ]**
+
+**Fotografia sugerida:**
+- Mulher olhando para si mesma com atenção e cuidado (espelho, não intimidade)
+- OU: duas mulheres conversando com leveza sobre cuidados pessoais
+- OU: mulher em consulta ginecológica de rotina — ambiente de saúde feminina
+
+**Texto na tela:**
+```
+┌──────────────────────────────────────────┐
+│                                          │
+│   Seu corpo merece o mesmo cuidado       │
+│   que você dedica ao seu rosto           │
+│                                          │
+└──────────────────────────────────────────┘
+```
+> *Tom: convite para reflexão, sem culpa. Despertamento suave.*
+
+---
+
+## SLIDE 2 — O QUE É
+**[ 30s – 45s do loop total ]**
+
+**Fotografia sugerida:**
+- Profissional com equipamento elegante (laser, radiofrequência ou seringa) sobre campo estéril
+- OU: infográfico clean com ícones dos procedimentos disponíveis
+- OU: ambiente da sala de procedimento: clean, moderno, sofisticado
+
+**Texto na tela:**
+```
+┌──────────────────────────────────────────┐
+│                                          │
+│   Harmonização Íntima Feminina           │
+│   Procedimentos não cirúrgicos           │
+│   para conforto e bem-estar              │
+│                                          │
+└──────────────────────────────────────────┘
+```
+
+---
+
+## SLIDE 3 — PROCEDIMENTOS E LOCAIS
+**[ 45s – 60s do loop total ]**
+
+**Fotografia sugerida:**
+- Infográfico com silhueta feminina estilizada + marcadores nas regiões tratadas (sem exposição — representação artística e abstrata)
+- OU: ícones dos tratamentos lado a lado em layout limpo
+- OU: close nas mãos da profissional com equipamento de radiofrequência
+
+**Texto na tela:**
+```
+┌──────────────────────────────────────────┐
+│                                          │
+│   ✓ Preenchimento labial íntimo          │
+│   ✓ Clareamento da região vulvar         │
+│   ✓ Radiofrequência e laser vaginal      │
+│   ✓ Remodelagem com bioestimuladores     │
+│                                          │
+└──────────────────────────────────────────┘
+```
+> *Cada item refere-se às regiões tratadas: grandes lábios (preenchimento/bioestimulador), monte de Vênus e região vulvar (clareamento), canal vaginal e vulva externa (radiofrequência/laser).*
+
+---
+
+## SLIDE 4 — BENEFÍCIOS E INDICAÇÕES
+**[ 60s – 75s do loop total ]**
+
+**Fotografia sugerida:**
+- Mulher em atividade do dia a dia: yoga, caminhada, ou simplesmente sorrindo com leveza
+- OU: paciente em consulta pós-procedimento com expressão de satisfação e alívio
+- OU: mulher em qualquer fase da vida — jovem, pós-parto, menopausa — sentindo-se bem
+
+**Texto na tela:**
+```
+┌──────────────────────────────────────────┐
+│                                          │
+│   Desconforto, flacidez, assimetria      │
+│   ou ressecamento têm solução            │
+│                                          │
+│   Resultados desde a 1ª sessão           │
+│   Sem internação • Retorno imediato      │
+│                                          │
+└──────────────────────────────────────────┘
+```
+
+**Indicações clínicas que embasam o slide** *(uso interno — não exibir no slide)*:
+- Flacidez dos grandes lábios após perda de peso ou envelhecimento
+- Assimetria ou hiperpigmentação da região vulvar
+- Ressecamento vaginal (pré ou pós-menopausa)
+- Desconforto em atividades físicas por hipertrofia dos pequenos lábios
+- Perda de tônus vaginal pós-parto
+- Disfunção do assoalho pélvico superficial
+
+---
+
+## SLIDE 5 — CTA + GANCHO
+**[ 75s – 90s do loop total ]**
+
+**Fotografia sugerida:**
+- Profissional sorrindo em ambiente de consultório, postura acolhedora e segura
+- OU: paciente saindo da clínica com expressão de leveza e satisfação
+- Ambiente: cores quentes, luz dourada suave, sensação de acolhimento
+
+**Texto na tela:**
+```
+┌──────────────────────────────────────────┐
+│                                          │
+│   Você já está no lugar certo            │
+│                                          │
+│   Pergunte sobre Harmonização Íntima     │
+│   na sua consulta de hoje                │
+│                                          │
+│   📲 [CONTATO]                           │
+│   [NOME DA CLÍNICA]                      │
+└──────────────────────────────────────────┘
+```
+
+---
+
+## FLUXO COMPLETO DO LOOP
+
+```
+[VÍDEO 15s] ──fade──► [SLIDE 1: 15s] ──dissolve──► [SLIDE 2: 15s]
+    ──dissolve──► [SLIDE 3: 15s] ──dissolve──► [SLIDE 4: 15s]
+    ──dissolve──► [SLIDE 5 CTA: 15s] ──fade──► [VÍDEO 15s] → LOOP
+```
+**Duração total do loop: ~90 segundos**
+
+---
+
+## CHECKLIST DOS SLIDES
+
+- [ ] Nenhuma foto expõe a região anatômica íntima
+- [ ] Texto legível a 3 metros (fonte ≥ 44pt)
+- [ ] Máximo 15 palavras por slide
+- [ ] Logotipo da clínica em todos os slides
+- [ ] Paleta rosé/branco/dourado consistente
+- [ ] Indicações clínicas do Slide 4 revisadas com o profissional responsável
+
+
+---
+
+
+# CTA e Ganchos — Harmonização Íntima Feminina
+**Uso:** Slide final do loop (Slide 5) + posts sociais + material impresso
+
+---
+
+## CTA PRINCIPAL (recepção)
+
+```
+┌──────────────────────────────────────────┐
+│                                          │
+│   Você já está no lugar certo            │
+│                                          │
+│   Pergunte sobre Harmonização Íntima     │
+│   na sua consulta de hoje                │
+│                                          │
+│   📲 [CONTATO]                           │
+│   [NOME DA CLÍNICA]                      │
+└──────────────────────────────────────────┘
+```
+
+> **Por que funciona:** A paciente já está na clínica. O CTA não pede que ela "agende" — pede que pergunte. Reduz a barreira de ação e capitaliza o contexto de espera.
+
+---
+
+## GANCHOS DE ABERTURA (5 variações)
+
+### Gancho 1 — Curiosidade + Normalização
+```
+Você sabia que o corpo feminino
+muda em cada fase da vida — e que
+existem cuidados específicos para isso?
+```
+
+### Gancho 2 — Identificação Silenciosa
+```
+Ressecamento, desconforto
+ou insatisfação com a região íntima?
+
+Isso tem nome. E tem solução.
+```
+
+### Gancho 3 — Empoderamento
+```
+Cuidar da saúde íntima
+não é vaidade — é autoconhecimento.
+```
+
+### Gancho 4 — Contexto pós-parto / mudança de fase
+```
+Pós-parto. Menopausa. Perda de peso.
+O corpo muda — e pode ser cuidado.
+```
+
+### Gancho 5 — Comparação de cuidados (espelho)
+```
+Você cuida do rosto, do cabelo,
+das mãos...
+
+Por que não da saúde íntima também?
+```
+
+---
+
+## VARIAÇÕES DE CTA (4 versões)
+
+### CTA A — Direto e Acolhedor
+```
+Agende sua avaliação
+[CONTATO] | [NOME DA CLÍNICA]
+Atendimento sigiloso e sem julgamentos
+```
+
+### CTA B — Contextual (recepção)
+```
+Está esperando? Aproveite para perguntar
+à recepcionista sobre Harmonização Íntima.
+```
+> *Para ser exibido em recepção com equipe treinada para receber perguntas sobre o procedimento.*
+
+### CTA C — Social Media
+```
+Sua dúvida é mais comum do que você imagina.
+Fale com a gente pelo direct 📲
+```
+
+### CTA D — Urgência Suave
+```
+Vagas limitadas por semana
+para procedimentos de harmonização íntima.
+Reserve a sua: [CONTATO]
+```
+
+---
+
+## FRASES DE FECHAMENTO (uso em textos impressos)
+
+- *"Cuidar de si começa de dentro para fora."*
+- *"Saúde íntima é saúde. Ponto."*
+- *"Cada fase do seu corpo merece atenção especializada."*
+- *"Sem tabu. Com cuidado."*
+- *"Conforto e bem-estar: você merece sentir isso todos os dias."*
+
+---
+
+## CHECKLIST CFM — CTA
+
+- [ ] Nenhuma promessa absoluta de resultado ("elimina", "cura", "garante")
+- [ ] Sem "avaliação gratuita" (proibido — captação de clientela)
+- [ ] Sem preços ou condições financeiras (proibido em material de divulgação)
+- [ ] Tom: saúde e bem-estar — não apelo estético agressivo
+- [ ] Profissional responsável identificado no material oficial
+
+
+---
+
+
+# Roteiro de Vídeo — Harmonização Íntima Masculina
+**Formato:** 16:9 | **Duração:** 15 segundos | **Público:** Masculino | **Uso:** Loop recepção (TV)
+
+---
+
+## BRIEFING DO VÍDEO
+
+| Campo              | Detalhe                                                                    |
+|--------------------|----------------------------------------------------------------------------|
+| Objetivo           | Apresentar a harmonização íntima masculina como escolha legítima e moderna |
+| Tom                | Direto, confiante, clínico — sem excesso de intimidade ou constrangimento  |
+| Abordagem          | Autoestima, confiança e bem-estar masculino                               |
+| Trilha sonora      | Ambient minimalista, piano ou eletrônico suave, BPM 65–75                 |
+| Paleta de cores    | Branco clínico + cinza slate + azul petróleo + dourado discreto           |
+| Legibilidade       | Fonte ≥ 48pt para leitura a 2–3 metros de distância                      |
+
+> **Nota de produção:** Nenhuma imagem da região anatômica deve aparecer no vídeo ou nos slides.
+> O procedimento é representado por: mãos do profissional, equipamentos sobre campo estéril,
+> expressões do paciente, ambiente clínico clean e infográficos ilustrativos. Abordagem visual
+> idêntica à de referências brasileiras como Clínica UpMen, Dr. Marcio Dantas e Flávio Carvalho Estética.
+
+---
+
+## STORYBOARD — 15 SEGUNDOS
+
+### CENA 1 — [ 0s a 5s ] | O HOMEM QUE CUIDA DE SI
+
+**O que filmar:**
+- Homem entre 28–50 anos em consulta — postura relaxada, conversa com profissional
+- Ambiente: sala clínica clean, iluminação neutra, sem elementos que infantilizem
+- Expressão: tranquilo, seguro, confortável
+
+**Legenda na tela:**
+```
+╔══════════════════════════════════════════╗
+║   HARMONIZAÇÃO ÍNTIMA MASCULINA          ║
+║   Cuidado, confiança e autoestima        ║
+╚══════════════════════════════════════════╝
+```
+
+---
+
+### CENA 2 — [ 5s a 11s ] | PRECISÃO E SEGURANÇA
+
+**O que filmar:**
+- Close nas mãos do profissional sobre campo estéril com equipamento de aplicação
+- OU: infográfico animado dos procedimentos disponíveis (bioplastia, scrotox, clareamento) com ícones técnicos neutros
+- OU: profissional explicando para paciente com material didático
+
+**Legenda na tela:**
+```
+╔══════════════════════════════════════════╗
+║   Bioplastia • Scrotox • Clareamento     ║
+║   Minimamente invasivo, sem cirurgia     ║
+╚══════════════════════════════════════════╝
+```
+
+---
+
+### CENA 3 — [ 11s a 15s ] | CONFIANÇA RESTAURADA
+
+**O que filmar:**
+- Paciente pós-consulta: expressão de satisfação, postura ereta, autoconfiança
+- Plano médio, roupa casual, saindo da clínica ou em consulta de pós-procedimento
+- Energia: discretamente seguro, confortável consigo mesmo
+
+**Legenda na tela:**
+```
+╔══════════════════════════════════════════╗
+║   Resultado imediato                     ║
+║   Retorno às atividades em 24–48h        ║
+╚══════════════════════════════════════════╝
+```
+
+---
+
+## PROCEDIMENTOS ABORDADOS NO MATERIAL (referência clínica)
+
+| Procedimento                   | Região de aplicação                                     | Técnica                                      |
+|--------------------------------|---------------------------------------------------------|----------------------------------------------|
+| Bioplastia / Preenchimento peniano | Corpo do pênis (circunferência e comprimento visual) | Ácido hialurônico injetável                  |
+| Preenchimento de glande        | Glande peniana (cabeça do pênis)                        | Ácido hialurônico ultra-refinado             |
+| Scrotox                        | Escroto (pele que envolve os testículos)                | Toxina botulínica — relaxa músculo cremáster |
+| Clareamento íntimo masculino   | Região pubiana, escroto, face interna das coxas         | Laser fracionado ou peeling químico          |
+| Bioestimulador peniano         | Corpo do pênis                                          | Ácido poli-L-láctico ou hidroxiapatita       |
+
+> **Notas clínicas:**
+> - **Scrotox:** além do efeito estético (escroto mais liso e baixo), reduz hiperhidrose escrotal e
+>   melhora o conforto térmico. Efeito dura em média 4–6 meses.
+> - **Bioplastia peniana:** ácido hialurônico absorvível. Duração média 12–18 meses. Procedimento
+>   realizado sob anestesia local, dura 1–2h. Sem cirurgia, sem incisão.
+> - Procedimentos realizados exclusivamente por médico habilitado (dermatologista, urologista ou
+>   cirurgião plástico com habilitação em estética genital).
+
+---
+
+## CHECKLIST DE APROVAÇÃO
+
+- [ ] Nenhuma imagem da região anatômica íntima no vídeo
+- [ ] Tom: autoestima e bem-estar — não sexual
+- [ ] Profissional visível com jaleco e postura clínica de autoridade
+- [ ] Paciente representado com naturalidade (não constrangimento)
+- [ ] Legenda legível a 3 metros de distância
+- [ ] Consentimento de uso de imagem assinado pelo paciente
+- [ ] Duração exata de 15 segundos
+
+
+---
+
+
+# Sequência de Slides — Harmonização Íntima Masculina
+**Formato:** 16:9 | **Total:** 5 slides × ~15s = 75 segundos | **Público:** Masculino
+
+---
+
+## DIRETRIZES GERAIS DOS SLIDES
+
+| Parâmetro             | Valor recomendado                                               |
+|-----------------------|------------------------------------------------------------------|
+| Tempo por slide       | 12–15 segundos (1s de transição cross-dissolve)                  |
+| Máximo de palavras    | 12–15 palavras por slide                                         |
+| Tamanho de fonte      | Título ≥ 60pt · Subtítulo ≥ 44pt (legível a 3m)                |
+| Paleta                | Branco clínico, cinza slate (#708090), azul petróleo (#1B4F72), dourado|
+| Imagens               | Sem exposição da região anatômica — apenas expressões e ambiente  |
+| Tom visual            | Sóbrio, preciso, moderno — semelhante a marca de saúde masculina |
+
+---
+
+## SLIDE 1 — GANCHO / IDENTIFICAÇÃO
+**[ 15s – 30s do loop total ]**
+
+**Fotografia sugerida:**
+- Homem com expressão pensativa mas confiante, olhando para frente
+- OU: homem em academia ou esporte — contexto de cuidado com o próprio corpo
+- OU: dois homens em conversa casual sobre saúde — normaliza o tema
+
+**Texto na tela:**
+```
+┌──────────────────────────────────────────┐
+│                                          │
+│   Homens também merecem                  │
+│   se sentir bem em todos os aspectos     │
+│                                          │
+└──────────────────────────────────────────┘
+```
+> *Tom: empoderador e normalizador — não há fragilidade em cuidar de si.*
+
+---
+
+## SLIDE 2 — O QUE É
+**[ 30s – 45s do loop total ]**
+
+**Fotografia sugerida:**
+- Profissional médico em postura de autoridade e competência
+- OU: ambiente da sala de procedimento: clean, tecnológico, preciso
+- OU: infográfico dos procedimentos com ícones neutros e profissionais
+
+**Texto na tela:**
+```
+┌──────────────────────────────────────────┐
+│                                          │
+│   Harmonização Íntima Masculina          │
+│   Procedimentos estéticos                │
+│   para autoestima e conforto             │
+│                                          │
+└──────────────────────────────────────────┘
+```
+
+---
+
+## SLIDE 3 — PROCEDIMENTOS E LOCAIS
+**[ 45s – 60s do loop total ]**
+
+**Fotografia sugerida:**
+- Infográfico com silhueta masculina estilizada + marcadores nas regiões tratadas (representação artística abstrata — sem exposição)
+- OU: ícones dos tratamentos em layout técnico e limpo
+- OU: close nas mãos do profissional preparando o equipamento sobre campo estéril
+
+**Texto na tela:**
+```
+┌──────────────────────────────────────────┐
+│                                          │
+│   ✓ Bioplastia peniana (volume e forma)  │
+│   ✓ Scrotox (conforto e estética)        │
+│   ✓ Clareamento da região íntima         │
+│   ✓ Bioestimuladores de colágeno         │
+│                                          │
+└──────────────────────────────────────────┘
+```
+> *Cada item refere-se às regiões tratadas: corpo e glande do pênis (bioplastia/bioestimulador),
+> escroto (scrotox), região pubiana e escrotal (clareamento).*
+
+---
+
+## SLIDE 4 — BENEFÍCIOS E INDICAÇÕES
+**[ 60s – 75s do loop total ]**
+
+**Fotografia sugerida:**
+- Homem praticando esporte ou em atividade de lazer — expressão de confiança e bem-estar
+- OU: paciente em pós-consulta com expressão satisfeita
+- OU: homem no trabalho, postura ereta, autoconfiança natural
+
+**Texto na tela:**
+```
+┌──────────────────────────────────────────┐
+│                                          │
+│   Resultado imediato, sem cirurgia       │
+│   Sigilo total • Retorno em 24–48h       │
+│                                          │
+│   Procedimento realizado                 │
+│   por médico especialista                │
+│                                          │
+└──────────────────────────────────────────┘
+```
+
+**Indicações clínicas que embasam o slide** *(uso interno — não exibir no slide)*:
+- Insatisfação estética com volume ou circunferência peniana
+- Hiperhidrose escrotal (suor excessivo — indicação do Scrotox)
+- Hiperpigmentação da região pubiana, escrotal ou face interna das coxas
+- Assimetria escrotal de origem estética
+- Desconforto durante atividades físicas relacionado à região
+
+---
+
+## SLIDE 5 — CTA + GANCHO
+**[ 75s – 90s do loop total ]**
+
+**Fotografia sugerida:**
+- Médico especialista em postura de autoridade, jaleco, ambiente clean e tecnológico
+- OU: paciente e profissional em consulta descontraída — transmite confiança e privacidade
+- Ambiente: clínica masculina moderna, sóbria, tecnológica
+
+**Texto na tela:**
+```
+┌──────────────────────────────────────────┐
+│                                          │
+│   Avaliação confidencial                 │
+│   sem julgamentos                        │
+│                                          │
+│   Agende sua consulta:                   │
+│   📲 [CONTATO]                           │
+│   [NOME DA CLÍNICA]                      │
+└──────────────────────────────────────────┘
+```
+> *O termo "confidencial" é estratégico — é a principal objeção masculina para este procedimento.*
+
+---
+
+## FLUXO COMPLETO DO LOOP
+
+```
+[VÍDEO 15s] ──fade──► [SLIDE 1: 15s] ──dissolve──► [SLIDE 2: 15s]
+    ──dissolve──► [SLIDE 3: 15s] ──dissolve──► [SLIDE 4: 15s]
+    ──dissolve──► [SLIDE 5 CTA: 15s] ──fade──► [VÍDEO 15s] → LOOP
+```
+**Duração total do loop: ~90 segundos**
+
+---
+
+## NOTA SOBRE EXIBIÇÃO NA RECEPÇÃO
+
+Em clínicas mistas (atendimento feminino e masculino), recomenda-se:
+1. **Loop feminino e masculino em horários alternados** (ex.: hora par → feminino, hora ímpar → masculino)
+2. **OU loop unificado**: exibir procedimentos femininos e masculinos intercalados com um slide de transição "Para você, do jeito que você é"
+3. Evitar exibir conteúdo masculino em recepções com público exclusivamente feminino e vice-versa
+
+---
+
+## CHECKLIST DOS SLIDES
+
+- [ ] Nenhuma foto expõe a região anatômica íntima
+- [ ] Texto legível a 3 metros (fonte ≥ 44pt)
+- [ ] Máximo 15 palavras por slide
+- [ ] Logotipo da clínica em todos os slides
+- [ ] Paleta cinza/branco/azul petróleo consistente
+- [ ] Indicações clínicas do Slide 4 revisadas com o profissional responsável
+
+
+---
+
+
+# CTA e Ganchos — Harmonização Íntima Masculina
+**Uso:** Slide final do loop (Slide 5) + posts sociais + material impresso
+
+---
+
+## CTA PRINCIPAL (recepção)
+
+```
+┌──────────────────────────────────────────┐
+│                                          │
+│   Avaliação confidencial                 │
+│   sem julgamentos                        │
+│                                          │
+│   Agende sua consulta:                   │
+│   📲 [CONTATO]                           │
+│   [NOME DA CLÍNICA]                      │
+└──────────────────────────────────────────┘
+```
+
+> **Por que "confidencial" funciona:** É a principal objeção masculina ao procedimento. Nomear diretamente o sigilo elimina a barreira antes de ela ser verbalizada.
+
+---
+
+## GANCHOS DE ABERTURA (5 variações)
+
+### Gancho 1 — Normalização Direta
+```
+Homens também buscam
+cuidados estéticos íntimos.
+
+E fazem bem.
+```
+
+### Gancho 2 — Autoestima Masculina
+```
+Autoconfiança não tem limite.
+Autoestima também não.
+
+Conheça a Harmonização Íntima Masculina.
+```
+
+### Gancho 3 — Pragmático / Sem Rodeios
+```
+Resultado em 1 sessão.
+Retorno às atividades em 24–48h.
+Sem cirurgia. Sem internação.
+```
+
+### Gancho 4 — Identificação Silenciosa
+```
+Desconforto, insatisfação
+ou questões estéticas na região íntima?
+
+Existe solução. Discreta.
+```
+
+### Gancho 5 — Autoridade Clínica
+```
+Procedimentos realizados
+por médico especialista.
+
+Seguro, preciso e sem exposição.
+```
+
+---
+
+## VARIAÇÕES DE CTA (4 versões)
+
+### CTA A — Confidencialidade em Destaque
+```
+Consulta 100% confidencial
+Sem exposição | Sem julgamentos
+[CONTATO] | [NOME DA CLÍNICA]
+```
+
+### CTA B — Contextual (recepção)
+```
+Está esperando?
+Pergunte ao médico sobre
+Harmonização Íntima Masculina na sua consulta.
+```
+> *Para ser exibido em recepção com médico treinado para conduzir a conversa.*
+
+### CTA C — Social Media / Direct
+```
+Tire suas dúvidas em sigilo total.
+Fale com a gente pelo direct 🔒
+```
+
+### CTA D — Urgência Suave
+```
+Agenda limitada por semana.
+Reserve sua avaliação:
+[CONTATO] — [NOME DA CLÍNICA]
+```
+
+---
+
+## FRASES DE FECHAMENTO (uso em textos impressos)
+
+- *"Cuidar de si não é fraqueza. É escolha."*
+- *"Confiança que você sente — não precisa explicar para ninguém."*
+- *"Precisão clínica. Privacidade total."*
+- *"O homem que cuida de si em todos os aspectos."*
+- *"Discreção é parte do procedimento."*
+
+---
+
+## CHECKLIST CFM — CTA
+
+- [ ] Nenhuma promessa absoluta de resultado ("aumenta X cm", "garante", "elimina")
+- [ ] Sem "avaliação gratuita" (proibido — captação de clientela)
+- [ ] Sem preços ou condições financeiras no material visual
+- [ ] Tom: autoestima e bem-estar — não apelo sexual ou de performance
+- [ ] "Confidencial" refere-se ao atendimento, não a segredo de resultado
+- [ ] Profissional responsável identificado no material oficial

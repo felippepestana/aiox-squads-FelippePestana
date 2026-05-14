@@ -36,6 +36,34 @@
 
 ---
 
+## Harmonização Íntima Feminina
+
+> Paleta: rosé nude · branco · dourado suave | Tom: acolhedor, empoderador, clínico
+
+| Arquivo | Descrição |
+|---------|-----------|
+| [Roteiro de Vídeo](./harmonizacao-intima-feminina/roteiro-video.md) | Storyboard 15s com referência clínica completa: grandes lábios, pequenos lábios, canal vaginal, radiofrequência, laser, bioestimuladores |
+| [Slides — Imagem](./harmonizacao-intima-feminina/slides-imagem.md) | 5 slides × 15s com textos on-screen, notas clínicas internas e nota sobre exibição em recepção mista |
+| [CTAs e Ganchos](./harmonizacao-intima-feminina/cta-hook.md) | CTA "você já está no lugar certo" + 5 ganchos + 4 variações de CTA |
+| [Variações de Vídeo](./harmonizacao-intima-feminina/variacoes-video.md) | 5 abordagens: problema/solução, fases da vida, curiosidade, autoridade clínica, emocional/autoestima |
+| [Variações de Slides](./harmonizacao-intima-feminina/variacoes-slides.md) | 5 variações de tom: técnico, emocional, direto, comparativo/espelho, contextual/fases da vida |
+
+---
+
+## Harmonização Íntima Masculina
+
+> Paleta: branco clínico · cinza slate · azul petróleo · dourado | Tom: direto, confiante, clínico
+
+| Arquivo | Descrição |
+|---------|-----------|
+| [Roteiro de Vídeo](./harmonizacao-intima-masculina/roteiro-video.md) | Storyboard 15s com referência clínica completa: bioplastia peniana, scrotox, clareamento, bioestimuladores |
+| [Slides — Imagem](./harmonizacao-intima-masculina/slides-imagem.md) | 5 slides × 15s — CTA estratégico "confidencial", nota sobre loop em recepção mista |
+| [CTAs e Ganchos](./harmonizacao-intima-masculina/cta-hook.md) | CTA "avaliação confidencial" + 5 ganchos + 4 variações de CTA |
+| [Variações de Vídeo](./harmonizacao-intima-masculina/variacoes-video.md) | 5 abordagens: normalização, pragmático/resultados, confiança, autoridade médica, identificação silenciosa |
+| [Variações de Slides](./harmonizacao-intima-masculina/variacoes-slides.md) | 5 variações de tom: técnico, empoderador, pragmático, discreto/silencioso, autoridade técnica |
+
+---
+
 ## Estrutura do Loop (90 segundos)
 
 ```

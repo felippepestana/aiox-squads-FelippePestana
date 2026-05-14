@@ -9,9 +9,11 @@
 2. [Estratégia de Captação Dual-Use TV + Redes Sociais](#2-estratégia-dual-use)
 3. [Roteiro de Ações — Foto Terapia Facial](#3-foto-terapia-facial)
 4. [Roteiro de Ações — Aplicação de Botox](#4-aplicação-de-botox)
-5. [Diretrizes Gerais de Produção](#5-diretrizes-gerais)
-6. [Cases Brasileiros de Referência](#6-cases-brasileiros)
-7. [Checklist Pré-Gravação](#7-checklist-pré-gravação)
+5. [Roteiro de Ações — Harmonização Íntima Feminina](#5-harmonização-íntima-feminina)
+6. [Roteiro de Ações — Harmonização Íntima Masculina](#6-harmonização-íntima-masculina)
+7. [Diretrizes Gerais de Produção](#7-diretrizes-gerais)
+8. [Cases Brasileiros de Referência](#8-cases-brasileiros)
+9. [Checklist Pré-Gravação](#9-checklist-pré-gravação)
 
 ---
 
@@ -487,17 +489,326 @@ na sua consulta hoje
 
 ---
 
-## 5. DIRETRIZES GERAIS DE PRODUÇÃO
+## 5. HARMONIZAÇÃO ÍNTIMA FEMININA — ROTEIRO DE AÇÕES
+
+### Contexto do Procedimento (para orientar o conteúdo das fotos)
+
+A Harmonização Íntima Feminina reúne procedimentos estéticos não cirúrgicos para a região vulvovaginal e púbica: preenchimento com ácido hialurônico nos grandes lábios, radiofrequência e laser vaginal (canal vaginal + vulva), clareamento do monte de Vênus e região vulvar, e bioestimuladores de colágeno nos grandes lábios. Indicada para flacidez pós-perda de peso, ressecamento vaginal, hiperpigmentação e recuperação de tônus pós-parto.
+
+**Mensagem central para o material:** "Cuidado com a parte de você que também merece atenção"
+
+**Nota de produção obrigatória:** Nenhuma imagem da região anatômica íntima deve aparecer. O procedimento é representado por: mãos da profissional com equipamento, expressões da paciente, ambiente clínico e infográficos educativos.
+
+---
+
+### VÍDEO (15 segundos)
+
+#### Cena 1 — [ 0s a 5s ] | O CUIDADO QUE COMEÇA EM VOCÊ
+
+**Ação a gravar:**
+- Profissional (jaleco, postura acolhedora) recebendo a paciente em consulta inicial
+- Ambiente: sala de atendimento clean, luz quente, flores ou elemento feminino discreto
+
+**Foco específico da câmera:**
+- Plano americano: profissional e paciente sentadas frente a frente
+- Expressão da profissional: empática, receptiva
+- Luz: quente e suave — diferente da frieza de um centro cirúrgico
+
+**Sugestão de chamada (legenda da cena):**
+```
+HARMONIZAÇÃO ÍNTIMA FEMININA
+Cuidado que vai além da aparência
+```
+
+---
+
+#### Cena 2 — [ 5s a 11s ] | A TECNOLOGIA E A TÉCNICA
+
+**Ação a gravar:**
+- Close nas mãos da profissional com equipamento (radiofrequência, laser ou seringa com ácido hialurônico) sobre campo cirúrgico — **sem mostrar a região anatômica**
+- OU: infográfico animado mostrando os procedimentos (preenchimento, clareamento, radiofrequência, laser) com ícones ilustrativos e elegantes
+
+**Foco específico da câmera:**
+- Enquadramento: da cintura para cima do profissional (jaleco + mãos + equipamento)
+- Campo estéril visível na mesa lateral — transmite higiene e precisão
+
+**Sugestão de chamada (legenda da cena):**
+```
+Preenchimento • Laser • Radiofrequência
+Procedimentos seguros e sem cirurgia
+```
+
+---
+
+#### Cena 3 — [ 11s a 15s ] | O RESULTADO: VOCÊ EM PLENA FORMA
+
+**Ação a gravar:**
+- Paciente saindo satisfeita — expressão de leveza, autoconfiança, sorriso genuíno
+- Plano: busto, roupa casual, ambiente clínico ao fundo
+
+**Foco específico da câmera:**
+- Expressão: leve, empoderada, bem consigo mesma
+- Luz suave, fundo levemente desfocado
+
+**Sugestão de chamada (legenda da cena):**
+```
+Bem-estar, conforto e autoestima
+de volta à sua rotina em seguida
+```
+
+---
+
+### SEQUÊNCIA DE FOTOS (5 slides × 15s)
+
+#### FOTO 1 — GANCHO / IDENTIFICAÇÃO
+
+**O que fotografar:**
+- Mulher olhando para si mesma com atenção e cuidado (espelho, não intimidade)
+- OU: duas mulheres conversando com leveza sobre cuidados pessoais
+- OU: mulher em consulta ginecológica de rotina — ambiente de saúde feminina
+
+**Texto da imagem (pronto para uso):**
+```
+Seu corpo merece o mesmo cuidado
+que você dedica ao seu rosto
+```
+
+---
+
+#### FOTO 2 — O QUE É
+
+**O que fotografar:**
+- Profissional com equipamento elegante sobre campo estéril
+- OU: infográfico clean com ícones dos procedimentos disponíveis
+- OU: ambiente da sala de procedimento: clean, moderno, sofisticado
+
+**Texto da imagem (pronto para uso):**
+```
+Harmonização Íntima Feminina
+Procedimentos não cirúrgicos
+para conforto e bem-estar
+```
+
+---
+
+#### FOTO 3 — PROCEDIMENTOS E LOCAIS
+
+**O que fotografar:**
+- Infográfico com silhueta feminina estilizada + marcadores nas regiões tratadas (representação artística abstrata — sem exposição)
+- OU: ícones dos tratamentos lado a lado em layout limpo
+
+**Texto da imagem (pronto para uso):**
+```
+✓ Preenchimento labial íntimo
+✓ Clareamento da região vulvar
+✓ Radiofrequência e laser vaginal
+✓ Remodelagem com bioestimuladores
+```
+
+> **Nota clínica para a equipe (não exibir no slide):** Preenchimento → grandes lábios; Clareamento → monte de Vênus e região vulvar; Radiofrequência/Laser → vulva externa + canal vaginal; Bioestimuladores → grandes lábios e monte de Vênus.
+
+---
+
+#### FOTO 4 — BENEFÍCIOS E INDICAÇÕES
+
+**O que fotografar:**
+- Mulher em atividade do dia a dia: yoga, caminhada, ou simplesmente sorrindo com leveza
+- OU: mulher em qualquer fase da vida — jovem, pós-parto, menopausa — sentindo-se bem
+
+**Texto da imagem (pronto para uso):**
+```
+Desconforto, flacidez, assimetria
+ou ressecamento têm solução
+
+Resultados desde a 1ª sessão
+Sem internação • Retorno imediato
+```
+
+---
+
+#### FOTO 5 — CTA
+
+**O que fotografar:**
+- Profissional sorrindo em ambiente de consultório, postura acolhedora e segura
+- Ambiente: cores quentes, luz dourada suave, sensação de acolhimento
+
+**Texto da imagem (pronto para uso):**
+```
+Você já está no lugar certo
+
+Pergunte sobre Harmonização Íntima
+na sua consulta de hoje
+
+📲 [CONTATO]
+[NOME DA CLÍNICA]
+```
+
+---
+
+## 6. HARMONIZAÇÃO ÍNTIMA MASCULINA — ROTEIRO DE AÇÕES
+
+### Contexto do Procedimento (para orientar o conteúdo das fotos)
+
+A Harmonização Íntima Masculina reúne procedimentos estéticos minimamente invasivos para a região genital masculina: bioplastia/preenchimento do pênis com ácido hialurônico (corpo e glande), scrotox com toxina botulínica (reduz suor e relaxa o músculo cremáster), clareamento da região pubiana e escrotal com laser ou peeling, e bioestimuladores de colágeno no corpo do pênis. Indicado para insatisfação estética com volume ou circunferência, hiperhidrose escrotal e hiperpigmentação.
+
+**Mensagem central para o material:** "Cuidado, confiança e autoestima — discretamente"
+
+**Nota de produção obrigatória:** Nenhuma imagem da região anatômica íntima deve aparecer. Representar por: mãos do profissional, equipamentos sobre campo estéril, expressões do paciente e infográficos.
+
+---
+
+### VÍDEO (15 segundos)
+
+#### Cena 1 — [ 0s a 5s ] | O HOMEM QUE CUIDA DE SI
+
+**Ação a gravar:**
+- Homem entre 28–50 anos em consulta — postura relaxada, conversa com profissional
+- Ambiente: sala clínica clean, iluminação neutra, sem elementos que infantilizem
+
+**Foco específico da câmera:**
+- Plano médio: homem e médico em conversa direta
+- Expressão do homem: tranquilo, seguro, confortável — sem constrangimento
+
+**Sugestão de chamada (legenda da cena):**
+```
+HARMONIZAÇÃO ÍNTIMA MASCULINA
+Cuidado, confiança e autoestima
+```
+
+---
+
+#### Cena 2 — [ 5s a 11s ] | PRECISÃO E SEGURANÇA
+
+**Ação a gravar:**
+- Close nas mãos do profissional sobre campo estéril com equipamento de aplicação
+- OU: infográfico animado dos procedimentos (bioplastia, scrotox, clareamento) com ícones técnicos neutros
+
+**Foco específico da câmera:**
+- Enquadramento: mãos + campo estéril + instrumento
+- Transmitir: precisão clínica, higiene, segurança
+
+**Sugestão de chamada (legenda da cena):**
+```
+Bioplastia • Scrotox • Clareamento
+Minimamente invasivo, sem cirurgia
+```
+
+---
+
+#### Cena 3 — [ 11s a 15s ] | CONFIANÇA RESTAURADA
+
+**Ação a gravar:**
+- Paciente pós-consulta: expressão de satisfação, postura ereta, autoconfiança
+- Plano médio, roupa casual, saindo da clínica ou em consulta de pós-procedimento
+
+**Foco específico da câmera:**
+- Energia: discretamente seguro, confortável consigo mesmo
+- Luz: neutra, ambiente profissional
+
+**Sugestão de chamada (legenda da cena):**
+```
+Resultado imediato
+Retorno às atividades em 24–48h
+```
+
+---
+
+### SEQUÊNCIA DE FOTOS (5 slides × 15s)
+
+#### FOTO 1 — GANCHO / IDENTIFICAÇÃO
+
+**O que fotografar:**
+- Homem com expressão pensativa mas confiante, olhando para frente
+- OU: homem em academia ou esporte — contexto de cuidado com o próprio corpo
+- OU: dois homens em conversa casual sobre saúde — normaliza o tema
+
+**Texto da imagem (pronto para uso):**
+```
+Homens também merecem
+se sentir bem em todos os aspectos
+```
+
+---
+
+#### FOTO 2 — O QUE É
+
+**O que fotografar:**
+- Profissional médico em postura de autoridade e competência
+- OU: ambiente da sala de procedimento: clean, tecnológico, preciso
+
+**Texto da imagem (pronto para uso):**
+```
+Harmonização Íntima Masculina
+Procedimentos estéticos
+para autoestima e conforto
+```
+
+---
+
+#### FOTO 3 — PROCEDIMENTOS E LOCAIS
+
+**O que fotografar:**
+- Infográfico com silhueta masculina estilizada + marcadores nas regiões tratadas (representação artística abstrata — sem exposição)
+- OU: ícones dos tratamentos em layout técnico e limpo
+
+**Texto da imagem (pronto para uso):**
+```
+✓ Bioplastia peniana (volume e forma)
+✓ Scrotox (conforto e estética)
+✓ Clareamento da região íntima
+✓ Bioestimuladores de colágeno
+```
+
+> **Nota clínica para a equipe (não exibir no slide):** Bioplastia → corpo do pênis (circunferência); Scrotox → escroto (músculo cremáster + sudorese); Clareamento → região pubiana, escroto e face interna das coxas; Bioestimuladores → corpo do pênis.
+
+---
+
+#### FOTO 4 — BENEFÍCIOS E INDICAÇÕES
+
+**O que fotografar:**
+- Homem praticando esporte ou em atividade de lazer — expressão de confiança e bem-estar
+- OU: homem no trabalho, postura ereta, autoconfiança natural
+
+**Texto da imagem (pronto para uso):**
+```
+Resultado imediato, sem cirurgia
+Sigilo total • Retorno em 24–48h
+
+Procedimento realizado
+por médico especialista
+```
+
+---
+
+#### FOTO 5 — CTA
+
+**O que fotografar:**
+- Médico especialista em postura de autoridade, jaleco, ambiente clean e tecnológico
+- Ambiente: clínica masculina moderna, sóbria, tecnológica
+
+**Texto da imagem (pronto para uso):**
+```
+Avaliação confidencial
+sem julgamentos
+
+Agende sua consulta:
+📲 [CONTATO]
+[NOME DA CLÍNICA]
+```
+
+---
+
+## 7. DIRETRIZES GERAIS DE PRODUÇÃO
 
 ### Paleta de Cores — Ambiente de Gravação
 
-| Elemento          | Foto Terapia Facial            | Botox                         |
-|-------------------|-------------------------------|-------------------------------|
-| Fundo principal   | Branco clínico + azul-luz     | Branco clínico + nude/bege    |
-| Acessórios        | Azul, dourado suave, verde-água| Dourado suave, off-white      |
-| Roupas paciente   | Branco, nude, cinza claro     | Branco, nude, rose            |
-| Jaleco profissional| Branco ou azul claro         | Branco                        |
-| Evitar            | Vermelho, laranja, estampado  | Vermelho, laranja, estampado  |
+| Elemento          | Foto Terapia Facial            | Botox                         | H. Íntima Feminina             | H. Íntima Masculina             |
+|-------------------|-------------------------------|-------------------------------|--------------------------------|---------------------------------|
+| Fundo principal   | Branco clínico + azul-luz     | Branco clínico + nude/bege    | Branco + rosé nude + dourado   | Branco clínico + cinza slate    |
+| Acessórios        | Azul, dourado suave, verde-água| Dourado suave, off-white      | Rosé, dourado, floral discreto | Azul petróleo, dourado discreto |
+| Roupas paciente   | Branco, nude, cinza claro     | Branco, nude, rose            | Branco, nude, rosé suave       | Casual neutro: cinza, azul, bege|
+| Jaleco profissional| Branco ou azul claro         | Branco                        | Branco + elemento feminino     | Branco ou cinza claro           |
+| Evitar            | Vermelho, laranja, estampado  | Vermelho, laranja, estampado  | Vermelho, roxo, estampado      | Vermelho, estampado, neon       |
 
 ### Trilha Sonora (Edição — não gravar)
 
@@ -529,7 +840,7 @@ na sua consulta hoje
 
 ---
 
-## 6. CASES BRASILEIROS DE REFERÊNCIA
+## 8. CASES BRASILEIROS DE REFERÊNCIA
 
 ### Para Foto Terapia Facial (Fotobiomodulação)
 
@@ -553,7 +864,7 @@ na sua consulta hoje
 
 ---
 
-## 7. CHECKLIST PRÉ-GRAVAÇÃO
+## 9. CHECKLIST PRÉ-GRAVAÇÃO
 
 ### Logística
 - [ ] Sala de procedimento limpa e organizada (sem itens fora do lugar)
@@ -580,6 +891,9 @@ na sua consulta hoje
 - [ ] Não prometer resultados absolutos (usar: "pode auxiliar", "em média", "tende a")
 - [ ] Não mencionar valores, preços ou descontos em qualquer material visual
 - [ ] Não mostrar agulha em close extremo
+- [ ] Harmonização Íntima: nenhuma imagem da região anatômica íntima — masculina ou feminina
+- [ ] Harmonização Íntima: tom é saúde/estética/autoestima — nunca sexual ou de performance
+- [ ] Harmonização Íntima: consentimento de imagem específico para procedimentos íntimos
 
 ---
 
