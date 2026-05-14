@@ -7,9 +7,10 @@ interface MoveRequestBody {
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = (await request.json()) as MoveRequestBody;
     const { targetAnalysisId } = body;
 
@@ -21,7 +22,7 @@ export async function POST(
     }
 
     const document = await prisma.document.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!document) {
@@ -43,7 +44,7 @@ export async function POST(
     }
 
     const updatedDocument = await prisma.document.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         analysisId: targetAnalysisId,
       },

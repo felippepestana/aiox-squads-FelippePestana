@@ -3,11 +3,12 @@ import { prisma } from "@/lib/prisma";
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const document = await prisma.document.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!document) {
@@ -18,7 +19,7 @@ export async function DELETE(
     }
 
     await prisma.document.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({
@@ -36,9 +37,10 @@ export async function DELETE(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body = await request.json();
 
     const allowedFields = {
@@ -51,7 +53,7 @@ export async function PATCH(
     );
 
     const document = await prisma.document.update({
-      where: { id: params.id },
+      where: { id },
       data: updateData,
     });
 
