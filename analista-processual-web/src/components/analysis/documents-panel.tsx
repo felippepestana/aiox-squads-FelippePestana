@@ -115,7 +115,7 @@ export function DocumentsPanel({
           <CardContent className="pt-6">
             <DocumentUploadArea
               onFilesSelected={handleUpload}
-              isLoading={isUploading}
+              isUploading={isUploading}
               maxSize={10 * 1024 * 1024}
             />
             <div className="mt-3 flex gap-2">
@@ -184,12 +184,15 @@ export function DocumentsPanel({
               documents={filteredDocs as any}
               selectedIds={selectedDocId ? [selectedDocId] : []}
               onSelect={(docId) => setSelectedDocId(docId)}
-              onPreview={(docId) => {
-                setSelectedDocId(docId);
+              onPreview={(doc) => {
+                setSelectedDocId(doc.id);
                 setShowPreview(true);
               }}
-              onDelete={handleDelete}
-              onMove={() => setShowMoveDialog(true)}
+              onDelete={(doc) => handleDelete(doc.id)}
+              onMove={(doc) => {
+                setSelectedDocId(doc.id);
+                setShowMoveDialog(true);
+              }}
             />
           ) : (
             <div className="space-y-2">
@@ -351,8 +354,9 @@ export function DocumentsPanel({
         <DocumentMoveDialog
           isOpen={showMoveDialog}
           onClose={() => setShowMoveDialog(false)}
-          onMove={handleMove}
-          currentAnalysisId={analysisId}
+          document={selectedDoc}
+          analyses={[]}
+          onConfirm={handleMove}
         />
       )}
     </div>

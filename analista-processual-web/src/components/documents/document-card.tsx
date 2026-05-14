@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { FileIcon, FilePdf, FileText, Image, Eye, Download, Trash2, ArrowRight, MoreVertical } from 'lucide-react';
+import { FileIcon, File, FileText, Image, Eye, Download, Trash2, ArrowRight, MoreVertical } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -52,7 +52,7 @@ export function DocumentCard({
 
   const getFileIcon = () => {
     const type = document.fileType?.toLowerCase() || '';
-    if (type.includes('pdf')) return <FilePdf className="w-8 h-8 text-red-500" />;
+    if (type.includes('pdf')) return <File className="w-8 h-8 text-red-500" />;
     if (type.includes('text') || type === '.txt') return <FileText className="w-8 h-8 text-blue-500" />;
     if (type.includes('image')) return <Image className="w-8 h-8 text-green-500" />;
     return <FileIcon className="w-8 h-8 text-gray-500" />;
@@ -207,29 +207,29 @@ export function DocumentCard({
   );
 }
 
-async function handleDownload(document: { id: string; filename: string; storagePath?: string }) {
+async function handleDownload(doc: { id: string; filename: string; storagePath?: string }) {
   try {
-    if (document.storagePath) {
-      const link = document.createElement('a');
-      link.href = document.storagePath;
-      link.download = document.filename;
-      document.body.appendChild(link);
+    if (doc.storagePath) {
+      const link = globalThis.document.createElement('a');
+      link.href = doc.storagePath;
+      link.download = doc.filename;
+      globalThis.document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
+      globalThis.document.body.removeChild(link);
     } else {
       // Fallback: fetch from API if storagePath not available
-      const response = await fetch(`/api/documents/${document.id}/download`);
+      const response = await fetch(`/api/documents/${doc.id}/download`);
       if (!response.ok) throw new Error('Download falhou');
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = globalThis.document.createElement('a');
       link.href = url;
-      link.download = document.filename;
-      document.body.appendChild(link);
+      link.download = doc.filename;
+      globalThis.document.body.appendChild(link);
       link.click();
       window.URL.revokeObjectURL(url);
-      document.body.removeChild(link);
+      globalThis.document.body.removeChild(link);
     }
   } catch (error) {
     console.error('Erro ao fazer download:', error);
