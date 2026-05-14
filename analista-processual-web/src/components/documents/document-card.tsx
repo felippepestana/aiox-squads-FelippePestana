@@ -21,6 +21,7 @@ interface DocumentCardProps {
     filename: string;
     fileType?: string;
     fileSize?: number;
+    storagePath?: string;
     createdAt: Date;
     analysis?: {
       id: string;
@@ -206,7 +207,31 @@ export function DocumentCard({
   );
 }
 
-function handleDownload(document: { filename: string }) {
-  // Implementar download - será integrado com API
-  console.log('Download:', document.filename);
+async function handleDownload(document: { id: string; filename: string; storagePath?: string }) {
+  try {
+    if (document.storagePath) {
+      const link = document.createElement('a');
+      link.href = document.storagePath;
+      link.download = document.filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      // Fallback: fetch from API if storagePath not available
+      const response = await fetch(`/api/documents/${document.id}/download`);
+      if (!response.ok) throw new Error('Download falhou');
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = document.filename;
+      document.body.appendChild(link);
+      link.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(link);
+    }
+  } catch (error) {
+    console.error('Erro ao fazer download:', error);
+  }
 }

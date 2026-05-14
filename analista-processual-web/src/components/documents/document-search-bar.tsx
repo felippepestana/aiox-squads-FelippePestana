@@ -24,7 +24,9 @@ export function DocumentSearchBar({
       if (query) {
         setIsSearching(true);
         onSearch(query);
+        setIsSearching(false);
       } else {
+        setIsSearching(false);
         onSearch('');
       }
     }, debounceMs);

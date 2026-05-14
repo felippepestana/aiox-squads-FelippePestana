@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 interface MoveRequestBody {
-  toAnalysisId: string;
+  targetAnalysisId: string;
 }
 
 export async function POST(
@@ -11,11 +11,11 @@ export async function POST(
 ) {
   try {
     const body = (await request.json()) as MoveRequestBody;
-    const { toAnalysisId } = body;
+    const { targetAnalysisId } = body;
 
-    if (!toAnalysisId) {
+    if (!targetAnalysisId) {
       return NextResponse.json(
-        { error: "toAnalysisId é obrigatório" },
+        { error: "targetAnalysisId é obrigatório" },
         { status: 400 }
       );
     }
@@ -32,7 +32,7 @@ export async function POST(
     }
 
     const targetAnalysis = await prisma.analysis.findUnique({
-      where: { id: toAnalysisId },
+      where: { id: targetAnalysisId },
     });
 
     if (!targetAnalysis) {
@@ -45,7 +45,7 @@ export async function POST(
     const updatedDocument = await prisma.document.update({
       where: { id: params.id },
       data: {
-        analysisId: toAnalysisId,
+        analysisId: targetAnalysisId,
       },
     });
 

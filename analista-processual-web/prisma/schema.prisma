@@ -79,7 +79,7 @@ model Deadline {
   calendarDays Int?
   status      DeadlineStatus @default(PENDING)
   priority    Priority     @default(NORMAL)
-  urgency     Urgency     @default(NORMAL)
+  urgency     Urgency     @default(MEDIUM)
   isAutomatic  Boolean    @default(false)
   createdAt   DateTime    @default(now())
 

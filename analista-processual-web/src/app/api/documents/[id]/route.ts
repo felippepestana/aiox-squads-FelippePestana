@@ -41,9 +41,18 @@ export async function PATCH(
   try {
     const body = await request.json();
 
+    const allowedFields = {
+      filename: body.filename,
+      metadata: body.metadata,
+    };
+
+    const updateData = Object.fromEntries(
+      Object.entries(allowedFields).filter(([, value]) => value !== undefined)
+    );
+
     const document = await prisma.document.update({
       where: { id: params.id },
-      data: body,
+      data: updateData,
     });
 
     return NextResponse.json({ data: document });

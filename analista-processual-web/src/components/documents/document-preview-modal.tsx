@@ -91,7 +91,7 @@ export function DocumentPreviewModal({
             </div>
           ) : isImage ? (
             <img
-              src={`data:${document.fileType};base64,`}
+              src={`data:${document.fileType};base64,${document.metadata?.base64Data || ''}`}
               alt={document.filename}
               className="max-w-full max-h-full"
               onLoad={() => setIsLoading(false)}
