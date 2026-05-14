@@ -11,7 +11,7 @@
 | 1     | "A fotobiomodulação é a ciência por trás da pele saudável"            |
 | 2     | "Luz LED de comprimentos de onda específicos penetra a derme"         |
 | 3     | "Estimula ATP celular, colágeno e elastina naturalmente"               |
-| 4     | "Redução comprovada de manchas, rugas e poros em 4 a 6 semanas"       |
+| 4     | "Auxilia na redução de manchas, rugas e poros"                        |
 | 5     | "Avaliação com especialista — Agende: 📲 [CONTATO]"                  |
 
 ---
@@ -51,7 +51,7 @@
 | 2     | "Luz LED: ação profunda que o creme não alcança"                      |
 | 3     | "Trata a causa, não só o sintoma"                                     |
 | 4     | "Pele transformada — sem risco, sem recuperação"                      |
-| 5     | "Descubra a diferença. Avaliação gratuita: 📲 [CONTATO]"             |
+| 5     | "Descubra a diferença. Agende sua avaliação: 📲 [CONTATO]"           |
 
 ---
 

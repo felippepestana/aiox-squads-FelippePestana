@@ -7,7 +7,7 @@
 
 ```
 Transforme sua pele ainda hoje
-Agende sua avaliação gratuita
+Agende sua avaliação
 📲 [CONTATO]
 ```
 
@@ -23,7 +23,7 @@ Escolha um gancho por temporada ou alterne no loop:
 | 2 | "Enquanto você espera, sua pele pode estar se renovando."            | Contextual (recepção) |
 | 3 | "Pergunte sobre Foto Terapia na sua consulta de hoje."               | Direto / ação    |
 | 4 | "Sem agulhas. Sem dor. Só resultado."                               | Desmistificador  |
-| 5 | "Quantos anos a mais sua pele parece? A gente resolve."              | Provocativo suave|
+| 5 | "Quantos anos a mais sua pele parece? Podemos ajudar."               | Provocativo suave|
 
 ---
 
@@ -31,14 +31,14 @@ Escolha um gancho por temporada ou alterne no loop:
 
 ### CTA Versão Urgência Suave
 ```
-Vagas limitadas para avaliação gratuita
-Reserve a sua: 📲 [CONTATO]
+Reserve sua avaliação
+📲 [CONTATO]
 ```
 
 ### CTA Versão Autoridade
 ```
 Procedimento realizado por profissionais certificados
-Avaliação gratuita — Agende agora
+Agende sua avaliação agora
 📲 [CONTATO]
 ```
 

@@ -121,7 +121,7 @@
 │                                      │
 │   Transforme sua pele ainda hoje     │
 │                                      │
-│   Agende sua avaliação gratuita      │
+│   Agende sua avaliação               │
 │   📲 [CONTATO]                       │
 │                                      │
 │   [NOME DA CLÍNICA]                  │

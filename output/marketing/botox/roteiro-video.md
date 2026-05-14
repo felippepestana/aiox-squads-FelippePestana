@@ -27,7 +27,7 @@
 ```
 ╔══════════════════════════════════════╗
 ║   APLICAÇÃO DE BOTOX                 ║
-║   Precisão que rejuvenesce           ║
+║   Precisão que suaviza               ║
 ╚══════════════════════════════════════╝
 ```
 *Posição: faixa inferior, fundo semi-transparente escuro*
@@ -62,7 +62,7 @@
 ```
 ╔══════════════════════════════════════╗
 ║   Aparência descansada e natural     ║
-║   Dura de 4 a 6 meses               ║
+║   Dura, em média, 4 a 6 meses       ║
 ╚══════════════════════════════════════╝
 ```
 *Faixa sobe com fade-in suave*

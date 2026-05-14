@@ -37,7 +37,7 @@
 | 1     | "Botox hoje não é o que você imagina"                                     |
 | 2     | "Sem rosto congelado. Resultado natural e personalizado."                 |
 | 3     | "✓ Mínimo desconforto  ✓ Sem internação  ✓ Sem repouso"                  |
-| 4     | "Sua expressão intacta — só as rugas que somem"                           |
+| 4     | "Sua expressão intacta — suavizando as rugas"                             |
 | 5     | "Tire suas dúvidas hoje: 📲 [CONTATO]"                                    |
 
 ---

@@ -9,7 +9,7 @@
 | Tempo    | Cena                                                                | Legenda                                               |
 |----------|---------------------------------------------------------------------|-------------------------------------------------------|
 | 0s – 5s  | Close natural nas rugas de expressão (testa, olhos, glabela)        | **"Rugas de expressão incomodam você no espelho?"**   |
-| 5s – 11s | Profissional aplicando com delicadeza, paciente tranquila           | **"Botox — precisão que rejuvenesce"**                |
+| 5s – 11s | Profissional aplicando com delicadeza, paciente tranquila           | **"Botox — precisão que suaviza"**                    |
 | 11s – 15s| Rosto descansado, expressão natural e confiante                     | **"Resultado natural. Sem cirurgia. 30 minutos."**    |
 
 **Gancho final (Slide 5):** "Você já está aqui. Pergunte ao seu médico hoje."

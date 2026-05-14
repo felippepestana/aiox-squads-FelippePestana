@@ -37,7 +37,7 @@ Pergunte ao seu médico sobre Botox.
 
 ### CTA Versão Agendamento Direto
 ```
-Agende sua avaliação gratuita
+Agende sua avaliação
 Resultado natural. Retorno imediato às atividades.
 📲 [CONTATO]
 ```
@@ -52,14 +52,14 @@ Técnica segura, resultado personalizado
 ### CTA Versão Preventivo (para público mais jovem)
 ```
 A melhor hora para começar é antes das rugas aparecerem
-Avaliação gratuita — sem compromisso
+Agende sua avaliação
 📲 [CONTATO]
 ```
 
 ### CTA Versão Social Proof
 ```
 O procedimento mais realizado em clínicas estéticas no Brasil
-Descubra por quê — Avaliação gratuita
+Descubra por quê — Agende sua avaliação
 📲 [CONTATO]
 ```
 

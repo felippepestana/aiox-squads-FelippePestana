@@ -34,7 +34,7 @@
 
 | Tempo    | Cena                                                              | Legenda                                                  |
 |----------|-------------------------------------------------------------------|----------------------------------------------------------|
-| 0s – 5s  | Close da luz LED colorida em detalhe (vermelho/azul) — visual impactante | **"Sabia que a luz pode rejuvenescer sua pele?"** |
+| 0s – 5s  | Close da luz LED colorida em detalhe (vermelho/azul) — visual impactante | **"Sabia que a luz pode renovar sua pele?"**      |
 | 5s – 11s | Paciente sob o painel LED relaxada, expressão serena              | **"Foto Terapia Facial — ciência e bem-estar"**          |
 | 11s – 15s| Pele com brilho natural, uniforme, jovem                          | **"Indolor, sem downtime, com resultado real."**         |
 
