@@ -23,8 +23,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Use docker driver (not docker-container) so load: true works without re-import
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker
 
       - name: Build chatbot image
         uses: docker/build-push-action@v5
@@ -33,7 +36,6 @@ jobs:
           file: ./chatbot/Dockerfile
           load: true
           tags: aiox-chatbot:scan
-          platforms: linux/amd64
 
       - name: Build web image
         uses: docker/build-push-action@v5
@@ -42,30 +44,32 @@ jobs:
           file: ./web/Dockerfile
           load: true
           tags: aiox-web:scan
-          platforms: linux/amd64
 
-      - name: Run Trivy vulnerability scanner on chatbot
+      - name: Run Trivy on chatbot
         uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: aiox-chatbot:scan
           format: sarif
           output: chatbot-trivy.sarif
 
-      - name: Run Trivy vulnerability scanner on web
+      - name: Run Trivy on web
         uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: aiox-web:scan
           format: sarif
           output: web-trivy.sarif
 
-      - name: Upload Trivy results to GitHub Security
+      # upload-sarif requires GitHub Advanced Security; continue gracefully if unavailable
+      - name: Upload chatbot Trivy results
         uses: github/codeql-action/upload-sarif@v3
+        continue-on-error: true
         with:
           sarif_file: chatbot-trivy.sarif
           category: chatbot-scan
 
       - name: Upload web Trivy results
         uses: github/codeql-action/upload-sarif@v3
+        continue-on-error: true
         with:
           sarif_file: web-trivy.sarif
           category: web-scan
