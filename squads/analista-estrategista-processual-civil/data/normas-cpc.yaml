@@ -1,0 +1,85 @@
+metadata:
+  version: "1.0"
+  created: "2026-05-15"
+  squad: "analista-estrategista-processual-civil"
+  description: "Referências normativas CPC 2015 e fontes autorizadas para pesquisa processual civil"
+
+legislacao_principal:
+  cpc_2015:
+    nome: "Código de Processo Civil"
+    lei: "Lei nº 13.105, de 16 de março de 2015"
+    url: "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13105.htm"
+    vigencia: "2016-03-18"
+    artigos_criticos:
+      - { artigo: "art. 17", tema: "Condições da ação: legitimidade e interesse" }
+      - { artigo: "art. 300", tema: "Tutela antecipada de urgência" }
+      - { artigo: "art. 305", tema: "Tutela cautelar" }
+      - { artigo: "art. 319", tema: "Requisitos da petição inicial" }
+      - { artigo: "art. 335", tema: "Prazo para contestação (15 dias)" }
+      - { artigo: "art. 343", tema: "Reconvenção" }
+      - { artigo: "art. 357", tema: "Saneamento e organização do processo" }
+      - { artigo: "art. 373", tema: "Ônus da prova" }
+      - { artigo: "art. 485", tema: "Extinção sem resolução de mérito" }
+      - { artigo: "art. 487", tema: "Extinção com resolução de mérito" }
+      - { artigo: "art. 489", tema: "Elementos essenciais da sentença" }
+      - { artigo: "art. 509", tema: "Liquidação de sentença" }
+      - { artigo: "art. 523", tema: "Cumprimento de sentença — prazo 15 dias" }
+      - { artigo: "art. 914", tema: "Embargos à execução" }
+      - { artigo: "art. 996", tema: "Legitimidade recursal" }
+      - { artigo: "art. 1003", tema: "Prazos recursais" }
+      - { artigo: "art. 1007", tema: "Preparo recursal" }
+      - { artigo: "art. 1009", tema: "Apelação" }
+      - { artigo: "art. 1015", tema: "Agravo de instrumento — rol taxativo" }
+      - { artigo: "art. 1021", tema: "Agravo interno" }
+      - { artigo: "art. 1022", tema: "Embargos de declaração" }
+      - { artigo: "art. 1026", tema: "Multa por embargos protelatórios" }
+      - { artigo: "art. 1029", tema: "Recurso especial e extraordinário" }
+      - { artigo: "art. 1036", tema: "Recurso repetitivo (teses vinculantes)" }
+      - { artigo: "art. 1043", tema: "Embargos de divergência" }
+
+codigo_civil:
+  nome: "Código Civil"
+  lei: "Lei nº 10.406, de 10 de janeiro de 2002"
+  url: "https://www.planalto.gov.br/ccivil_03/leis/2002/l10406compilada.htm"
+  artigos_prescricao:
+    - { artigo: "art. 205", tema: "Prescrição geral — 10 anos" }
+    - { artigo: "art. 206", tema: "Prescrições especiais (1 a 5 anos)" }
+    - { artigo: "art. 206-A", tema: "Prescrição geral supletiva — 5 anos" }
+    - { artigo: "art. 207", tema: "Causas impeditivas da prescrição" }
+    - { artigo: "art. 202", tema: "Interrupção da prescrição" }
+
+fontes_jurisprudencia:
+  stj:
+    nome: "Superior Tribunal de Justiça"
+    url: "https://www.stj.jus.br"
+    busca_jurisprudencia: "https://processo.stj.jus.br/SCON/"
+    busca_teses: "https://scon.stj.jus.br/SCON/jt/"
+    prioridade: 1
+  stf:
+    nome: "Supremo Tribunal Federal"
+    url: "https://www.stf.jus.br"
+    busca_repercussao: "https://repercussao.stf.jus.br/"
+    prioridade: 1
+  planalto:
+    nome: "Portal da Legislação Federal"
+    url: "https://www.planalto.gov.br"
+    prioridade: 1
+  jusbrasil:
+    nome: "JusBrasil (consolidado — verificar autenticidade)"
+    url: "https://www.jusbrasil.com.br"
+    prioridade: 2
+  conjur:
+    nome: "Consultor Jurídico (doutrina — referência secundária)"
+    url: "https://www.conjur.com.br"
+    prioridade: 3
+
+prazos_recursais:
+  apelacao: { prazo_dias: 15, artigo: "CPC art. 1003, §5º c/c art. 1009" }
+  agravo_instrumento: { prazo_dias: 15, artigo: "CPC art. 1003, §5º c/c art. 1015" }
+  agravo_interno: { prazo_dias: 15, artigo: "CPC art. 1021, §2º" }
+  embargos_declaracao: { prazo_dias: 5, artigo: "CPC art. 1023" }
+  resp_re: { prazo_dias: 15, artigo: "CPC art. 1003, §5º c/c art. 1029" }
+  contestacao: { prazo_dias: 15, artigo: "CPC art. 335" }
+  cumprimento_sentenca: { prazo_dias: 15, artigo: "CPC art. 523" }
+  embargos_execucao: { prazo_dias: 15, artigo: "CPC art. 915" }
+  fazenda_publica: { multiplicador: 2, artigo: "CPC art. 183" }
