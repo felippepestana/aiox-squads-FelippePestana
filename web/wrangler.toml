@@ -3,6 +3,9 @@ main = "dist/worker/index.js"
 compatibility_date = "2026-03-20"
 compatibility_flags = ["nodejs_compat"]
 
+[build]
+command = "npm ci && npm run build && node scripts/bundle-squads.mjs"
+
 [assets]
 directory = "./dist/client"
 
