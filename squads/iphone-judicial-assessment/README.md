@@ -111,7 +111,8 @@ squads/iphone-judicial-assessment/
 │   ├── 04-report-generation.md
 │   └── 05-qc-validation.md
 ├── templates/
-│   ├── laudo-tecnico.md          ← Modelo completo com exemplo iPhone 16 Pro Max
+│   ├── laudo-tecnico.md                        ← Template puro com placeholders [CAMPO]
+│   ├── laudo-tecnico-exemplo-iphone16promax.md ← Exemplo preenchido: iPhone 16 Pro Max
 │   └── quesitos-padrao.md
 ├── data/
 │   ├── nbr-references.md
