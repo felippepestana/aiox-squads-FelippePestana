@@ -1,0 +1,63 @@
+workflow:
+  id: wf-diagnostico-rapido
+  name: "Diagnóstico Processual Rápido"
+  version: "1.0.0"
+  squad: analista-estrategista-processual-civil
+  trigger: UC-AEPC-002
+  description: |
+    Workflow rápido de diagnóstico processual civil. Executa apenas o Tier 0
+    (classificação + auditoria CPC) e gera relatório de diagnóstico simplificado.
+    Ideal para verificar prazos, status e riscos imediatos sem análise profunda.
+  estimated_duration: "5-10 min"
+
+phases:
+  PHASE-1:
+    name: "Classificação da Demanda"
+    agent: chefe-estrategico
+    type: SEQUENTIAL
+    actions:
+      - Receber a demanda de diagnóstico
+      - Classificar como UC-AEPC-002
+      - Ativar pipeline de diagnóstico rápido
+    output: UC-AEPC-002 confirmado
+    quality_gate: QG-AEPC-001
+
+  PHASE-2:
+    name: "Triagem e Diagnóstico CPC"
+    agents: [classificador-civel, auditor-processual]
+    type: SEQUENTIAL
+    depends_on: PHASE-1
+    actions:
+      - classificador-civel identifica tipo de ação, fase e partes
+      - auditor-processual audita riscos CPC com ênfase em prazos imediatos
+    output: Ficha de classificação + Relatório de Auditoria CPC
+    quality_gates:
+      - QG-AEPC-002
+      - QG-AEPC-003
+
+  PHASE-3:
+    name: "Relatório de Diagnóstico"
+    agent: redator-estrategico
+    type: SEQUENTIAL
+    depends_on: PHASE-2
+    actions:
+      - Consolidar outputs do Tier 0
+      - Redigir relatório MODO_DIAGNOSTICO (simplificado)
+      - Salvar via Write
+    output: "Diagnóstico salvo em diagnostico-civel-[slug]-[data].md"
+    quality_gate: QG-AEPC-004
+
+quality_checklist:
+  - "[ ] UC-AEPC-002 classificado"
+  - "[ ] Tipo de ação e fase identificados"
+  - "[ ] Riscos CPC com artigos auditados"
+  - "[ ] Prazos imediatos identificados"
+  - "[ ] Diagnóstico salvo via Write"
+
+completion_signals:
+  success:
+    - "Diagnóstico salvo via Write"
+    - "Prazos imediatos listados"
+  failure:
+    - "@redator-estrategico não usou Write"
+    - "Auditoria sem artigos CPC"
