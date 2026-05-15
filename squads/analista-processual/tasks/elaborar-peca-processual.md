@@ -59,7 +59,7 @@ documento final via Write.
 5. Incorporar fundamentos legais e jurisprudência fornecidos pelo @pesquisador-juridico
 6. Alinhar os pedidos à estratégia definida pelo @estrategista-processual (se disponível)
 7. Revisar a peça: verificar coerência dos pedidos, completude dos fundamentos, linguagem formal
-8. Salvar o documento via Write em `output/pecas/[tipo]-[YYYYMMDD]-[identificador].md`
+8. Salvar o documento via Write em `output/pecas/[tipo-documento]-[YYYYMMDD]-[parte].md`
 9. Confirmar ao @analista-chefe o caminho do arquivo salvo
 
 ## Output

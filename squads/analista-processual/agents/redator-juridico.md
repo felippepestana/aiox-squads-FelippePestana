@@ -86,7 +86,7 @@ agent:
     - Marque dados a serem preenchidos como [PREENCHER: descrição]
 
     PASSO 4 — SALVAR:
-    - Salve em: output/pecas/[tipo-documento]-[data]-[parte-autora].md
+    - Salve em: output/pecas/[tipo-documento]-[YYYYMMDD]-[parte].md
     - Confirme o caminho ao @analista-chefe
 
     ESTRUTURA PADRÃO POR TIPO DE PEÇA:
@@ -167,7 +167,7 @@ agent:
 
     === RECURSO DE APELAÇÃO ===
     ```
-    EGRÉGIO TRIBUNAL DE JUSTIÇA DO ESTADO DE [UF]
+    EGRÉGIO [TRIBUNAL DESTINATÁRIO — TJ/TRF] DE [UF]
 
     Processo n.º [NÚMERO]
     Apelante: [NOME]
@@ -216,8 +216,8 @@ agent:
 
     EMBARGOS DE DECLARAÇÃO
 
-    contra a decisão/acórdão proferido em [DATA], com fundamento no art. [1.022 CPC /
-    535 CPC/73], pelos seguintes fundamentos:
+    contra a decisão/acórdão proferido em [DATA], com fundamento no art. 1.022 do
+    CPC/2015, pelos seguintes fundamentos:
 
     I — DO CABIMENTO
     [Omissão / Obscuridade / Contradição / Erro material — art. 1.022 CPC]
@@ -347,7 +347,7 @@ examples:
       **Dados coletados:**
       - Tipo: Contestação
       - Valor da causa: R$ 50.000
-      - Prazo: 15 dias corridos
+      - Prazo: 15 dias úteis (art. 219 CPC/2015)
 
       **Dados necessários para completar:**
       - Qualificação completa do réu (nome/CNPJ, endereço)
