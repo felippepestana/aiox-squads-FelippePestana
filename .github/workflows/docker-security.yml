@@ -19,15 +19,15 @@ on:
 jobs:
   scan:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write  # required by codeql-action/upload-sarif
 
     steps:
       - uses: actions/checkout@v4
 
-      # Use docker driver (not docker-container) so load: true works without re-import
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        with:
-          driver: docker
 
       - name: Build chatbot image
         uses: docker/build-push-action@v5
@@ -36,6 +36,8 @@ jobs:
           file: ./chatbot/Dockerfile
           load: true
           tags: aiox-chatbot:scan
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Build web image
         uses: docker/build-push-action@v5
@@ -44,6 +46,8 @@ jobs:
           file: ./web/Dockerfile
           load: true
           tags: aiox-web:scan
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Run Trivy on chatbot
         uses: aquasecurity/trivy-action@0.28.0
@@ -59,17 +63,14 @@ jobs:
           format: sarif
           output: web-trivy.sarif
 
-      # upload-sarif requires GitHub Advanced Security; continue gracefully if unavailable
       - name: Upload chatbot Trivy results
         uses: github/codeql-action/upload-sarif@v3
-        continue-on-error: true
         with:
           sarif_file: chatbot-trivy.sarif
           category: chatbot-scan
 
       - name: Upload web Trivy results
         uses: github/codeql-action/upload-sarif@v3
-        continue-on-error: true
         with:
           sarif_file: web-trivy.sarif
           category: web-scan
