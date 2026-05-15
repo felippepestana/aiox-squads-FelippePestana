@@ -1,0 +1,298 @@
+metadata:
+  version: "1.0"
+  created: "2026-05-15"
+  squad: "clinic-mgmt"
+
+squad:
+  name: "clinic-mgmt"
+  display_name: "Clínica Anmar — Gestão Inteligente"
+  version: "1.0.0"
+  domain: "Healthcare Operations & Clinic Management"
+  description: |
+    Squad completo de gestão para clínica de estética, emagrecimento e qualidade de vida.
+    Orquestra atendimento médico com IA de voz, análise visual de evolução, follow-up
+    humanizado via WhatsApp, gestão financeira com DRE especializada e integração contábil
+    automática. 8 agentes cobrindo toda a operação da Clínica Anmar.
+  philosophy: |
+    "Cada paciente merece cuidado preciso, acompanhamento humanizado e resultados visíveis —
+    potencializados por agentes IA que eliminam burocracia e ampliam qualidade."
+  keywords:
+    - clinic-management
+    - estetica
+    - emagrecimento
+    - hormonal
+    - prontuario-eletronico
+    - analise-visual
+    - follow-up
+    - dre
+    - integracao-contabil
+    - brasil
+    - lgpd
+    - whatsapp
+  entry_agent: clinic-chief
+  slash_prefix: "anmar"
+  pattern_prefix: "AN"
+
+tiers:
+  tier_0:
+    name: "Orquestração Central"
+    agents: [clinic-chief]
+    purpose: "Router principal, QA gates, síntese multi-módulo. Ativa sempre primeiro."
+  tier_1:
+    name: "Masters Operacionais"
+    agents: [intake-coordinator, medical-ops, patient-care, financial-intel]
+    purpose: "Especialistas por domínio: cadastros, atendimento, acompanhamento, financeiro."
+  tier_2:
+    name: "Especialistas Técnicos"
+    agents: [visual-analyst, accounting-bridge, stock-controller]
+    purpose: "Foco técnico profundo: visão computacional, APIs externas, inventário."
+  tier_3:
+    name: "Suporte Transversal"
+    agents: [chatbot-humanized]
+    purpose: "Chatbot paciente com escalada inteligente para humano."
+
+agents:
+  clinic-chief:
+    file: agents/clinic-chief.md
+    tier: tier_0
+    icon: "🏥"
+    focus: "Orquestração de módulos, classificação de use cases, QA gates, síntese"
+  intake-coordinator:
+    file: agents/intake-coordinator.md
+    tier: tier_1
+    icon: "📋"
+    focus: "Cadastro de colaboradores, protocolos de tratamento, procedimentos e serviços"
+  medical-ops:
+    file: agents/medical-ops.md
+    tier: tier_1
+    icon: "🩺"
+    focus: "Atendimento médico com IA de voz, prontuário automático, agendamento pós-consulta"
+  patient-care:
+    file: agents/patient-care.md
+    tier: tier_1
+    icon: "💚"
+    focus: "Follow-up personalizado, histórico do paciente, acompanhamento de tratamento"
+  financial-intel:
+    file: agents/financial-intel.md
+    tier: tier_1
+    icon: "💰"
+    focus: "Fluxo de caixa, DRE especializada, contratos, alertas financeiros"
+  visual-analyst:
+    file: agents/visual-analyst.md
+    tier: tier_2
+    icon: "📷"
+    focus: "Análise de fotos corporais, predição de resultado, comparação de evolução"
+  accounting-bridge:
+    file: agents/accounting-bridge.md
+    tier: tier_2
+    icon: "🔗"
+    focus: "Sincronização com Conta Azul, Omie, Tangerino, NF-e — sem duplicatas"
+  stock-controller:
+    file: agents/stock-controller.md
+    tier: tier_2
+    icon: "📦"
+    focus: "Inventário de insumos/medicamentos, dispensação, projeção de compras"
+  chatbot-humanized:
+    file: agents/chatbot-humanized.md
+    tier: tier_3
+    icon: "💬"
+    focus: "Chatbot paciente WhatsApp/Web com personalidade humanizada e escalada inteligente"
+
+handoffs:
+  clinic-chief:
+    routes_to: [intake-coordinator, medical-ops, patient-care, financial-intel, visual-analyst, accounting-bridge, stock-controller, chatbot-humanized]
+  intake-coordinator:
+    collaborates_with: [stock-controller]
+    escalates_to: [clinic-chief]
+  medical-ops:
+    triggers: [stock-controller, patient-care]
+    escalates_to: [clinic-chief]
+  patient-care:
+    triggers: [chatbot-humanized]
+    escalates_to: [clinic-chief]
+  financial-intel:
+    triggers: [accounting-bridge]
+    escalates_to: [clinic-chief]
+  visual-analyst:
+    returns_to: [medical-ops, patient-care]
+    escalates_to: [clinic-chief]
+  accounting-bridge:
+    receives_from: [financial-intel]
+    returns_to: [clinic-chief]
+  stock-controller:
+    receives_from: [medical-ops, intake-coordinator]
+    escalates_to: [clinic-chief]
+  chatbot-humanized:
+    receives_from: [patient-care]
+    escalates_to: [patient-care]
+
+pipeline:
+  use_cases:
+    UC-AN-001:
+      name: "Nova Consulta Médica"
+      trigger_patterns: ["abrir consulta", "atendimento", "consulta", "novo paciente", "iniciar atendimento"]
+      agents: [medical-ops, stock-controller]
+    UC-AN-002:
+      name: "Cadastrar Protocolo ou Procedimento"
+      trigger_patterns: ["cadastrar protocolo", "novo procedimento", "cadastrar tratamento", "novo serviço"]
+      agents: [intake-coordinator]
+    UC-AN-003:
+      name: "Análise Visual de Evolução"
+      trigger_patterns: ["análise visual", "foto evolução", "before after", "bioimpedância", "comparar fotos"]
+      agents: [visual-analyst]
+    UC-AN-004:
+      name: "Follow-Up de Paciente"
+      trigger_patterns: ["follow-up", "acompanhamento", "contato paciente", "régua de comunicação"]
+      agents: [patient-care, chatbot-humanized]
+    UC-AN-005:
+      name: "Relatório Financeiro / DRE"
+      trigger_patterns: ["DRE", "financeiro", "fluxo de caixa", "receita", "resultado financeiro"]
+      agents: [financial-intel, accounting-bridge]
+    UC-AN-006:
+      name: "Controle de Estoque"
+      trigger_patterns: ["estoque", "insumo", "medicamento", "dispensação", "compra"]
+      agents: [stock-controller]
+    UC-AN-007:
+      name: "Sincronização Contábil"
+      trigger_patterns: ["contabilidade", "conta azul", "omie", "exportar", "NF-e", "nota fiscal"]
+      agents: [accounting-bridge]
+    UC-AN-008:
+      name: "Onboarding de Paciente"
+      trigger_patterns: ["novo paciente", "cadastrar paciente", "onboarding", "primeira consulta"]
+      agents: [intake-coordinator, patient-care]
+
+quality_gates:
+  QG-AN-001:
+    name: "Use Case Classificado"
+    agent: clinic-chief
+    criteria: "Use case identificado antes de acionar qualquer agente especialista"
+  QG-AN-002:
+    name: "Prontuário Médico Completo"
+    agent: medical-ops
+    criteria: "Transcrição + estruturação + revisão médica + assinatura digital presentes"
+  QG-AN-003:
+    name: "LGPD Compliance"
+    agent: clinic-chief
+    criteria: "Consentimento LGPD registrado antes de processar dados de paciente"
+  QG-AN-004:
+    name: "Sincronização sem Duplicatas"
+    agent: accounting-bridge
+    criteria: "Cada transação tem UUID único — idempotência verificada antes de exportar"
+  QG-AN-005:
+    name: "Estoque Atualizado"
+    agent: stock-controller
+    criteria: "Baixa de insumos registrada para cada procedimento realizado"
+
+tools:
+  WebSearch:
+    used_by: [visual-analyst, financial-intel]
+    purpose: "Pesquisa de referências visuais e benchmarks financeiros"
+  Read:
+    used_by: [clinic-chief, medical-ops, patient-care, financial-intel, intake-coordinator]
+    purpose: "Leitura de prontuários, documentos e dados do paciente"
+  Write:
+    used_by: [medical-ops, patient-care, financial-intel, visual-analyst]
+    purpose: "Salvar prontuários, relatórios e análises"
+  Bash:
+    used_by: [accounting-bridge, stock-controller]
+    purpose: "Execução de scripts de sincronização e integração de APIs"
+
+skills:
+  - id: voice-transcription
+    provider: openai-whisper
+    used_by: [medical-ops]
+  - id: visual-body-analysis
+    provider: openai-vision
+    used_by: [visual-analyst]
+  - id: whatsapp-send
+    provider: meta-graph-api
+    used_by: [chatbot-humanized, patient-care]
+  - id: protocol-recommender
+    provider: claude-api
+    used_by: [intake-coordinator]
+  - id: dre-builder
+    provider: claude-api
+    used_by: [financial-intel]
+  - id: schedule-optimizer
+    provider: claude-api
+    used_by: [clinic-chief]
+  - id: stock-forecast
+    provider: claude-api
+    used_by: [stock-controller]
+  - id: lgpd-validator
+    provider: claude-api
+    used_by: [clinic-chief]
+  - id: digital-signature
+    provider: icp-brasil
+    used_by: [medical-ops]
+  - id: accounting-sync
+    provider: conta-azul-api
+    used_by: [accounting-bridge]
+
+integrations:
+  required:
+    - name: WhatsApp Business API
+      provider: Meta Graph API v19+
+      fallback: Twilio
+      used_by: [chatbot-humanized, patient-care]
+    - name: Conta Azul API
+      provider: Conta Azul
+      alternative: Omie API
+      used_by: [accounting-bridge]
+    - name: OpenAI Whisper
+      provider: OpenAI
+      used_by: [medical-ops]
+    - name: OpenAI Vision
+      provider: OpenAI
+      fallback: AWS Rekognition
+      used_by: [visual-analyst]
+    - name: Asaas
+      provider: Asaas
+      alternative: Pagar.me
+      used_by: [financial-intel]
+    - name: NFe.io
+      provider: NFe.io
+      used_by: [accounting-bridge]
+  optional:
+    - name: Tangerino (Sólides)
+      used_by: [accounting-bridge]
+      purpose: Ponto eletrônico → custo hora
+    - name: Firebase Cloud Messaging
+      used_by: [chatbot-humanized]
+      purpose: Push notifications mobile paciente
+    - name: SERPRO Integra Contador
+      used_by: [accounting-bridge]
+      purpose: Dados fiscais oficiais
+
+compliance:
+  lgpd: true
+  cfm_1821: true
+  anvisa_rdc: true
+  icp_brasil_signature: true
+  data_retention_years: 20
+  audit_trail: immutable
+
+settings:
+  activation:
+    prefix: "anmar"
+    slash: "/anmar"
+    example: "@clinic-chief UC-AN-001"
+  language: "pt-BR"
+  greeting:
+    show_use_cases: true
+    show_pipeline_status: true
+
+quality_standards:
+  min_score: 8.0
+  smoke_tests:
+    - "Abrir consulta médica com transcrição de voz"
+    - "Gerar DRE do mês com integração Conta Azul"
+    - "Follow-up automático via WhatsApp após consulta"
+    - "Análise visual before/after de paciente"
+    - "Cadastrar protocolo de emagrecimento com 8 steps"
+
+stats:
+  total_agents: 9
+  total_tasks: 9
+  total_templates: 5
+  total_data_files: 4

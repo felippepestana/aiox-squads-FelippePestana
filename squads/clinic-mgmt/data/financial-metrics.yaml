@@ -1,0 +1,176 @@
+metadata:
+  version: "1.0"
+  created: "2026-05-15"
+  squad: "clinic-mgmt"
+  description: "KPIs financeiros e benchmarks para clínicas de estética/saúde no Brasil"
+
+kpis_essenciais:
+  receita:
+    ticket_medio:
+      descricao: "Receita total / Nº de atendimentos no período"
+      benchmark_clinica_estetica: "R$ 350 - R$ 1.200"
+      alerta_baixo: "Ticket médio abaixo de R$ 300 indica precificação inadequada"
+
+    receita_por_medico:
+      descricao: "Receita gerada por médico no período"
+      meta_referencia: "R$ 25.000 - R$ 80.000/mês por médico"
+
+    receita_recorrente:
+      descricao: "Pacientes que voltam vs. novos pacientes"
+      benchmark: "60-70% da receita deve ser de pacientes recorrentes"
+      saude: "> 60% = saudável"
+
+  custos:
+    cogs_pct:
+      descricao: "CMV / Receita Líquida"
+      benchmark: "25% a 40%"
+      alerta_alto: "CMV > 45% indica problema de precificação ou desperdício de insumos"
+
+    custo_aquisicao_paciente:
+      sigla: CAC
+      formula: "Gastos de Marketing / Novos Pacientes no Período"
+      benchmark: "R$ 50 - R$ 300 para clínicas estéticas"
+      alerta: "CAC > R$ 500 exige revisão da estratégia de marketing"
+
+    lifetime_value:
+      sigla: LTV
+      formula: "Ticket médio × Nº médio de atendimentos × Tempo de retenção (meses)"
+      meta: "LTV / CAC > 3x"
+
+  margens:
+    margem_bruta:
+      formula: "(Receita Líquida - CMV) / Receita Líquida"
+      benchmark_clinica_estetica: "55% a 75%"
+      critico_abaixo: "50%"
+
+    ebitda:
+      formula: "Receita Líquida - CMV - Despesas Operacionais"
+      benchmark: "15% a 30%"
+      alerta_baixo: "EBITDA < 10% exige revisão de custos"
+
+    margem_liquida:
+      formula: "Lucro Líquido / Receita Bruta"
+      benchmark: "10% a 22%"
+      alerta_critico: "< 5%"
+
+  operacional:
+    taxa_ocupacao:
+      descricao: "Agendamentos realizados / Capacidade total de horários"
+      meta: "> 75%"
+      critico_abaixo: "< 50% = ociosidade cara"
+
+    taxa_no_show:
+      descricao: "Pacientes que faltaram / Total agendado"
+      meta: "< 8%"
+      alerta_alto: "> 15% impacta significativamente a receita"
+
+    taxa_cancelamento:
+      descricao: "Cancelamentos / Total agendado"
+      meta: "< 12%"
+      acao: "Implementar política de cancelamento com antecedência mínima de 24h"
+
+    indice_recompra:
+      descricao: "Pacientes que retornaram / Total de pacientes ativos"
+      meta: "> 60%"
+      impacto: "Cada % de recompra adicional = receita recorrente crescente"
+
+  financeiro:
+    dias_recebimento:
+      descricao: "Tempo médio para receber após o atendimento"
+      meta: "< 30 dias"
+      alerta_alto: "> 60 dias indica problema de inadimplência ou fluxo de pagamento"
+
+    inadimplencia:
+      descricao: "Saldo vencido > 30 dias / Receita total"
+      meta: "< 3%"
+      alerta: "> 8% exige ação imediata de cobrança"
+
+    cobertura_custos_fixos:
+      descricao: "Nº de dias para cobrir custos fixos com a receita gerada"
+      meta: "< 15 dias úteis do mês"
+      alerta: "> 20 dias = ponto de equilíbrio preocupante"
+
+    reserva_emergencia:
+      descricao: "Caixa disponível / Despesas fixas mensais"
+      meta: "> 3 meses"
+      minimo_aceitavel: "1.5 meses"
+
+alertas_automaticos:
+  criticos:
+    - condition: "caixa < 1.5 meses de despesas fixas"
+      severity: CRITICAL
+      message: "Caixa crítico — reserva abaixo de 45 dias de operação"
+      action: "Revisão imediata com sócio/gestor"
+
+    - condition: "inadimplencia > 10%"
+      severity: CRITICAL
+      message: "Inadimplência acima de 10% da receita"
+      action: "Acionar processo de cobrança"
+
+    - condition: "margem_liquida < 5%"
+      severity: HIGH
+      message: "Margem líquida abaixo de 5%"
+      action: "Revisão de precificação e custos"
+
+  alertas:
+    - condition: "taxa_no_show > 15%"
+      severity: HIGH
+      message: "No-show acima de 15% — impacto significativo na receita"
+      action: "Revisar política de lembrete e cancelamento"
+
+    - condition: "cogs_pct > 45%"
+      severity: MEDIUM
+      message: "CMV acima de 45% — verificar desperdício de insumos"
+      action: "Auditoria de estoque e procedimentos"
+
+    - condition: "taxa_ocupacao < 60%"
+      severity: MEDIUM
+      message: "Taxa de ocupação abaixo de 60%"
+      action: "Campanha de agendamento + revisão de precificação para períodos ociosos"
+
+dre_categorias_clinica:
+  receitas:
+    - code: REC-EST-FAC
+      descricao: "Receita — Estética Facial"
+    - code: REC-EST-COR
+      descricao: "Receita — Estética Corporal"
+    - code: REC-EMA
+      descricao: "Receita — Emagrecimento e Nutrologia"
+    - code: REC-HOR
+      descricao: "Receita — Saúde Hormonal"
+    - code: REC-MED
+      descricao: "Receita — Medicina Preventiva/Funcional"
+    - code: REC-CON
+      descricao: "Receita — Consultas Médicas"
+    - code: REC-SUP
+      descricao: "Receita — Suplementos e Medicamentos"
+    - code: REC-OUT
+      descricao: "Outras Receitas"
+
+  custos_diretos:
+    - code: CMV-INS
+      descricao: "CMV — Insumos e Materiais"
+    - code: CMV-MED
+      descricao: "CMV — Medicamentos Dispensados"
+    - code: CMV-LAB
+      descricao: "CMV — Custo Hora Profissional Clínico"
+
+  despesas_operacionais:
+    - code: OPEX-FOL
+      descricao: "Folha de Pagamento Administrativa"
+    - code: OPEX-ALU
+      descricao: "Aluguel e Condomínio"
+    - code: OPEX-UTI
+      descricao: "Energia, Água e Utilidades"
+    - code: OPEX-MKT
+      descricao: "Marketing e Publicidade"
+    - code: OPEX-TEC
+      descricao: "Tecnologia e Sistemas"
+    - code: OPEX-MAN
+      descricao: "Manutenção de Equipamentos"
+    - code: OPEX-ADM
+      descricao: "Administrativo (contabilidade, jurídico, etc.)"
+    - code: OPEX-DEP
+      descricao: "Depreciação de Equipamentos"
+    - code: OPEX-OUT
+      descricao: "Outras Despesas Operacionais"

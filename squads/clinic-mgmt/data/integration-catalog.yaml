@@ -1,0 +1,217 @@
+metadata:
+  version: "1.0"
+  created: "2026-05-15"
+  squad: "clinic-mgmt"
+  description: "Catálogo de APIs, MCPs e integrações para a Clínica Anmar"
+
+# ============================================================
+# COMUNICAÇÃO
+# ============================================================
+whatsapp_business_api:
+  provider: "Meta"
+  type: "REST API"
+  base_url: "https://graph.facebook.com/v19.0"
+  auth: "Bearer Token (long-lived)"
+  docs: "https://developers.facebook.com/docs/whatsapp"
+  fallback: "Twilio WhatsApp API"
+  used_by: [chatbot-humanized, patient-care]
+  capabilities:
+    - Envio de mensagens de texto
+    - Templates de mensagem (necessário aprovação Meta)
+    - Mensagens de imagem/documento
+    - Webhooks para mensagens recebidas
+    - Status de entrega e leitura
+  cost_model: "Pay-per-conversation (R$ 0,10 a R$ 0,25 por conversa/24h)"
+  setup_requirements:
+    - Número de telefone verificado
+    - Conta Business Manager no Facebook
+    - Aprovação de templates de mensagem
+
+firebase_fcm:
+  provider: "Google Firebase"
+  type: "SDK + REST API"
+  auth: "Service Account JSON"
+  used_by: [chatbot-humanized]
+  capabilities:
+    - Push notifications Android/iOS
+    - Background notifications
+    - Data messages
+  cost_model: "Gratuito até 500k mensagens/dia"
+
+# ============================================================
+# FINANCEIRO / PAGAMENTOS
+# ============================================================
+asaas:
+  provider: "Asaas Soluções Financeiras"
+  type: "REST API"
+  base_url: "https://api.asaas.com/v3"
+  auth: "API Key no header access_token"
+  docs: "https://docs.asaas.com"
+  alternative: "Pagar.me"
+  used_by: [financial-intel]
+  capabilities:
+    - Cobranças: PIX, boleto, cartão de crédito
+    - Link de pagamento
+    - Assinaturas recorrentes
+    - Webhooks de pagamento confirmado
+    - Split de pagamentos (para franquias)
+    - Emissão de NF-e integrada (parceria)
+  cost_model: "% por transação: PIX 1.99%, Boleto R$ 1.99, Cartão 2.99% a 3.49%"
+  sandbox_available: true
+
+nfe_io:
+  provider: "NFe.io"
+  type: "REST API"
+  base_url: "https://api.nfe.io/v1"
+  auth: "API Key no header Authorization"
+  docs: "https://nfe.io/docs"
+  used_by: [accounting-bridge]
+  capabilities:
+    - Emissão NF-e (produtos) e NFS-e (serviços)
+    - Cancelamento e correção
+    - Download XML e PDF
+    - Webhooks de status (emitido, cancelado, rejeitado)
+    - Homologação com todas as prefeituras
+  cost_model: "Pay-per-use: R$ 0,15 a R$ 0,50 por NF emitida + plano mensal"
+  ciddes_homologadas: "5.500+ municípios brasileiros"
+
+# ============================================================
+# CONTABILIDADE / ERP
+# ============================================================
+conta_azul:
+  provider: "Conta Azul"
+  type: "REST API"
+  base_url: "https://api.contaazul.com/v1"
+  auth: "OAuth2 (Authorization Code)"
+  docs: "https://developers.contaazul.com"
+  used_by: [accounting-bridge]
+  plan_recommendation: "Pro — R$ 149/mês (suporta API e multi-usuário)"
+  capabilities:
+    - Lançamentos financeiros (receitas e despesas)
+    - Contas a pagar e receber
+    - Conciliação bancária
+    - Relatórios financeiros
+    - DRE e Balanço
+    - Emissão NF-e (integrado)
+    - Gestão de estoque (básico)
+  best_for: "PME — interface amigável, ótimo custo-benefício"
+
+omie:
+  provider: "Omie ERP"
+  type: "REST API"
+  base_url: "https://app.omie.com.br/api/v1"
+  auth: "app_key + app_secret (por chamada)"
+  docs: "https://developer.omie.com.br"
+  used_by: [accounting-bridge]
+  plan_recommendation: "Essencial — R$ 149/mês ou Avançado R$ 249/mês"
+  capabilities:
+    - ERP completo: financeiro, contábil, fiscal
+    - Módulo de notas fiscais
+    - Contas a pagar/receber
+    - Ordens de serviço
+    - Multi-empresa e multi-filial
+    - Relatórios SPED
+  best_for: "Empresas que precisam de ERP completo com módulo fiscal robusto"
+
+# ============================================================
+# RH / PONTO ELETRÔNICO
+# ============================================================
+tangerino:
+  provider: "Tangerino (Sólides)"
+  type: "REST API"
+  base_url: "https://api.tangerino.com.br/api/v2"
+  auth: "API Key"
+  docs: "https://developers.tangerino.com.br"
+  used_by: [accounting-bridge]
+  capabilities:
+    - Registro de ponto eletrônico
+    - Relatório de horas trabalhadas por colaborador
+    - Exportação por centro de custo
+    - Integração com folha de pagamento
+    - Banco de horas
+  cost_model: "Por colaborador/mês — R$ 6 a R$ 15"
+  relevance: "Custo hora profissional → composição de custo de procedimento"
+
+# ============================================================
+# AI / MACHINE LEARNING
+# ============================================================
+openai_whisper:
+  provider: "OpenAI"
+  type: "REST API"
+  endpoint: "https://api.openai.com/v1/audio/transcriptions"
+  auth: "Bearer Token"
+  used_by: [medical-ops]
+  model: "whisper-1"
+  capabilities:
+    - Transcrição de áudio em 57 idiomas (incluindo pt-BR)
+    - Suporte: mp3, mp4, mpeg, mpga, m4a, wav, webm
+    - Máximo: 25MB por arquivo
+    - Timestamps de palavras (verbose_json)
+  cost_model: "U$ 0.006 por minuto de áudio"
+  latency: "~10s para 5 minutos de áudio"
+
+openai_vision:
+  provider: "OpenAI"
+  type: "REST API"
+  endpoint: "https://api.openai.com/v1/chat/completions"
+  auth: "Bearer Token"
+  model: "gpt-4o"
+  used_by: [visual-analyst]
+  capabilities:
+    - Análise de imagens corporais
+    - Descrição de mudanças visuais
+    - Comparação before/after
+    - Suporte: JPEG, PNG, GIF, WebP
+  cost_model: "U$ 0.0025 por imagem (low detail) a U$ 0.01 (high detail)"
+  fallback: "AWS Rekognition (análise básica)"
+
+claude_api:
+  provider: "Anthropic"
+  type: "REST API + SDK"
+  model_primary: "claude-sonnet-4-6"
+  auth: "API Key"
+  used_by: [clinic-chief, medical-ops, patient-care, financial-intel, intake-coordinator, chatbot-humanized]
+  capabilities:
+    - Raciocínio clínico (estruturação de prontuário)
+    - Geração de DRE e relatórios financeiros
+    - Script de follow-up personalizado
+    - Chatbot humanizado
+    - Análise de métricas e alertas
+  cost_model: "claude-sonnet-4-6: U$ 3 input / U$ 15 output per 1M tokens"
+  context_window: "200K tokens"
+
+# ============================================================
+# GOVERNO / FISCAL
+# ============================================================
+serpro_integra_contador:
+  provider: "SERPRO (Serviço Federal de Processamento de Dados)"
+  type: "REST API"
+  auth: "OAuth2 gov.br"
+  used_by: [accounting-bridge]
+  capabilities:
+    - Consulta de CPF/CNPJ com dados cadastrais (LGPD compliant)
+    - Informações tributárias
+    - Certidões negativas
+  cost_model: "Mediante credenciamento com SERPRO"
+
+# ============================================================
+# MCPs CONFIGURÁVEIS NO CLAUDE CODE
+# ============================================================
+mcps:
+  supabase:
+    status: "Configurado (Supabase MCP)"
+    uso: "Database, auth, storage, realtime"
+  cloudflare:
+    status: "Configurado (Cloudflare MCP)"
+    uso: "Deploy, CDN, R2 storage de fotos"
+  github:
+    status: "Configurado (GitHub MCP)"
+    uso: "CI/CD, code review"
+  whatsapp_mcp:
+    status: "A configurar"
+    descricao: "Bridge para WhatsApp Business API"
+    comando: "claude mcp add whatsapp -- npx whatsapp-mcp-server"
+  accounting_mcp:
+    status: "A configurar"
+    descricao: "Bridge para Conta Azul / Omie"
+    nota: "Implementação custom necessária"

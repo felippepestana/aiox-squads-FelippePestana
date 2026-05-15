@@ -1,0 +1,109 @@
+metadata:
+  version: "1.0"
+  created: "2026-05-15"
+  squad: "clinic-mgmt"
+  description: "Referências de conformidade legal para operação de clínica médica/estética no Brasil"
+
+lgpd:
+  lei: "Lei 13.709/2018"
+  vigencia: "2020-09-18"
+  autoridade: "ANPD — Autoridade Nacional de Proteção de Dados"
+  obrigacoes_clinica:
+    - Coletar consentimento explícito antes de processar dados pessoais de saúde
+    - Dados de saúde são dados sensíveis (art. 11) — exigem consentimento específico
+    - Direito de acesso do paciente aos seus dados (art. 18)
+    - Direito de correção e exclusão (portabilidade)
+    - Nomear DPO (Data Protection Officer) se porte exigir
+    - Manter registro de atividades de tratamento
+    - Notificar ANPD em caso de incidente de segurança (72h)
+  prazos_retencao:
+    prontuarios_medicos: "20 anos (CFM)"
+    dados_financeiros: "5 anos (Receita Federal)"
+    dados_comunicacao: "2 anos"
+  campos_consentimento_obrigatorios:
+    - Finalidade do tratamento dos dados
+    - Identificação do responsável pelo tratamento
+    - Contato do DPO
+    - Direito de revogação do consentimento
+    - Período de retenção
+
+cfm:
+  resolucao_prontuario: "Resolução CFM 1821/2007"
+  resolucao_teleatendimento: "Resolução CFM 2314/2022"
+  obrigacoes:
+    - Prontuário deve ser completo, legível e manter integridade
+    - Guarda mínima de 20 anos (adultos) ou 5 anos após maioridade (menores)
+    - Prontuário eletrônico válido desde 2007 com assinatura digital ICP-Brasil
+    - Médico é responsável legal pelo prontuário
+    - Proibido deletar ou alterar prontuário assinado
+  campos_obrigatorios_prontuario:
+    - Data e hora do atendimento
+    - Identificação completa do paciente
+    - Nome e CRM do médico
+    - Queixa principal
+    - Exame clínico relevante
+    - Hipótese diagnóstica (CID-10 quando aplicável)
+    - Conduta / plano terapêutico
+    - Assinatura digital do médico
+
+assinatura_digital:
+  padrao: "ICP-Brasil (Infraestrutura de Chaves Públicas Brasileira)"
+  orgao: "ITI — Instituto Nacional de Tecnologia da Informação"
+  tipos:
+    - Certificado A1 (software, validade 1 ano)
+    - Certificado A3 (token/cartão, validade 3 anos)
+  validade_legal: "Mesma validade do documento físico assinado"
+  alternativa: "Assinatura eletrônica avançada (art. 10 MP 2200-2) — aceita em prontuários"
+
+anvisa:
+  resolucao_medicamentos: "RDC 27/2007"
+  resolucao_cosmeticos: "RDC 48/2013"
+  resolucao_equipamentos: "RDC 185/2001"
+  obrigacoes_clinica:
+    - Registro na ANVISA para medicamentos dispensados
+    - Controle de rastreabilidade por lote
+    - Profissional habilitado para dispensação
+    - Armazenamento conforme temperatura indicada
+    - Relatório de farmacovigilância para reações adversas
+
+tributario:
+  regime_recomendado_clinica: "Simples Nacional (até R$ 4.8M faturamento)"
+  anexo_servicos_medicos: "Anexo III (serviços médicos, odontológicos)"
+  aliquotas_simples:
+    - faixa: "Até R$ 180.000/ano"
+      aliquota: "6.00%"
+    - faixa: "De R$ 180.001 a R$ 360.000/ano"
+      aliquota: "11.20%"
+    - faixa: "De R$ 360.001 a R$ 720.000/ano"
+      aliquota: "13.50%"
+    - faixa: "Acima de R$ 720.000 até R$ 1.800.000"
+      aliquota: "16.00%"
+  iss: "Alíquota municipal — geralmente 2% a 5% sobre serviços"
+  cnes: "Cadastro Nacional de Estabelecimentos de Saúde — obrigatório para clínicas"
+  cnpj_atividades:
+    - codigo: "8630-5/03"
+      descricao: "Atividade médica ambulatorial restrita a consultas"
+    - codigo: "8630-5/06"
+      descricao: "Serviços de vacinação e imunização humana"
+    - codigo: "8690-9/03"
+      descricao: "Atividades de podologia"
+    - codigo: "9602-5/01"
+      descricao: "Cabeleireiros, manicure e pedicure (para serviços estéticos)"
+    - codigo: "8650-0/06"
+      descricao: "Atividades de fisioterapia"
+
+vigilancia_sanitaria:
+  alvara_funcionamento: "Obrigatório pela Vigilância Sanitária Municipal"
+  requisitos:
+    - Alvará Sanitário Municipal
+    - Responsável Técnico habilitado (médico, biomédico, etc.)
+    - Instalações conforme RDC 50/2002 (projetos físicos estabelecimentos saúde)
+    - Gestão de resíduos (PGRSS — Plano de Gerenciamento de Resíduos de Serviços de Saúde)
+
+crf:
+  sigla: "Conselho Regional de Farmácia"
+  relevancia: "Dispensação de medicamentos exige farmacêutico responsável técnico"
+  obrigacoes:
+    - Farmacêutico RT para dispensação de medicamentos
+    - Controle de receitas médicas
+    - Notificação de psicotrópicos ao SCTC/SNGPC

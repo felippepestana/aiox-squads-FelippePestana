@@ -1,10 +1,65 @@
 metadata:
   version: 1.5.0
-  last_updated: '2026-03-31'
-  total_squads: 10
+  last_updated: '2026-05-15'
+  total_squads: 11
   maintainer: squad-creator
   generated_by: "scripts/refresh-registry.py --write (100% deterministic)"
 squads:
+  clinic-mgmt:
+    path: squads/clinic-mgmt/
+    version: 1.0.0
+    score: 9.5
+    maturity: DEVELOPING
+    validated: false
+    validated_explicit: false
+    auto_promoted: false
+    description: >
+      Squad completo de gestão para clínica de estética, emagrecimento e qualidade de vida.
+      9 agentes cobrindo atendimento médico com IA de voz, análise visual de evolução,
+      follow-up humanizado via WhatsApp, DRE especializada e integração contábil automática
+      com Conta Azul/Omie/Tangerino. Compliance LGPD, CFM 1821 e ANVISA.
+    slashPrefix: 'anmar'
+    counts:
+      agents: 9
+      tasks: 9
+      workflows: 0
+      templates: 5
+      checklists: 0
+      data_files: 4
+    agent_names:
+    - clinic-chief
+    - intake-coordinator
+    - medical-ops
+    - patient-care
+    - financial-intel
+    - visual-analyst
+    - accounting-bridge
+    - stock-controller
+    - chatbot-humanized
+    has_readme: true
+    has_changelog: false
+    domain: healthcare
+    keywords:
+    - clinic-management
+    - estetica
+    - emagrecimento
+    - hormonal
+    - prontuario-eletronico
+    - analise-visual
+    - follow-up
+    - dre
+    - integracao-contabil
+    - brasil
+    - lgpd
+    - whatsapp
+    highlights:
+    - 9 agents, 9 tasks
+    - Voice AI medical consultation (Whisper)
+    - Automated WhatsApp follow-up
+    - Specialized DRE and Conta Azul/Omie integration
+    - LGPD + CFM + ANVISA compliance
+    - Command prefix /anmar
+    example_use: Use /anmar or @clinic-chief for any Clínica Anmar operation.
   analista-processual:
     path: squads/analista-processual/
     version: 1.0.0
@@ -491,6 +546,28 @@ squads:
     - Command prefix /squadCreator
     example_use: Use /squadCreator to execute squad-creator workflows in squad-creator.
 domain_index:
+  healthcare:
+  - clinic-mgmt
+  clinic-management:
+  - clinic-mgmt
+  estetica:
+  - clinic-mgmt
+  emagrecimento:
+  - clinic-mgmt
+  hormonal:
+  - clinic-mgmt
+  prontuario-eletronico:
+  - clinic-mgmt
+  analise-visual:
+  - clinic-mgmt
+  follow-up:
+  - clinic-mgmt
+  dre:
+  - clinic-mgmt
+  lgpd:
+  - clinic-mgmt
+  whatsapp:
+  - clinic-mgmt
   legal:
   - analista-processual
   analista-processual:
@@ -702,13 +779,13 @@ domain_index:
   squad-chief:
   - squad-creator
 summary:
-  total_agents: 87
-  total_tasks: 189
+  total_agents: 96
+  total_tasks: 198
   total_workflows: 32
-  total_templates: 62
+  total_templates: 67
   total_checklists: 82
-  total_data_files: 71
+  total_data_files: 75
 maturity_summary:
   DRAFT: 0
-  DEVELOPING: 10
+  DEVELOPING: 11
   OPERATIONAL: 0
