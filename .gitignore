@@ -14,3 +14,4 @@ analista-processual-web/node_modules/
 analista-processual-web/.env*
 analista-processual-web/dist/
 analista-processual-web/.next/
+.env.local
