@@ -1,0 +1,101 @@
+workflow:
+  id: wf-analise-cpc-completa
+  name: "Análise CPC Completa"
+  version: "1.0.0"
+  squad: analista-estrategista-processual-civil
+  trigger: UC-AEPC-001
+  description: |
+    Workflow completo para análise estratégica de processo civil (CPC 2015).
+    Executa o pipeline 3-tier completo: triagem, diagnóstico CPC, extração de
+    peças, pesquisa jurídica, estratégia, recursos e plano de ação.
+  estimated_duration: "20-45 min"
+
+phases:
+  PHASE-1:
+    name: "Classificação e Roteamento"
+    agent: chefe-estrategico
+    type: SEQUENTIAL
+    actions:
+      - Receber a demanda e identificar que se trata de processo civil
+      - Classificar como UC-AEPC-001 (Análise CPC Completa)
+      - Definir pipeline de execução
+    output: UC classificado + plano de ativacao dos agentes
+    quality_gate: QG-AEPC-001
+
+  PHASE-2:
+    name: "Triagem e Diagnóstico CPC (Tier 0)"
+    agents: [classificador-civel, auditor-processual]
+    type: SEQUENTIAL
+    depends_on: PHASE-1
+    actions:
+      - classificador-civel identifica tipo de ação, fase e partes
+      - auditor-processual audita 6 eixos de risco CPC (prescrição, preclusão, nulidades)
+    output: Ficha de classificação + Relatório de Auditoria CPC
+    quality_gates:
+      - QG-AEPC-002
+      - QG-AEPC-003
+
+  PHASE-3:
+    name: "Extração e Pesquisa Jurídica (Tier 1 — Paralelo)"
+    agents: [leitor-pecas-civel, pesquisador-cpc]
+    type: PARALLEL
+    depends_on: PHASE-2
+    actions:
+      - leitor-pecas-civel extrai 8 categorias de cada peça processual
+      - pesquisador-cpc pesquisa artigos CPC, STJ, teses repetitivas e súmulas
+    output: Extração estruturada das peças + Pesquisa CPC/STJ consolidada
+
+  PHASE-4:
+    name: "Análise Estratégica e Recursal (Tier 1 — Sequencial)"
+    agents: [estrategista-civel, analista-recursos]
+    type: SEQUENTIAL
+    depends_on: PHASE-3
+    actions:
+      - estrategista-civel produz 5 partes (posicionamento, riscos, 3 cenários, acordo, recomendação)
+      - analista-recursos analisa admissibilidade e mérito de eventual recurso
+    output: Análise estratégica cível + Análise recursal (se aplicável)
+
+  PHASE-5:
+    name: "Plano de Ação (Tier 1 — Sequencial)"
+    agent: orientador-civel
+    type: SEQUENTIAL
+    depends_on: PHASE-4
+    actions:
+      - Elaborar 4 seções do plano (urgência, cronograma, monitoramento, comunicação)
+      - Incluir prazos CPC com artigos específicos
+    output: Plano de ação processual com cronograma e prazos CPC
+
+  PHASE-6:
+    name: "Síntese e Relatório Estratégico (Tier Síntese)"
+    agent: redator-estrategico
+    type: SEQUENTIAL
+    depends_on: PHASE-5
+    actions:
+      - Consolidar outputs de todas as fases
+      - Redigir relatório MODO_COMPLETO com 8 seções
+      - Salvar via Write
+      - Confirmar caminho do arquivo
+    output: "Relatório estratégico completo salvo em relatorio-estrategico-civel-[slug]-[data].md"
+    quality_gate: QG-AEPC-004
+
+quality_checklist:
+  - "[ ] UC-AEPC-001 classificado pelo @chefe-estrategico"
+  - "[ ] Tipo de ação e fase processual identificados pelo @classificador-civel"
+  - "[ ] 6 eixos de risco CPC auditados pelo @auditor-processual"
+  - "[ ] Extração das peças (8 categorias) realizada pelo @leitor-pecas-civel"
+  - "[ ] Pesquisa CPC/STJ (5 dimensões) realizada pelo @pesquisador-cpc"
+  - "[ ] 3 cenários com % elaborados pelo @estrategista-civel (soma = 100%)"
+  - "[ ] Análise recursal realizada pelo @analista-recursos (se aplicável)"
+  - "[ ] Plano de ação com prazos CPC elaborado pelo @orientador-civel"
+  - "[ ] Relatório salvo via Write pelo @redator-estrategico"
+  - "[ ] Bloco citacoes presente no relatório final"
+
+completion_signals:
+  success:
+    - "Relatório estratégico salvo via Write confirmado"
+    - "Bloco citacoes gerado"
+    - "Plano de ação com prazos CPC entregue"
+  failure:
+    - "@redator-estrategico não usou Write"
+    - "Cenários sem probabilidades"
+    - "Auditoria CPC sem artigos"
