@@ -1,0 +1,74 @@
+name: marketing
+display_name: "Marketing para Clínicas Estéticas"
+version: "1.0.0"
+domain: marketing
+description: "Squad especializado em geração de materiais de marketing para clínicas estéticas. Produz sequências de slides para TV, roteiros de vídeo, CTAs e variações de copy — tudo dentro das normas do CFM Res. 2.336/2023."
+
+keywords:
+  - marketing estético
+  - slides de recepção
+  - display TV
+  - roteiro de vídeo
+  - copy médico
+  - CFM compliance
+  - toxina botulínica
+  - harmonização facial
+  - clínica estética
+  - sinalização digital
+
+tier_structure:
+  tier_0:
+    role: "Orquestração e Briefing"
+    agents: ["marketing-chief"]
+  tier_1:
+    role: "Criação de Conteúdo"
+    agents: ["slide-copywriter", "video-director", "cta-strategist"]
+  tier_2:
+    role: "Especialistas de Suporte"
+    agents: ["compliance-guard", "visual-briefer"]
+
+output_structure:
+  base_path: "output/marketing/{procedure_slug}/"
+  files:
+    - "slides-imagem.md"
+    - "roteiro-video.md"
+    - "cta-hook.md"
+    - "variacoes-slides.md"
+    - "variacoes-video.md"
+
+cfm_compliance:
+  resolution: "CFM Res. 2.336/2023"
+  key_rules:
+    - "Proibido prometer resultados garantidos"
+    - "Usar sempre 'pode auxiliar' ao invés de 'elimina' ou 'cura'"
+    - "Antes/depois requerem autorização escrita do paciente"
+    - "Toxina botulínica: usar nome técnico, não marcas comerciais (ex: Botox)"
+    - "Harmonização íntima: restrições de exibição em recepção mista"
+    - "Preços proibidos em materiais de divulgação pública"
+
+workflow:
+  primary: "generate-procedure"
+  phases:
+    - "Phase 1: BRIEFING - Coletar dados do procedimento e clínica"
+    - "Phase 2: CREATION - Gerar slides, vídeo, CTAs e variações em paralelo"
+    - "Phase 3: COMPLIANCE - Revisar conformidade CFM"
+    - "Phase 4: EXPORT - Salvar em output/marketing/{slug}/"
+
+entry_points:
+  full_procedure: "*gerar-materiais"
+  slides_only: "*gerar-slides"
+  video_only: "*gerar-roteiro"
+  cta_only: "*gerar-cta"
+  compliance_check: "*revisar-compliance"
+
+display_formats:
+  primary:
+    name: "TV Recepção"
+    ratio: "16:9"
+    resolution: "1920x1080"
+    loop_duration: "~90s"
+  secondary:
+    name: "Reels / TikTok"
+    ratio: "9:16"
+    resolution: "1080x1920"
+    note: "Recorte central do conteúdo 16:9"
