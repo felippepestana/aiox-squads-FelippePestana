@@ -1,10 +1,64 @@
 metadata:
-  version: 1.5.0
-  last_updated: '2026-05-06'
-  total_squads: 9
+  version: 1.6.0
+  last_updated: '2026-05-15'
+  total_squads: 10
   maintainer: squad-creator
   generated_by: "scripts/refresh-registry.py --write (100% deterministic)"
 squads:
+  analista-estrategista-processual-civil:
+    path: squads/analista-estrategista-processual-civil/
+    version: 1.0.0
+    score: 9.5
+    maturity: DEVELOPING
+    validated: false
+    validated_explicit: false
+    auto_promoted: false
+    description: >
+      Squad especializado em Direito Processual Civil (CPC 2015) com pipeline 3-tier:
+      Triagem CPC (classificação + auditoria de compliance), Análise Jurídica
+      (leitura de peças, pesquisa CPC/STJ/teses repetitivas, estratégia, análise
+      recursal, plano de ação) e Síntese Final (relatório estratégico estruturado).
+      Cobre análise completa, diagnóstico rápido, recursos, defesas e execução.
+    slashPrefix: ''
+    counts:
+      agents: 9
+      tasks: 8
+      workflows: 2
+      templates: 1
+      checklists: 2
+      data_files: 1
+    agent_names:
+    - chefe-estrategico
+    - classificador-civel
+    - auditor-processual
+    - leitor-pecas-civel
+    - pesquisador-cpc
+    - estrategista-civel
+    - analista-recursos
+    - orientador-civel
+    - redator-estrategico
+    has_readme: true
+    has_changelog: true
+    domain: legal
+    keywords:
+    - analista-estrategista-processual-civil
+    - processual-civil
+    - cpc-2015
+    - estrategia-civel
+    - recursos-processuais
+    - stj
+    - teses-repetitivas
+    - auditoria-cpc
+    - relatorio-estrategico
+    - brasil
+    - direito-civil
+    - juridico
+    highlights:
+    - 9 agents, 8 tasks
+    - 2 workflows available
+    - README documented
+    - Pipeline 3-tier CPC 2015
+    example_use: Use analista-estrategista-processual-civil for CPC strategy and legal analysis.
   analista-processual:
     path: squads/analista-processual/
     version: 1.1.0
@@ -452,20 +506,43 @@ squads:
     example_use: Use /squadCreator to execute squad-creator workflows in squad-creator.
 domain_index:
   legal:
+  - analista-estrategista-processual-civil
   - analista-processual
+  processual-civil:
+  - analista-estrategista-processual-civil
+  cpc-2015:
+  - analista-estrategista-processual-civil
+  estrategia-civel:
+  - analista-estrategista-processual-civil
+  recursos-processuais:
+  - analista-estrategista-processual-civil
+  stj:
+  - analista-estrategista-processual-civil
+  teses-repetitivas:
+  - analista-estrategista-processual-civil
+  auditoria-cpc:
+  - analista-estrategista-processual-civil
+  relatorio-estrategico:
+  - analista-estrategista-processual-civil
   analista-processual:
   - analista-processual
   mapeamento:
   - analista-processual
   juridico:
+  - analista-estrategista-processual-civil
   - analista-processual
   jurisprudencia:
+  - analista-estrategista-processual-civil
   - analista-processual
   processo:
   - analista-processual
   relatorio:
   - analista-processual
   estrategia-processual:
+  - analista-estrategista-processual-civil
+  - analista-processual
+  direito-civil:
+  - analista-estrategista-processual-civil
   - analista-processual
   design-system:
   - apex
@@ -648,13 +725,13 @@ domain_index:
   squad-chief:
   - squad-creator
 summary:
-  total_agents: 81
-  total_tasks: 183
-  total_workflows: 32
-  total_templates: 62
-  total_checklists: 80
-  total_data_files: 70
+  total_agents: 90
+  total_tasks: 191
+  total_workflows: 34
+  total_templates: 63
+  total_checklists: 82
+  total_data_files: 71
 maturity_summary:
   DRAFT: 0
-  DEVELOPING: 9
+  DEVELOPING: 10
   OPERATIONAL: 0
