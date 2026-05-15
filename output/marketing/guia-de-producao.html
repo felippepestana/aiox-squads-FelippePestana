@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia de Produção — Materiais de Marketing Clínica Estética</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    :root {
+      --primary: #1a1a2e;
+      --accent: #4FC3F7;
+      --gold: #D4AF37;
+      --bg: #fafafa;
+      --card: #ffffff;
+      --text: #2d2d2d;
+      --muted: #666;
+      --border: #e0e0e0;
+      --code-bg: #f4f6f8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, #0f3460 100%);
+      color: white;
+      padding: 2.5rem 2rem 2rem;
+      text-align: center;
+      border-bottom: 4px solid var(--accent);
+    }
+    header h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: .4rem; }
+    header p  { font-size: .9rem; opacity: .75; }
+    .badge {
+      display: inline-block;
+      background: rgba(79,195,247,.2);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      border-radius: 20px;
+      padding: .2rem .8rem;
+      font-size: .75rem;
+      margin: .5rem .3rem 0;
+    }
+
+    /* ── Nav ── */
+    nav {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: .8rem 2rem;
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 6px rgba(0,0,0,.06);
+    }
+    nav a {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: .85rem;
+      font-weight: 600;
+      padding: .3rem 0;
+      border-bottom: 2px solid transparent;
+      transition: border-color .2s;
+    }
+    nav a:hover { border-bottom-color: var(--accent); color: #0f3460; }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 960px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem 4rem;
+    }
+
+    /* ── Content rendered from Markdown ── */
+    #content h1 {
+      font-size: 1.7rem;
+      color: var(--primary);
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: .4rem;
+      margin: 2.5rem 0 1rem;
+    }
+    #content h1:first-child { margin-top: 0; }
+
+    #content h2 {
+      font-size: 1.25rem;
+      color: #0f3460;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: .3rem;
+      margin: 2rem 0 .8rem;
+    }
+
+    #content h3 {
+      font-size: 1.05rem;
+      color: #1a6a8a;
+      margin: 1.5rem 0 .5rem;
+    }
+
+    #content p { margin: .7rem 0; }
+
+    #content a { color: #1565C0; }
+
+    #content ul, #content ol {
+      margin: .7rem 0 .7rem 1.5rem;
+    }
+    #content li { margin: .3rem 0; }
+
+    #content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: .88rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    #content th {
+      background: linear-gradient(135deg, #e8f4fd, #ddeeff);
+      color: var(--primary);
+      font-weight: 700;
+      padding: .6rem .9rem;
+      text-align: left;
+      border-bottom: 2px solid var(--accent);
+    }
+    #content td {
+      padding: .55rem .9rem;
+      border-bottom: 1px solid var(--border);
+    }
+    #content tr:last-child td { border-bottom: none; }
+    #content tr:hover td { background: #f7fbff; }
+
+    #content code {
+      background: var(--code-bg);
+      padding: .15rem .4rem;
+      border-radius: 4px;
+      font-family: 'Cascadia Code', 'Fira Code', monospace;
+      font-size: .82rem;
+      color: #c0392b;
+    }
+
+    #content pre {
+      background: #1e2a3a;
+      color: #e8f0fe;
+      padding: 1.2rem 1.5rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1rem 0;
+      border-left: 4px solid var(--accent);
+      font-size: .82rem;
+      line-height: 1.6;
+    }
+    #content pre code {
+      background: none;
+      color: inherit;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    #content blockquote {
+      border-left: 4px solid var(--gold);
+      background: #fffdf2;
+      padding: .8rem 1.2rem;
+      margin: 1rem 0;
+      border-radius: 0 6px 6px 0;
+      font-style: italic;
+      color: #555;
+    }
+    #content blockquote p { margin: 0; }
+
+    #content hr {
+      border: 0;
+      border-top: 2px solid var(--border);
+      margin: 2.5rem 0;
+    }
+
+    /* ── Procedure cards ── */
+    .proc-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+      border-top: 4px solid var(--accent);
+    }
+
+    /* ── Print / Download button ── */
+    .actions {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .6rem 1.4rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: .88rem;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: opacity .2s, transform .1s;
+    }
+    .btn:hover { opacity: .85; transform: translateY(-1px); }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-accent  { background: var(--accent); color: white; }
+    .btn-gold    { background: var(--gold); color: white; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--primary);
+      color: rgba(255,255,255,.6);
+      text-align: center;
+      padding: 1.5rem;
+      font-size: .8rem;
+      margin-top: 4rem;
+    }
+    footer a { color: var(--accent); }
+
+    /* ── Print ── */
+    @media print {
+      header, nav, .actions, footer { display: none !important; }
+      body { background: white; font-size: 11pt; }
+      #content pre { background: #f5f5f5; color: #222; border: 1px solid #ddd; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Guia de Produção</h1>
+  <p>Materiais de Marketing — Clínica Estética</p>
+  <div>
+    <span class="badge">TV 16:9</span>
+    <span class="badge">Loop ~90s Recepção</span>
+    <span class="badge">Dual-use Reels</span>
+    <span class="badge">CFM Compliant</span>
+  </div>
+</header>
+
+<nav>
+  <a href="#specs">Especificações Técnicas</a>
+  <a href="#dual">Dual-use TV + Reels</a>
+  <a href="#ftf">Foto Terapia Facial</a>
+  <a href="#botox">Botox</a>
+  <a href="#diretrizes">Diretrizes Gerais</a>
+  <a href="#cases">Cases BR</a>
+  <a href="#checklist">Checklist</a>
+</nav>
+
+<div class="container">
+
+  <div class="actions">
+    <button class="btn btn-primary" onclick="window.print()">🖨 Imprimir / Salvar PDF</button>
+    <a class="btn btn-accent" href="./marketing-completo.pdf" download>⬇ Baixar PDF Completo</a>
+    <a class="btn btn-gold" href="./README.md">📄 Ver Índice Completo</a>
+  </div>
+
+  <div id="content">Carregando conteúdo...</div>
+
+</div>
+
+<footer>
+  Gerado em maio de 2026 &nbsp;|&nbsp;
+  <a href="https://github.com/felippepestana/aiox-squads-FelippePestana/blob/claude/marketing-materials-generation-MoqZY/output/marketing/guia-de-producao.md">Ver no GitHub</a>
+</footer>
+
+<script>
+  const MARKDOWN_URL = './guia-de-producao.md';
+
+  marked.setOptions({
+    gfm: true,
+    breaks: false,
+    headerIds: true,
+    mangle: false
+  });
+
+  fetch(MARKDOWN_URL)
+    .then(r => {
+      if (!r.ok) throw new Error('Arquivo não encontrado');
+      return r.text();
+    })
+    .then(md => {
+      document.getElementById('content').innerHTML = marked.parse(md);
+
+      // Adicionar IDs de ancora nas seções de navegação
+      const map = {
+        'ESPECIFICAÇÕES TÉCNICAS': 'specs',
+        'ESTRATÉGIA DUAL-USE':    'dual',
+        'FOTO TERAPIA FACIAL':    'ftf',
+        'APLICAÇÃO DE BOTOX':     'botox',
+        'DIRETRIZES GERAIS':      'diretrizes',
+        'CASES BRASILEIROS':      'cases',
+        'CHECKLIST':              'checklist'
+      };
+
+      document.querySelectorAll('#content h2').forEach(h => {
+        const text = h.textContent.toUpperCase();
+        for (const [key, id] of Object.entries(map)) {
+          if (text.includes(key)) { h.id = id; break; }
+        }
+      });
+    })
+    .catch(err => {
+      document.getElementById('content').innerHTML =
+        `<p style="color:red">⚠ Erro ao carregar: ${err.message}</p>
+         <p>Abra esta página a partir de um servidor local ou acesse diretamente o
+         <a href="./guia-de-producao.md">arquivo markdown</a>.</p>`;
+    });
+</script>
+
+</body>
+</html>
