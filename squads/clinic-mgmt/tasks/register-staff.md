@@ -13,7 +13,7 @@
 required:
   - full_name: string
   - cpf: string (validado)
-  - role: admin | doctor | nurse | receptionist | viewer
+  - role: admin | doctor | nurse | biomedical | receptionist | viewer
   - professional_register: string (CRM/COREN/outros — obrigatório para roles clínicos)
 optional:
   - birth_date: DATE

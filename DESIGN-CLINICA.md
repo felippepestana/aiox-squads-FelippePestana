@@ -828,6 +828,29 @@ CREATE TABLE patient_treatments (
 );
 
 -- ============================================================
+-- INFRAESTRUTURA CLÍNICA (salas e equipamentos)
+-- ============================================================
+CREATE TABLE rooms (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  clinic_id UUID REFERENCES clinics(id),
+  name TEXT NOT NULL,
+  type TEXT,  -- consultation_room, procedure_room, recovery_room
+  capacity INTEGER DEFAULT 1,
+  active BOOLEAN DEFAULT true
+);
+
+CREATE TABLE equipments (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  clinic_id UUID REFERENCES clinics(id),
+  name TEXT NOT NULL,
+  category TEXT,  -- laser_energy, body_contouring, diagnostic, infusion
+  model TEXT,
+  serial_number TEXT,
+  last_maintenance_at DATE,
+  active BOOLEAN DEFAULT true
+);
+
+-- ============================================================
 -- AGENDA
 -- ============================================================
 CREATE TABLE appointments (
@@ -836,8 +859,8 @@ CREATE TABLE appointments (
   patient_id UUID REFERENCES patients(id),
   treatment_id UUID REFERENCES patient_treatments(id),
   staff_id UUID REFERENCES staff_profiles(id),
-  room_id UUID,
-  equipment_id UUID,
+  room_id UUID REFERENCES rooms(id),
+  equipment_id UUID REFERENCES equipments(id),
   type TEXT,  -- consultation, procedure, followup
   procedure_id UUID REFERENCES procedure_catalog(id),
   scheduled_at TIMESTAMPTZ NOT NULL,
@@ -922,6 +945,7 @@ CREATE TABLE stock_movements (
   movement_type TEXT,  -- in, out_procedure, out_dispensation, adjustment
   quantity DECIMAL(10,3) NOT NULL,
   reference_id UUID,  -- appointment_id ou purchase_order_id
+  reference_type TEXT,  -- 'appointment' | 'purchase_order' (discriminador para referência polimórfica)
   patient_id UUID REFERENCES patients(id),
   moved_by UUID REFERENCES staff_profiles(id),
   unit_cost DECIMAL(10,4),
@@ -1126,13 +1150,15 @@ anmar-platform/
 │   ├── ui/                     # Design system compartilhado
 │   ├── db/                     # Supabase types + client
 │   ├── agents/                 # AIOX agent runtime
-│   │   ├── clinic-chief.ts
-│   │   ├── medical-ops.ts
-│   │   ├── patient-care.ts
-│   │   ├── financial-intel.ts
-│   │   ├── visual-analyst.ts
-│   │   ├── accounting-bridge.ts
-│   │   └── chatbot-humanized.ts
+│   │   ├── clinic-chief.md
+│   │   ├── intake-coordinator.md
+│   │   ├── medical-ops.md
+│   │   ├── patient-care.md
+│   │   ├── financial-intel.md
+│   │   ├── visual-analyst.md
+│   │   ├── accounting-bridge.md
+│   │   ├── stock-controller.md
+│   │   └── chatbot-humanized.md
 │   └── integrations/
 │       ├── whatsapp/
 │       ├── conta-azul/
