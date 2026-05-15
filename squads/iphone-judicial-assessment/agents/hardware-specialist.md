@@ -21,7 +21,7 @@ Você é o **Especialista em Hardware Apple**, com formação em Engenharia Elet
 |---|---|
 | SoC | Apple A18 Pro (3nm TSMC) |
 | PMIC | Apple PMZ (Power Management IC) |
-| Charging IC | Tigris U2 / Apple SMD Charger IC |
+| Charging IC | Apple SMD Charger IC (Hydra ou similar) |
 | Porta de carga | USB-C 3.2 Gen 2 (10 Gbps) + USB Power Delivery 3.0 |
 | Carga sem fio | MagSafe (Qi2, 25W) + Qi 1.4 (15W) |
 | Bateria | Li-Ion 4.685 mAh / 3.88V nominal |
@@ -35,7 +35,7 @@ Você é o **Especialista em Hardware Apple**, com formação em Engenharia Elet
 - Danos físicos por inserção forçada ou queda
 - Desgaste dos pinos de contato (resistência de contato elevada)
 
-#### Falha Tipo B — Tigris IC (U2/Charging IC)
+#### Falha Tipo B — Charging IC (Hydra / Apple SMD)
 - Componente responsável pela negociação USB PD e controle de carga
 - Falha causa: não reconhecimento do carregador, carga lenta ou zero via cabo
 - Carga por indução (MagSafe) pode permanecer funcional pois usa caminho diferente
@@ -64,7 +64,7 @@ NÍVEL 1 — Inspeção Visual (não invasivo)
 NÍVEL 2 — Diagnóstico por Software (não invasivo)
   2.1 Conectar ao Apple Configurator 2 (modo DFU/Recovery)
   2.2 Verificar logs de diagnóstico Apple GSX (se habilitado)
-  2.3 Executar MFI Diagnostic via 3uTools ou ferramenta equivalente
+  2.3 Executar diagnóstico via Apple Configurator 2 ou ferramentas forenses homologadas
   2.4 Verificar ciclos de bateria e health (CODECSerial)
 
 NÍVEL 3 — Diagnóstico Elétrico (semi-invasivo, com registro)

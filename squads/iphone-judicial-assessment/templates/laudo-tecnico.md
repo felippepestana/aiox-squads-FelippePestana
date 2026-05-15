@@ -170,7 +170,7 @@
 | Apple 30W USB-C (original) | Apple MFi | 5,09 | 0,00 | 0,00 | **NÃO** |
 | Carregador USB PD 65W | Apple MFi | 5,11 | 0,00 | 0,00 | **NÃO** |
 
-> **Análise:** A presença de tensão no conector (≈5,1V) confirma que o carregador envia energia à porta USB-C; contudo, a corrente zero indica que o dispositivo não está consumindo energia. Isso sugere que o problema está no circuito receptor do dispositivo (Tigris IC ou PMIC), e não no carregador ou cabo.
+> **Análise:** A presença de tensão no conector (≈5,1V) confirma que o carregador envia energia à porta USB-C; contudo, a corrente zero indica que o dispositivo não está consumindo energia. Isso sugere que o problema está no circuito receptor do dispositivo (Charging IC / PMIC), e não no carregador ou cabo.
 
 **6.3.3** **Teste de Carga sem Fio (MagSafe):**
 
@@ -261,7 +261,7 @@ O contato prévio com líquido (evidenciado pelos LCIs ativados) pode ter contri
 
 **QUESITO 2:** "O defeito decorre de vício de fabricação?"
 
-**RESPOSTA:** **Parcialmente.** O problema inicial — não carregamento via cabo USB-C com funcionamento do carregamento MagSafe — pode ter origem em vício de produto (falha no circuito de negociação USB PD / Tigris IC) ou em contato do dispositivo com líquido. **Não foi possível determinar com certeza** a origem deste problema inicial, pois o dispositivo já havia sido submetido a intervenção antes da perícia, o que comprometeu o estado original das evidências.
+**RESPOSTA:** **Parcialmente.** O problema inicial — não carregamento via cabo USB-C com funcionamento do carregamento MagSafe — pode ter origem em vício de produto (falha no circuito de negociação USB PD / Charging IC) ou em contato do dispositivo com líquido. **Não foi possível determinar com certeza** a origem deste problema inicial, pois o dispositivo já havia sido submetido a intervenção antes da perícia, o que comprometeu o estado original das evidências.
 
 A **falha total** posterior, que resultou na paralisação completa do dispositivo, não decorre de vício de fabricação, mas sim de intervenção técnica inadequada, conforme fundamentado no item 7 deste laudo.
 

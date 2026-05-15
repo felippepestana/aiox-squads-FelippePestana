@@ -120,7 +120,7 @@ Exemplo: `XYZ1234ABCD`
 - IMEI = International Mobile Equipment Identity (15 dígitos)
 - Algoritmo de validação: Luhn (mod 10)
 - Verificação de bloqueio/furto: checkmend.com, imei.info (serviços externos)
-- **No Brasil:** consulta EMEI bloqueado via ANATEL (não há portal público direto; via operadoras)
+- **No Brasil:** consulta de IMEI bloqueado via portal oficial https://www.consultaaparelhoimpedido.com.br/ (CEMIR/ABR Telecom)
 
 ---
 
@@ -130,7 +130,7 @@ Exemplo: `XYZ1234ABCD`
 
 | Ferramenta | Uso | Norma de Referência |
 |---|---|---|
-| Chave Pentalobe P2 (1,2mm) | Remoção parafusos externos iPhone | Apple ASF |
+| Chave Pentalobe P2 (0,8mm) | Remoção parafusos externos iPhone | Apple ASF |
 | Chave Tri-point Y000 (0,6mm) | Parafusos internos bateria/placa | Apple ASF |
 | Chave Phillips PH000 | Parafusos internos variados | Apple ASF |
 | Espátula nylon/plástico ESD | Abertura sem danos | IEC 61340-5-1 |
@@ -154,7 +154,7 @@ Exemplo: `XYZ1234ABCD`
 | Software | Plataforma | Uso |
 |---|---|---|
 | Apple Configurator 2 | macOS | Modo DFU/Recovery, backup, diagnóstico |
-| 3uTools | Windows | Diagnóstico, verificação de componentes |
+| Apple Devices | Windows | Diagnóstico básico e restauração |
 | iMazing | macOS/Windows | Diagnóstico de bateria, backup |
 | Apple Diagnostics (ASD) | macOS/interno | Diagnóstico de hardware Apple (AASP) |
 
