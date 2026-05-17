@@ -66,7 +66,7 @@ Conforme **CPC/2015, Art. 156** e **Resolução CFT nº 1.010/2005**:
 - **ABNT NBR ISO/IEC 17025:2017** — Competência de laboratórios de ensaio e calibração
 - **ABNT NBR ISO/IEC 27037:2013** — Evidência digital: identificação, coleta e preservação
 - **ABNT NBR 5410:2004** — Instalações elétricas de baixa tensão
-- **IEC 62368-1:2018** — Segurança de equipamentos de TI/AV
+- **ABNT NBR IEC 62368-1:2023** — Segurança de equipamentos de TI/AV
 - **IEC 60068-2** — Ensaios ambientais (temperatura, umidade, vibração)
 
 ### Padrões Fabricante

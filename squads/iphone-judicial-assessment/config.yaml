@@ -70,7 +70,7 @@ compliance:
     - "ABNT NBR ISO/IEC 17025:2017"
     - "ABNT NBR ISO/IEC 27037:2013"
     - "ABNT NBR 5410:2004"
-    - "IEC 62368-1:2018"
+    - "ABNT NBR IEC 62368-1:2023"
     - "IEC 60068-2 (ensaios ambientais)"
     - "Apple Service Fundamentals (ASF)"
 

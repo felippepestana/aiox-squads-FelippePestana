@@ -306,7 +306,7 @@ A **falha total** posterior, que resultou na paralisação completa do dispositi
 3. Realização de trabalho de solda (rework) sem os devidos critérios, resultando na perda do capacitor C1202;
 4. A intervenção não foi realizada por AASP (Apple Authorized Service Provider), caracterizando reparo não autorizado pelo fabricante.
 
-Tais procedimentos são contrários às boas práticas de engenharia eletrônica e aos padrões **IEC 62368-1:2018** e **Apple Service Fundamentals (ASF)** aplicáveis à manutenção de dispositivos iPhone.
+Tais procedimentos são contrários às boas práticas de engenharia eletrônica e aos padrões **ABNT NBR IEC 62368-1:2023** e **Apple Service Fundamentals (ASF)** aplicáveis à manutenção de dispositivos iPhone.
 
 ---
 

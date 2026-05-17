@@ -95,8 +95,8 @@
 - Frequência: 60 Hz
 - Proteção contra choque elétrico em carregadores: Classe II (isolamento duplo)
 
-### 2.4 IEC 62368-1:2018
-**Título:** Audio/video, information and communication technology equipment — Part 1: Safety requirements  
+### 2.4 ABNT NBR IEC 62368-1:2023
+**Título:** Equipamentos de tecnologia de áudio/vídeo, informação e comunicação — Parte 1: Requisitos de segurança (adoção da IEC 62368-1:2018+AMD1:2020)
 **Aplicação:** Norma de segurança aplicável a smartphones, incluindo iPhones.
 
 **Limites relevantes para iPhones:**

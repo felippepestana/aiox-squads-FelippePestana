@@ -4,7 +4,7 @@
 
 ## Objetivo
 
-Realizar diagnóstico técnico completo do dispositivo iPhone, identificando as causas das falhas reportadas através de metodologia baseada nas normas **ABNT NBR ISO/IEC 17025:2017** e **IEC 62368-1:2018**.
+Realizar diagnóstico técnico completo do dispositivo iPhone, identificando as causas das falhas reportadas através de metodologia baseada nas normas **ABNT NBR ISO/IEC 17025:2017** e **ABNT NBR IEC 62368-1:2023**.
 
 ## Protocolo de Diagnóstico
 

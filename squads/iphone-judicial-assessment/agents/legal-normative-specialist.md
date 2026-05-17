@@ -90,7 +90,7 @@ Você é o **Especialista Jurídico-Normativo**, responsável por garantir que t
 - Limites de tensão, corrente e proteção
 - **Aplicação pericial:** Avaliação de acessórios de carga utilizados
 
-### IEC 62368-1:2018
+### ABNT NBR IEC 62368-1:2023
 **Audio/video, information and communication technology equipment**
 - Requisitos de segurança para equipamentos de TIC (inclui smartphones)
 - Limites de temperatura, tensão e corrente em conectores
