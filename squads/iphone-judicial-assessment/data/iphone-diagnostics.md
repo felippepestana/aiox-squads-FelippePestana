@@ -133,7 +133,7 @@ Exemplo: `XYZ1234ABCD`
 | Chave Pentalobe P2 (0,8mm) | Remoção parafusos externos iPhone | Apple ASF |
 | Chave Tri-point Y000 (0,6mm) | Parafusos internos bateria/placa | Apple ASF |
 | Chave Phillips PH000 | Parafusos internos variados | Apple ASF |
-| Espátula nylon/plástico ESD | Abertura sem danos | IEC 61340-5-1 |
+| Espátula náilon/plástico ESD | Abertura sem danos | IEC 61340-5-1 |
 | Ventosa com alça | Remoção da tela | Apple ASF |
 | Pulseira antiestática ESD | Proteção de componentes | IEC 61340-5-1 |
 | ESD Mat (tapete antiestático) | Proteção da área de trabalho | IEC 61340-5-1 |

@@ -1,4 +1,4 @@
-# Template: Quesitos Padrão para Perícia em iPhone
+# Modelo: Quesitos Padrão para Perícia em iPhone
 
 ## Instrução de Uso
 

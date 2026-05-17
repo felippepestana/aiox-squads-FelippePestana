@@ -49,6 +49,7 @@ Produto que não se esgota rapidamente pelo seu uso normal.
 > "Os fornecedores de produtos de consumo duráveis ou não duráveis respondem solidariamente pelos vícios de qualidade ou quantidade que os tornem impróprios ou inadequados ao consumo a que se destinam ou lhes diminuam o valor."
 
 **Distinção crítica:**
+
 | Critério | Defeito (Art. 12) | Vício (Art. 18) |
 |---|---|---|
 | Natureza | Compromete a segurança | Compromete a adequação ao uso |

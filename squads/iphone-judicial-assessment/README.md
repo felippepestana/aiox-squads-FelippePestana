@@ -79,7 +79,7 @@ Conforme **CPC/2015, Art. 156** e **Resolução CFT nº 1.010/2005**:
 ## Como Usar
 
 ```bash
-# 1. Preencha os inputs obrigatórios em config.yml
+# 1. Preencha os inputs obrigatórios em config.yaml
 # 2. Execute o Chief Coordinator com os dados do processo
 aiox run squads/iphone-judicial-assessment \
   --input numero_processo="0001234-56.2024.8.26.0000" \
@@ -118,7 +118,7 @@ squads/iphone-judicial-assessment/
 │   ├── nbr-references.md
 │   ├── iphone-diagnostics.md
 │   └── legal-definitions.md
-├── config.yml
+├── config.yaml
 └── README.md
 ```
 

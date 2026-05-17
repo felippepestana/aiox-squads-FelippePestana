@@ -198,13 +198,13 @@ Durante a tentativa de carregamento via cabo e via MagSafe, a câmera termográf
 
 **6.4.1** Com base nas evidências coletadas na inspeção visual (marcas nos parafusos Pentalobe, ruptura da gaxeta vedante), o perito procedeu à desmontagem documentada do dispositivo, previamente autorizada pelo MM. Juiz por despacho de 20 de abril de 2026 (Anexo D).
 
-**6.4.2** A desmontagem foi realizada com ferramentas específicas (Pentalobe P2, Tri-point Y000, spatulas de nylon ESD), com registro fotográfico de cada etapa (Fotos 09 a 35, Anexo C).
+**6.4.2** A desmontagem foi realizada com ferramentas específicas (Pentalobe P2, Tri-point Y000, spatulas de náilon ESD), com registro fotográfico de cada etapa (Fotos 09 a 35, Anexo C).
 
 **6.4.3** O exame interno revelou os seguintes achados de relevância pericial:
 
 > **a) Bateria:** A bateria interna possui etiqueta e código de barras compatíveis com componente original Apple (Part Number A3254). Contudo, o adesivo de fixação inferior apresenta-se rompido e reaplicado de forma irregular, indicando que a bateria foi removida e reinstalada em intervenção anterior.
 >
-> **b) Conector FPC inferior:** O conector FPC (Flexible Printed Circuit) que liga a placa do conector USB-C à placa-lógica principal apresenta **rasgo parcial em duas trilhas de sinal** (Foto 16), dano este inconsistente com falha natural e consistente com remoção inadequada por ferramenta de metal (tipo espátula metálica ou palheta de guitarra), ao invés de ferramentas de plástico/nylon adequadas.
+> **b) Conector FPC inferior:** O conector FPC (Flexible Printed Circuit) que liga a placa do conector USB-C à placa-lógica principal apresenta **rasgo parcial em duas trilhas de sinal** (Foto 16), dano este inconsistente com falha natural e consistente com remoção inadequada por ferramenta de metal (tipo espátula metálica ou palheta de guitarra), ao invés de ferramentas de plástico/náilon adequadas.
 >
 > **c) Placa-lógica — região do PMIC:** O exame com microscópio da região do PMIC (Power Management IC Apple PMZ) na placa-lógica revelou **resíduos de fluxo de solda não limpos** ao redor de dois capacitores SMD (C1201 e C1202, tamanho 0201) adjacentes ao CI de gerenciamento de energia (Fotos 19, 20, 21). A presença de fluxo residual é indicativa de trabalho de solda (rework) realizado na região.
 >
