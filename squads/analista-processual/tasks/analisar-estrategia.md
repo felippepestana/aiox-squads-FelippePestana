@@ -4,10 +4,7 @@
 **Executor:** `estrategista-processual`
 **Tier:** Tier 1
 **Use Cases:** UC-AP-002, UC-AP-003
-
-**Depends On:**
-- UC-AP-002: `ap-ler-peca`, `ap-pesquisar-jurisprudencia`
-- UC-AP-003: `ap-avaliar-conformidade` (usa outputs do Tier 0)
+**Depends On:** `ap-ler-peca`, `ap-pesquisar-jurisprudencia`
 
 ## Overview
 
@@ -15,13 +12,13 @@ Elabora análise estratégica do processo identificando posicionamento, riscos, 
 
 ## Input
 
-- Extrações estruturadas do `ap-ler-peca` (UC-AP-002) ou outputs do Tier 0 (UC-AP-003)
-- Pesquisa jurídica do `ap-pesquisar-jurisprudencia` (UC-AP-002)
+- Extrações estruturadas do `ap-ler-peca`
+- Pesquisa jurídica do `ap-pesquisar-jurisprudencia`
 
 ## Output
 
 - Posicionamento processual (pontos fortes/fracos por polo)
-- Riscos e oportunidades identificados com nível de criticidade
+- Riscos e oportunidades identificados
 - 3 cenários (otimista, realista, pessimista) com probabilidades (%)
 - Avaliação de viabilidade de acordo
 
@@ -39,6 +36,6 @@ Elabora análise estratégica do processo identificando posicionamento, riscos, 
 
 - [ ] Posicionamento por polo definido
 - [ ] 3 cenários com percentuais que somam 100%
-- [ ] Riscos identificados com nível de criticidade (Alto/Médio/Baixo)
+- [ ] Riscos identificados com nível de criticidade
 - [ ] Viabilidade de acordo avaliada
 - [ ] Nenhum cenário sem percentual de probabilidade

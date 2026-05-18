@@ -26,7 +26,7 @@
 - [ ] 3 cenários estratégicos com probabilidades
 - [ ] Orientações práticas e plano de ação
 - [ ] Conclusões e recomendações
-- [ ] Bloco `citacoes` presente com fontes rastreadas
+- [ ] Bloco ` ```citacoes``` ` presente com fontes rastreadas
 - [ ] Arquivo salvo via `Write`
 
 ## Condições de Veto

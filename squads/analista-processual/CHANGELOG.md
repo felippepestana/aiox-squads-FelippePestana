@@ -4,40 +4,6 @@ All notable changes to this squad follow [Keep a Changelog](https://keepachangel
 
 ---
 
-## [1.1.0] — 2026-05-06
-
-### Fixed
-
-**Bugs críticos:**
-- `config.yaml`: `UC-AP-002.tier_0_active` corrigido de `false` para `true`
-- `analista-chefe.md`: UC-AP-002 routing corrigido — Tier 0 (mapeador → avaliador) agora executa antes do Tier 1
-- `documentador-processual.md`: Detecção de modo expandida — MODO_JURIDICO ativado quando qualquer agente Tier 1 estiver presente (corrige UC-AP-003)
-- `wf-analise-completa.yaml`: PHASE-2 (Tier 0) adicionada; fases renumeradas (6 fases no total)
-- `tasks/analisar-estrategia.md`: Depends On agora é condicional por UC (UC-AP-002 vs UC-AP-003)
-
-**Bugs médios:**
-- `wf-mapeamento-rapido.yaml`: PHASE-4 (síntese) adicionada antes da documentação
-- `mapeador-processual.md`: Token placeholder corrigido para `INDEFINIDO` (alinhado com avaliador)
-- `config.yaml`: TRF adicionado aos trigger_patterns de UC-AP-004
-- `data/fontes-juridicas.yaml`: Prefixo `https://` adicionado a todas as 7 URLs
-- `tasks/pesquisar-jurisprudencia.md`: TJs/TRFs e OJs adicionados ao Output e Acceptance Criteria
-- `ecosystem-registry.yaml`: Keyword `estrategia-juridica` corrigida para `estrategia-processual`
-
-**Typos corrigidos:**
-- `leitor-de-pecas.md`: JURDÍDICOS, contestação, recúrso, condenação
-- `pesquisador-juridico.md`: bibliografia, parágrafo único; seções TJ/TRF e OJ adicionadas ao formato
-- `estrategista-processual.md`: CENÁRIOS, precedente adverso, RISCO JURÍDICO
-- `advogado-orientador.md`: diligências
-- `README.md`: ativação (era ativation), headers em PT-BR
-
-**voice_dna adicionado** a todos os 8 agentes (schema requirement)
-
-**Templates:**
-- `relatorio-processual-tmpl.md`: restrito ao MODO_PROCESSUAL
-- `relatorio-juridico-tmpl.md`: novo arquivo exclusivo para MODO_JURIDICO
-
----
-
 ## [1.0.0] — 2026-03-28
 
 ### Added
@@ -77,9 +43,9 @@ All notable changes to this squad follow [Keep a Changelog](https://keepachangel
 
 - Entry agent: `analista-chefe` com 4 use cases (UC-AP-001 a 004)
 - Tier 0 (Intake): `mapeador-processual` → `avaliador-processual` (sequencial)
-- Tier 1 (Jurídico): `leitor-de-pecas` + `pesquisador-juridico` (paralelo) → `estrategista-processual` → `advogado-orientador` (sequencial)
+- Tier 1 (Jurídico): `leitor-de-pecas`, `pesquisador-juridico`, `estrategista-processual`, `advogado-orientador` (paralelo)
 - Tier Síntese: `documentador-processual` (sempre último)
-- Dual-mode: `MODO_PROCESSUAL` para processos genéricos, `MODO_JURIDICO` para judiciais/estratégicos
+- Dual-mode: `MODO_PROCESSUAL` para processos genéricos, `MODO_JURIDICO` para judiciais
 - Citation tracking: bloco ` ```citacoes``` ` em todos os relatórios MODO_JURIDICO
 
 ### Migration

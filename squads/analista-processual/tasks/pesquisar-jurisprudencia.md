@@ -18,9 +18,7 @@ Pesquisa e compila jurisprudência, legislação, súmulas e doutrina relevantes
 Bibliografia estruturada com:
 - Legislação aplicável com artigos
 - Jurisprudência STF/STJ com número, data e ementa
-- Jurisprudência de TJs/TRFs relevantes
 - Súmulas e teses vinculantes aplicáveis
-- Orientações Jurisprudenciais (OJs) aplicáveis
 - Posição doutrinária majoritária
 
 ## Action Items
@@ -32,14 +30,12 @@ Bibliografia estruturada com:
 5. Pesquise TJs e TRFs relevantes para a matéria e jurisdição
 6. Compile súmulas e OJs aplicáveis
 7. Identifique a posição doutrinária majoritária
-8. Sinalize entendimentos contróversos apresentando ambas as posições
+8. Sinalize entendimentos controvertidos apresentando ambas as posições
 
 ## Acceptance Criteria
 
 - [ ] Mínimo 5 fontes citadas com tribunal/fonte, número e data
 - [ ] Decisões recentes (preferencialmente últimos 5 anos) priorizadas
 - [ ] Súmulas aplicáveis identificadas
-- [ ] TJs/TRFs relevantes pesquisados quando aplicável
-- [ ] Orientações Jurisprudenciais (OJs) identificadas quando relevantes
 - [ ] Posição majoritária sintetizada
-- [ ] Contróversias identificadas quando existentes
+- [ ] Controvérsias identificadas quando existentes

@@ -4,21 +4,21 @@ updated: "2026-03-28"
 
 tribunais_superiores:
   stf:
-    url: "https://stf.jus.br"
+    url: "stf.jus.br"
     nome: "Supremo Tribunal Federal"
     tipo: controle_constitucionalidade
     prioridade: 1
     busca_sugerida: "site:stf.jus.br [tema] repercussao geral"
 
   stj:
-    url: "https://stj.jus.br"
+    url: "stj.jus.br"
     nome: "Superior Tribunal de Justiça"
     tipo: recurso_especial_sumulas
     prioridade: 1
     busca_sugerida: "site:stj.jus.br [tema] recurso especial"
 
   tst:
-    url: "https://tst.jus.br"
+    url: "tst.jus.br"
     nome: "Tribunal Superior do Trabalho"
     tipo: materia_trabalhista
     prioridade: 1
@@ -26,27 +26,27 @@ tribunais_superiores:
 
 legislacao:
   lexml:
-    url: "https://lexml.gov.br"
+    url: "lexml.gov.br"
     nome: "LexML — Legislação federal e estadual"
     tipo: legislacao
     prioridade: 1
 
   planalto:
-    url: "https://planalto.gov.br"
+    url: "planalto.gov.br"
     nome: "Portal da Legislação Federal"
     tipo: legislacao
     prioridade: 1
 
 doutrina_consolidada:
   jusbrasil:
-    url: "https://jusbrasil.com.br"
+    url: "jusbrasil.com.br"
     nome: "JusBrasil — Jurisprudência consolidada"
     tipo: jurisprudencia_consolidada
     prioridade: 2
     nota: "Verificar autenticidade antes de citar"
 
   conjur:
-    url: "https://conjur.com.br"
+    url: "conjur.com.br"
     nome: "Consultor Jurídico"
     tipo: doutrina_noticias
     prioridade: 3
@@ -56,5 +56,5 @@ regras_de_uso:
   - "Indicar sempre: tribunal/fonte, número, data e ementa/resumo"
   - "Prioridade 1 sempre antes de prioridade 2 ou 3"
   - "Nunca citar fontes sem verificar autenticidade"
-  - "Contróversias devem apresentar AMBAS as posições"
+  - "Controvérsias devem apresentar AMBAS as posições"
   - "Súmulas vinculantes (STF) têm relevância absoluta"
