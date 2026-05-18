@@ -153,7 +153,6 @@ Squads published by the community in this repository.
 
 | Squad | What it does | Status |
 |-------|-------------|--------|
-| [**analista-estrategista-processual-civil**](../squads/analista-estrategista-processual-civil/) | Strategic analysis of civil litigation in Brazil — 8-agent pipeline covering procedural audit, CPC 2015 compliance, STJ jurisprudence research, and strategic reporting | 🟢 |
 | [**analista-processual**](../squads/analista-processual/) | Complete analysis of organizational and legal processes in Brazil — 3-tier pipeline with 8 agents, from mapping to strategic report | 🟢 |
 | [**apex**](../squads/apex/) | Ultra-premium frontend squad (Web, Mobile, Spatial) — 14 agents covering design system, React/RN, animations, 3D/WebXR, accessibility, and performance | 🟢 |
 | [**curator**](../squads/curator/) | Mines video transcripts, identifies high-impact moments with timestamps, and assembles ready-to-edit cut scripts | 🟢 |
@@ -214,7 +213,7 @@ handoffs:    # When to stop and delegate to another agent
 Squads in this repository go through validation and earn maturity badges:
 
 | Level | Criteria | Badge |
-|-------|----------|-------|
+|-------|----------|---------|
 | **DRAFT** | Basic structure, score < 7.0 | 🔴 |
 | **DEVELOPING** | Score ≥ 7.0, functional agents, executable tasks | 🟡 |
 | **OPERATIONAL** | Score ≥ 9.0, tested in production, proven real-world usage | 🟢 |
