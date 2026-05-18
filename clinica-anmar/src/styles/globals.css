@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-anmar-navy text-anmar-ivory font-body;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    @apply bg-anmar-gold text-anmar-navy;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-anmar-navy;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-anmar-gold rounded-full;
+  }
+}
+
+@layer components {
+  .gold-text {
+    background: linear-gradient(135deg, #C9A96E 0%, #E2C896 40%, #C9A96E 60%, #A6854A 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gold-shimmer {
+    background: linear-gradient(90deg, #C9A96E 25%, #E8D5A3 50%, #C9A96E 75%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+  }
+
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl;
+  }
+
+  .gold-border {
+    @apply border border-anmar-gold/30;
+  }
+
+  .btn-primary {
+    @apply bg-gold-gradient text-anmar-navy font-body font-semibold px-8 py-4 rounded-full
+           transition-all duration-300 hover:shadow-gold-lg hover:scale-105 active:scale-100
+           text-sm tracking-widest uppercase;
+  }
+
+  .btn-outline {
+    @apply border border-anmar-gold/60 text-anmar-gold font-body font-medium px-8 py-4 rounded-full
+           transition-all duration-300 hover:bg-anmar-gold/10 hover:border-anmar-gold
+           text-sm tracking-widest uppercase;
+  }
+
+  .section-label {
+    @apply text-anmar-gold font-body text-xs font-medium tracking-[0.3em] uppercase;
+  }
+
+  .section-title {
+    @apply font-display text-display-md text-anmar-ivory leading-tight;
+  }
+
+  .divider-gold {
+    @apply w-16 h-px bg-anmar-gold/60 my-6;
+  }
+}
+
+@layer utilities {
+  .animation-delay-100 { animation-delay: 100ms; }
+  .animation-delay-200 { animation-delay: 200ms; }
+  .animation-delay-300 { animation-delay: 300ms; }
+  .animation-delay-400 { animation-delay: 400ms; }
+  .animation-delay-500 { animation-delay: 500ms; }
+  .animation-delay-700 { animation-delay: 700ms; }
+  .animation-delay-1000 { animation-delay: 1000ms; }
+
+  .opacity-0-init { opacity: 0; }
+  .text-balance { text-wrap: balance; }
+}

@@ -19,32 +19,19 @@ on:
 jobs:
   scan:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          driver-options: network=host
-
       - name: Build chatbot image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./chatbot/Dockerfile
-          load: true
-          tags: aiox-chatbot:scan
-          platforms: linux/amd64
+        run: docker build -f ./chatbot/Dockerfile -t aiox-chatbot:scan .
 
       - name: Build web image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./web/Dockerfile
-          load: true
-          tags: aiox-web:scan
-          platforms: linux/amd64
+        run: docker build -f ./web/Dockerfile -t aiox-web:scan .
 
       - name: Run Trivy vulnerability scanner on chatbot
         uses: aquasecurity/trivy-action@0.28.0
@@ -62,12 +49,14 @@ jobs:
 
       - name: Upload Trivy results to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
+        continue-on-error: true
         with:
           sarif_file: chatbot-trivy.sarif
           category: chatbot-scan
 
       - name: Upload web Trivy results
         uses: github/codeql-action/upload-sarif@v3
+        continue-on-error: true
         with:
           sarif_file: web-trivy.sarif
           category: web-scan
