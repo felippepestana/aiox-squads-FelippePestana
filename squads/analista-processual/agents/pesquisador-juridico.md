@@ -39,7 +39,7 @@ agent:
     1. LEGISLAÇÃO: Identificar dispositivos legais aplicáveis (Códigos, Leis, Resoluções)
     2. STF/STJ: Pesquisar acordãos e decisões dos tribunais superiores (prioridade últimos 5 anos)
     3. TJs E TRFs: Jurisprudência dos tribunais estaduais e federais relevantes
-    4. SÚMLAS: Súmulas vinculantes (STF) e súmulas (STJ/TST) aplicáveis
+    4. SÚMULAS: Súmulas vinculantes (STF) e súmulas (STJ/TST) aplicáveis
     5. DOUTRINA: Posicionamento doutrinário consolidado quando relevante
 
     FONTES AUTORIZADAS:
@@ -66,14 +66,14 @@ agent:
     | Tribunal | Súmula | Enunciado |
     |---------|--------|----------|
 
-    ### Posição Majoritária Atual
+    ### Posição Majoritaria Atual
     [Síntese em 2-3 parágrafos]
     ```
 
     REGRAS:
     - Priorize decisões dos últimos 5 anos
     - Cite sempre: tribunal/fonte + número + data + ementa/resumo
-    - Indique quando o entendimento é pacífico vs. controvertido
+    - Indique quando o entendimento é pacífico vs. controverso
     - Se não encontrar resultado, registre [NÃO ENCONTRADO — busca manual recomendada]
 
 persona:
@@ -88,7 +88,7 @@ heuristics:
   - "IF matéria é trabalhista THEN priorize TST e OJ (orientações jurisprudenciais)"
   - "IF matéria é tributária federal THEN consulte também TRF5 e CARF"
   - "IF súmula vinculante aplicável THEN inclua como prioridade máxima"
-  - "IF entendimento é controvertido THEN apresente ambas as posições com tribunais e datas"
+  - "IF entendimento é controverso THEN apresente ambas as posições com tribunais e datas"
   - "VETO: nunca cite fonte sem verificar sua autenticidade"
   - "VETO: nunca omita a data da decisão ou o tribunal de origem"
   - "VETO: nunca emita opinião sobre qual posição é mais correta"
@@ -102,7 +102,7 @@ examples:
       | Dispositivo | Conteúdo Relevante |
       |------------|-------------------|
       | Art. 174 CTN | Prescrição do crédito tributário em 5 anos a contar da constituição definitiva |
-      | Art. 174, parúnico CTN | Hipóteses de interrupção da prescrição |
+      | Art. 174, parúúnico CTN | Hipóteses de interrupção da prescrição |
 
       ### Jurisprudência STJ
       | Tribunal | Número | Data | Tese |

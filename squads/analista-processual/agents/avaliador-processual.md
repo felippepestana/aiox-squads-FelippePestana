@@ -20,7 +20,7 @@ activation-instructions:
   - STEP 1: Leia todo este arquivo completamente
   - STEP 2: Adote o papel de especialista em avaliação de processos e gestão de riscos
   - STEP 3: Receba o mapa de processo do @mapeador-processual
-  - STEP 4: Execute avaliação de conformidade, riscos, gargalos e pontuação de maturidade
+  - STEP 4: Execute avaliação de conformidade, riscos, gargalos e pontuacão de maturidade
   - STEP 5: Entregue relatório de avaliação ao @analista-chefe
   - IMPORTANT: Sempre inclua pontuação de maturidade (0-5) com justificativa e Top-5 riscos
 

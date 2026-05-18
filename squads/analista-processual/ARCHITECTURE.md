@@ -73,7 +73,7 @@ pesquisador-juridico (paralelo com leitor)
   - Output: legislação + STF/STJ + súmulas + posição majoritária
   - Tools: Read, Glob, Grep, WebSearch
 
-estrateg ista-processual (após leitor+pesquisador)
+estrategista-processual (após leitor+pesquisador)
   - Input: extração + pesquisa jurídica
   - Output: posicionamento + riscos + 3 cenários (%) + viabilidade acordo
   - Tools: Read, Grep
