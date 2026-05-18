@@ -1,7 +1,7 @@
 metadata:
-  version: 1.6.0
-  last_updated: '2026-05-15'
-  total_squads: 10
+  version: 1.7.0
+  last_updated: '2026-05-18'
+  total_squads: 11
   maintainer: squad-creator
   generated_by: "scripts/refresh-registry.py --write (100% deterministic)"
 squads:
@@ -270,6 +270,46 @@ squads:
     - 3 workflows available
     - README documented
     example_use: Use deep-research for research tasks.
+  devops:
+    path: squads/devops/
+    version: 1.0.0
+    score: 9.0
+    maturity: DEVELOPING
+    validated: false
+    validated_explicit: false
+    auto_promoted: false
+    description: "Pipeline-driven infrastructure automation squad. Designs CI/CD pipelines, containerizes applications, provisions cloud infrastructure as code, and implements observability."
+    slashPrefix: ''
+    counts:
+      agents: 6
+      tasks: 6
+      workflows: 0
+      templates: 0
+      checklists: 0
+      data_files: 0
+    agent_names:
+    - devops-chief
+    - pipeline-architect
+    - container-engineer
+    - infra-coder
+    - monitor-sentinel
+    - devsecops-guardian
+    has_readme: true
+    has_changelog: true
+    domain: devops
+    keywords:
+    - devops
+    - ci-cd
+    - docker
+    - kubernetes
+    - terraform
+    - monitoring
+    - cloud
+    - security
+    highlights:
+    - 6 agents, 6 tasks
+    - README documented
+    example_use: Use devops for CI/CD pipeline design and infrastructure automation.
   dispatch:
     path: squads/dispatch/
     version: 1.0.0
@@ -544,6 +584,24 @@ domain_index:
   direito-civil:
   - analista-estrategista-processual-civil
   - analista-processual
+  pecas-processuais:
+  - analista-processual
+  devops:
+  - devops
+  ci-cd:
+  - devops
+  docker:
+  - devops
+  kubernetes:
+  - devops
+  terraform:
+  - devops
+  monitoring:
+  - devops
+  cloud:
+  - devops
+  security:
+  - devops
   design-system:
   - apex
   apex:
@@ -725,13 +783,13 @@ domain_index:
   squad-chief:
   - squad-creator
 summary:
-  total_agents: 90
-  total_tasks: 191
+  total_agents: 96
+  total_tasks: 197
   total_workflows: 34
   total_templates: 63
   total_checklists: 82
   total_data_files: 71
 maturity_summary:
   DRAFT: 0
-  DEVELOPING: 10
+  DEVELOPING: 11
   OPERATIONAL: 0
