@@ -1,0 +1,187 @@
+name: Deploy Landing Pages to Cloudflare Pages
+
+on:
+  workflow_dispatch:
+    inputs:
+      alternative:
+        description: 'Which alternative to deploy'
+        required: true
+        type: choice
+        options:
+          - all
+          - sanctuary
+          - covenant
+          - flame
+          - community
+          - pilgrimage
+  push:
+    branches: [main]
+    paths:
+      - 'landing-pages/alternative-*/**'
+      - '.github/workflows/deploy-landing-pages.yml'
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  detect-changes:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      sanctuary: ${{ steps.changes.outputs.sanctuary }}
+      covenant: ${{ steps.changes.outputs.covenant }}
+      flame: ${{ steps.changes.outputs.flame }}
+      community: ${{ steps.changes.outputs.community }}
+      pilgrimage: ${{ steps.changes.outputs.pilgrimage }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            sanctuary:
+              - 'landing-pages/alternative-1-sanctuary/**'
+            covenant:
+              - 'landing-pages/alternative-2-covenant/**'
+            flame:
+              - 'landing-pages/alternative-3-flame/**'
+            community:
+              - 'landing-pages/alternative-4-community/**'
+            pilgrimage:
+              - 'landing-pages/alternative-5-pilgrimage/**'
+
+  deploy-sanctuary:
+    if: >
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.alternative == 'all' || github.event.inputs.alternative == 'sanctuary')) ||
+      (github.event_name == 'push' && needs.detect-changes.outputs.sanctuary == 'true')
+    needs: [detect-changes]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: landing-pages/alternative-1-sanctuary/package-lock.json
+      - name: Install & Build
+        working-directory: landing-pages/alternative-1-sanctuary
+        run: |
+          npm ci
+          npx vite build
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy landing-pages/alternative-1-sanctuary/dist --project-name=alianca-de-amor-sanctuary
+
+  deploy-covenant:
+    if: >
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.alternative == 'all' || github.event.inputs.alternative == 'covenant')) ||
+      (github.event_name == 'push' && needs.detect-changes.outputs.covenant == 'true')
+    needs: [detect-changes]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install & Build
+        working-directory: landing-pages/alternative-2-covenant
+        run: |
+          npm ci || npm install
+          npx vite build
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy landing-pages/alternative-2-covenant/dist --project-name=alianca-de-amor-covenant
+
+  deploy-flame:
+    if: >
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.alternative == 'all' || github.event.inputs.alternative == 'flame')) ||
+      (github.event_name == 'push' && needs.detect-changes.outputs.flame == 'true')
+    needs: [detect-changes]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: landing-pages/alternative-3-flame/package-lock.json
+      - name: Install & Build
+        working-directory: landing-pages/alternative-3-flame
+        run: |
+          npm ci
+          npx vite build
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy landing-pages/alternative-3-flame/dist --project-name=alianca-de-amor-flame
+
+  deploy-community:
+    if: >
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.alternative == 'all' || github.event.inputs.alternative == 'community')) ||
+      (github.event_name == 'push' && needs.detect-changes.outputs.community == 'true')
+    needs: [detect-changes]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install & Build
+        working-directory: landing-pages/alternative-4-community
+        run: |
+          npm ci || npm install
+          npx vite build
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy landing-pages/alternative-4-community/dist --project-name=alianca-de-amor-community
+
+  deploy-pilgrimage:
+    if: >
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.alternative == 'all' || github.event.inputs.alternative == 'pilgrimage')) ||
+      (github.event_name == 'push' && needs.detect-changes.outputs.pilgrimage == 'true')
+    needs: [detect-changes]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: landing-pages/alternative-5-pilgrimage/package-lock.json
+      - name: Install & Build
+        working-directory: landing-pages/alternative-5-pilgrimage
+        run: |
+          npm ci
+          npx vite build
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy landing-pages/alternative-5-pilgrimage/dist --project-name=alianca-de-amor-pilgrimage

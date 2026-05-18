@@ -1,0 +1,80 @@
+name: Validate Squads
+
+on:
+  pull_request:
+    paths:
+      - 'squads/**'
+  push:
+    branches: [main]
+    paths:
+      - 'squads/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate squad structure
+        run: |
+          set -euo pipefail
+
+          ERRORS=0
+          SQUADS_DIR="squads"
+
+          echo "=== Validating Squad Structure ==="
+
+          for squad_dir in "$SQUADS_DIR"/*/; do
+            squad_name="$(basename "$squad_dir")"
+            echo ""
+            echo "→ Validating: $squad_name"
+
+            # Check required files/directories
+            has_error=false
+
+            if [ ! -f "$squad_dir/README.md" ]; then
+              echo "  ✗ Missing README.md"
+              has_error=true
+            else
+              echo "  ✓ README.md"
+            fi
+
+            # Check for at least one of: config.yml, config.yaml, or agents/
+            if [ -f "$squad_dir/config.yml" ] || [ -f "$squad_dir/config.yaml" ]; then
+              echo "  ✓ config.yml"
+            else
+              echo "  ⚠ No config.yml found (optional)"
+            fi
+
+            if [ -d "$squad_dir/agents" ]; then
+              agent_count=$(find "$squad_dir/agents" -name "*.md" | wc -l)
+              echo "  ✓ agents/ ($agent_count agents)"
+            else
+              echo "  ⚠ No agents/ directory (optional)"
+            fi
+
+            if [ -d "$squad_dir/tasks" ]; then
+              task_count=$(find "$squad_dir/tasks" -name "*.md" | wc -l)
+              echo "  ✓ tasks/ ($task_count tasks)"
+            else
+              echo "  ⚠ No tasks/ directory (optional)"
+            fi
+
+            if [ "$has_error" = true ]; then
+              ERRORS=$((ERRORS + 1))
+            fi
+          done
+
+          echo ""
+          echo "=== Validation Complete ==="
+          squad_count=$(find "$SQUADS_DIR" -mindepth 1 -maxdepth 1 -type d | wc -l)
+          echo "Squads validated: $squad_count"
+          echo "Errors: $ERRORS"
+
+          if [ "$ERRORS" -gt 0 ]; then
+            echo "::error::$ERRORS squad(s) failed validation"
+            exit 1
+          fi
+
+          echo "✓ All squads passed validation"
