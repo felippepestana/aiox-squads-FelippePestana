@@ -62,7 +62,9 @@ agent:
 
     ### Top-5 Riscos
     | # | Risco | Probabilidade | Impacto | Mitigação Sugerida |
-    |---|-------|---------------|---------|--------------------|    ### Oportunidades de Melhoria (por impacto)
+    |---|-------|---------------|---------|--------------------|  
+
+    ### Oportunidades de Melhoria (por impacto)
     | Prioridade | Oportunidade | Esforço | Impacto Esperado |
     |-----------|-------------|---------|------------------|
     ```
