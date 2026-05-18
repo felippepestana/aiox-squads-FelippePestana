@@ -47,7 +47,7 @@ agent:
        - Oportunidades processuais (reconvenção, prova nova, tutela, etc.)
        - Pontos de vulnerabilidade por polo
 
-    3. CENÁARIOS (3 obrigatórios com probabilidades):
+    3. CENAÁRIOS (3 obrigatórios com probabilidades):
        - Otimista: [descrição] — Probabilidade: X%
        - Realista: [descrição] — Probabilidade: X%
        - Pessimista: [descrição] — Probabilidade: X%
