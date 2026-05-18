@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Sanctuary Theme — Custom Styles
+   ============================================================ */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: #0A1628;
+    color: #FAF7F0;
+  }
+
+  ::selection {
+    background-color: rgba(201, 168, 76, 0.3);
+    color: #FAF7F0;
+  }
+}
+
+@layer components {
+  /* Gold separator line */
+  .gold-divider {
+    @apply mx-auto;
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #C9A84C, transparent);
+  }
+
+  /* Glowing gold border card */
+  .sanctuary-card {
+    @apply relative rounded-xl border border-sanctuary-gold/20 bg-sanctuary-navy-light/60 backdrop-blur-sm;
+    transition: all 0.4s ease;
+  }
+
+  .sanctuary-card:hover {
+    border-color: rgba(201, 168, 76, 0.4);
+    box-shadow: 0 0 30px rgba(201, 168, 76, 0.1);
+  }
+
+  /* Gold gradient button */
+  .btn-gold {
+    @apply relative inline-flex items-center justify-center px-8 py-4 font-semibold text-sanctuary-navy rounded-lg overflow-hidden transition-all duration-300;
+    background: linear-gradient(135deg, #C9A84C 0%, #D4BA6A 50%, #A68A3A 100%);
+  }
+
+  .btn-gold:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(201, 168, 76, 0.4);
+  }
+
+  .btn-gold:active {
+    transform: translateY(0);
+  }
+
+  /* Outlined gold button */
+  .btn-gold-outline {
+    @apply inline-flex items-center justify-center px-8 py-4 font-semibold rounded-lg border-2 border-sanctuary-gold text-sanctuary-gold transition-all duration-300;
+  }
+
+  .btn-gold-outline:hover {
+    background: rgba(201, 168, 76, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(201, 168, 76, 0.2);
+  }
+
+  /* Section heading */
+  .section-heading {
+    @apply font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-sanctuary-cream mb-4;
+  }
+
+  .section-subheading {
+    @apply text-sanctuary-cream/70 text-lg md:text-xl max-w-2xl mx-auto;
+  }
+}
+
+@layer utilities {
+  /* Candle glow effect */
+  .candle-glow {
+    box-shadow:
+      0 0 15px rgba(201, 168, 76, 0.4),
+      0 0 40px rgba(201, 168, 76, 0.2),
+      0 0 80px rgba(201, 168, 76, 0.1);
+  }
+
+  /* Text gold gradient */
+  .text-gold-gradient {
+    background: linear-gradient(135deg, #C9A84C 0%, #D4BA6A 50%, #C9A84C 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Radial glow backgrounds */
+  .radial-glow-gold {
+    background: radial-gradient(ellipse at center, rgba(201, 168, 76, 0.08) 0%, transparent 70%);
+  }
+
+  .radial-glow-rose {
+    background: radial-gradient(ellipse at center, rgba(139, 34, 82, 0.08) 0%, transparent 70%);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0A1628;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #C9A84C, #A68A3A);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #D4BA6A, #C9A84C);
+}
+
+/* Input focus styles */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #C9A84C !important;
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.2);
+}

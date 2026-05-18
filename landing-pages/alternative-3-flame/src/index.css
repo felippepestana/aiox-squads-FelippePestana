@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-dark-900 text-white font-body;
+  }
+
+  ::selection {
+    @apply bg-flame-600/40 text-white;
+  }
+}
+
+@layer components {
+  .flame-btn {
+    @apply relative inline-flex items-center justify-center px-8 py-4
+           bg-gradient-to-r from-crimson-800 via-flame-600 to-gold-500
+           text-white font-display font-bold text-lg
+           rounded-lg shadow-lg
+           transition-all duration-300 ease-out
+           hover:shadow-flame-600/50 hover:shadow-2xl hover:scale-105
+           active:scale-95
+           focus:outline-none focus:ring-4 focus:ring-flame-500/50;
+  }
+
+  .flame-btn-lg {
+    @apply flame-btn text-xl px-10 py-5;
+  }
+
+  .flame-text {
+    @apply bg-gradient-to-r from-crimson-800 via-flame-600 to-gold-500
+           bg-clip-text text-transparent;
+  }
+
+  .flame-border {
+    @apply border-2 border-transparent
+           bg-gradient-to-r from-crimson-800 via-flame-600 to-gold-500
+           bg-origin-border;
+  }
+
+  .glass-dark {
+    @apply bg-dark-800/80 backdrop-blur-md border border-dark-700/50;
+  }
+
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8 py-16 md:py-24;
+  }
+}
+
+@layer utilities {
+  .animate-delay-100 { animation-delay: 100ms; }
+  .animate-delay-200 { animation-delay: 200ms; }
+  .animate-delay-300 { animation-delay: 300ms; }
+  .animate-delay-400 { animation-delay: 400ms; }
+  .animate-delay-500 { animation-delay: 500ms; }
+}

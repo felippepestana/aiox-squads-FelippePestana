@@ -548,3 +548,29 @@ kbd {
 .portal-submit {
   width: 100%;
 }
+
+.squad-desc {
+  margin: 0.25rem 0 0;
+  line-height: 1.4;
+}
+
+.agent-search {
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  margin-bottom: 0.35rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.agent-search:focus {
+  outline: 2px solid #059669;
+  outline-offset: 0;
+}
+
+.agent-search::placeholder {
+  color: var(--muted);
+}

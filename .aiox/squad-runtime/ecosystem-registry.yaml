@@ -457,7 +457,7 @@ squads:
     description: "Base meta-squad para criar squads de agentes via templates e validacao estrutural. Orchestrator: @squad-chief\
       \ (triage, routing, criacao template-driven de squads). Base mode: 24 tasks, 3 workflows, 1 agent. Pro mode: auto-detected\
       \ via squad-creator-pro/ (adds mind cloning, DNA extraction, multi-agent orchestration, model routing, advanced optimization).\
-      \ v4.0: Base/Pro split — template-driven base, mind-cloning pro."
+      \ v4.0: Base/Pro split \u2014 template-driven base, mind-cloning pro."
     slashPrefix: squadCreator
     counts:
       agents: 1

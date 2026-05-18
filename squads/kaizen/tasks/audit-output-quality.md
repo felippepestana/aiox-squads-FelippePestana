@@ -52,13 +52,13 @@ task:
     - "squad_id — identificador do squad a auditar"
     - "output_paths — caminhos dos outputs recentes"
     - "gold_examples_path — banco de exemplos gold (opcional)"
-    - "squad.yaml → automation_boundary + quality_gates"
+    - "config.yaml → automation_boundary + quality_gates"
 
   steps:
     - id: "1"
       name: "Coletar outputs e contexto"
       action: |
-        1. Ler squad.yaml do squad alvo
+        1. Ler config.yaml do squad alvo
         2. Identificar quality_gates existentes
         3. Coletar os N outputs mais recentes (default: 5)
         4. Carregar gold examples se disponivel

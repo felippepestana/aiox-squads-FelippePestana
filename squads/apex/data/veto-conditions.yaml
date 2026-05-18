@@ -709,7 +709,7 @@ workflow_veto_conditions:
     name: Profile Agent Validation
     trigger: "On pipeline start"
     condition: "Pipeline references agent not active in current profile"
-    available_check: "test -f squads/apex/squad.yaml"
+    available_check: "test -f squads/apex/config.yaml"
     on_unavailable: SKIP_WITH_WARNING
     check: "Compare pipeline agent list against profile active agents"
     action: "SKIP agent steps for inactive agents. Log with reason."

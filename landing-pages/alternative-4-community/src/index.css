@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Community Theme — Warm, People-Centered Styles
+   ============================================================ */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: #FDF8F0;
+    color: #78350F;
+  }
+
+  ::selection {
+    background-color: rgba(22, 101, 52, 0.2);
+    color: #166534;
+  }
+}
+
+@layer components {
+  /* Warm divider */
+  .warm-divider {
+    @apply mx-auto;
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #166534, transparent);
+    border-radius: 2px;
+  }
+
+  /* Community card */
+  .community-card {
+    @apply relative rounded-2xl bg-white/80 backdrop-blur-sm shadow-md;
+    border: 1px solid rgba(22, 101, 52, 0.1);
+    transition: all 0.4s ease;
+  }
+
+  .community-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(22, 101, 52, 0.12);
+    border-color: rgba(22, 101, 52, 0.25);
+  }
+
+  /* Green CTA button */
+  .btn-community {
+    @apply relative inline-flex items-center justify-center px-8 py-4 font-heading font-bold text-white rounded-full overflow-hidden transition-all duration-300;
+    background: linear-gradient(135deg, #166534 0%, #22863A 100%);
+  }
+
+  .btn-community:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(22, 101, 52, 0.35);
+  }
+
+  .btn-community:active {
+    transform: translateY(0);
+  }
+
+  /* Outlined button */
+  .btn-community-outline {
+    @apply inline-flex items-center justify-center px-8 py-4 font-heading font-bold rounded-full border-2 border-community-green text-community-green transition-all duration-300;
+  }
+
+  .btn-community-outline:hover {
+    background: rgba(22, 101, 52, 0.08);
+    transform: translateY(-2px);
+  }
+
+  /* Rose button */
+  .btn-rose {
+    @apply relative inline-flex items-center justify-center px-8 py-4 font-heading font-bold text-white rounded-full overflow-hidden transition-all duration-300;
+    background: linear-gradient(135deg, #BE185D 0%, #DB2777 100%);
+  }
+
+  .btn-rose:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(190, 24, 93, 0.35);
+  }
+
+  /* Section heading */
+  .section-heading {
+    @apply font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-community-green mb-4;
+  }
+
+  .section-subheading {
+    @apply text-community-brown/70 text-lg md:text-xl max-w-2xl mx-auto font-body;
+  }
+}
+
+@layer utilities {
+  /* Warm glow */
+  .warm-glow {
+    box-shadow:
+      0 0 20px rgba(22, 101, 52, 0.1),
+      0 0 60px rgba(22, 101, 52, 0.05);
+  }
+
+  /* Text green gradient */
+  .text-green-gradient {
+    background: linear-gradient(135deg, #166534 0%, #22863A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Photo circle */
+  .photo-circle {
+    @apply rounded-full overflow-hidden border-4 border-white shadow-lg;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FDF8F0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #166534, #22863A);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #22863A, #166534);
+}
+
+/* Input focus styles */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #166534 !important;
+  box-shadow: 0 0 0 3px rgba(22, 101, 52, 0.15);
+}
