@@ -15,7 +15,7 @@ Este é o repositório da comunidade para compartilhar, descobrir e contribuir s
 ### Commits
 
 - Prefixos: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`
-- Mensagem em inglês, concisa (1 linha), descritiva do “por quê”
+- Mensagem em inglês, concisa (1 linha), descritiva do "porquê"
 - Corpo opcional para detalhes adicionais
 
 ### Scripts Bash
