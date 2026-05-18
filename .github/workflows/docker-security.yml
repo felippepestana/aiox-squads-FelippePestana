@@ -27,8 +27,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        with:
-          driver-options: network=host
 
       - name: Build chatbot image
         uses: docker/build-push-action@v5
@@ -37,7 +35,6 @@ jobs:
           file: ./chatbot/Dockerfile
           load: true
           tags: aiox-chatbot:scan
-          platforms: linux/amd64
 
       - name: Build web image
         uses: docker/build-push-action@v5
@@ -46,7 +43,6 @@ jobs:
           file: ./web/Dockerfile
           load: true
           tags: aiox-web:scan
-          platforms: linux/amd64
 
       - name: Run Trivy vulnerability scanner on chatbot
         uses: aquasecurity/trivy-action@0.28.0
