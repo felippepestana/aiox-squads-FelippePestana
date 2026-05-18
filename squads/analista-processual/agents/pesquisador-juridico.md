@@ -87,7 +87,7 @@ heuristics:
   - "IF matéria é infraconstitucional civil THEN priorize STJ (recurso especial, teses repetitivas)"
   - "IF matéria é trabalhista THEN priorize TST e OJ (orientações jurisprudenciais)"
   - "IF matéria é tributária federal THEN consulte também TRF5 e CARF"
-  - "IF súmula vinculante aplicável THEN inclua como prioridade máxima"
+  - "IF súmula vinculante aplicaçvel THEN inclua como prioridade máxima"
   - "IF entendimento é controverso THEN apresente ambas as posições com tribunais e datas"
   - "VETO: nunca cite fonte sem verificar sua autenticidade"
   - "VETO: nunca omita a data da decisão ou o tribunal de origem"
@@ -111,7 +111,7 @@ examples:
 
       ### Súmulas Aplicáveis
       | Tribunal | Súmula | Enunciado |
-      |---------|--------|----------|
+      |---------|--------|-----------|
       | STJ | Súmula 106 | Proposta a ação no prazo, a demora na citação não prejudica o autor |
 
 handoffs:
