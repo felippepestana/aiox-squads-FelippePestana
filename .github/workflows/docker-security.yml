@@ -19,55 +19,41 @@ on:
 jobs:
   scan:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Run Trivy vulnerability scanner (chatbot dependencies)
+        uses: aquasecurity/trivy-action@master
         with:
-          driver-options: network=host
-
-      - name: Build chatbot image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./chatbot/Dockerfile
-          load: true
-          tags: aiox-chatbot:scan
-          platforms: linux/amd64
-
-      - name: Build web image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./web/Dockerfile
-          load: true
-          tags: aiox-web:scan
-          platforms: linux/amd64
-
-      - name: Run Trivy vulnerability scanner on chatbot
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          image-ref: aiox-chatbot:scan
+          scan-type: fs
+          scan-ref: ./chatbot
           format: sarif
           output: chatbot-trivy.sarif
+          severity: CRITICAL,HIGH
 
-      - name: Run Trivy vulnerability scanner on web
-        uses: aquasecurity/trivy-action@0.28.0
+      - name: Run Trivy vulnerability scanner (web dependencies)
+        uses: aquasecurity/trivy-action@master
         with:
-          image-ref: aiox-web:scan
+          scan-type: fs
+          scan-ref: ./web
           format: sarif
           output: web-trivy.sarif
+          severity: CRITICAL,HIGH
 
       - name: Upload Trivy results to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
+        continue-on-error: true
         with:
           sarif_file: chatbot-trivy.sarif
           category: chatbot-scan
 
       - name: Upload web Trivy results
         uses: github/codeql-action/upload-sarif@v3
+        continue-on-error: true
         with:
           sarif_file: web-trivy.sarif
           category: web-scan

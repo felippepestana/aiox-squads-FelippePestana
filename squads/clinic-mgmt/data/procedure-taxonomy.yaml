@@ -1,0 +1,145 @@
+metadata:
+  version: "1.0"
+  created: "2026-05-15"
+  squad: "clinic-mgmt"
+  description: "Taxonomia de procedimentos e especialidades para Clínica Anmar"
+
+specialties:
+  estetica_facial:
+    display: "Estética Facial"
+    color: "#F4A261"
+    procedures_examples:
+      - "Botox / Toxina Botulínica"
+      - "Preenchimento Labial / Facial (Ácido Hialurônico)"
+      - "Bioestimulador de Colágeno (Sculptra, Radiesse)"
+      - "Skinbooster (Juvederm, Restylane)"
+      - "Peeling Químico"
+      - "Microagulhamento (Microneeding)"
+      - "Laser Fracionado CO2"
+      - "IPL / Luz Intensa Pulsada"
+      - "Ultrassom Microfocado (Ulthera)"
+      - "Radiofrequência Facial"
+      - "Fios de PDO / Sustentação"
+      - "PRP Facial (Plasma Rico em Plaquetas)"
+      - "Limpeza de Pele Profunda"
+      - "Mesoterapia Facial"
+      - "Carbono Laser"
+
+  estetica_corporal:
+    display: "Estética Corporal"
+    color: "#2A9D8F"
+    procedures_examples:
+      - "Criolipólise"
+      - "Lipo Enzimática (Intralipoterapia)"
+      - "Carboxiterapia"
+      - "Drenagem Linfática (Presoterapia)"
+      - "Ultracavitação"
+      - "Radiofrequência Corporal"
+      - "HIFEM / Eletroestimulação (EMS)"
+      - "Laser Corporal"
+      - "Massagem Modeladora"
+      - "Endermologia / LPG"
+      - "Ondas de Choque"
+      - "Vacuum Therapy"
+      - "Mesoterapia Corporal"
+
+  emagrecimento:
+    display: "Emagrecimento e Nutrologia"
+    color: "#57CC99"
+    procedures_examples:
+      - "Consulta Nutroiológica"
+      - "Avaliação de Bioimpedância"
+      - "Protocolo Ozônio Terapia"
+      - "Injetoterapia para Emagrecimento"
+      - "Suplementação IV (Vitaminas, Minerais)"
+      - "Terapia de Reposição Nutricional"
+      - "Programa Detox Funcional"
+      - "Semaglutida / GLP-1 (Prescrição e Acompanhamento)"
+      - "Dieta Cetogênica Supervisionada"
+      - "Balão Intragástrico (parceria cirurgião)"
+
+  hormonal:
+    display: "Reposição e Ajuste Hormonal"
+    color: "#8338EC"
+    procedures_examples:
+      - "Consulta de Saúde Hormonal"
+      - "Implante de Pellet Hormonal (Testosterona, Estrogênio)"
+      - "Reposição Hormonal Feminina (THR)"
+      - "Reposição Hormonal Masculina (TRT)"
+      - "Terapia de Tireoide (T3/T4)"
+      - "Ajuste de Cortisol"
+      - "Terapia com GH (Hormônio do Crescimento)"
+      - "Protocolo Anti-Aging Hormonal"
+      - "Revisão de Exames Hormonais"
+
+  medicina_preventiva:
+    display: "Medicina Preventiva e Funcional"
+    color: "#3A86FF"
+    procedures_examples:
+      - "Check-up Completo"
+      - "Análise de Micronutrientes"
+      - "Medicina Ortomolecular"
+      - "Vitamina C IV (Alta Dose)"
+      - "Ozonioterapia Sistêmica"
+      - "Chelation Therapy"
+      - "Análise de DNA/Genômica"
+      - "Medicina do Sono"
+      - "Avaliação de Estresse Oxidativo"
+
+  consultas:
+    display: "Consultas Médicas"
+    color: "#264653"
+    procedures_examples:
+      - "Consulta Inicial (Anamnese Completa)"
+      - "Consulta de Retorno"
+      - "Teleconsulta"
+      - "Consulta de Encerramento de Protocolo"
+      - "Segunda Opinião"
+
+equipment_categories:
+  laser_energy:
+    - "Laser CO2 Fracionado"
+    - "Laser Nd:YAG"
+    - "IPL (Intense Pulsed Light)"
+    - "HIFU (High Intensity Focused Ultrasound)"
+  body_contouring:
+    - "CoolSculpting / Criolipólise"
+    - "EMSCULPT / HIFEM"
+    - "Ultracavitação"
+    - "Radiofrequência"
+  diagnostic:
+    - "Balança de Bioimpedância (InBody, Tanita)"
+    - "Câmera de análise corporal 3D"
+    - "Dermatoscópio"
+  infusion:
+    - "Bomba de Infusão IV"
+    - "Nebulizador de Ozônio"
+
+supply_categories:
+  injectables:
+    subcategories: ["Toxinas botulínicas", "Preenchedores", "Bioestimuladores", "Mesococktails"]
+  medications:
+    subcategories: ["Hormônios", "Vitaminas IV", "Suplementos prescritos", "Anestésicos tópicos"]
+  consumables:
+    subcategories: ["Agulhas", "Seringas", "Gaze", "Luvas", "Descartáveis de equipamento"]
+  skincare:
+    subcategories: ["Peelings", "Ativos cosméticos", "Máscaras", "Hidratantes"]
+
+protocol_templates:
+  slim_pro_12w:
+    name: "Slim Pro — Emagrecimento 12 Semanas"
+    specialty: emagrecimento
+    steps_count: 14
+    key_procedures: ["Consulta inicial", "Bioimpedância semanal", "Criolipólise", "Ozônioterapia", "Consultas de retorno"]
+
+  hormonal_balance_8w:
+    name: "Hormonal Balance — 8 Semanas"
+    specialty: hormonal
+    steps_count: 8
+    key_procedures: ["Consulta hormonal", "Exames laboratoriais", "Implante pellet", "Retornos mensais"]
+
+  facial_rejuvenation:
+    name: "Rejuvenescimento Facial Premium"
+    specialty: estetica_facial
+    steps_count: 6
+    key_procedures: ["Avaliação facial", "Botox", "Preenchimento", "Bioestimulador", "Retorno 30/60 dias"]
