@@ -76,6 +76,7 @@ function paramId(req: Request): string {
 function squadsSummary(squads: Squad[]) {
   return squads.map((s) => ({
     id: s.id,
+    meta: s.meta,
     agents: s.agents.map((a) => ({
       id: a.id,
       name: a.name,
