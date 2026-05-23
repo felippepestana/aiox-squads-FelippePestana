@@ -35,6 +35,8 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          driver-options: network=host
 
       - name: Build chatbot image
         uses: docker/build-push-action@v5
@@ -43,6 +45,7 @@ jobs:
           file: ./chatbot/Dockerfile
           load: true
           tags: aiox-chatbot:scan
+          platforms: linux/amd64
 
       - name: Build web image
         uses: docker/build-push-action@v5
@@ -51,6 +54,7 @@ jobs:
           file: ./web/Dockerfile
           load: true
           tags: aiox-web:scan
+          platforms: linux/amd64
 
       # aquasecurity/trivy-action 0.28.0 was within the GHSA-69fq-xp46-6x23
       # supply-chain attack window (CVE-2026-33634, March 19 2026). Pinned

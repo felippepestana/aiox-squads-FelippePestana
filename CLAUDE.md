@@ -71,3 +71,61 @@ squads/<nome>/
 - Firewall via iptables (init-firewall.sh)
 - Firewall restringe egress, mas `--dangerously-skip-permissions` permite alterações irrestritas no workspace — use apenas com repositórios confiáveis
 - Volumes persistentes para histórico de comandos e config do Claude
+
+## Model Context Protocol (MCP)
+
+MCPs são servidores que estendem as capacidades do Claude Code. Este projeto utiliza os seguintes MCPs:
+
+### MCPs Configurados
+
+- **MCP_DOCKER**: Gerenciar containers e imagens Docker
+  - Pacote: `docker-mcp`
+  - Requer: Docker daemon rodando (acesso ao `/var/run/docker.sock`)
+  - Instalação: `npm install -g docker-mcp`
+
+- **shell**: Executar comandos bash
+  - Comando: `/bin/bash`
+  - Sempre disponível no sistema
+  - Requer aprovação explícita no Claude Code
+
+- **ClickUp** (opcional): Integração com ClickUp para gerenciamento de tarefas
+  - Pacote recomendado: `@taazkareem/clickup-mcp-server` (v0.14.4+)
+  - Requer: Token de API do ClickUp
+  - Obtenção do token: https://app.clickup.com/settings/apps
+  - Instalação:
+    ```bash
+    npm install -g @taazkareem/clickup-mcp-server
+    export CLICKUP_API_TOKEN="seu_token_aqui"
+    claude mcp add ClickUp \
+      -e CLICKUP_API_TOKEN=$CLICKUP_API_TOKEN \
+      -- npx @taazkareem/clickup-mcp-server
+    ```
+
+### Diagnóstico e Resolução de MCPs
+
+Caso encontre erros de conexão com MCPs:
+
+1. **Executar script de diagnóstico:**
+   ```bash
+   ./fix-mcp.sh
+   ```
+
+2. **Verificar status:**
+   ```bash
+   claude mcp list
+   ```
+
+3. **Reinstalar MCPs:**
+   ```bash
+   npm install -g docker-mcp
+   claude mcp add MCP_DOCKER -- npx -y docker-mcp
+   claude mcp add shell -- /bin/bash
+   ```
+
+### Documentação Detalhada
+
+Veja `MCP_SETUP_PLAN.md` para:
+- Análise completa de erros
+- Plano de resolução com 7 passos
+- Testes de validação
+- Scripts de resolução rápida
