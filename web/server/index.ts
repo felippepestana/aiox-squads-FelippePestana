@@ -15,7 +15,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { portalAuthMiddleware, portalAuthEnabled } from "./authPortal.js";
 import { loadAllSquads, findAgent, type Agent, type Squad } from "./agents.js";
 import { ChatSession } from "./chatSession.js";
-import { generateLaudo, type PericiaData } from "./pericia.js";
+import { generateLaudo, assistQuesito, type PericiaData } from "./pericia.js";
 import {
   uploadFileFromBuffer,
   supportedExtensions,
@@ -137,6 +137,29 @@ function asyncHandler(
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true });
 });
+
+app.post(
+  "/api/pericia/assist-quesito",
+  rateLimitDisabled ? ((_req, _res, next) => next()) : heavyLimiter,
+  asyncHandler(async (req, res) => {
+    const { formData, quesito } = req.body as {
+      formData: PericiaData;
+      quesito: string;
+    };
+    if (!quesito || typeof quesito !== "string") {
+      res.status(400).json({ error: "Campo 'quesito' é obrigatório" });
+      return;
+    }
+    try {
+      const resposta = await assistQuesito(getAnthropic(), formData ?? {}, quesito);
+      res.json({ resposta });
+    } catch (e) {
+      Sentry.captureException(e);
+      const message = e instanceof Error ? e.message : String(e);
+      res.status(502).json({ error: message });
+    }
+  })
+);
 
 app.post(
   "/api/pericia/generate-laudo",

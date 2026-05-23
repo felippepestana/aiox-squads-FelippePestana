@@ -1,6 +1,49 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 import "./pericia-styles.css";
+
+const DRAFT_KEY = "pericia-form-draft";
+
+const QUESITOS_PADRAO_AUTOR: QuesitoPD[] = [
+  { texto: "O dispositivo periciado é original de fábrica, na configuração comercializada pelo fabricante?", resposta: "" },
+  { texto: "O número de série e IMEI conferem com os documentos de compra juntados?", resposta: "" },
+  { texto: "Qual o estado geral de conservação do dispositivo?", resposta: "" },
+  { texto: "O dispositivo apresenta defeito(s)? Em caso afirmativo, qual(is) é(são)?", resposta: "" },
+  { texto: "O defeito impede o uso normal do produto para a finalidade a que se destina?", resposta: "" },
+  { texto: "Qual é a causa técnica do(s) defeito(s) identificado(s)?", resposta: "" },
+  { texto: "O defeito é de origem interna (vício do produto) ou externa (uso inadequado, acidente, intervenção)?", resposta: "" },
+  { texto: "O defeito é compatível com vício de fabricação (defeito intrínseco ao produto)?", resposta: "" },
+  { texto: "O defeito poderia ter sido causado ou agravado por intervenção técnica inadequada?", resposta: "" },
+  { texto: "Há evidências de que a assistência técnica realizou serviço de forma incorreta ou com ferramentas inadequadas?", resposta: "" },
+  { texto: "A assistência técnica que atendeu o produto é autorizada pelo fabricante (Apple Authorized Service Provider)?", resposta: "" },
+  { texto: "O dispositivo tem conserto? Em caso afirmativo, qual o custo estimado de reparo?", resposta: "" },
+  { texto: "Qual o valor de mercado atual do dispositivo em pleno estado de funcionamento?", resposta: "" },
+  { texto: "Qual o valor residual do dispositivo no estado atual (para retirada de peças)?", resposta: "" },
+  { texto: "O custo de reparo é economicamente viável em comparação ao valor de mercado?", resposta: "" },
+  { texto: "Há registro de serviços anteriores por assistência autorizada Apple (ASP)?", resposta: "" },
+  { texto: "O período de ocorrência do defeito está dentro do prazo de garantia legal (90 dias — CDC) ou contratual?", resposta: "" },
+];
+
+const QUESITOS_PADRAO_REU: QuesitoPD[] = [
+  { texto: "O dispositivo apresenta evidências de uso inadequado pelo consumidor (queda, imersão em líquido além das especificações, uso de acessórios não certificados)?", resposta: "" },
+  { texto: "Os danos identificados são compatíveis com desgaste natural pelo uso?", resposta: "" },
+  { texto: "Os Indicadores de Contato com Líquido (LCI) estão ativados? Em caso afirmativo, isso implica perda de garantia?", resposta: "" },
+  { texto: "O serviço descrito na Ordem de Serviço foi realizado de forma tecnicamente correta?", resposta: "" },
+  { texto: "Os procedimentos adotados estão em conformidade com as especificações do fabricante?", resposta: "" },
+  { texto: "O serviço foi realizado por técnico com certificação adequada?", resposta: "" },
+  { texto: "Os componentes utilizados no reparo são originais ou certificados pelo fabricante?", resposta: "" },
+  { texto: "A falha atual do dispositivo poderia ter ocorrido independentemente do serviço prestado?", resposta: "" },
+  { texto: "Há causa alternativa para o defeito que não seja a intervenção técnica realizada?", resposta: "" },
+  { texto: "O defeito é classificado como 'não coberto pela garantia' pelos critérios do fabricante? Por quê?", resposta: "" },
+  { texto: "O modelo iPhone periciado possui certificação ANATEL válida para comercialização no Brasil?", resposta: "" },
+];
+
+const QUESITOS_PADRAO_JUIZO: QuesitoPD[] = [
+  { texto: "O defeito poderia ter sido prevenido com inspeção adequada no momento da venda?", resposta: "" },
+  { texto: "O consumidor foi informado adequadamente sobre as condições e limitações da garantia?", resposta: "" },
+  { texto: "Qual das hipóteses técnicas (vício de fabricação vs. dano por intervenção) tem maior suporte nas evidências encontradas?", resposta: "" },
+  { texto: "O laudo do assistente técnico do autor/réu é tecnicamente correto? Em que pontos diverge das conclusões do perito?", resposta: "" },
+];
 
 interface QuesitoPD {
   texto: string;
@@ -608,15 +651,21 @@ function QuesitosSection({
   title,
   label,
   quesitos,
+  padrao,
+  formData,
   onChange,
 }: {
   title: string;
   label: string;
   quesitos: QuesitoPD[];
+  padrao: QuesitoPD[];
+  formData: FormData;
   onChange: (q: QuesitoPD[]) => void;
 }) {
   const LETRAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const ALGARISMOS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII"];
+  const [aiLoading, setAiLoading] = useState<Set<number>>(new Set());
+  const [aiErrors, setAiErrors] = useState<Record<number, string>>({});
 
   const addQ = () => onChange([...quesitos, { texto: "", resposta: "" }]);
   const removeQ = (i: number) => onChange(quesitos.filter((_, idx) => idx !== i));
@@ -624,6 +673,32 @@ function QuesitosSection({
     const next = [...quesitos];
     next[i] = { ...next[i], [field]: val };
     onChange(next);
+  };
+
+  const loadPadrao = () => {
+    if (quesitos.length > 0 && !confirm("Substituir quesitos atuais pelos padrão?")) return;
+    onChange(padrao.map((q) => ({ ...q })));
+  };
+
+  const assistWithAI = async (i: number) => {
+    const q = quesitos[i];
+    if (!q.texto.trim()) return;
+    setAiLoading((prev) => new Set(prev).add(i));
+    setAiErrors((prev) => { const n = { ...prev }; delete n[i]; return n; });
+    try {
+      const r = await fetch("/api/pericia/assist-quesito", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ formData, quesito: q.texto }),
+      });
+      if (!r.ok) throw new Error(await r.text());
+      const data = (await r.json()) as { resposta: string };
+      updateQ(i, "resposta", data.resposta);
+    } catch (e) {
+      setAiErrors((prev) => ({ ...prev, [i]: String(e) }));
+    } finally {
+      setAiLoading((prev) => { const n = new Set(prev); n.delete(i); return n; });
+    }
   };
 
   const getNum = (i: number): string => {
@@ -634,10 +709,17 @@ function QuesitosSection({
 
   return (
     <div className="pericia-section">
-      <p className="pericia-section-title">{title}</p>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.85rem", paddingBottom: "0.5rem", borderBottom: "1px solid var(--border)" }}>
+        <p className="pericia-section-title" style={{ margin: 0, border: "none", padding: 0 }}>{title}</p>
+        {padrao.length > 0 && (
+          <button type="button" className="pericia-add-btn" onClick={loadPadrao} style={{ fontSize: "0.72rem" }}>
+            Carregar padrão ({padrao.length})
+          </button>
+        )}
+      </div>
       {quesitos.length === 0 && (
         <p style={{ fontSize: "0.82rem", color: "var(--muted)", marginBottom: "0.75rem" }}>
-          Nenhum quesito adicionado. Clique em "Adicionar quesito" para incluir.
+          Nenhum quesito adicionado. Clique em "Adicionar quesito" ou "Carregar padrão".
         </p>
       )}
       <div className="pericia-quesitos-list">
@@ -652,12 +734,28 @@ function QuesitosSection({
                 rows={2}
                 placeholder="Transcreva o quesito literalmente conforme formulado pela parte"
               />
-              <span className="pericia-q-label">Resposta do perito</span>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "0.1rem" }}>
+                <span className="pericia-q-label">Resposta do perito</span>
+                <button
+                  type="button"
+                  className="pericia-ai-btn"
+                  disabled={aiLoading.has(i) || !q.texto.trim()}
+                  onClick={() => void assistWithAI(i)}
+                  title="Gerar resposta com IA baseada nos dados diagnósticos"
+                >
+                  {aiLoading.has(i) ? "Gerando…" : "Gerar com IA"}
+                </button>
+              </div>
+              {aiErrors[i] && (
+                <p style={{ fontSize: "0.72rem", color: "var(--danger)", margin: "0.2rem 0 0" }}>{aiErrors[i]}</p>
+              )}
               <textarea
                 value={q.resposta}
                 onChange={(e) => updateQ(i, "resposta", e.target.value)}
-                rows={3}
-                placeholder="Resposta direta. Fundamentação técnica. Referência à norma ou evidência. Conclusão."
+                rows={aiLoading.has(i) ? 2 : 4}
+                placeholder={aiLoading.has(i) ? "Aguardando resposta da IA…" : "Resposta direta. Fundamentação técnica. Referência à norma ou evidência. Conclusão."}
+                disabled={aiLoading.has(i)}
+                style={aiLoading.has(i) ? { opacity: 0.5 } : undefined}
               />
             </div>
             <button className="pericia-quesito-remove" type="button" onClick={() => removeQ(i)} title="Remover quesito">
@@ -680,18 +778,24 @@ function Step4({ form, setForm }: { form: FormData; setForm: Dispatch<SetStateAc
         title="Quesitos do Autor (numerados: 1, 2, 3…)"
         label="autor"
         quesitos={form.quesitosAutor}
+        padrao={QUESITOS_PADRAO_AUTOR}
+        formData={form}
         onChange={(q) => setForm((p) => ({ ...p, quesitosAutor: q }))}
       />
       <QuesitosSection
         title="Quesitos do Réu (letras: A, B, C…)"
         label="reu"
         quesitos={form.quesitosReu}
+        padrao={QUESITOS_PADRAO_REU}
+        formData={form}
         onChange={(q) => setForm((p) => ({ ...p, quesitosReu: q }))}
       />
       <QuesitosSection
         title="Quesitos do Juízo (algarismos romanos: I, II, III…)"
         label="juizo"
         quesitos={form.quesitosJuizo}
+        padrao={QUESITOS_PADRAO_JUIZO}
+        formData={form}
         onChange={(q) => setForm((p) => ({ ...p, quesitosJuizo: q }))}
       />
     </>
@@ -885,10 +989,47 @@ function Step5({
 
 export function PericiaView({ onClose }: { onClose: () => void }) {
   const [step, setStep] = useState(1);
-  const [form, setForm] = useState<FormData>(initialForm);
   const [laudo, setLaudo] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
   const [genError, setGenError] = useState<string | null>(null);
+  const [hasDraft, setHasDraft] = useState(false);
+  const isFirstMount = useRef(true);
+
+  const [form, setForm] = useState<FormData>(() => {
+    try {
+      const raw = typeof localStorage !== "undefined" ? localStorage.getItem(DRAFT_KEY) : null;
+      if (raw) {
+        const parsed = JSON.parse(raw) as FormData;
+        return parsed;
+      }
+    } catch { /* ignore */ }
+    return initialForm;
+  });
+
+  // Set hasDraft after mount based on whether localStorage had data
+  useEffect(() => {
+    const raw = typeof localStorage !== "undefined" ? localStorage.getItem(DRAFT_KEY) : null;
+    if (raw) setHasDraft(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Auto-save debounced
+  useEffect(() => {
+    if (isFirstMount.current) { isFirstMount.current = false; return; }
+    const id = setTimeout(() => {
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(form));
+      }
+    }, 600);
+    return () => clearTimeout(id);
+  }, [form]);
+
+  const clearDraft = () => {
+    if (typeof localStorage !== "undefined") localStorage.removeItem(DRAFT_KEY);
+    setForm(initialForm);
+    setLaudo(null);
+    setHasDraft(false);
+  };
 
   const update: FieldUpdater = (field) => (e) => {
     setForm((p) => ({ ...p, [field]: e.target.value }));
@@ -938,9 +1079,23 @@ export function PericiaView({ onClose }: { onClose: () => void }) {
       <div className="pericia-header">
         <div className="pericia-title-row">
           <h2>Formulario Pericial — iPhone</h2>
-          <button type="button" className="btn btn-ghost" onClick={onClose} style={{ fontSize: "0.8rem" }}>
-            Fechar
-          </button>
+          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+            {hasDraft && (
+              <span className="meta" style={{ color: "var(--accent-dim)" }}>
+                Rascunho salvo ·{" "}
+                <button
+                  type="button"
+                  className="pericia-inline-link"
+                  onClick={clearDraft}
+                >
+                  Limpar
+                </button>
+              </span>
+            )}
+            <button type="button" className="btn btn-ghost" onClick={onClose} style={{ fontSize: "0.8rem" }}>
+              Fechar
+            </button>
+          </div>
         </div>
         <StepIndicator current={step} />
       </div>
