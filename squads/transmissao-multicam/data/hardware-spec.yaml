@@ -1,0 +1,81 @@
+# Hardware specification for the broadcast operation
+# All values are minimums unless explicitly noted
+
+host_pc:
+  os: "Windows 11 Pro 64-bit"
+  cpu:
+    cores_min: 8
+    threads_min: 16
+    architecture: "x86_64"
+  ram_gb_min: 32
+  gpu:
+    required: true
+    encoder: "NVENC"
+    note: "RTX 3060 ou superior recomendado para encode H.264 sem CPU"
+  storage:
+    type: "NVMe SSD"
+    free_gb_min: 200
+    note: "Gravações locais de fallback além da gravação Meet na nuvem"
+  usb_controllers:
+    rear_usb_a_3x_min: 2
+    rear_usb_c_3x_min: 2
+    note: "Idealmente em controladores raiz distintos (validar com USBTreeView)"
+  network:
+    wired: true
+    bandwidth_mbps_min: 100
+    note: "Cabeada gigabit recomendada. Wi-Fi não é aceito para produção."
+
+cameras:
+  models_supported:
+    - "OBSBOT Tiny 2"
+    - "OBSBOT Tiny 2 Lite"
+  quantity_target: 4
+  interface: "USB 3.0 UVC + UAC"
+  resolution_target: "1920x1080 @ 30fps MJPEG"
+  resolution_max: "3840x2160 @ 30fps MJPEG"
+  power_draw_ma_per_camera: 900
+  cable_max_length_m_passive: 2
+  cable_long_run: "Active USB 3.0 extender (chip repeater) > 2m"
+
+hub_backup:
+  model: "Anker A7515 (ou equivalente USB 3.2 Gen1 alimentado)"
+  power_supply_a_min: 4
+  ports_min: 4
+  use_when:
+    - "Host com menos de 4 portas USB 3.x traseiras"
+    - "Necessidade de centralizar cabos por questão física"
+  must_not:
+    - "Conectar ao Dell D6000"
+    - "Encadear (daisy chain) outro hub"
+
+physical_controller:
+  model: "OBSBOT Remote"
+  connection: "Bluetooth 5.0"
+  use: "Failover manual sem dependência de software"
+
+dock_dell_d6000:
+  status: "ALLOWED for peripherals only"
+  forbidden_for:
+    - "OBSBOT cameras"
+    - "USB audio interfaces with isochronous traffic > 50Mbps"
+  reason: "DisplayLink shares USB 3.0 uplink and historically conflicts with multiple isochronous UVC streams"
+  allowed_for:
+    - "Keyboard"
+    - "Mouse"
+    - "Wired Ethernet"
+    - "Display outputs"
+
+audio:
+  interface_recommended: "Behringer UMC404HD (or equivalent multichannel USB)"
+  channels_min: 4
+  microphones:
+    type: "Lapela / mesa condicionador"
+    qty_min: 4
+  note: "Áudio NÃO compartilha barramento USB com câmeras. Conectar a controlador raiz separado."
+
+monitors:
+  qty_min: 2
+  resolution_min: "1920x1080"
+  use:
+    - "Monitor 1: OBS preview multicam"
+    - "Monitor 2: Painel operador / Meet companion"
