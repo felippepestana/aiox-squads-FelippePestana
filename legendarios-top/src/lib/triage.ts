@@ -24,11 +24,13 @@ export const RISK_LABELS: Record<RiskLevel, string> = {
 };
 
 export function calcularIdade(dataNascimento: string): number {
+  // Parse both dates in UTC to avoid timezone-induced day shifts.
+  // "YYYY-MM-DD" strings are UTC midnight; using UTC getters keeps them consistent.
   const hoje = new Date();
-  const nasc = new Date(dataNascimento);
-  let idade = hoje.getFullYear() - nasc.getFullYear();
-  const m = hoje.getMonth() - nasc.getMonth();
-  if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) idade--;
+  const [anoN, mesN, diaN] = dataNascimento.split("-").map(Number);
+  let idade = hoje.getUTCFullYear() - anoN;
+  const m = hoje.getUTCMonth() + 1 - mesN;
+  if (m < 0 || (m === 0 && hoje.getUTCDate() < diaN)) idade--;
   return idade;
 }
 

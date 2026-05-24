@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, XCircle, MessageCircle, Link as LinkIcon } from "lucide-react";
+import { EXAM_LABELS, type ExamType } from "@/lib/triage";
 
 interface Senderista {
   id: string;
@@ -54,7 +55,7 @@ export default function SenderistActions({ senderista, uploadLink }: Props) {
   }
 
   const msgExames = `Olá ${senderista.nome}! Para participar do Legendários TOP, você precisa enviar os seguintes exames:\n\n${
-    senderista.exames_exigidos.join("\n")
+    senderista.exames_exigidos.map((e) => EXAM_LABELS[e as ExamType] ?? e).join("\n")
   }\n\nEnvie aqui: ${uploadLink}`;
 
   const msgLink = `Olá ${senderista.nome}! Use este link para enviar seus exames: ${uploadLink}`;

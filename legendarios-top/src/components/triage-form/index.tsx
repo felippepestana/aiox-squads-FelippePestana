@@ -262,7 +262,14 @@ export default function TriageForm() {
                 <Button type="button" variant="outline" onClick={() => setStep(1)} className="flex-1">
                   <ChevronLeft className="w-4 h-4" /> Voltar
                 </Button>
-                <Button type="button" onClick={() => setStep(3)} className="flex-1">
+                <Button
+                  type="button"
+                  onClick={async () => {
+                    const ok = await form.trigger(["peso_kg", "altura_cm", "plano_saude", "comorbidades"]);
+                    if (ok) setStep(3);
+                  }}
+                  className="flex-1"
+                >
                   Revisar <ChevronRight className="w-4 h-4" />
                 </Button>
               </div>

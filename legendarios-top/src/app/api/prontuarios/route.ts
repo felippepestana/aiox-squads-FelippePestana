@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 const schema = z.object({
   id: z.string().uuid().optional(),
   senderista_id: z.string().uuid(),
+  hakuna_email: z.string().email().optional().nullable(),
   queixas: z.string().optional().nullable(),
   condutas: z.string().optional().nullable(),
   fotos_urls: z.array(z.string()).default([]),
@@ -13,6 +14,12 @@ const schema = z.object({
 
 export async function POST(request: Request) {
   const supabase = await createClient();
+
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) {
+    return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+  }
+
   const body = await request.json();
   const parsed = schema.safeParse(body);
 

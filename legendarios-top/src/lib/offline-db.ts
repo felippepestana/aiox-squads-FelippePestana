@@ -38,7 +38,7 @@ export async function saveProntuarioOffline(
 }
 
 export async function getPendingProntuarios(): Promise<OfflineProntuario[]> {
-  return db.prontuarios.where("synced").equals(0).toArray();
+  return db.prontuarios.where("synced").equals(false).toArray();
 }
 
 export async function markProntuarioSynced(id: string): Promise<void> {

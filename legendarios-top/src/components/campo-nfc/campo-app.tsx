@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +28,7 @@ export default function CampoApp() {
   const [pendingCount, setPendingCount] = useState(0);
   const [syncing, setSyncing] = useState(false);
   const [hakuna, setHakuna] = useState("");
+  const nfcAbortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     setIsOnline(navigator.onLine);
@@ -45,14 +46,28 @@ export default function CampoApp() {
     getPendingProntuarios().then((p) => setPendingCount(p.length));
   }, [screen]);
 
+  function cancelNFCRead() {
+    nfcAbortRef.current?.abort();
+    nfcAbortRef.current = null;
+    setScreen("home");
+  }
+
   async function startNFCRead() {
+    // Abort any previous scan before starting a new one
+    nfcAbortRef.current?.abort();
+    const controller = new AbortController();
+    nfcAbortRef.current = controller;
+
     setScreen("reading");
     setNfcError(null);
     try {
-      const data = await readNFCTag();
+      const data = await readNFCTag(controller.signal);
+      nfcAbortRef.current = null;
       setParticipant(data);
       setScreen("profile");
     } catch (e) {
+      nfcAbortRef.current = null;
+      if (e instanceof Error && e.message === "Cancelado") return;
       setNfcError(e instanceof Error ? e.message : "Erro ao ler TAG");
       setScreen("home");
     }
@@ -85,6 +100,7 @@ export default function CampoApp() {
           body: JSON.stringify({
             id: p.id,
             senderista_id: p.senderista_id,
+            hakuna_email: p.hakuna_email,
             queixas: p.queixas,
             condutas: p.condutas,
             fotos_urls,
@@ -93,7 +109,9 @@ export default function CampoApp() {
         });
         if (res.ok) await markProntuarioSynced(p.id);
       }
-      setPendingCount(0);
+      // Recount what remains — a partial failure leaves some unsynced
+      const remaining = await getPendingProntuarios();
+      setPendingCount(remaining.length);
     } catch (e) {
       console.error("Sync error:", e);
     } finally {
@@ -183,7 +201,7 @@ export default function CampoApp() {
             <Nfc className="w-24 h-24 text-green-400 animate-pulse" />
             <h2 className="text-xl font-bold">Aguardando TAG...</h2>
             <p className="text-gray-400">Aproxime a TAG NFC do participante ao celular</p>
-            <Button variant="outline" onClick={() => setScreen("home")} className="border-gray-600 text-gray-300">
+            <Button variant="outline" onClick={cancelNFCRead} className="border-gray-600 text-gray-300">
               Cancelar
             </Button>
           </div>

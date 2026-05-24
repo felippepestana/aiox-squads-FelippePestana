@@ -15,6 +15,15 @@ export default async function HakunaLayout({
 
   if (!user) redirect("/hakuna/login");
 
+  // Only emails registered in the hakunas table gain access
+  const { data: hakuna } = await supabase
+    .from("hakunas")
+    .select("id")
+    .eq("email", user.email!)
+    .single();
+
+  if (!hakuna) redirect("/hakuna/login");
+
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="bg-green-800 text-white px-4 py-3 flex items-center justify-between">

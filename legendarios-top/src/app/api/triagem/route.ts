@@ -6,7 +6,7 @@ import { classificarRisco, calcularIMC } from "@/lib/triage";
 const schema = z.object({
   nome: z.string().min(3),
   telefone: z.string().min(10),
-  data_nascimento: z.string(),
+  data_nascimento: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Data de nascimento inválida"),
   tipo_sanguineo: z.string().optional().nullable(),
   peso_kg: z.number().min(20).max(300),
   altura_cm: z.number().min(100).max(250),
