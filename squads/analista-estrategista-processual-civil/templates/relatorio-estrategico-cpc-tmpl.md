@@ -42,7 +42,7 @@
 |---|------|-------------------|---------------|-----------|-------------|
 | 1 | [eixo] | [risco] | [artigo] | [CRÍTICO/ALTO/MÉDIO/BAIXO] | [recomendação] |
 
-> *Se não há riscos: registrar “Nenhum risco processual crítico identificado.”*
+> *Se não há riscos: registrar "Nenhum risco processual crítico identificado."*
 
 ---
 
@@ -104,7 +104,7 @@
 | Cabimento | [✅ APTO / ❌ FALHO / ⚠️ A VERIFICAR] | [artigo CPC] |
 | Tempestividade | [✅ APTO / ❌ FALHO / ⚠️ A VERIFICAR] | [prazo e data] |
 | Preparo | [✅ APTO / ❌ FALHO / ⚠️ A VERIFICAR] | [CPC art. 1007] |
-| Pré-questionário | [✅ APTO / ❌ FALHO / N/A] | *(REsp/RE)* |
+| Prequestionamento | [✅ APTO / ❌ FALHO / N/A] | *(REsp/RE)* |
 
 **Recomendação Recursal:** [INTERPOR / NÃO INTERPOR / COM CAUTELAS]
 
@@ -114,7 +114,7 @@
 
 ### Ações Urgentes (até 7 dias)
 
-> *Se não há: registrar “Nenhuma ação urgente identificada.”*
+> *Se não há: registrar "Nenhuma ação urgente identificada."*
 
 - [ ] [Ação urgente] — **Prazo:** [data] (CPC art. [XXX])
 

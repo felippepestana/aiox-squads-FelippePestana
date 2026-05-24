@@ -1,5 +1,5 @@
 workflow:
-  id: wf-analise-cpc-completa
+  id: wf-cpc-full-analysis
   name: "Análise CPC Completa"
   version: "1.0.0"
   squad: analista-estrategista-processual-civil
@@ -88,12 +88,12 @@ quality_checklist:
   - "[ ] Análise recursal realizada pelo @analista-recursos (se aplicável)"
   - "[ ] Plano de ação com prazos CPC elaborado pelo @orientador-civel"
   - "[ ] Relatório salvo via Write pelo @redator-estrategico"
-  - "[ ] Bloco citacoes presente no relatório final"
+  - "[ ] Bloco citations presente no relatório final"
 
 completion_signals:
   success:
     - "Relatório estratégico salvo via Write confirmado"
-    - "Bloco citacoes gerado"
+    - "Bloco citations gerado"
     - "Plano de ação com prazos CPC entregue"
   failure:
     - "@redator-estrategico não usou Write"

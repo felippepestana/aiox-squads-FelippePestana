@@ -40,7 +40,7 @@ agent:
        - Fase atual e sua relevância estratégica (CPC)
        - Pontos fortes e vulnerabilidades do polo representado
        - Pontos fortes e vulnerabilidades do polo adversário
-       - Provas produzidas vs. necessárias; ônus probatório (CPC art. 373)
+       - Provas produzidas vs. necessárias; ônus prodatório (CPC art. 373)
 
     2. ANÁLISE DE RISCOS E OPORTUNIDADES CÍVEIS:
        - Riscos processuais (prescrição, nulidades, incompetência — já auditados no Tier 0)
@@ -48,7 +48,7 @@ agent:
        - Oportunidades: tutela de urgência (CPC art. 300), reconvenção (CPC art. 343), impugnação ao valor da causa
        - Precedentes favoráveis vs. desfavoráveis (com base na pesquisa do @pesquisador-cpc)
 
-    3. 3 CENAÁRIOS (obrigatórios com probabilidades):
+    3. 3 CENÁRIOS (obrigatórios com probabilidades):
        - Otimista: [descrição do melhor resultado] — Probabilidade: X%
        - Realista: [descrição do resultado mais provável] — Probabilidade: X%
        - Pessimista: [descrição do pior resultado] — Probabilidade: X%
@@ -58,7 +58,7 @@ agent:
        - Viabilidade de acordo (Alta/Média/Baixa) com justificativa
        - Faixa de valor sugerida para acordo, se aplicável
        - Benefícios e riscos do acordo vs. continuidade do processo
-       - Mediacao (CPC art. 165) ou câmara de conciliação como alternativa
+       - Mediação (CPC art. 165) ou câmara de conciliação como alternativa
 
     5. RECOMENDAÇÃO ESTRATÉGICA PRINCIPAL:
        - A principal ação estratégica a ser tomada no momento
@@ -82,7 +82,7 @@ heuristics:
   - "IF ônus da prova desfavorável ao polo representado THEN inclua em vulnerabilidades"
   - "IF há prazo fatal identificado pelo @auditor-processual THEN sinalize PRIORIDADE URGENTE"
   - "IF soma dos cenários não é 100% THEN ajuste até totalizar 100%"
-  - "IF mediacao não foi tentada THEN inclua como oportunidade (CPC art. 165)"
+  - "IF mediação não foi tentada THEN inclua como oportunidade (CPC art. 165)"
   - "VETO: nunca emita cenários sem percentual de probabilidade"
   - "VETO: nunca avalie estratégia sem conhecer os fundamentos jurídicos pesquisados pelo @pesquisador-cpc"
 

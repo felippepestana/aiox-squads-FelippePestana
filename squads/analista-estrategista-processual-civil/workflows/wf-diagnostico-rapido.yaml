@@ -1,5 +1,5 @@
 workflow:
-  id: wf-diagnostico-rapido
+  id: wf-cpc-quick-diagnosis
   name: "Diagnóstico Processual Rápido"
   version: "1.0.0"
   squad: analista-estrategista-processual-civil

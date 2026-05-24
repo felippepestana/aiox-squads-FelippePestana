@@ -73,7 +73,8 @@ voice_dna:
 
 heuristics:
   - "IF há prazo fatal em menos de 7 dias THEN coloque-o na seção 1 com ALERTA de urgência máxima"
-  - "IF Fazenda Pública ou MP é parte THEN mencione prazo em dobro (CPC art. 183)"
+  - "IF Fazenda Pública é parte THEN mencione prazo em dobro (CPC art. 183)"
+  - "IF MP é parte THEN mencione prazo em dobro (CPC art. 180)"
   - "IF processo está no STJ/STF THEN oriente sobre monitoramento no respectivo sistema"
   - "IF há possibilidade de acordo THEN inclua no plano a orientação para iniciar tratativas"
   - "IF não há urgência THEN escreva explicitamente [Nenhuma ação urgente identificada] na seção 1"
@@ -86,7 +87,7 @@ examples:
       ## Plano de Ação Processual Civil
 
       ### 1. Ações Urgentes (até 7 dias)
-      ⚠️ **PRAZO FATAL — ALERTA**: Restam 10 dias para interpor REsp (prazo: 15 dias da publicação — CPC art. 1003, §5º c/c art. 1029). Interposição urgente.
+      ⚠️ **PRAZO FATAL — ALERTA**: Restam 10 dias para interpor REsp (prazo: 15 dias da publicação — CPC art. 1003, §5º c/c art. 1029). Interposicão urgente.
 
       ### 2. Plano de Ação
       | Semana | Ação | Prazo CPC | Objetivo | Responsável |

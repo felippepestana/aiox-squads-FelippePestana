@@ -76,10 +76,11 @@ fontes_jurisprudencia:
 prazos_recursais:
   apelacao: { prazo_dias: 15, artigo: "CPC art. 1003, §5º c/c art. 1009" }
   agravo_instrumento: { prazo_dias: 15, artigo: "CPC art. 1003, §5º c/c art. 1015" }
-  agravo_interno: { prazo_dias: 15, artigo: "CPC art. 1021, §2º" }
+  agravo_interno: { prazo_dias: 15, artigo: "CPC art. 1003, §5º c/c art. 1021" }
   embargos_declaracao: { prazo_dias: 5, artigo: "CPC art. 1023" }
   resp_re: { prazo_dias: 15, artigo: "CPC art. 1003, §5º c/c art. 1029" }
   contestacao: { prazo_dias: 15, artigo: "CPC art. 335" }
   cumprimento_sentenca: { prazo_dias: 15, artigo: "CPC art. 523" }
   embargos_execucao: { prazo_dias: 15, artigo: "CPC art. 915" }
   fazenda_publica: { multiplicador: 2, artigo: "CPC art. 183" }
+  ministerio_publico: { multiplicador: 2, artigo: "CPC art. 180" }
