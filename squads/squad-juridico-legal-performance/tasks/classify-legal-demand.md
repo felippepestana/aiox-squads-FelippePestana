@@ -1,0 +1,31 @@
+# Task: Classificar Demanda Jurídico-Processual
+
+**Executor:** `legal-performance-chief`  
+**Squad:** `squad-juridico-legal-performance`
+
+## Objetivo
+
+Executar a etapa `Classificar Demanda Jurídico-Processual` dentro da arquitetura unificada Legal Performance, preservando rastreabilidade, separação de responsabilidades e revisão humana.
+
+## Inputs
+
+- Demanda do usuário ou documento de referência.
+- Pacote de outputs dos agentes anteriores, quando houver.
+- Fontes, peças, normas, evidências ou requisitos de produto disponíveis.
+
+## Passos
+1. Identificar gatilhos UC-LP.
+2. Confirmar escopo e urgência.
+3. Declarar rota de agentes e modo de saída.
+4. Bloquear execução se a demanda estiver ambígua.
+
+## Critérios de Aceite
+- [ ] UC-LP definido.
+- [ ] Rota declarada.
+- [ ] Limitações e revisão humana informadas.
+
+## Observações de Segurança
+
+- Não substituir atuação de advogado, perito ou profissional habilitado.
+- Declarar lacunas, limitações e necessidade de validação humana.
+- Não citar fonte jurídica, norma técnica ou evidência sem rastreabilidade mínima.

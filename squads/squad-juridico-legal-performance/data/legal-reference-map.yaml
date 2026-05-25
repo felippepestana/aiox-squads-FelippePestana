@@ -1,0 +1,28 @@
+legal_references:
+  cpc_2015:
+    law: "Lei 13.105/2015"
+    key_topics:
+      - "arts. 156-158: perito"
+      - "arts. 464-480: prova pericial"
+      - "art. 319: petição inicial"
+      - "art. 335: contestação"
+      - "art. 357: saneamento"
+      - "art. 373: ônus da prova"
+      - "arts. 485 e 487: extinção"
+      - "arts. 1003, 1007, 1009, 1015, 1021, 1022, 1029: recursos"
+  codigo_civil:
+    law: "Lei 10.406/2002"
+    key_topics: ["prescrição", "decadência", "responsabilidade civil", "obrigações"]
+  cdc:
+    law: "Lei 8.078/1990"
+    key_topics: ["arts. 12, 18, 26, 27, 50", "produto durável", "vício", "fato do produto"]
+  technical_standards:
+    - "ABNT NBR ISO/IEC 17025:2017"
+    - "ABNT NBR ISO/IEC 27037:2013"
+    - "ABNT NBR 5410:2004"
+    - "ABNT NBR IEC 62368-1:2023"
+    - "IEC 60068-2"
+  authorized_sources:
+    primary: ["planalto.gov.br", "stf.jus.br", "stj.jus.br", "tst.jus.br", "lexml.gov.br"]
+    secondary: ["jusbrasil.com.br", "conjur.com.br"]
+    rule: "Fontes secundárias exigem verificação em fonte oficial antes de citação conclusiva."

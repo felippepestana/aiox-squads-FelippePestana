@@ -1,0 +1,25 @@
+quality_gates:
+  - id: QG-LP-001
+    type: blocking
+    description: "Classificação UC-LP obrigatória antes da execução."
+  - id: QG-LP-002
+    type: blocking
+    description: "Fontes e evidências críticas devem ser rastreáveis."
+  - id: QG-LP-003
+    type: blocking_when_applicable
+    description: "Auditoria CPC obrigatória para fluxos processuais civis."
+  - id: QG-LP-004
+    type: blocking_when_applicable
+    description: "Cenários estratégicos devem somar 100%."
+  - id: QG-LP-005
+    type: blocking_when_applicable
+    description: "Normas periciais e cadeia de custódia obrigatórias em laudos."
+  - id: QG-LP-006
+    type: blocking
+    description: "Revisão humana e responsabilidade profissional devem ser declaradas."
+  - id: QG-LP-007
+    type: blocking_when_applicable
+    description: "Brief de design obrigatório antes de frontend."
+  - id: QG-LP-008
+    type: blocking
+    description: "Entregável final deve passar por checklist aplicável."
