@@ -1,0 +1,155 @@
+{
+  "$schema": "https://hexler.net/touchosc/schema/layout.json",
+  "metadata": {
+    "name": "Multicam Operator",
+    "version": "1.0.0",
+    "description": "Layout master para o operador — 4 páginas: Cenas, PiP, Áudio, Show Flow",
+    "frame": { "width": 1024, "height": 768 },
+    "orientation": "landscape",
+    "color_palette": {
+      "scene_active": "#4f90ff",
+      "scene_idle":   "#1c2230",
+      "danger":       "#f85149",
+      "warn":         "#f0a843",
+      "ok":           "#3fb950",
+      "muted":        "#8a96a8"
+    }
+  },
+  "pages": [
+    {
+      "name": "Cenas",
+      "layout": "grid 5x2",
+      "controls": [
+        { "type": "BUTTON", "label": "CAM 1", "color": "scene_idle",
+          "send_address": "/tx/scene/cam1",
+          "feedback_address": "/tx/feedback/scene/CAM1",
+          "feedback_active_color": "scene_active" },
+        { "type": "BUTTON", "label": "CAM 2",
+          "send_address": "/tx/scene/cam2",
+          "feedback_address": "/tx/feedback/scene/CAM2" },
+        { "type": "BUTTON", "label": "CAM 3",
+          "send_address": "/tx/scene/cam3",
+          "feedback_address": "/tx/feedback/scene/CAM3" },
+        { "type": "BUTTON", "label": "CAM 4",
+          "send_address": "/tx/scene/cam4",
+          "feedback_address": "/tx/feedback/scene/CAM4" },
+        { "type": "BUTTON", "label": "GRID 2x2",
+          "send_address": "/tx/scene/grid",
+          "feedback_address": "/tx/feedback/scene/GRID" },
+        { "type": "BUTTON", "label": "Slides (full)",
+          "send_address": "/tx/scene/slides_full",
+          "feedback_address": "/tx/feedback/scene/SLIDES_FULL" },
+        { "type": "BUTTON", "label": "Slides + PiP",
+          "send_address": "/tx/scene/slides_pip",
+          "feedback_address": "/tx/feedback/scene/SLIDES_PIP" },
+        { "type": "BUTTON", "label": "Tela + PiP",
+          "send_address": "/tx/scene/tela_pip",
+          "feedback_address": "/tx/feedback/scene/TELA_PIP" },
+        { "type": "BUTTON", "label": "Standby", "color": "warn",
+          "send_address": "/tx/scene/standby",
+          "feedback_address": "/tx/feedback/scene/STANDBY" },
+        { "type": "BUTTON", "label": "Encerramento", "color": "danger",
+          "send_address": "/tx/scene/encerramento",
+          "feedback_address": "/tx/feedback/scene/ENCERRAMENTO" }
+      ]
+    },
+    {
+      "name": "PiP",
+      "controls": [
+        { "type": "LABEL", "text": "Câmera no PiP", "position": "top" },
+        { "type": "RADIO", "options": [
+            { "label": "CAM 1", "send_address": "/tx/pip/camera/cam1" },
+            { "label": "CAM 2", "send_address": "/tx/pip/camera/cam2" },
+            { "label": "CAM 3", "send_address": "/tx/pip/camera/cam3" },
+            { "label": "CAM 4", "send_address": "/tx/pip/camera/cam4" }
+          ]
+        },
+        { "type": "LABEL", "text": "Canto", "position": "middle" },
+        { "type": "RADIO", "options": [
+            { "label": "↖ Sup. Esq.", "send_address": "/tx/pip/corner/top_left" },
+            { "label": "↗ Sup. Dir.", "send_address": "/tx/pip/corner/top_right" },
+            { "label": "↙ Inf. Esq.", "send_address": "/tx/pip/corner/bottom_left" },
+            { "label": "↘ Inf. Dir.", "send_address": "/tx/pip/corner/bottom_right" }
+          ]
+        },
+        { "type": "LABEL", "text": "Tamanho", "position": "bottom" },
+        { "type": "RADIO", "options": [
+            { "label": "20%", "send_address": "/tx/pip/size/20" },
+            { "label": "25%", "send_address": "/tx/pip/size/25" },
+            { "label": "30%", "send_address": "/tx/pip/size/30" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Áudio",
+      "layout": "channel-strip x4",
+      "controls": [
+        {
+          "type": "GROUP", "label": "Canal 1 — Palestrante",
+          "children": [
+            { "type": "RADAR", "feedback_address": "/tx/feedback/audio/level/1",
+              "scale_min": -60, "scale_max": 0, "color": "ok",
+              "warn_threshold": -6, "danger_threshold": -3 },
+            { "type": "FADER", "orientation": "vertical",
+              "send_address": "/tx/audio/fader/1", "min": 0, "max": 1, "default": 0.91 },
+            { "type": "BUTTON", "label": "MUTE", "behavior": "toggle",
+              "send_address": "/tx/audio/mute/1", "active_color": "danger" }
+          ]
+        },
+        {
+          "type": "GROUP", "label": "Canal 2 — Apresentador",
+          "children": [
+            { "type": "RADAR", "feedback_address": "/tx/feedback/audio/level/2" },
+            { "type": "FADER", "send_address": "/tx/audio/fader/2", "default": 0.91 },
+            { "type": "BUTTON", "label": "MUTE", "behavior": "toggle",
+              "send_address": "/tx/audio/mute/2" }
+          ]
+        },
+        {
+          "type": "GROUP", "label": "Canal 3 — Aux",
+          "children": [
+            { "type": "RADAR", "feedback_address": "/tx/feedback/audio/level/3" },
+            { "type": "FADER", "send_address": "/tx/audio/fader/3", "default": 0.85 },
+            { "type": "BUTTON", "label": "MUTE", "behavior": "toggle",
+              "send_address": "/tx/audio/mute/3" }
+          ]
+        },
+        {
+          "type": "GROUP", "label": "Canal 4 — Aux",
+          "children": [
+            { "type": "RADAR", "feedback_address": "/tx/feedback/audio/level/4" },
+            { "type": "FADER", "send_address": "/tx/audio/fader/4", "default": 0.85 },
+            { "type": "BUTTON", "label": "MUTE", "behavior": "toggle",
+              "send_address": "/tx/audio/mute/4" }
+          ]
+        },
+        { "type": "BUTTON", "label": "🔇 MUTE TODOS", "color": "danger",
+          "send_address": "/tx/audio/mute_all", "size": "wide" }
+      ]
+    },
+    {
+      "name": "Show Flow",
+      "controls": [
+        { "type": "BUTTON", "label": "⏸️  STANDBY", "size": "large", "color": "warn",
+          "send_address": "/tx/show/standby",
+          "feedback_address": "/tx/feedback/scene/STANDBY" },
+        { "type": "BUTTON", "label": "🔴 GO LIVE", "size": "large", "color": "ok",
+          "send_address": "/tx/show/golive" },
+        { "type": "BUTTON", "label": "🎬 ENCERRAMENTO", "size": "large", "color": "danger",
+          "send_address": "/tx/show/encerramento",
+          "feedback_address": "/tx/feedback/scene/ENCERRAMENTO" },
+        { "type": "LABEL", "text": "Modo IA", "position": "top-right" },
+        { "type": "BUTTON", "label": "MANUAL", "behavior": "toggle",
+          "send_address_on": "/tx/mode/manual",
+          "send_address_off": "/tx/mode/auto",
+          "feedback_address": "/tx/feedback/mode",
+          "active_color": "warn" },
+        { "type": "LABEL", "text": "OBS", "position": "bottom-left" },
+        { "type": "BUTTON", "label": "Conectado", "behavior": "indicator",
+          "feedback_address": "/tx/feedback/connected",
+          "active_color": "ok", "inactive_color": "danger" }
+      ]
+    }
+  ]
+}

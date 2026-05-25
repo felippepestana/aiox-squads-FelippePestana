@@ -1,0 +1,419 @@
+.pericia-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.pericia-header {
+  flex-shrink: 0;
+  padding: 1rem 1.25rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+
+.pericia-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+}
+
+.pericia-title-row h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* Step indicator */
+.pericia-steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.pericia-step-item {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex: 1;
+}
+
+.pericia-step-item:last-child {
+  flex: none;
+}
+
+.pericia-step-dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: 0.72rem;
+  font-weight: 600;
+  flex-shrink: 0;
+  border: 2px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+
+.pericia-step-dot.active {
+  border-color: var(--accent);
+  background: #065f46;
+  color: var(--accent);
+}
+
+.pericia-step-dot.done {
+  border-color: var(--accent-dim);
+  background: #064e3b;
+  color: var(--accent-dim);
+}
+
+.pericia-step-label {
+  font-size: 0.68rem;
+  color: var(--muted);
+  margin-left: 0.35rem;
+  white-space: nowrap;
+}
+
+.pericia-step-label.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.pericia-step-connector {
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  margin: 0 0.3rem;
+  min-width: 8px;
+}
+
+.pericia-step-connector.done {
+  background: var(--accent-dim);
+}
+
+/* Body */
+.pericia-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem 1.5rem;
+}
+
+/* Section */
+.pericia-section {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel);
+}
+
+.pericia-section-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-dim);
+  margin: 0 0 0.85rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Form grid */
+.pericia-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1rem;
+}
+
+.pericia-grid.cols-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.pericia-grid.cols-1 {
+  grid-template-columns: 1fr;
+}
+
+.pericia-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.pericia-field.span-2 {
+  grid-column: span 2;
+}
+
+.pericia-field.span-3 {
+  grid-column: span 3;
+}
+
+.pericia-field label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.pericia-field input[type="text"],
+.pericia-field input[type="date"],
+.pericia-field input[type="email"],
+.pericia-field input[type="number"],
+.pericia-field select,
+.pericia-field textarea {
+  padding: 0.5rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.85rem;
+  width: 100%;
+}
+
+.pericia-field input:focus,
+.pericia-field select:focus,
+.pericia-field textarea:focus {
+  outline: 2px solid #059669;
+  outline-offset: 0;
+}
+
+.pericia-field textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+.pericia-field .pericia-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0;
+}
+
+.pericia-field .pericia-checkbox-row input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+
+.pericia-field .pericia-checkbox-row span {
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+/* Quesitos */
+.pericia-quesitos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.pericia-quesito-item {
+  display: grid;
+  grid-template-columns: 1.5rem 1fr auto;
+  gap: 0.5rem;
+  align-items: start;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.pericia-quesito-num {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted);
+  padding-top: 0.45rem;
+  text-align: right;
+}
+
+.pericia-quesito-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.pericia-quesito-fields textarea {
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.83rem;
+  resize: vertical;
+  min-height: 52px;
+  width: 100%;
+}
+
+.pericia-quesito-fields textarea:focus {
+  outline: 2px solid #059669;
+  outline-offset: 0;
+}
+
+.pericia-quesito-fields .pericia-q-label {
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
+.pericia-quesito-remove {
+  flex-shrink: 0;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+  font-family: inherit;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.pericia-quesito-remove:hover {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.pericia-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  border: 1px dashed var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-family: inherit;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.pericia-add-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent-dim);
+}
+
+/* Reparos */
+.pericia-repair-item {
+  display: grid;
+  grid-template-columns: 1fr 140px auto;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.pericia-repair-item input {
+  padding: 0.45rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.83rem;
+  width: 100%;
+}
+
+.pericia-repair-item input:focus {
+  outline: 2px solid #059669;
+  outline-offset: 0;
+}
+
+.pericia-repair-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Footer */
+.pericia-footer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.5rem;
+  border-top: 1px solid var(--border);
+  background: var(--panel);
+  gap: 0.5rem;
+}
+
+.pericia-footer-right {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Preview */
+.pericia-preview-container {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.pericia-preview-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+  flex-wrap: wrap;
+}
+
+.pericia-preview-toolbar span {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-right: auto;
+}
+
+.pericia-preview-text {
+  font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  padding: 1rem;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.pericia-generate-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  min-height: 180px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  text-align: center;
+}
+
+.pericia-generate-area p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+@media print {
+  .pericia-header,
+  .pericia-footer,
+  .pericia-preview-toolbar,
+  .sidebar {
+    display: none !important;
+  }
+
+  .pericia-preview-text {
+    max-height: none;
+    font-size: 10pt;
+  }
+}

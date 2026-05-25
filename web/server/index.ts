@@ -15,6 +15,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { portalAuthMiddleware, portalAuthEnabled } from "./authPortal.js";
 import { loadAllSquads, findAgent, type Agent, type Squad } from "./agents.js";
 import { ChatSession } from "./chatSession.js";
+import { generateLaudo, type PericiaData } from "./pericia.js";
 import {
   uploadFileFromBuffer,
   supportedExtensions,
@@ -136,6 +137,24 @@ function asyncHandler(
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true });
 });
+
+app.post(
+  "/api/pericia/generate-laudo",
+  asyncHandler(async (req, res) => {
+    const data = req.body as PericiaData;
+    if (!data || typeof data !== "object") {
+      res.status(400).json({ error: "Corpo da requisição inválido" });
+      return;
+    }
+    try {
+      const laudo = generateLaudo(data);
+      res.json({ laudo });
+    } catch (e) {
+      const message = e instanceof Error ? e.message : String(e);
+      res.status(500).json({ error: message });
+    }
+  })
+);
 
 app.get("/api/auth/status", (_req, res) => {
   res.json({ portalAuthRequired: portalAuthEnabled() });
