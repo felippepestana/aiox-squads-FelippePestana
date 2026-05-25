@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Upload, CheckCircle, AlertCircle, FileSpreadsheet, X } from "lucide-react";
+import { Upload, CheckCircle, AlertCircle, FileSpreadsheet, X, MessageSquare } from "lucide-react";
 
 interface ImportResult {
   imported: number;
@@ -18,6 +18,8 @@ export default function ImportarPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ImportResult | null>(null);
   const [fatalError, setFatalError] = useState<string | null>(null);
+  const [waSending, setWaSending] = useState(false);
+  const [waResult, setWaResult] = useState<{ sent: number; failed: number; total: number } | null>(null);
   const [dragging, setDragging] = useState(false);
 
   function handleFile(f: File | null) {
@@ -54,6 +56,21 @@ export default function ImportarPage() {
       setFatalError(e instanceof Error ? e.message : "Erro desconhecido");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function sendWhatsApp() {
+    setWaSending(true);
+    try {
+      const res = await fetch("/api/admin/whatsapp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "batch_mensagens_links" }),
+      });
+      const body = await res.json();
+      setWaResult(body);
+    } finally {
+      setWaSending(false);
     }
   }
 
@@ -173,6 +190,31 @@ export default function ImportarPage() {
               Participantes importados estão disponíveis no painel principal.
               A triagem médica foi calculada automaticamente com base em idade e comorbidades declaradas.
             </p>
+
+            {/* WhatsApp batch send */}
+            <div className="border rounded-lg p-4 bg-green-50 border-green-200 space-y-3">
+              <p className="text-sm font-medium text-green-900">
+                Enviar link de mensagens via WhatsApp
+              </p>
+              <p className="text-xs text-green-700">
+                Envia automaticamente o link do portal de mensagens para o WhatsApp de cada cônjuge/responsável cadastrado.
+              </p>
+              {waResult ? (
+                <p className="text-sm text-green-800 font-medium">
+                  ✓ {waResult.sent} enviados · {waResult.failed} falhas de {waResult.total} total
+                </p>
+              ) : (
+                <Button
+                  size="sm"
+                  className="bg-green-700 hover:bg-green-800"
+                  disabled={waSending}
+                  onClick={sendWhatsApp}
+                >
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  {waSending ? "Enviando..." : "Enviar WhatsApp para cônjuges"}
+                </Button>
+              )}
+            </div>
           </CardContent>
         </Card>
       )}

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Heart, FileText, Image, Video, Mic, ChevronLeft } from "lucide-react";
+import { Heart, FileText, Image, Video, Mic, ChevronLeft, Play } from "lucide-react";
 
 const TIPO_ICON: Record<string, React.ReactNode> = {
   carta: <FileText className="w-4 h-4" />,
@@ -69,6 +69,16 @@ export default async function MensagensHakunaPage({
           <p className="text-sm text-muted-foreground">{mensagens?.length ?? 0} mensagem(ns) recebida(s)</p>
         </div>
       </div>
+
+      {/* Slideshow button */}
+      {(mensagens?.length ?? 0) > 0 && (
+        <Link
+          href="mensagens/slideshow"
+          className="flex items-center justify-center gap-2 w-full rounded-lg bg-green-700 text-white py-3 font-medium text-sm hover:bg-green-800 transition-colors"
+        >
+          <Play className="w-4 h-4" /> Apresentar mensagens (slideshow)
+        </Link>
+      )}
 
       {/* Portal link */}
       <Card className="border-green-200 bg-green-50">

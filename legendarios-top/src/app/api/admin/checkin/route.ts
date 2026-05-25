@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 const schema = z.object({
   senderista_id: z.string().uuid(),
   status_presenca: z.enum(["presente", "ausente"]),
+  termo_aceito: z.boolean().optional(),
 });
 
 export async function PATCH(request: Request) {
@@ -28,9 +29,18 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
   }
 
+  const updatePayload: Record<string, unknown> = {
+    status_presenca: parsed.data.status_presenca,
+    updated_at: new Date().toISOString(),
+  };
+  if (parsed.data.termo_aceito) {
+    updatePayload.termo_aceito = true;
+    updatePayload.termo_aceito_em = new Date().toISOString();
+  }
+
   const { error } = await supabase
     .from("senderistas")
-    .update({ status_presenca: parsed.data.status_presenca, updated_at: new Date().toISOString() })
+    .update(updatePayload)
     .eq("id", parsed.data.senderista_id);
 
   if (error) throw error;

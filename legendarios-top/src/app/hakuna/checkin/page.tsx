@@ -7,9 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { RISK_LABELS, type RiskLevel } from "@/lib/triage";
 import { isNFCSupported, readNFCTag, writeNFCTag } from "@/lib/nfc";
+import TermoModal from "@/components/checkin/termo-modal";
 import {
   Search, Wifi, CheckCircle, AlertCircle, User, Nfc,
-  Tag, ChevronLeft, RefreshCw,
+  Tag, ChevronLeft, RefreshCw, FileText,
 } from "lucide-react";
 
 const RISCO_COLOR: Record<string, string> = {
@@ -50,6 +51,7 @@ export default function CheckinPage() {
   const [searching, setSearching] = useState(false);
   const [selected, setSelected] = useState<Participant | null>(null);
   const [checkinLoading, setCheckinLoading] = useState(false);
+  const [showTermo, setShowTermo] = useState(false);
   const [nfcReading, setNfcReading] = useState(false);
   const [nfcWriting, setNfcWriting] = useState(false);
   const [nfcStatus, setNfcStatus] = useState<string | null>(null);
@@ -120,7 +122,7 @@ export default function CheckinPage() {
     setScreen("search");
   }
 
-  async function confirmCheckin() {
+  async function confirmCheckin(termoAceito = false) {
     if (!selected) return;
     setCheckinLoading(true);
     setError(null);
@@ -128,10 +130,15 @@ export default function CheckinPage() {
       const res = await fetch("/api/admin/checkin", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ senderista_id: selected.id, status_presenca: "presente" }),
+        body: JSON.stringify({
+          senderista_id: selected.id,
+          status_presenca: "presente",
+          termo_aceito: termoAceito,
+        }),
       });
       if (!res.ok) throw new Error("Erro ao registrar presença");
       setSelected(prev => prev ? { ...prev, status_presenca: "presente" } : prev);
+      setShowTermo(false);
       setScreen("done");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erro desconhecido");
@@ -177,7 +184,19 @@ export default function CheckinPage() {
 
   const nfcAvailable = isNFCSupported();
 
+  // Render termo modal outside main layout so it overlays everything
+  const termoModal = showTermo && selected ? (
+    <TermoModal
+      participantName={selected.nome}
+      onAccept={() => confirmCheckin(true)}
+      onCancel={() => setShowTermo(false)}
+      loading={checkinLoading}
+    />
+  ) : null;
+
   return (
+    <>
+    {termoModal}
     <div className="max-w-lg mx-auto space-y-4 py-4">
       <div className="flex items-center gap-2">
         <h1 className="text-2xl font-bold">Check-in</h1>
@@ -319,14 +338,26 @@ export default function CheckinPage() {
 
           {/* Check-in button */}
           {selected.status_presenca !== "presente" ? (
-            <Button
-              className="w-full bg-green-700 hover:bg-green-800 text-white"
-              disabled={checkinLoading || selected.status_ingresso === "cancelado"}
-              onClick={confirmCheckin}
-            >
-              <User className="w-4 h-4 mr-2" />
-              {checkinLoading ? "Registrando..." : "Confirmar presença"}
-            </Button>
+            <>
+              <Button
+                className="w-full bg-green-700 hover:bg-green-800 text-white"
+                disabled={checkinLoading || selected.status_ingresso === "cancelado"}
+                onClick={() => setShowTermo(true)}
+              >
+                <FileText className="w-4 h-4 mr-2" />
+                {checkinLoading ? "Registrando..." : "Assinar Termo e Confirmar Presença"}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full text-sm"
+                disabled={checkinLoading || selected.status_ingresso === "cancelado"}
+                onClick={() => confirmCheckin(false)}
+              >
+                <User className="w-4 h-4 mr-2" />
+                Confirmar presença sem termo
+              </Button>
+            </>
+
           ) : (
             <div className="flex items-center justify-center gap-2 rounded-lg bg-green-50 border border-green-200 py-3">
               <CheckCircle className="w-5 h-5 text-green-600" />
@@ -393,5 +424,6 @@ export default function CheckinPage() {
         </div>
       )}
     </div>
+    </>
   );
 }
