@@ -43,6 +43,7 @@ export default async function HakunaDashboard({
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Senderistas</h1>
         <div className="flex gap-2">
+          <Link href="/hakuna/evento" className="text-sm bg-blue-700 text-white px-3 py-1.5 rounded-md font-medium">Evento 72h</Link>
           <Link href="/hakuna/checkin" className="text-sm bg-green-700 text-white px-3 py-1.5 rounded-md font-medium">Check-in</Link>
           <Link href="/hakuna/importar" className="text-sm text-green-700 underline">Importar TICKETGO</Link>
           <Link href="/hakuna/nfc" className="text-sm text-green-700 underline">Gravar TAGs NFC</Link>
