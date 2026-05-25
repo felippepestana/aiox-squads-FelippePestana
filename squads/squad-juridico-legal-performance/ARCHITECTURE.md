@@ -63,9 +63,9 @@ Os cenários mínimos de validação estão em [`SMOKE_TESTS.md`](SMOKE_TESTS.md
 
 | Cenário | UC esperado | Objetivo arquitetural |
 |---|---|---|
-| Análise processual civil | `UC-LP-003` | Confirmar integração entre classificação CPC, auditoria, leitura de peças, pesquisa, estratégia e relatório. |
-| Estratégia recursal | `UC-LP-004` | Confirmar separação entre admissibilidade recursal, mérito, prazos e recomendação. |
-| Frontend jurídico | `UC-LP-008` | Confirmar que produto e usabilidade geram brief antes de qualquer implementação visual. |
+| [Análise processual civil](examples/processo-civil-acao-cobranca.md) | `UC-LP-003` | Confirmar integração entre classificação CPC, auditoria, leitura de peças, pesquisa, estratégia e relatório. |
+| [Estratégia recursal](examples/estrategia-recursal-resp.md) | `UC-LP-004` | Confirmar separação entre admissibilidade recursal, mérito, prazos e recomendação. |
+| [Frontend jurídico](examples/frontend-juridico-dashboard.md) | `UC-LP-008` | Confirmar que produto e usabilidade geram brief antes de qualquer implementação visual. |
 
 ## Quality gates
 

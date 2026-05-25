@@ -2,7 +2,7 @@
 
 > Squad unificado para análise processual, estratégia jurídica, direito processual civil, perícia judicial técnica e planejamento de produto jurídico com frontend de alta usabilidade.
 
-**Versão:** 1.0.0 | **Agentes:** 16 | **Tasks:** 10 | **Workflows:** 3 | **Smoke tests:** 3
+**Versão:** 1.0.0 | **Agentes:** 16 | **Tasks:** 10 | **Workflows:** 3 | **Smoke tests:** 3 | **Exemplos:** 3
 
 ---
 
@@ -107,11 +107,11 @@ As orientações para o ambiente de usabilidade estão em [`DESIGN_GUIDE.md`](DE
 
 A revisão inicial deve executar os cenários de [`SMOKE_TESTS.md`](SMOKE_TESTS.md):
 
-1. Análise processual civil.
-2. Estratégia recursal.
-3. Planejamento de frontend jurídico.
+1. [Análise processual civil](examples/processo-civil-acao-cobranca.md).
+2. [Estratégia recursal](examples/estrategia-recursal-resp.md).
+3. [Planejamento de frontend jurídico](examples/frontend-juridico-dashboard.md).
 
-Esses testes verificam classificação de UC, rota de agentes, quality gates e entregáveis esperados antes de evoluir para exemplos preenchidos ou implementação de interface.
+Esses testes verificam classificação de UC, rota de agentes, quality gates e entregáveis esperados antes de evoluir para implementação de interface.
 
 ---
 

@@ -21,6 +21,8 @@ Este arquivo define os cenários funcionais mínimos para revisar se o squad est
 
 ## Cenário 1 — Análise processual civil
 
+Exemplo preenchido: [`examples/processo-civil-acao-cobranca.md`](examples/processo-civil-acao-cobranca.md).
+
 ### Objetivo
 
 Validar se o squad integra triagem CPC, auditoria processual, leitura de peças, pesquisa jurídica, estratégia e plano de ação.
@@ -78,6 +80,8 @@ legal-performance-chief
 ---
 
 ## Cenário 2 — Estratégia recursal
+
+Exemplo preenchido: [`examples/estrategia-recursal-resp.md`](examples/estrategia-recursal-resp.md).
 
 ### Objetivo
 
@@ -138,6 +142,8 @@ legal-performance-chief
 
 ## Cenário 3 — Planejamento de frontend jurídico
 
+Exemplo preenchido: [`examples/frontend-juridico-dashboard.md`](examples/frontend-juridico-dashboard.md).
+
 ### Objetivo
 
 Validar se o squad consegue sair do domínio jurídico puro e planejar uma experiência de produto antes de acionar implementação frontend.
@@ -196,4 +202,4 @@ legal-performance-chief
 
 ## Próximo passo recomendado
 
-Após aprovar estes smoke tests, evoluir para exemplos preenchidos em `examples/`, usando documentos fictícios e outputs esperados para cada cenário.
+Após aprovar estes smoke tests e exemplos, evoluir para um pacote `examples/expected-outputs/` com relatórios completos fictícios para comparação de regressão.

@@ -261,14 +261,17 @@ quality_standards:
       - id: ST-LP-001
         name: "Análise processual civil"
         expected_use_case: UC-LP-003
+        example: examples/processo-civil-acao-cobranca.md
         validates: ["classificação CPC", "auditoria processual", "pesquisa jurídica", "estratégia", "relatório"]
       - id: ST-LP-002
         name: "Estratégia recursal"
         expected_use_case: UC-LP-004
+        example: examples/estrategia-recursal-resp.md
         validates: ["admissibilidade", "prequestionamento", "prazo", "mérito recursal", "plano de ação"]
       - id: ST-LP-003
         name: "Planejamento de frontend jurídico"
         expected_use_case: UC-LP-008
+        example: examples/frontend-juridico-dashboard.md
         validates: ["personas", "jornadas", "acessibilidade", "rastreabilidade", "handoff para apex"]
 
 stats:
@@ -278,3 +281,4 @@ stats:
   total_checklists: 3
   total_templates: 3
   total_data_files: 4
+  total_examples: 3
