@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { RISK_LABELS, EXAM_LABELS, type RiskLevel, type ExamType } from "@/lib/triage";
 import SenderistActions from "@/components/hakuna-dashboard/senderista-actions";
 import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Heart } from "lucide-react";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -118,6 +118,15 @@ export default async function SenderistaDetailPage({ params }: Props) {
           )}
         </CardContent>
       </Card>
+
+      {/* Mensagens de apoio */}
+      <Link
+        href={`/hakuna/senderistas/${id}/mensagens`}
+        className="flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-800 hover:bg-green-100 transition-colors"
+      >
+        <Heart className="w-4 h-4" />
+        Ver mensagens de família recebidas
+      </Link>
 
       {/* Ações (validar, reprovar, WhatsApp stubs) */}
       <SenderistActions senderista={s} uploadLink={uploadLink} />
