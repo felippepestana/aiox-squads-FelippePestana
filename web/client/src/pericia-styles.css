@@ -300,6 +300,47 @@
   border-color: var(--accent-dim);
 }
 
+.pericia-ai-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid #059669;
+  background: transparent;
+  color: var(--accent-dim);
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-family: inherit;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+}
+
+.pericia-ai-btn:hover:not(:disabled) {
+  background: #065f46;
+  color: var(--accent);
+}
+
+.pericia-ai-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pericia-inline-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--accent-dim);
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  text-decoration: underline;
+}
+
+.pericia-inline-link:hover {
+  color: var(--danger);
+}
+
 /* Reparos */
 .pericia-repair-item {
   display: grid;

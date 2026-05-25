@@ -131,6 +131,55 @@ export interface PericiaData {
   anoLaudo: string;
 }
 
+import type Anthropic from "@anthropic-ai/sdk";
+
+function buildDiagnosticSummary(d: PericiaData): string {
+  return `
+DISPOSITIVO: ${d.modeloIphone} | Série: ${d.numeroSerie} | IMEI: ${d.imei1}
+GARANTIA: ${d.statusGarantia} até/em ${d.dataGarantia}
+SINTOMAS: ${d.sintomasRelatados}
+LCI-1: ${d.lci1Estado} | LCI-2: ${d.lci2Estado}
+ABERTURA PRÉVIA: ${d.aberturaPrevia ? "Sim — " + d.descricaoAberturaPrevia : "Não"}
+RECONHECIMENTO USB: ${d.reconhecimentoNormal} | DFU: ${d.reconhecimentoDfu || "não testado"}
+CARGA USB-C 20W: ${d.cargaApple20wResultado} (${d.cargaApple20wTensao}V / ${d.cargaApple20wCorrente}A)
+CARGA USB-C 30W: ${d.cargaApple30wResultado} (${d.cargaApple30wTensao}V / ${d.cargaApple30wCorrente}A)
+CARGA MAGSAFE: ${d.cargaMagsafeResultado}
+RESISTÊNCIA VBUS-GND: ${d.resistenciaVbus || "não medida"}
+RESISTÊNCIA CC1-GND: ${d.resistenciaCc1 || "não medida"} | CC2-GND: ${d.resistenciaCc2 || "não medida"}
+TERMOGRAFIA: ${d.termografia || "não realizada"}
+HISTÓRICO GSX: ${d.historicoGsx || "sem registros"}
+INTERVENÇÃO ANTERIOR: ${d.intervencaoAnterior ? "Sim — " + d.descricaoIntervencoesExternas : "Não"}
+CATEGORIA DO DEFEITO: ${d.categoriaDefeito}
+HIPÓTESE PRINCIPAL: ${d.hipotesePrincipal}
+REPARÁVEL: ${d.reparavel ? "Sim" : "Não"}
+  `.trim();
+}
+
+export async function assistQuesito(
+  anthropic: Anthropic,
+  formData: PericiaData,
+  quesito: string
+): Promise<string> {
+  const summary = buildDiagnosticSummary(formData);
+  const msg = await anthropic.messages.create({
+    model: "claude-sonnet-4-6",
+    max_tokens: 800,
+    messages: [
+      {
+        role: "user",
+        content: `Você é um perito judicial especializado em dispositivos iPhone, com conhecimento em eletrônica, CDC e normas ABNT. Com base nos dados diagnósticos abaixo, responda ao quesito de forma técnica, direta e fundamentada. Cite evidências concretas dos dados. Máximo 3 parágrafos.
+
+DADOS DIAGNÓSTICOS:
+${summary}
+
+QUESITO: ${quesito}`,
+      },
+    ],
+  });
+  const block = msg.content[0];
+  return block.type === "text" ? block.text : "";
+}
+
 function lciInterpretacao(estado: string): string {
   return estado === "ATIVADO"
     ? "Indica contato anterior com líquido"
