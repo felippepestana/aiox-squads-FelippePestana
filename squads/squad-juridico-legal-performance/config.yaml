@@ -153,7 +153,7 @@ pipeline:
     UC-LP-008:
       name: "Design de Produto Jurídico"
       trigger_patterns: ["frontend", "interface", "usabilidade", "dashboard", "design", "produto jurídico", "experiência do usuário"]
-      route: [process-intake-analyst, legal-ux-architect, quality-compliance-validator]
+      route: [process-intake-analyst, legal-ux-architect, legal-report-writer, quality-compliance-validator]
 
 quality_gates:
   QG-LP-001:
@@ -255,6 +255,21 @@ quality_standards:
     - "Avaliar estratégia recursal com admissibilidade e recomendação."
     - "Produzir roteiro de laudo pericial iPhone com cadeia de custódia e normas aplicáveis."
     - "Gerar brief de frontend jurídico com personas, jornadas, acessibilidade e rastreabilidade."
+  functional_review:
+    path: SMOKE_TESTS.md
+    priority_scenarios:
+      - id: ST-LP-001
+        name: "Análise processual civil"
+        expected_use_case: UC-LP-003
+        validates: ["classificação CPC", "auditoria processual", "pesquisa jurídica", "estratégia", "relatório"]
+      - id: ST-LP-002
+        name: "Estratégia recursal"
+        expected_use_case: UC-LP-004
+        validates: ["admissibilidade", "prequestionamento", "prazo", "mérito recursal", "plano de ação"]
+      - id: ST-LP-003
+        name: "Planejamento de frontend jurídico"
+        expected_use_case: UC-LP-008
+        validates: ["personas", "jornadas", "acessibilidade", "rastreabilidade", "handoff para apex"]
 
 stats:
   total_agents: 16

@@ -2,7 +2,7 @@
 
 > Squad unificado para análise processual, estratégia jurídica, direito processual civil, perícia judicial técnica e planejamento de produto jurídico com frontend de alta usabilidade.
 
-**Versão:** 1.0.0 | **Agentes:** 16 | **Tasks:** 10 | **Workflows:** 3
+**Versão:** 1.0.0 | **Agentes:** 16 | **Tasks:** 10 | **Workflows:** 3 | **Smoke tests:** 3
 
 ---
 
@@ -100,6 +100,18 @@ Preciso planejar o frontend de um dashboard jurídico para upload de peças, an�
 ## Design e frontend
 
 As orientações para o ambiente de usabilidade estão em [`DESIGN_GUIDE.md`](DESIGN_GUIDE.md). O frontend só deve ser implementado depois de aprovado o brief de design gerado pela task `design-legal-product-ux` e validado pelo checklist `design-readiness-checklist.md`.
+
+---
+
+## Validação funcional
+
+A revisão inicial deve executar os cenários de [`SMOKE_TESTS.md`](SMOKE_TESTS.md):
+
+1. Análise processual civil.
+2. Estratégia recursal.
+3. Planejamento de frontend jurídico.
+
+Esses testes verificam classificação de UC, rota de agentes, quality gates e entregáveis esperados antes de evoluir para exemplos preenchidos ou implementação de interface.
 
 ---
 

@@ -57,6 +57,16 @@ legal-performance-chief
 | Perícia técnica | `legal-normative-specialist`, `forensic-device-specialist`, `quality-compliance-validator` |
 | Produto jurídico | `legal-ux-architect`, `quality-compliance-validator`, handoff futuro para `apex` |
 
+## Smoke tests funcionais
+
+Os cenários mínimos de validação estão em [`SMOKE_TESTS.md`](SMOKE_TESTS.md). Eles existem para confirmar que a arquitetura unificada não apenas lista agentes, mas também roteia corretamente demandas reais:
+
+| Cenário | UC esperado | Objetivo arquitetural |
+|---|---|---|
+| Análise processual civil | `UC-LP-003` | Confirmar integração entre classificação CPC, auditoria, leitura de peças, pesquisa, estratégia e relatório. |
+| Estratégia recursal | `UC-LP-004` | Confirmar separação entre admissibilidade recursal, mérito, prazos e recomendação. |
+| Frontend jurídico | `UC-LP-008` | Confirmar que produto e usabilidade geram brief antes de qualquer implementação visual. |
+
 ## Quality gates
 
 | Gate | Finalidade | Bloqueia quando |
