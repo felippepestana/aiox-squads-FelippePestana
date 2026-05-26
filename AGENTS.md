@@ -10,7 +10,7 @@ This is a monorepo with multiple products. The primary services for development 
 |---------|------|-------------|------|
 | **Web Portal** (Express + React/Vite) | `web/` | `npm run dev` | Client: 5173, API: 8787 |
 | **Chatbot** (Express) | `chatbot/` | `npm run dev` | 3000 |
-| **Analista Processual Web** (Next.js 15) | `analista-processual-web/` | `npm run dev` | 3000 |
+| **Analista Processual Web** (Next.js 15) | `analista-processual-web/` | `npm run dev` | 3000 (conflicts with chatbot — run one at a time) |
 
 ### Running the web portal (main product)
 
