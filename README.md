@@ -5,6 +5,7 @@
 <p align="center">
   <a href="#quickstart"><strong>Quickstart</strong></a> &middot;
   <a href="#catálogo-de-squads"><strong>Catálogo</strong></a> &middot;
+  <a href="docs/deploy/vercel.md"><strong>Deploy Vercel</strong></a> &middot;
   <a href="https://github.com/SynkraAI/aiox-squads"><strong>GitHub</strong></a> &middot;
   <a href="https://github.com/SynkraAI/aiox-squads/discussions"><strong>Discussões</strong></a>
 </p>
