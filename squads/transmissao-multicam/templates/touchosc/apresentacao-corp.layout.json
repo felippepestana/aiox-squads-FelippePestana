@@ -1,0 +1,42 @@
+{
+  "$schema": "https://hexler.net/touchosc/schema/layout.json",
+  "metadata": {
+    "name": "Multicam Apresentação Corporativa",
+    "version": "1.0.0",
+    "description": "Variante para apresentações com slides — SLIDES_PIP central, presets PiP rápidos",
+    "frame": { "width": 1024, "height": 768 },
+    "orientation": "landscape",
+    "based_on": "operator.layout.json"
+  },
+  "diff_from_master": {
+    "Cenas": {
+      "promote_to_main": ["Slides + PiP", "Slides (full)"],
+      "size_overrides": {
+        "Slides + PiP": "extra-large",
+        "Slides (full)": "large"
+      }
+    },
+    "PiP": {
+      "place_on_main_page": true,
+      "comment": "Operador troca câmera/canto/tamanho do PiP sem mudar de página."
+    },
+    "Cenas_extra_buttons": [
+      {
+        "label": "PiP Rápido — Sup. Dir.",
+        "macro": [
+          { "send_address": "/tx/scene/slides_pip" },
+          { "send_address": "/tx/pip/corner/top_right" },
+          { "send_address": "/tx/pip/size/25" }
+        ]
+      },
+      {
+        "label": "PiP Rápido — Inf. Dir.",
+        "macro": [
+          { "send_address": "/tx/scene/slides_pip" },
+          { "send_address": "/tx/pip/corner/bottom_right" },
+          { "send_address": "/tx/pip/size/25" }
+        ]
+      }
+    ]
+  }
+}

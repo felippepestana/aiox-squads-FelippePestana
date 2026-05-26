@@ -1,0 +1,32 @@
+{
+  "$schema": "https://hexler.net/touchosc/schema/layout.json",
+  "metadata": {
+    "name": "Multicam Debate 2x2",
+    "version": "1.0.0",
+    "description": "Variante para debates 2x2 — GRID destacado e 4 mutes na main",
+    "frame": { "width": 1024, "height": 768 },
+    "orientation": "landscape",
+    "based_on": "operator.layout.json"
+  },
+  "diff_from_master": {
+    "Cenas": {
+      "promote_to_main": ["GRID 2x2"],
+      "size_overrides": {
+        "GRID 2x2": "extra-large",
+        "CAM 1":    "small",
+        "CAM 2":    "small",
+        "CAM 3":    "small",
+        "CAM 4":    "small"
+      },
+      "comment": "GRID ocupa metade superior; câmeras individuais ficam pequenas."
+    },
+    "Áudio": {
+      "place_on_main_page": true,
+      "comment": "4 strips visíveis simultaneamente na página Cenas para mute rápido."
+    },
+    "PiP": {
+      "hidden": true,
+      "comment": "Em debate 2x2 raramente se usa PiP."
+    }
+  }
+}
