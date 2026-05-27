@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 const ALLOWED_MIME: Record<string, string> = {
@@ -106,7 +107,8 @@ export async function POST(
     const path = `${senderista.id}/${Date.now()}.${ext}`;
     const buffer = await file.arrayBuffer();
 
-    const { error: uploadErr } = await supabase.storage
+    const admin = createAdminClient();
+    const { error: uploadErr } = await admin.storage
       .from("mensagens")
       .upload(path, buffer, { contentType: mimeType, upsert: false });
 
@@ -123,7 +125,7 @@ export async function POST(
     });
 
     if (insertErr) {
-      await supabase.storage.from("mensagens").remove([path]);
+      await admin.storage.from("mensagens").remove([path]);
       throw insertErr;
     }
 

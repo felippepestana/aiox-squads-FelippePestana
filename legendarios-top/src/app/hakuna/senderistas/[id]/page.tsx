@@ -15,7 +15,7 @@ export default async function SenderistaDetailPage({ params }: Props) {
   const { id } = await params;
   const supabase = await createClient();
 
-  const [{ data: s }, { data: exames }, { data: prontuarios }] = await Promise.all([
+  const [{ data: s }, { data: examesRaw }, { data: prontuariosRaw }] = await Promise.all([
     supabase
       .from("senderistas")
       .select("*")
@@ -32,6 +32,29 @@ export default async function SenderistaDetailPage({ params }: Props) {
       .eq("senderista_id", id)
       .order("created_at", { ascending: false }),
   ]);
+
+  // Generate signed URLs for private storage — 1-hour expiry is enough for a dashboard session
+  const examePaths = examesRaw?.map((e) => e.arquivo_url).filter(Boolean) ?? [];
+  const { data: signedExames } = examePaths.length
+    ? await supabase.storage.from("exames").createSignedUrls(examePaths, 3600)
+    : { data: [] };
+  const exameUrlMap = Object.fromEntries(
+    (signedExames ?? []).map((s) => [s.path, s.signedUrl])
+  );
+
+  const allFotoPaths = prontuariosRaw?.flatMap((p) => p.fotos_urls ?? []) ?? [];
+  const { data: signedFotos } = allFotoPaths.length
+    ? await supabase.storage.from("prontuarios").createSignedUrls(allFotoPaths, 3600)
+    : { data: [] };
+  const fotoUrlMap = Object.fromEntries(
+    (signedFotos ?? []).map((s) => [s.path, s.signedUrl])
+  );
+
+  const exames = examesRaw?.map((e) => ({ ...e, signed_url: exameUrlMap[e.arquivo_url] ?? null }));
+  const prontuarios = prontuariosRaw?.map((p) => ({
+    ...p,
+    fotos_urls: (p.fotos_urls ?? []).map((path: string) => fotoUrlMap[path] ?? null).filter(Boolean),
+  }));
 
   if (!s) return notFound();
 
@@ -105,9 +128,11 @@ export default async function SenderistaDetailPage({ params }: Props) {
                 <div key={e.id} className="flex items-center justify-between border rounded p-3">
                   <div>
                     <p className="text-sm font-medium">{EXAM_LABELS[e.tipo as ExamType] ?? e.tipo}</p>
-                    <a href={e.arquivo_url} target="_blank" className="text-xs text-blue-600 underline">
-                      Ver arquivo
-                    </a>
+                    {e.signed_url && (
+                      <a href={e.signed_url} target="_blank" className="text-xs text-blue-600 underline">
+                        Ver arquivo
+                      </a>
+                    )}
                   </div>
                   <Badge variant={e.validado === true ? "aprovado" : e.validado === false ? "reprovado" : "pendente"}>
                     {e.validado === true ? "Aprovado" : e.validado === false ? "Reprovado" : "Pendente"}

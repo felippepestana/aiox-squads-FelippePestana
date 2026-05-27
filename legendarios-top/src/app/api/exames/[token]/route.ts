@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 const ALLOWED_TIPOS = ["atestado_cg", "atestado_cardio", "teste_esteira"] as const;
 type TipoExame = typeof ALLOWED_TIPOS[number];
@@ -60,7 +61,8 @@ export async function POST(request: Request, { params }: Params) {
 
   const path = `exames/${senderista.id}/${tipo}-${Date.now()}.${rawExt}`;
 
-  const { error: uploadError } = await supabase.storage
+  const admin = createAdminClient();
+  const { error: uploadError } = await admin.storage
     .from("exames")
     .upload(path, file, { contentType, upsert: true });
 
@@ -69,12 +71,10 @@ export async function POST(request: Request, { params }: Params) {
     return NextResponse.json({ error: "Erro ao armazenar arquivo" }, { status: 500 });
   }
 
-  const { data: urlData } = supabase.storage.from("exames").getPublicUrl(path);
-
   const { error: dbError } = await supabase.from("exames").insert({
     senderista_id: senderista.id,
     tipo,
-    arquivo_url: urlData.publicUrl,
+    arquivo_url: path,
   });
 
   if (dbError) {
@@ -82,7 +82,7 @@ export async function POST(request: Request, { params }: Params) {
     return NextResponse.json({ error: "Erro ao registrar exame" }, { status: 500 });
   }
 
-  return NextResponse.json({ arquivo_url: urlData.publicUrl });
+  return NextResponse.json({ arquivo_url: path });
 }
 
 export async function PATCH(request: Request, { params }: Params) {

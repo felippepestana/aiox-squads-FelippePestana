@@ -41,6 +41,5 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Erro ao armazenar foto" }, { status: 500 });
   }
 
-  const { data: urlData } = supabase.storage.from("prontuarios").getPublicUrl(path);
-  return NextResponse.json({ url: urlData.publicUrl });
+  return NextResponse.json({ url: path });
 }
