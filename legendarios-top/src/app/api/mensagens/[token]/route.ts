@@ -32,9 +32,9 @@ export async function GET(
   { params }: { params: Promise<{ token: string }> }
 ) {
   const { token } = await params;
-  const supabase = await createClient();
+  const admin = createAdminClient();
 
-  const { data: senderista, error } = await supabase
+  const { data: senderista, error } = await admin
     .from("senderistas")
     .select("id, nome, evento_nome")
     .eq("mensagens_token", token)
@@ -57,8 +57,9 @@ export async function POST(
 ) {
   const { token } = await params;
   const supabase = await createClient();
+  const admin = createAdminClient();
 
-  const { data: senderista, error: lookupErr } = await supabase
+  const { data: senderista, error: lookupErr } = await admin
     .from("senderistas")
     .select("id")
     .eq("mensagens_token", token)

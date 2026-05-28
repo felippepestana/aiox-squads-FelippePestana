@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { classificarRisco, calcularIMC } from "@/lib/triage";
 
 function normalizeCpf(v: string | null | undefined): string | null {
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     const imc = calcularIMC(data.peso_kg, data.altura_cm);
     const cpf = normalizeCpf(data.cpf);
 
-    const supabase = await createClient();
+    const supabase = createAdminClient();
 
     // Upsert by CPF when provided to avoid duplicates
     const record = {

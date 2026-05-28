@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { notFound } from "next/navigation";
 import ExameUpload from "@/components/exam-upload";
 
@@ -12,7 +12,7 @@ interface Props {
 
 export default async function ExamesPage({ params }: Props) {
   const { token } = await params;
-  const supabase = await createClient();
+  const supabase = createAdminClient();
 
   const { data: senderista } = await supabase
     .from("senderistas")

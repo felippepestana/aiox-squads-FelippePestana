@@ -15,8 +15,9 @@ interface Params {
 export async function POST(request: Request, { params }: Params) {
   const { token } = await params;
   const supabase = await createClient();
+  const admin = createAdminClient();
 
-  const { data: senderista, error: lookupError } = await supabase
+  const { data: senderista, error: lookupError } = await admin
     .from("senderistas")
     .select("id")
     .eq("upload_token", token)
@@ -61,7 +62,6 @@ export async function POST(request: Request, { params }: Params) {
 
   const path = `exames/${senderista.id}/${tipo}-${Date.now()}.${rawExt}`;
 
-  const admin = createAdminClient();
   const { error: uploadError } = await admin.storage
     .from("exames")
     .upload(path, file, { contentType, upsert: true });
