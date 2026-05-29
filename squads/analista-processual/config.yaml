@@ -1,20 +1,22 @@
 metadata:
-  version: "1.0"
+  version: "1.1"
   created: "2026-03-28"
+  updated: "2026-05-15"
   squad: "analista-processual"
 
 squad:
   name: "analista-processual"
   display_name: "Analista Processual"
-  version: "1.0.0"
+  version: "1.1.0"
   domain: "Process Analysis & Legal Domain"
   description: |
     Squad de análise processual com pipeline 3-tier: Intake (mapeamento + avaliação),
-    Execução Jurídica (leitor de peças, pesquisa jurisprudencial, estratégia, orientação),
-    e Síntese Final (relatório estruturado com citações rastreadas). Cobre processos
-    genéricos e demandas jurídicas completas com suporte a documentos legais.
+    Execução Jurídica (leitor de peças, pesquisa jurisprudencial, estratégia, orientação,
+    elaboração de peças processuais), e Síntese Final (relatório estruturado com citações
+    rastreadas). Cobre processos genéricos e demandas jurídicas completas — incluindo
+    análise e elaboração de peças processuais, contratos e documentos extrajudiciais.
   philosophy: |
-    "Todo processo merece análise rigorosa: mapeado, avaliado, fundamentado e documentado."
+    "Todo processo merece análise rigorosa: mapeado, avaliado, fundamentado, documentado e bem redigido."
   keywords:
     - analista-processual
     - mapeamento-processo
@@ -22,6 +24,11 @@ squad:
     - jurisprudencia
     - estrategia-processual
     - relatorio-tecnico
+    - elaboracao-pecas
+    - redacao-juridica
+    - peticao-inicial
+    - contestacao
+    - recurso
     - brasil
     - direito-civil
   entry_agent: analista-chefe
@@ -33,8 +40,8 @@ tiers:
     purpose: "Mapeia etapas/atores/decisões e avalia riscos/maturidade. Sempre executa sequencialmente primeiro."
   tier_1:
     name: "Execução Jurídica"
-    agents: [leitor-de-pecas, pesquisador-juridico, estrategista-processual, advogado-orientador]
-    purpose: "Análise jurídica profunda. Execução paralela — orquestrador seleciona agentes por use case."
+    agents: [leitor-de-pecas, pesquisador-juridico, estrategista-processual, advogado-orientador, redator-juridico]
+    purpose: "Análise jurídica profunda e elaboração de peças. Execução paralela — orquestrador seleciona agentes por use case."
   tier_sintese:
     name: "Síntese e Documentação"
     agents: [documentador-processual]
@@ -80,6 +87,11 @@ agents:
     tier: tier_1
     icon: "📋"
     focus: "Medidas urgentes, plano de ação com prazos, monitoramento DJe, comunicação com cliente"
+  redator-juridico:
+    file: agents/redator-juridico.md
+    tier: tier_1
+    icon: "✍️"
+    focus: "Elaboração de peças processuais (petição, contestação, recursos, embargos) e documentos jurídicos (contratos, notificações, procurações)"
   documentador-processual:
     file: agents/documentador-processual.md
     tier: tier_sintese
@@ -88,7 +100,7 @@ agents:
 
 handoffs:
   analista-chefe:
-    routes_to: [mapeador-processual, avaliador-processual, leitor-de-pecas, pesquisador-juridico, estrategista-processual, advogado-orientador, documentador-processual]
+    routes_to: [mapeador-processual, avaliador-processual, leitor-de-pecas, pesquisador-juridico, estrategista-processual, advogado-orientador, redator-juridico, documentador-processual]
   mapeador-processual:
     hands_off_to: [avaliador-processual]
     escalates_to: [analista-chefe]
@@ -107,6 +119,10 @@ handoffs:
   advogado-orientador:
     receives_from: [estrategista-processual]
     returns_to: [analista-chefe]
+  redator-juridico:
+    receives_from: [analista-chefe, leitor-de-pecas, pesquisador-juridico, estrategista-processual]
+    returns_to: [analista-chefe]
+    output_path: "output/pecas/"
   documentador-processual:
     receives_from: [analista-chefe]
     final: true
@@ -133,6 +149,12 @@ pipeline:
       trigger_patterns: ["jurisprudência", "STJ", "STF", "súmula", "legislação", "precedente"]
       tier_0_active: false
       tier_1_agents: [pesquisador-juridico]
+    UC-AP-005:
+      name: "Elaboração de Peça Processual ou Documento Jurídico"
+      trigger_patterns: ["elaborar", "redigir", "minutar", "escrever", "draft", "petição inicial", "contestação", "apelação", "embargos", "recurso especial", "notificação extrajudicial", "contrato", "procuração", "memorial", "manifestação"]
+      tier_0_active: false
+      tier_1_agents: [leitor-de-pecas, pesquisador-juridico, redator-juridico]
+      notes: "leitor-de-pecas e pesquisador-juridico são opcionais — ativados quando há peças existentes ou fundamentos a pesquisar"
 
 quality_gates:
   QG-AP-001:
@@ -151,6 +173,10 @@ quality_gates:
     name: "Relatório Rastreado"
     agent: documentador-processual
     criteria: "Relatório Markdown salvo, bloco citacoes presente (modo jurídico), roadmap completo"
+  QG-AP-005:
+    name: "Peça Processual Salva"
+    agent: redator-juridico
+    criteria: "Peça completa salva via Write em output/pecas/, dados faltantes sinalizados com [PREENCHER:]"
 
 tools:
   WebSearch:
@@ -160,8 +186,8 @@ tools:
     used_by: [leitor-de-pecas, mapeador-processual, avaliador-processual, estrategista-processual, advogado-orientador, documentador-processual]
     purpose: "Leitura de peças processuais e documentos"
   Write:
-    used_by: [documentador-processual]
-    purpose: "Salvar relatório final no workspace"
+    used_by: [documentador-processual, redator-juridico]
+    purpose: "Salvar relatório final e peças processuais elaboradas no workspace"
   Glob:
     used_by: [leitor-de-pecas, analista-chefe]
     purpose: "Descoberta de documentos no workspace"
@@ -184,11 +210,13 @@ quality_standards:
     - "Mapear processo simples com 5 etapas"
     - "Analisar processo judicial com documentos"
     - "Gerar relatório com jurisprudência pesquisada"
+    - "Elaborar contestação em processo de cobrança"
+    - "Redigir notificação extrajudicial de mora"
 
 stats:
-  total_agents: 8
-  total_tasks: 9
+  total_agents: 9
+  total_tasks: 10
   total_workflows: 2
   total_checklists: 2
-  total_templates: 1
+  total_templates: 2
   total_data_files: 1
