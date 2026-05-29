@@ -1,0 +1,19 @@
+{
+  "name": "ai-gateway",
+  "version": "1.0.0",
+  "description": "Vercel AI Gateway example using the AI SDK",
+  "main": "index.mjs",
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file=.env.local index.mjs"
+  },
+  "keywords": [
+    "ai",
+    "ai-gateway",
+    "vercel"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "ai": "^6.0.193"
+  }
+}
