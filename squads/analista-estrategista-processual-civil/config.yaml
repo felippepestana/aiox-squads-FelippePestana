@@ -1,0 +1,209 @@
+metadata:
+  version: "1.0"
+  created: "2026-05-15"
+  squad: "analista-estrategista-processual-civil"
+
+squad:
+  name: "analista-estrategista-processual-civil"
+  display_name: "Analista Estrategista Processual Civil"
+  version: "1.0.0"
+  domain: "Direito Processual Civil"
+  description: |
+    Squad especializado na análise estratégica de processos civis brasileiros sob o
+    Código de Processo Civil (CPC 2015). Pipeline 3-tier: Triagem e Diagnóstico
+    (classificação do tipo/fase + auditoria de riscos CPC), Análise Especializada
+    (leitura de peças, pesquisa CPC/STJ, estratégia cível, recursos, orientação) e
+    Síntese Estratégica (relatório estruturado com fundamentos CPC e recomendações).
+  philosophy: |
+    "Todo processo civil é uma batalha estratégica: diagnosticado, fundamentado e orientado."
+  keywords:
+    - processual-civil
+    - cpc-2015
+    - estrategia-civel
+    - recursos-processuais
+    - execucao-civel
+    - stj
+    - analise-juridica
+    - brasil
+    - direito-civil
+  entry_agent: chefe-estrategico
+
+tiers:
+  tier_0:
+    name: "Triagem e Diagnóstico"
+    agents: [classificador-civel, auditor-processual]
+    purpose: "Classifica o tipo e fase do processo civil; audita riscos CPC (prescrição, preclusão, nulidades, incompetência)."
+  tier_1:
+    name: "Análise Especializada"
+    agents: [leitor-pecas-civel, pesquisador-cpc, estrategista-civel, analista-recursos, orientador-civel]
+    purpose: "Análise profunda: extração de peças, pesquisa CPC/STJ, estratégia cível, análise recursal e plano de ação."
+  tier_synthesis:
+    name: "Síntese Estratégica"
+    agents: [redator-estrategico]
+    purpose: "Consolida todos os outputs em relatório estratégico estruturado com Write."
+  orchestrator:
+    name: "Coordenação Estratégica"
+    agents: [chefe-estrategico]
+    purpose: "Classifica demandas CPC, roteia pelo pipeline, enforcã quality gates."
+
+agents:
+  chefe-estrategico:
+    file: agents/chefe-estrategico.md
+    tier: orchestrator
+    icon: "⚖️"
+    focus: "Classificação de demandas CPC, roteamento de pipeline, quality gates"
+  classificador-civel:
+    file: agents/classificador-civel.md
+    tier: tier_0
+    icon: "🗂️"
+    focus: "Tipo de ação cível, fase processual (conhecimento/execução/cautelar), polo, juízo"
+  auditor-processual:
+    file: agents/auditor-processual.md
+    tier: tier_0
+    icon: "🔎"
+    focus: "Riscos CPC: prescrição, decância, preclusão, nulidades, incompetência"
+  leitor-pecas-civel:
+    file: agents/leitor-pecas-civel.md
+    tier: tier_1
+    icon: "📄"
+    focus: "Extração de peças civis (petição inicial, contestação, sentença, acórdão, recurso)"
+  pesquisador-cpc:
+    file: agents/pesquisador-cpc.md
+    tier: tier_1
+    icon: "🔍"
+    focus: "Artigos CPC 2015, jurisprudência STJ cível, teses repetitivas, súmulas"
+  estrategista-civel:
+    file: agents/estrategista-civel.md
+    tier: tier_1
+    icon: "♟️"
+    focus: "3 cenários (%), viabilidade de acordo, tática processual cível"
+  analista-recursos:
+    file: agents/analista-recursos.md
+    tier: tier_1
+    icon: "📤"
+    focus: "Admissibilidade e mérito: apelação, agravo, REsp, RE, embargos de declaração"
+  orientador-civel:
+    file: agents/orientador-civel.md
+    tier: tier_1
+    icon: "📋"
+    focus: "Prazos CPC, plano de ação com cronograma, medidas urgentes, comunicação com cliente"
+  redator-estrategico:
+    file: agents/redator-estrategico.md
+    tier: tier_synthesis
+    icon: "📝"
+    focus: "Relatório estratégico completo com fundamentos CPC + bloco citations + Write"
+
+handoffs:
+  chefe-estrategico:
+    routes_to: [classificador-civel, auditor-processual, leitor-pecas-civel, pesquisador-cpc, estrategista-civel, analista-recursos, orientador-civel, redator-estrategico]
+  classificador-civel:
+    hands_off_to: [auditor-processual]
+    escalates_to: [chefe-estrategico]
+  auditor-processual:
+    receives_from: [classificador-civel]
+    hands_off_to: [chefe-estrategico]
+  leitor-pecas-civel:
+    collaborates_with: [pesquisador-cpc]
+    returns_to: [chefe-estrategico]
+  pesquisador-cpc:
+    collaborates_with: [leitor-pecas-civel]
+    returns_to: [chefe-estrategico]
+  estrategista-civel:
+    receives_from: [leitor-pecas-civel, pesquisador-cpc]
+    returns_to: [chefe-estrategico]
+  analista-recursos:
+    receives_from: [estrategista-civel, leitor-pecas-civel, pesquisador-cpc]
+    returns_to: [chefe-estrategico]
+  orientador-civel:
+    receives_from: [estrategista-civel, analista-recursos]
+    returns_to: [chefe-estrategico]
+  redator-estrategico:
+    receives_from: [chefe-estrategico]
+    final: true
+
+pipeline:
+  use_cases:
+    UC-AEPC-001:
+      name: "Análise CPC Completa"
+      trigger_patterns: ["processo cível", "ação civil", "petição inicial cível", "contestação", "sentença cível", "analisar processo civil"]
+      tier_0_active: true
+      tier_1_agents: [leitor-pecas-civel, pesquisador-cpc, estrategista-civel, analista-recursos, orientador-civel]
+    UC-AEPC-002:
+      name: "Diagnóstico Processual"
+      trigger_patterns: ["diagnosticar", "fase processual", "status do processo", "verificar prazos", "situação processual"]
+      tier_0_active: true
+      tier_1_agents: []
+    UC-AEPC-003:
+      name: "Estratégia Recursal"
+      trigger_patterns: ["recurso", "apelação", "agravo", "REsp", "recurso especial", "recurso extraordinário", "embargos de declaração"]
+      tier_0_active: true
+      tier_1_agents: [leitor-pecas-civel, pesquisador-cpc, analista-recursos, orientador-civel]
+    UC-AEPC-004:
+      name: "Análise de Defesa"
+      trigger_patterns: ["defesa", "contestação", "preliminares", "exceção processual", "reconvenção", "prazo de resposta"]
+      tier_0_active: true
+      tier_1_agents: [leitor-pecas-civel, pesquisador-cpc, estrategista-civel, orientador-civel]
+    UC-AEPC-005:
+      name: "Fase de Execução"
+      trigger_patterns: ["execução", "cumprimento de sentença", "penhora", "embargos à execução", "título executivo"]
+      tier_0_active: true
+      tier_1_agents: [leitor-pecas-civel, pesquisador-cpc, estrategista-civel, orientador-civel]
+
+quality_gates:
+  QG-AEPC-001:
+    name: "Classificação da Demanda"
+    agent: chefe-estrategico
+    criteria: "UC classificado, tipo de ação e fase identificados, pipeline definido"
+  QG-AEPC-002:
+    name: "Triagem Processual"
+    agent: classificador-civel
+    criteria: "Tipo de ação, fase processual e polo identificados com base no CPC"
+  QG-AEPC-003:
+    name: "Auditoria CPC"
+    agent: auditor-processual
+    criteria: "Riscos processuais identificados com fundamento em artigos CPC específicos"
+  QG-AEPC-004:
+    name: "Relatório Estratégico Salvo"
+    agent: redator-estrategico
+    criteria: "Relatório Markdown salvo via Write, bloco citations presente, recomendações incluídas"
+
+tools:
+  WebSearch:
+    used_by: [pesquisador-cpc]
+    purpose: "Pesquisa de jurisprudência STJ/STF, artigos CPC, teses repetitivas e súmulas"
+  Read:
+    used_by: [leitor-pecas-civel, classificador-civel, auditor-processual, estrategista-civel, analista-recursos, orientador-civel, redator-estrategico]
+    purpose: "Leitura de peças processuais e documentos"
+  Write:
+    used_by: [redator-estrategico]
+    purpose: "Salvar relatório estratégico no workspace"
+  Glob:
+    used_by: [leitor-pecas-civel, chefe-estrategico]
+    purpose: "Descoberta de documentos no workspace"
+  Grep:
+    used_by: [leitor-pecas-civel, pesquisador-cpc, estrategista-civel, analista-recursos]
+    purpose: "Busca em documentos e relatórios"
+
+settings:
+  activation:
+    prefix: "analista-estrategista-processual-civil"
+    example: "@analista-estrategista-processual-civil:chefe-estrategico"
+  greeting:
+    show_use_cases: true
+    show_pipeline_status: true
+  language: "pt-BR"
+
+quality_standards:
+  min_score: 7.5
+  smoke_tests:
+    - "Diagnosticar processo de cobrança em fase de conhecimento"
+    - "Analisar estratégia recursal em apelação cível"
+    - "Análise completa de ação de indenização com documentos"
+
+stats:
+  total_agents: 9
+  total_tasks: 8
+  total_workflows: 2
+  total_checklists: 2
+  total_templates: 1
+  total_data_files: 1

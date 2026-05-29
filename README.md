@@ -5,6 +5,7 @@
 <p align="center">
   <a href="#quickstart"><strong>Quickstart</strong></a> &middot;
   <a href="#catálogo-de-squads"><strong>Catálogo</strong></a> &middot;
+  <a href="docs/deploy/vercel.md"><strong>Deploy Vercel</strong></a> &middot;
   <a href="https://github.com/SynkraAI/aiox-squads"><strong>GitHub</strong></a> &middot;
   <a href="https://github.com/SynkraAI/aiox-squads/discussions"><strong>Discussões</strong></a>
 </p>
@@ -162,6 +163,7 @@ Squads publicados pela comunidade neste repositório.
 | [**education**](squads/education/) | Design instrucional que transforma expertise em cursos online conformes ao MEC, aplicando 15 frameworks pedagógicos (Bloom, Mayer, UbD, ARCS) | 🟢 |
 | [**kaizen**](squads/kaizen/) | Monitora e melhora continuamente todos os squads — analisa estrutura, performance, gargalos, competências e custos | 🟢 |
 | [**seo**](squads/seo/) | Otimiza SEO de sites (score 0-100) — auditoria on-page, técnico, schema, E-E-A-T, Core Web Vitals e visibilidade para IA (GEO) | 🟡 |
+| [**squad-juridico-legal-performance**](squads/squad-juridico-legal-performance/) | Squad jurídico unificado — integra análise processual, CPC, estratégia recursal, perícia técnica judicial e planejamento de frontend jurídico de alta usabilidade | 🟢 |
 | [**squad-creator**](squads/squad-creator/) | Meta-squad que cria outros squads via templates estruturais, validação de qualidade e extração de DNA de especialistas reais | 🟢 |
 | [**squad-creator-pro**](squads/squad-creator-pro/) | Upgrade do Squad Creator com mind cloning, roteamento de modelos, 3 agentes especialistas e benchmarks de qualidade | 🟢 |
 

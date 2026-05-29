@@ -1,0 +1,25 @@
+id: wf-legal-product-design
+name: Legal Product Design Readiness Pipeline
+trigger: "Frontend, interface, dashboard, usabilidade ou produto jurídico"
+steps:
+  - id: classify
+    agent: legal-performance-chief
+    gate: QG-LP-001
+  - id: intake
+    agent: process-intake-analyst
+  - id: ux-architecture
+    agent: legal-ux-architect
+    task: design-legal-product-ux
+    gate: QG-LP-007
+  - id: design-brief
+    agent: legal-report-writer
+    template: legal-product-design-brief-tmpl.md
+  - id: validate
+    agent: quality-compliance-validator
+    checklist: design-readiness-checklist.md
+outputs:
+  - legal-product-design-brief.md
+  - design-readiness-checklist.md
+handoff:
+  target_squad: apex
+  condition: "Somente após aprovação do brief e do DESIGN_GUIDE.md"

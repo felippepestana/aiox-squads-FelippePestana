@@ -72,6 +72,16 @@ npm run dev
 4. Configure Nginx como reverse proxy
 5. Configure SSL com Let's Encrypt
 
+### Vercel
+
+Este app também está preparado para deploy na Vercel como projeto Next.js. Ao importar o repositório, configure:
+
+- **Root Directory:** `analista-processual-web`
+- **Framework Preset:** `Next.js`
+- **Build Command:** `npm run build`
+
+Veja o guia completo em [`../docs/deploy/vercel.md`](../docs/deploy/vercel.md), incluindo variáveis de ambiente e checklist de produção.
+
 ## Roadmap
 
 - [x] Setup do projeto

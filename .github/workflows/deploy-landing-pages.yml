@@ -25,18 +25,19 @@ env:
 
 jobs:
   detect-changes:
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     outputs:
-      sanctuary: ${{ steps.changes.outputs.sanctuary }}
-      covenant: ${{ steps.changes.outputs.covenant }}
-      flame: ${{ steps.changes.outputs.flame }}
-      community: ${{ steps.changes.outputs.community }}
-      pilgrimage: ${{ steps.changes.outputs.pilgrimage }}
+      sanctuary: ${{ steps.changes.outputs.sanctuary || 'false' }}
+      covenant: ${{ steps.changes.outputs.covenant || 'false' }}
+      flame: ${{ steps.changes.outputs.flame || 'false' }}
+      community: ${{ steps.changes.outputs.community || 'false' }}
+      pilgrimage: ${{ steps.changes.outputs.pilgrimage || 'false' }}
     steps:
       - uses: actions/checkout@v4
+        if: github.event_name == 'push'
       - uses: dorny/paths-filter@v3
         id: changes
+        if: github.event_name == 'push'
         with:
           filters: |
             sanctuary:

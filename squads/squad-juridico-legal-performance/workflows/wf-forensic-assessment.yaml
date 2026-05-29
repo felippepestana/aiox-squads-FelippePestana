@@ -1,0 +1,24 @@
+id: wf-forensic-assessment
+name: Forensic Judicial Assessment Pipeline
+trigger: "Perícia judicial, laudo técnico, iPhone, cadeia de custódia ou quesitos"
+steps:
+  - id: classify
+    agent: legal-performance-chief
+    gate: QG-LP-001
+  - id: intake
+    agent: process-intake-analyst
+  - id: normative
+    agent: legal-normative-specialist
+    gate: QG-LP-005
+  - id: technical
+    agent: forensic-device-specialist
+  - id: report
+    agent: legal-report-writer
+    template: forensic-technical-report-tmpl.md
+  - id: validate
+    agent: quality-compliance-validator
+    checklist: forensic-compliance-checklist.md
+outputs:
+  - forensic-technical-report.md
+  - answers-to-questions.md
+  - compliance-validation.md
