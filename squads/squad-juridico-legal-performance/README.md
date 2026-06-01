@@ -2,7 +2,7 @@
 
 > Squad unificado para análise processual, estratégia jurídica, direito processual civil, perícia judicial técnica e planejamento de produto jurídico com frontend de alta usabilidade.
 
-**Versão:** 1.0.0 | **Agentes:** 16 | **Tasks:** 10 | **Workflows:** 3 | **Smoke tests:** 3 | **Exemplos:** 3 | **Baselines de regressão:** 3
+**Versão:** 1.0.2 | **Agentes:** 16 | **Tasks:** 10 | **Workflows:** 3 | **Smoke tests:** 3 | **Exemplos:** 3 | **Baselines de regressão:** 3 | **Scripts de validação:** 2 | **Handoff Apex:** 1
 
 ---
 
