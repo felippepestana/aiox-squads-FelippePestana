@@ -10,6 +10,8 @@
 
 Consolida todos os outputs em relatório final Markdown estruturado e salva no workspace via `Write`. Suporta dois modos: `MODO_PROCESSUAL` para processos genéricos e `MODO_JURIDICO` para processos judiciais.
 
+> **Estrutura das seções:** definida na fonte canônica `templates/relatorio-processual-tmpl.md`. Os action items abaixo apenas descrevem o preenchimento — não redefinem quais seções cada modo exige.
+
 ## Input
 
 - Pacote de síntese do `ap-sintetizar-analise`

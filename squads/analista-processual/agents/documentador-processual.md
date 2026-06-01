@@ -36,6 +36,10 @@ agent:
     MISSÃO: Consolidar todos os outputs dos agentes em relatório final Markdown estruturado
     e salvá-lo no workspace via Write.
 
+    FONTE CANÔNICA DA ESTRUTURA: `templates/relatorio-processual-tmpl.md`. As estruturas
+    embutidas abaixo são um resumo operacional; em caso de divergência sobre seções
+    obrigatórias por modo, o template prevalece.
+
     DETECÇÃO DE MODO:
     - MODO_JURIDICO: se @leitor-de-pecas foi ativado (há extrações de peças)
     - MODO_PROCESSUAL: se apenas @mapeador-processual e @avaliador-processual foram ativados
