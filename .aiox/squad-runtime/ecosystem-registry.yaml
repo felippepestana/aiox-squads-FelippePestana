@@ -1,24 +1,24 @@
 metadata:
-  version: 1.7.0
-  last_updated: '2026-05-18'
-  total_squads: 11
+  version: 1.3.0
+  last_updated: '2026-06-01'
+  total_squads: 15
   maintainer: squad-creator
   generated_by: "scripts/refresh-registry.py --write (100% deterministic)"
 squads:
   analista-estrategista-processual-civil:
     path: squads/analista-estrategista-processual-civil/
-    version: 1.0.0
-    score: 9.5
+    version: '1.0'
+    score: 8.2
     maturity: DEVELOPING
     validated: false
     validated_explicit: false
     auto_promoted: false
-    description: >
-      Squad especializado em Direito Processual Civil (CPC 2015) com pipeline 3-tier:
-      Triagem CPC (classificação + auditoria de compliance), Análise Jurídica
-      (leitura de peças, pesquisa CPC/STJ/teses repetitivas, estratégia, análise
-      recursal, plano de ação) e Síntese Final (relatório estratégico estruturado).
-      Cobre análise completa, diagnóstico rápido, recursos, defesas e execução.
+    description: |-
+      Squad especializado na análise estratégica de processos civis brasileiros sob o
+      Código de Processo Civil (CPC 2015). Pipeline 3-tier: Triagem e Diagnóstico
+      (classificação do tipo/fase + auditoria de riscos CPC), Análise Especializada
+      (leitura de peças, pesquisa CPC/STJ, estratégia cível, recursos, orientação) e
+      Síntese Estratégica (relatório estruturado com fundamentos CPC e recomendações).
     slashPrefix: ''
     counts:
       agents: 9
@@ -28,14 +28,14 @@ squads:
       checklists: 2
       data_files: 1
     agent_names:
+    - analista-recursos
+    - auditor-processual
     - chefe-estrategico
     - classificador-civel
-    - auditor-processual
-    - leitor-pecas-civel
-    - pesquisador-cpc
     - estrategista-civel
-    - analista-recursos
+    - leitor-pecas-civel
     - orientador-civel
+    - pesquisador-cpc
     - redator-estrategico
     has_readme: true
     has_changelog: true
@@ -57,21 +57,20 @@ squads:
     - 9 agents, 8 tasks
     - 2 workflows available
     - README documented
-    - Pipeline 3-tier CPC 2015
     example_use: Use analista-estrategista-processual-civil for CPC strategy and legal analysis.
   analista-processual:
     path: squads/analista-processual/
-    version: 1.1.0
-    score: 9.0
+    version: '1.0'
+    score: 8.2
     maturity: DEVELOPING
     validated: false
     validated_explicit: false
     auto_promoted: false
-    description: >
+    description: |-
       Squad de análise processual com pipeline 3-tier: Intake (mapeamento + avaliação),
       Execução Jurídica (leitor de peças, pesquisa jurisprudencial, estratégia, orientação),
       e Síntese Final (relatório estruturado com citações rastreadas). Cobre processos
-      genéricos e demandas jurídicas completas com suporte a documentos legais brasileiros.
+      genéricos e demandas jurídicas completas com suporte a documentos legais.
     slashPrefix: ''
     counts:
       agents: 8
@@ -81,14 +80,14 @@ squads:
       checklists: 2
       data_files: 1
     agent_names:
-    - analista-chefe
-    - mapeador-processual
-    - avaliador-processual
-    - leitor-de-pecas
-    - pesquisador-juridico
-    - estrategista-processual
     - advogado-orientador
+    - analista-chefe
+    - avaliador-processual
     - documentador-processual
+    - estrategista-processual
+    - leitor-de-pecas
+    - mapeador-processual
+    - pesquisador-juridico
     has_readme: true
     has_changelog: true
     domain: legal
@@ -107,8 +106,53 @@ squads:
     - 8 agents, 9 tasks
     - 2 workflows available
     - README documented
-    - Dual-mode (processual + juridico)
     example_use: Use analista-processual for process mapping or legal document analysis.
+  android-judicial-assessment:
+    path: squads/android-judicial-assessment/
+    version: 1.0.0
+    score: 5.8
+    maturity: DEVELOPING
+    validated: false
+    validated_explicit: false
+    auto_promoted: false
+    description: "Squad especializado na elaboração de laudos técnicos periciais judiciais para dispositivos Android, com\
+      \ ênfase em smartphones Samsung Galaxy, em conformidade com o CPC/2015, CDC e normas técnicas ABNT/NBR aplicáveis. Destinado\
+      \ a uso exclusivo por perito judicial habilitado e registrado no CREA/CFT. Contempla especificidades do ecossistema\
+      \ Samsung: Knox e-FUSE, diagnóstico via ADB, ODIN/Heimdall, Samsung Members e Samsung Service Center."
+    slashPrefix: ''
+    counts:
+      agents: 5
+      tasks: 5
+      workflows: 0
+      templates: 3
+      checklists: 0
+      data_files: 3
+    agent_names:
+    - chief-coordinator
+    - hardware-specialist
+    - legal-normative-specialist
+    - qc-validator
+    - report-writer
+    has_readme: true
+    has_changelog: false
+    domain: android-judicial-assessment
+    keywords:
+    - android
+    - judicial
+    - assessment
+    - elabora
+    - laudos
+    - cnicos
+    - periciais
+    - judiciais
+    - dispositivos
+    - nfase
+    - smartphones
+    - samsung
+    highlights:
+    - 5 agents, 5 tasks
+    - README documented
+    example_use: Use android-judicial-assessment for android-judicial-assessment tasks.
   apex:
     path: squads/apex/
     version: 1.1.0
@@ -273,12 +317,14 @@ squads:
   devops:
     path: squads/devops/
     version: 1.0.0
-    score: 9.0
+    score: 6.0
     maturity: DEVELOPING
     validated: false
     validated_explicit: false
     auto_promoted: false
-    description: "Pipeline-driven infrastructure automation squad. Designs CI/CD pipelines, containerizes applications, provisions cloud infrastructure as code, and implements observability."
+    description: Pipeline-driven infrastructure automation squad. Designs CI/CD pipelines, containerizes applications, provisions
+      cloud infrastructure as code, and implements observability — turning manual operations into reproducible, auditable
+      systems.
     slashPrefix: ''
     counts:
       agents: 6
@@ -288,12 +334,12 @@ squads:
       checklists: 0
       data_files: 0
     agent_names:
-    - devops-chief
-    - pipeline-architect
     - container-engineer
+    - devops-chief
+    - devsecops-guardian
     - infra-coder
     - monitor-sentinel
-    - devsecops-guardian
+    - pipeline-architect
     has_readme: true
     has_changelog: true
     domain: devops
@@ -404,6 +450,51 @@ squads:
     - 4 workflows available
     - README documented
     example_use: Use education for education tasks.
+  iphone-judicial-assessment:
+    path: squads/iphone-judicial-assessment/
+    version: 1.0.0
+    score: 5.8
+    maturity: DEVELOPING
+    validated: false
+    validated_explicit: false
+    auto_promoted: false
+    description: Squad especializado na elaboração de laudos técnicos periciais judiciais para dispositivos iPhone, em conformidade
+      com o CPC/2015, CDC e normas técnicas ABNT/NBR aplicáveis. Destinado a uso exclusivo por perito judicial habilitado
+      e registrado no CREA/CFT.
+    slashPrefix: ''
+    counts:
+      agents: 5
+      tasks: 5
+      workflows: 0
+      templates: 3
+      checklists: 0
+      data_files: 4
+    agent_names:
+    - chief-coordinator
+    - hardware-specialist
+    - legal-normative-specialist
+    - qc-validator
+    - report-writer
+    has_readme: true
+    has_changelog: false
+    domain: iphone-judicial-assessment
+    keywords:
+    - iphone
+    - judicial
+    - assessment
+    - elabora
+    - laudos
+    - cnicos
+    - periciais
+    - judiciais
+    - dispositivos
+    - conformidade
+    - cpc
+    - '2015'
+    highlights:
+    - 5 agents, 5 tasks
+    - README documented
+    example_use: Use iphone-judicial-assessment for iphone-judicial-assessment tasks.
   kaizen:
     path: squads/kaizen/
     version: 1.3.0
@@ -412,8 +503,8 @@ squads:
     validated: false
     validated_explicit: false
     auto_promoted: false
-    description: "O squad que vigia e melhora todos os outros. Analisa continuamente o ecossistema de agentes, squads, ferramentas\
-      \ e competências. Detecta gaps, monitora performance, recomenda novos recursos. O sistema nervoso do seu projeto."
+    description: O squad que vigia e melhora todos os outros. Analisa continuamente o ecossistema de agentes, squads, ferramentas
+      e competências. Detecta gaps, monitora performance, recomenda novos recursos. O sistema nervoso do seu projeto.
     slashPrefix: kaizen
     counts:
       agents: 7
@@ -544,6 +635,111 @@ squads:
     - README documented
     - Command prefix /squadCreator
     example_use: Use /squadCreator to execute squad-creator workflows in squad-creator.
+  squad-juridico-legal-performance:
+    path: squads/squad-juridico-legal-performance/
+    version: 1.0.0
+    score: 9.1
+    maturity: DEVELOPING
+    validated: false
+    validated_explicit: false
+    auto_promoted: false
+    description: Squad unificado para atividades processuais, jurídicas, estratégicas, recursais, periciais e de produto jurídico.
+      Consolida os squads analista-processual, analista-estrategista-processual-civil e iphone-judicial-assessment em uma
+      arquitetura hierárquica com orquestração central, módulos especializados e quality gates rastreáveis.
+    slashPrefix: legal-performance
+    counts:
+      agents: 16
+      tasks: 10
+      workflows: 3
+      templates: 3
+      checklists: 3
+      data_files: 4
+    agent_names:
+    - appeals-analyst
+    - civil-procedure-classifier
+    - forensic-device-specialist
+    - jurisprudence-researcher
+    - legal-action-advisor
+    - legal-document-reader
+    - legal-normative-specialist
+    - legal-performance-chief
+    - legal-report-writer
+    - legal-ux-architect
+    - litigation-strategist
+    - procedural-auditor
+    - process-intake-analyst
+    - process-mapper
+    - quality-compliance-validator
+    - risk-and-maturity-evaluator
+    has_readme: true
+    has_changelog: true
+    domain: squad-juridico-legal-performance
+    keywords:
+    - juridico
+    - legal
+    - performance
+    - unificado
+    - atividades
+    - processuais
+    - jur
+    - dicas
+    - estrat
+    - gicas
+    - recursais
+    - periciais
+    highlights:
+    - 16 agents, 10 tasks
+    - 3 workflows available
+    - README documented
+    - Command prefix /legal-performance
+    example_use: Use /legal-performance to execute squad-juridico-legal-performance workflows in squad-juridico-legal-performance.
+  transmissao-multicam:
+    path: squads/transmissao-multicam/
+    version: 1.0.0
+    score: 8.0
+    maturity: DEVELOPING
+    validated: false
+    validated_explicit: false
+    auto_promoted: false
+    description: ''
+    slashPrefix: ''
+    counts:
+      agents: 9
+      tasks: 11
+      workflows: 0
+      templates: 3
+      checklists: 4
+      data_files: 6
+    agent_names:
+    - audio-controller
+    - auto-switch-engineer
+    - meet-integration
+    - obs-scenes-architect
+    - obsbot-controller
+    - pre-show-runner
+    - producer
+    - touchosc-controller
+    - tx-chief
+    has_readme: true
+    has_changelog: false
+    domain: transmissao-multicam
+    keywords:
+    - transmissao
+    - multicam
+    - audio
+    - controller
+    - auto
+    - switch
+    - engineer
+    - meet
+    - integration
+    - obs
+    - scenes
+    - architect
+    highlights:
+    - 9 agents, 11 tasks
+    - README documented
+    example_use: Use transmissao-multicam for transmissao-multicam tasks.
 domain_index:
   legal:
   - analista-estrategista-processual-civil
@@ -782,14 +978,164 @@ domain_index:
   - squad-creator
   squad-chief:
   - squad-creator
+  analista-estrategista-processual-civil:
+  - analista-estrategista-processual-civil
+  analista:
+  - analista-estrategista-processual-civil
+  - analista-processual
+  estrategista:
+  - analista-estrategista-processual-civil
+  processual:
+  - analista-estrategista-processual-civil
+  - analista-processual
+  civil:
+  - analista-estrategista-processual-civil
+  lise:
+  - analista-estrategista-processual-civil
+  - analista-processual
+  estrat:
+  - analista-estrategista-processual-civil
+  - squad-juridico-legal-performance
+  gica:
+  - analista-estrategista-processual-civil
+  processos:
+  - analista-estrategista-processual-civil
+  civis:
+  - analista-estrategista-processual-civil
+  brasileiros:
+  - analista-estrategista-processual-civil
+  sob:
+  - analista-estrategista-processual-civil
+  digo:
+  - analista-estrategista-processual-civil
+  intake:
+  - analista-processual
+  avalia:
+  - analista-processual
+  execu:
+  - analista-processual
+  jur:
+  - analista-processual
+  - squad-juridico-legal-performance
+  dica:
+  - analista-processual
+  leitor:
+  - analista-processual
+  android-judicial-assessment:
+  - android-judicial-assessment
+  android:
+  - android-judicial-assessment
+  judicial:
+  - android-judicial-assessment
+  - iphone-judicial-assessment
+  assessment:
+  - android-judicial-assessment
+  - iphone-judicial-assessment
+  elabora:
+  - android-judicial-assessment
+  - iphone-judicial-assessment
+  laudos:
+  - android-judicial-assessment
+  - iphone-judicial-assessment
+  cnicos:
+  - android-judicial-assessment
+  - iphone-judicial-assessment
+  periciais:
+  - android-judicial-assessment
+  - iphone-judicial-assessment
+  - squad-juridico-legal-performance
+  judiciais:
+  - android-judicial-assessment
+  - iphone-judicial-assessment
+  dispositivos:
+  - android-judicial-assessment
+  - iphone-judicial-assessment
+  nfase:
+  - android-judicial-assessment
+  smartphones:
+  - android-judicial-assessment
+  samsung:
+  - android-judicial-assessment
+  pipeline-driven:
+  - devops
+  infrastructure:
+  - devops
+  automation:
+  - devops
+  designs:
+  - devops
+  pipelines:
+  - devops
+  containerizes:
+  - devops
+  applications:
+  - devops
+  provisions:
+  - devops
+  code:
+  - devops
+  implements:
+  - devops
+  iphone-judicial-assessment:
+  - iphone-judicial-assessment
+  iphone:
+  - iphone-judicial-assessment
+  conformidade:
+  - iphone-judicial-assessment
+  cpc:
+  - iphone-judicial-assessment
+  '2015':
+  - iphone-judicial-assessment
+  squad-juridico-legal-performance:
+  - squad-juridico-legal-performance
+  performance:
+  - squad-juridico-legal-performance
+  unificado:
+  - squad-juridico-legal-performance
+  atividades:
+  - squad-juridico-legal-performance
+  processuais:
+  - squad-juridico-legal-performance
+  dicas:
+  - squad-juridico-legal-performance
+  gicas:
+  - squad-juridico-legal-performance
+  recursais:
+  - squad-juridico-legal-performance
+  transmissao-multicam:
+  - transmissao-multicam
+  transmissao:
+  - transmissao-multicam
+  multicam:
+  - transmissao-multicam
+  audio:
+  - transmissao-multicam
+  controller:
+  - transmissao-multicam
+  auto:
+  - transmissao-multicam
+  switch:
+  - transmissao-multicam
+  engineer:
+  - transmissao-multicam
+  meet:
+  - transmissao-multicam
+  integration:
+  - transmissao-multicam
+  obs:
+  - transmissao-multicam
+  scenes:
+  - transmissao-multicam
+  architect:
+  - transmissao-multicam
 summary:
-  total_agents: 96
-  total_tasks: 197
-  total_workflows: 34
-  total_templates: 63
-  total_checklists: 82
-  total_data_files: 71
+  total_agents: 131
+  total_tasks: 228
+  total_workflows: 37
+  total_templates: 75
+  total_checklists: 89
+  total_data_files: 88
 maturity_summary:
   DRAFT: 0
-  DEVELOPING: 11
+  DEVELOPING: 15
   OPERATIONAL: 0
