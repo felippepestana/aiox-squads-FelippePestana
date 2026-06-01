@@ -107,9 +107,11 @@ As orientações para o ambiente de usabilidade estão em [`DESIGN_GUIDE.md`](DE
 
 A revisão inicial deve executar os cenários de [`SMOKE_TESTS.md`](SMOKE_TESTS.md):
 
-1. [Análise processual civil](examples/processo-civil-acao-cobranca.md) — baseline: [`relatorio-civil-acao-cobranca.md`](examples/expected-outputs/relatorio-civil-acao-cobranca.md).
-2. [Estratégia recursal](examples/estrategia-recursal-resp.md) — baseline: [`relatorio-recursal-resp.md`](examples/expected-outputs/relatorio-recursal-resp.md).
-3. [Planejamento de frontend jurídico](examples/frontend-juridico-dashboard.md) — baseline: [`brief-dashboard-juridico.md`](examples/expected-outputs/brief-dashboard-juridico.md).
+| # | Cenário (exemplo) | Baseline de regressão |
+|---:|---|---|
+| 1 | [Análise processual civil](examples/processo-civil-acao-cobranca.md) | [`relatorio-civil-acao-cobranca.md`](examples/expected-outputs/relatorio-civil-acao-cobranca.md) |
+| 2 | [Estratégia recursal](examples/estrategia-recursal-resp.md) | [`relatorio-recursal-resp.md`](examples/expected-outputs/relatorio-recursal-resp.md) |
+| 3 | [Planejamento de frontend jurídico](examples/frontend-juridico-dashboard.md) | [`brief-dashboard-juridico.md`](examples/expected-outputs/brief-dashboard-juridico.md) |
 
 Índice dos baselines: [`examples/expected-outputs/README.md`](examples/expected-outputs/README.md).
 

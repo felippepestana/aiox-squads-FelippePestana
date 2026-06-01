@@ -208,9 +208,9 @@ legal-performance-chief
 
 | Cenário | Status esperado | Observação |
 |---|---|---|
-| Análise processual civil | Coberto | Rota e gates em `config.yaml`; baseline em [`examples/expected-outputs/relatorio-civil-acao-cobranca.md`](examples/expected-outputs/relatorio-civil-acao-cobranca.md). |
-| Estratégia recursal | Coberto | Baseline em [`examples/expected-outputs/relatorio-recursal-resp.md`](examples/expected-outputs/relatorio-recursal-resp.md). |
-| Frontend jurídico | Coberto com restrição | Baseline em [`examples/expected-outputs/brief-dashboard-juridico.md`](examples/expected-outputs/brief-dashboard-juridico.md); handoff ao `apex` só após aprovação. |
+| Análise processual civil | Coberto | Rota e gates em `config.yaml`; este teste formaliza a validação. Baseline: [`relatorio-civil-acao-cobranca.md`](examples/expected-outputs/relatorio-civil-acao-cobranca.md). |
+| Estratégia recursal | Coberto | `appeals-analyst` e `UC-LP-004` cobrem admissibilidade e mérito. Baseline: [`relatorio-recursal-resp.md`](examples/expected-outputs/relatorio-recursal-resp.md). |
+| Frontend jurídico | Coberto com restrição | Brief antes de handoff ao `apex`. Baseline: [`brief-dashboard-juridico.md`](examples/expected-outputs/brief-dashboard-juridico.md); implementação: [`handoff/apex/README.md`](handoff/apex/README.md). |
 
 ## Regressão com outputs esperados
 
