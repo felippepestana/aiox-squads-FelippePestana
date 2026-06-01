@@ -117,7 +117,7 @@ Cada conclusão exibida ao usuário deve permitir abrir o **Evidence Drawer** co
 4. Matriz de permissões (advogado, gestor, analista, cliente) assinada.
 5. Definição de integração com backend (ex.: `analista-processual-web`) documentada separadamente.
 
-**Entregáveis para o Apex:** wireframes, mapa de componentes, especificação de estados, critérios de aceite por tela, referência a design system existente no repositório.
+**Entregáveis para o Apex:** pacote em [`handoff/apex/`](../../handoff/apex/README.md) — wireframes, critérios de aceite e `apex-entry-prompt.md`.
 
 ## 11. Revisão Humana Obrigatória
 

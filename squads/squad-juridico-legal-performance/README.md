@@ -115,6 +115,18 @@ A revisão inicial deve executar os cenários de [`SMOKE_TESTS.md`](SMOKE_TESTS.
 
 Esses testes verificam classificação de UC, rota de agentes, quality gates e entregáveis esperados antes de evoluir para implementação de interface.
 
+Scripts:
+
+```bash
+bash squads/squad-juridico-legal-performance/scripts/run-smoke-baselines.sh
+```
+
+---
+
+## Handoff frontend (Apex)
+
+Após aprovação do brief UC-LP-008, use o pacote [`handoff/apex/`](handoff/apex/README.md) (wireframes, critérios de aceite e prompt `@apex`) no app [`analista-processual-web/`](../../analista-processual-web/).
+
 ---
 
 ## Aviso profissional
