@@ -24,7 +24,7 @@ import { Logo, LogoMark } from "@/components/brand/logo";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Nova Demanda", href: "/dashboard/nova-analise", icon: Sparkles },
+  { name: "Assistente", href: "/dashboard/assistente", icon: Sparkles },
   { name: "Análises", href: "/dashboard/analises", icon: FileText },
   { name: "Biblioteca", href: "/dashboard/biblioteca", icon: Library },
   { name: "Configurações", href: "/dashboard/config", icon: Settings },
