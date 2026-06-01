@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -30,26 +30,38 @@
     --input: 214 32% 91%;
     --ring: 213 52% 29%;
     --radius: 0.5rem;
+
+    /* Brand accents — Felippe Pestana / Legal Performance */
+    --brand-navy: 213 52% 25%;
+    --brand-navy-deep: 215 53% 10%;
+    --brand-gold: 44 56% 54%;
+    --brand-silver: 218 13% 65%;
   }
 
   .dark {
-    --background: 222 47% 8%;
+    --background: 215 53% 10%;
     --foreground: 210 40% 98%;
-    --card: 222 47% 11%;
+    --card: 216 38% 13%;
     --card-foreground: 210 40% 98%;
-    --popover: 222 47% 11%;
+    --popover: 216 38% 13%;
     --popover-foreground: 210 40% 98%;
-    --primary: 213 52% 29%;
+    --primary: 211 50% 40%;
     --primary-foreground: 0 0% 100%;
     --secondary: 215 16% 47%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217 33% 17%;
-    --muted-foreground: 215 16% 51%;
-    --accent: 38 92% 50%;
-    --accent-foreground: 222 47% 11%;
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 213 52% 29%;
+    --muted-foreground: 215 16% 65%;
+    --accent: 44 56% 54%;
+    --accent-foreground: 215 53% 10%;
+    --border: 216 30% 20%;
+    --input: 216 30% 20%;
+    --ring: 44 56% 54%;
+
+    /* Brand accents — dark mode */
+    --brand-navy: 211 50% 40%;
+    --brand-navy-deep: 215 53% 8%;
+    --brand-gold: 44 56% 60%;
+    --brand-silver: 218 13% 72%;
   }
 }
 
@@ -67,7 +79,24 @@
   .text-balance {
     text-wrap: balance;
   }
-  
+
+  /* Brand surfaces — Felippe Pestana / Legal Performance */
+  .bg-brand-gradient {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--brand-navy-deep)) 0%,
+      hsl(var(--brand-navy)) 100%
+    );
+  }
+
+  .text-brand-gold {
+    color: hsl(var(--brand-gold));
+  }
+
+  .border-brand-gold {
+    border-color: hsl(var(--brand-gold));
+  }
+
   .animate-shimmer {
     animation: shimmer 2s infinite;
     background: linear-gradient(

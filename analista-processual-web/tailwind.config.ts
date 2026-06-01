@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import { colors as brandColors, typography } from "./src/lib/design/tokens";
 
 const config: Config = {
   darkMode: ["class"],
@@ -11,20 +12,30 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#1E3A5F",
-          light: "#2D5A8B",
-          dark: "#0F1F33",
+          DEFAULT: brandColors.navy.DEFAULT,
+          light: brandColors.navy.light,
+          dark: brandColors.navy.dark,
           foreground: "#ffffff",
         },
         secondary: {
-          DEFAULT: "#64748B",
-          light: "#94A3B8",
+          DEFAULT: brandColors.slate.DEFAULT,
+          light: brandColors.slate.light,
           foreground: "#ffffff",
         },
         accent: {
-          DEFAULT: "#F59E0B",
-          light: "#FBBF24",
+          DEFAULT: brandColors.amber.DEFAULT,
+          light: brandColors.amber.light,
           foreground: "#0F172A",
+        },
+        brand: {
+          navy: brandColors.navy.DEFAULT,
+          "navy-deep": brandColors.navy.deep,
+          silver: brandColors.silver.DEFAULT,
+          "silver-light": brandColors.silver.light,
+          "silver-dark": brandColors.silver.dark,
+          gold: brandColors.gold.DEFAULT,
+          "gold-light": brandColors.gold.light,
+          "gold-dark": brandColors.gold.dark,
         },
         success: {
           DEFAULT: "#10B981",
@@ -60,8 +71,9 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
-        mono: ["JetBrains Mono", "Consolas", "monospace"],
+        sans: [...typography.fontSans],
+        mono: [...typography.fontMono],
+        serif: [...typography.fontSerif],
       },
       keyframes: {
         "accordion-down": {
