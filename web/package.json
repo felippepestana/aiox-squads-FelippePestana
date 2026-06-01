@@ -12,7 +12,7 @@
     "start": "node dist/server/index.js",
     "preview": "vite preview --config client/vite.config.ts",
     "test:smoke": "node scripts/smoke-api.mjs",
-    "lint:webhint": "hint ."
+    "lint:webhint": "hint client --formatters stylish --telemetry off"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.54.0",

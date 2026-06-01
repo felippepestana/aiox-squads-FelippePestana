@@ -3,35 +3,35 @@
     "sentry": {
       "enabled": true
     },
-    "vercel": {
-      "enabled": true
-    },
-    "cloudflare": {
-      "enabled": true
-    },
-    "firebase": {
-      "enabled": true
-    },
-    "wix": {
+    "cursor-team-kit": {
       "enabled": true
     },
     "cli-for-agent": {
       "enabled": true
     },
-    "cursor-team-kit": {
-      "enabled": true
-    },
-    "meta-quest-agentic-tools": {
-      "enabled": true
-    },
-    "stripe": {
-      "enabled": true
-    },
     "runlayer": {
       "enabled": true
     },
+    "vercel": {
+      "enabled": false
+    },
     "encore": {
-      "enabled": true
+      "enabled": false
+    },
+    "cloudflare": {
+      "enabled": false
+    },
+    "firebase": {
+      "enabled": false
+    },
+    "stripe": {
+      "enabled": false
+    },
+    "wix": {
+      "enabled": false
+    },
+    "meta-quest-agentic-tools": {
+      "enabled": false
     }
   }
 }

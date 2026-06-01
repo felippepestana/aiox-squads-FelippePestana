@@ -33,6 +33,9 @@ jobs:
       - name: Instalar dependências
         run: npm ci
 
+      - name: Webhint (client)
+        run: npm run lint:webhint
+
       - name: Build (tsc + Vite)
         run: npm run build
 

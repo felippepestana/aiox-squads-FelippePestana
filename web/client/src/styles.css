@@ -15,6 +15,19 @@
   box-sizing: border-box;
 }
 
+/* Apenas leitores de ecrã — manter texto associado a controlos visíveis. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -110,6 +123,10 @@ select {
   font-size: 0.75rem;
   color: var(--muted);
   line-height: 1.4;
+}
+
+.meta--mb-sm {
+  margin-bottom: 0.5rem;
 }
 
 kbd {
@@ -288,7 +305,10 @@ kbd {
 
 .md-root h1,
 .md-root h2,
-.md-root h3 {
+.md-root h3,
+.md-root h4,
+.md-root h5,
+.md-root h6 {
   font-size: 1em;
   font-weight: 600;
   margin: 0.75rem 0 0.35rem;
@@ -297,7 +317,10 @@ kbd {
 
 .md-root h1:first-child,
 .md-root h2:first-child,
-.md-root h3:first-child {
+.md-root h3:first-child,
+.md-root h4:first-child,
+.md-root h5:first-child,
+.md-root h6:first-child {
   margin-top: 0;
 }
 
@@ -405,17 +428,6 @@ kbd {
 .stream-placeholder {
   color: var(--muted);
   font-style: italic;
-  animation: stream-pulse 1.1s ease-in-out infinite;
-}
-
-@keyframes stream-pulse {
-  0%,
-  100% {
-    opacity: 0.45;
-  }
-  50% {
-    opacity: 1;
-  }
 }
 
 .composer {
@@ -428,6 +440,11 @@ kbd {
   display: flex;
   gap: 0.5rem;
   align-items: flex-end;
+}
+
+.composer-input-wrap {
+  flex: 1;
+  min-width: 0;
 }
 
 .composer-actions {
@@ -447,8 +464,9 @@ kbd {
   color: #fef2f2;
 }
 
-.composer textarea {
-  flex: 1;
+.composer-input-wrap textarea {
+  width: 100%;
+  box-sizing: border-box;
   min-height: 44px;
   max-height: 200px;
   resize: vertical;
@@ -461,15 +479,30 @@ kbd {
   font-size: 0.9rem;
 }
 
-.composer textarea:focus {
+.composer-input-wrap textarea:focus {
   outline: 2px solid #059669;
   outline-offset: 0;
 }
 
 .attachments {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 0.75rem;
   color: var(--muted);
   margin-bottom: 0.5rem;
+}
+
+.attachments-label {
+  cursor: pointer;
+  color: var(--accent-dim);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.attachments-label:hover {
+  color: var(--accent);
 }
 
 .error-banner {
@@ -497,6 +530,7 @@ kbd {
   justify-content: center;
   padding: 1rem;
   background: rgba(10, 12, 18, 0.88);
+  -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
 }
 

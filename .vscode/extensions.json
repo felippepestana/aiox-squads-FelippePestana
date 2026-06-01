@@ -1,7 +1,8 @@
 {
-    "recommendations": [
-        "gitlab.gitlab-workflow",
-        "webhint.vscode-webhint",
-        "WakaTime.vscode-wakatime"
-    ]
+  "recommendations": [
+    "webhint.vscode-webhint",
+    "gitlab.gitlab-workflow",
+    "ms-python.python",
+    "WakaTime.vscode-wakatime"
+  ]
 }

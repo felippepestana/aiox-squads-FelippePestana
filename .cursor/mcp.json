@@ -4,6 +4,18 @@
       "command": "npx",
       "args": ["tsx", "src/stdio-server.ts"],
       "cwd": "mcp"
+    },
+    "aiox-python": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        ".venv\\Scripts\\mcp.exe",
+        "run",
+        "python\\stdio_server.py",
+        "-t",
+        "stdio"
+      ],
+      "cwd": "mcp"
     }
   }
 }

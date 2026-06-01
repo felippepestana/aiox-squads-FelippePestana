@@ -1,10 +1,13 @@
 {
   "pythonVersion": "3.12",
-  "venvPath": ".",
+  "venvPath": "mcp",
   "venv": ".venv",
   "executionEnvironments": [
     {
-      "root": "python"
+      "root": "."
+    },
+    {
+      "root": "mcp/python"
     }
   ]
 }

@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "description": "Prioridade das ferramentas deste workspace. Plugins em P3 estão disabled em .cursor/settings.json — ativa no Cursor quando trabalhares nesse stack.",
+  "tiers": {
+    "P0": {
+      "label": "Núcleo — alinhado ao repo (Sentry, qualidade, MCP local TS, webhint)",
+      "cursor_plugins": ["sentry", "cursor-team-kit", "cli-for-agent", "runlayer"],
+      "mcp_servers": ["aiox-local-ts"],
+      "vscode_extensions": ["webhint.vscode-webhint", "gitlab.gitlab-workflow"]
+    },
+    "P1": {
+      "label": "MCP Python + extensão Python (requer mcp/.venv)",
+      "cursor_plugins": [],
+      "mcp_servers": ["aiox-python"],
+      "vscode_extensions": ["ms-python.python"]
+    },
+    "P3": {
+      "label": "Plataforma / nicho — desativado por defeito",
+      "cursor_plugins": [
+        "vercel",
+        "encore",
+        "cloudflare",
+        "firebase",
+        "stripe",
+        "wix",
+        "meta-quest-agentic-tools"
+      ],
+      "mcp_servers": [],
+      "vscode_extensions": ["WakaTime.vscode-wakatime"]
+    }
+  },
+  "outside_repo": [
+    "MCP ao nível do utilizador (ex.: Docker, GitKraken) — Cursor Settings → MCP global, não versionados aqui."
+  ]
+}

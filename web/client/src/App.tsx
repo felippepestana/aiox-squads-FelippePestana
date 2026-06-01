@@ -36,6 +36,9 @@ import {
 } from "./recentSessions";
 const MarkdownMessage = lazy(() => import("./MarkdownMessage"));
 
+/** Sufixos para “A gerar resposta” sem CSS @keyframes (evita hints do webhint). */
+const STREAM_WAIT_FRAMES = ["", ".", "..", "..."] as const;
+
 function squadLabel(s: SquadSummary): string {
   const t = s.meta?.title?.trim();
   if (t) return t;
@@ -82,6 +85,7 @@ export function App() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copiedLineIdx, setCopiedLineIdx] = useState<number | null>(null);
+  const [streamWaitDots, setStreamWaitDots] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const composerRef = useRef<HTMLTextAreaElement>(null);
   const streamAbortRef = useRef<AbortController | null>(null);
@@ -90,6 +94,26 @@ export function App() {
   const [recentRev, setRecentRev] = useState(0);
   const refreshRecent = useCallback(() => setRecentRev((n) => n + 1), []);
   const recentList = useMemo(() => loadRecentSessions(), [recentRev]);
+
+  const streamWaitActive = useMemo(() => {
+    if (!busy || lines.length === 0) return false;
+    const last = lines[lines.length - 1];
+    return last.role === "assistant" && !last.text.trim();
+  }, [busy, lines]);
+
+  useEffect(() => {
+    if (!streamWaitActive) {
+      setStreamWaitDots(0);
+      return;
+    }
+    const id = window.setInterval(() => {
+      setStreamWaitDots((n) => (n + 1) % STREAM_WAIT_FRAMES.length);
+    }, 420);
+    return () => {
+      window.clearInterval(id);
+      setStreamWaitDots(0);
+    };
+  }, [streamWaitActive]);
 
   busyRef.current = busy;
   sessionIdRef.current = sessionId;
@@ -580,7 +604,7 @@ export function App() {
 
   return (
     <div className="layout">
-      <aside className="sidebar">
+      <aside className="sidebar" aria-label="Sessão e definições">
         <h1>AIOX Squads</h1>
         <div>
           <label htmlFor="squad">Squad</label>
@@ -715,7 +739,7 @@ export function App() {
         ) : null}
       </aside>
 
-      <main className="main">
+      <main className="main" aria-label="Área de conversa">
         <div className="messages">
           {!sessionId && (
             <p className="loading">
@@ -761,13 +785,20 @@ export function App() {
                   </div>
                 ) : null}
                 {line.role === "user" && line.files?.length ? (
-                  <div className="meta" style={{ marginBottom: "0.5rem" }}>
+                  <div className="meta meta--mb-sm">
                     Anexos: {line.files.join(", ")}
                   </div>
                 ) : null}
                 <div className="bubble-body">
                   {streamingEmpty ? (
-                    <span className="stream-placeholder">A gerar resposta…</span>
+                    <span
+                      className="stream-placeholder"
+                      aria-live="polite"
+                      aria-busy="true"
+                    >
+                      A gerar resposta
+                      {STREAM_WAIT_FRAMES[streamWaitDots % STREAM_WAIT_FRAMES.length]}
+                    </span>
                   ) : line.role === "assistant" ? (
                     streamingThis ? (
                       <div className="stream-plain">{line.text}</div>
@@ -795,31 +826,46 @@ export function App() {
           {sessionId ? (
             <>
               <div className="attachments">
+                <label
+                  className="attachments-label"
+                  htmlFor="composer-attachments"
+                >
+                  Anexar ficheiros
+                </label>
                 <input
+                  id="composer-attachments"
                   type="file"
                   multiple
                   accept=".pdf,.txt,.md,.json,.csv,.png,.jpg,.jpeg,.webp,.gif"
+                  aria-describedby={
+                    pendingFiles.length > 0 ? "attachments-pending-hint" : undefined
+                  }
                   onChange={(e) =>
                     setPendingFiles(Array.from(e.target.files ?? []))
                   }
                 />
                 {pendingFiles.length > 0 ? (
-                  <span>
-                    {" "}
+                  <span id="attachments-pending-hint">
                     {pendingFiles.length} arquivo(s) para a próxima mensagem
                   </span>
                 ) : null}
               </div>
               <div className="composer-row">
-                <textarea
-                  ref={composerRef}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={onKeyDown}
-                  placeholder="Mensagem… (Enter envia, Shift+Enter nova linha)"
-                  rows={3}
-                  disabled={busy}
-                />
+                <div className="composer-input-wrap">
+                  <label htmlFor="composer-message" className="sr-only">
+                    Mensagem para o assistente
+                  </label>
+                  <textarea
+                    id="composer-message"
+                    ref={composerRef}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={onKeyDown}
+                    placeholder="Mensagem… (Enter envia, Shift+Enter nova linha)"
+                    rows={3}
+                    disabled={busy}
+                  />
+                </div>
                 <div className="composer-actions">
                   {busy ? (
                     <button
