@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { chiefAgent } from "@/lib/agents";
+import { harmonizeLegalRequest } from "@/lib/agents";
 
 export async function GET(request: NextRequest) {
   try {
@@ -72,6 +72,7 @@ export async function POST(request: NextRequest) {
       processClass, 
       processType,
       analysisGoal,
+      demand,
       userId,
       documents 
     } = body;
@@ -105,12 +106,19 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    if (documents && documents.length > 0) {
-      chiefAgent.execute(
-        { 
-          documents, 
+    const goal = demand || analysisGoal;
+    const hasWork = (documents && documents.length > 0) || Boolean(goal);
+
+    if (hasWork) {
+      // Unified Legal Performance pipeline: classifies the demand into a UC-LP
+      // use case and runs the matching agent route.
+      harmonizeLegalRequest(
+        {
+          demand: goal || "Análise processual dos documentos anexados.",
+          documents: documents || [],
           processType: processType || processClass,
-          analysisGoal 
+          processNumber,
+          court,
         },
         (step, progress) => {
           console.log(`[Analysis ${analysis.id}] ${step} (${progress}%)`);
@@ -128,35 +136,40 @@ export async function POST(request: NextRequest) {
           await prisma.analysisEvent.create({
             data: {
               analysisId: analysis.id,
-              event: result.status === "completed" ? "ANALYSIS_COMPLETED" : "ANALYSIS_FAILED",
-              metadata: { 
-                duration: result.completedAt 
-                  ? new Date(result.completedAt).getTime() - new Date(result.createdAt).getTime()
+              event:
+                result.status === "completed"
+                  ? "ANALYSIS_COMPLETED"
+                  : "ANALYSIS_FAILED",
+              metadata: {
+                useCase: result.useCase.id,
+                deliverableType: result.deliverableType,
+                duration: result.completedAt
+                  ? new Date(result.completedAt).getTime() -
+                    new Date(result.createdAt).getTime()
                   : null,
                 error: result.error,
               },
             },
           });
 
-          if (result.deadlines?.deadlines) {
-            for (const deadline of result.deadlines.deadlines) {
-              await prisma.deadline.create({
-                data: {
-                  analysisId: analysis.id,
-                  description: deadline.description,
-                  legalBasis: deadline.legalBasis,
-                  dueDate: new Date(deadline.dueDate),
-                  status: "PENDING",
-                  urgency: deadline.urgency.toUpperCase() as any,
-                },
-              });
-            }
+          const deadlines = result.context.deadlines?.deadlines ?? [];
+          for (const deadline of deadlines) {
+            await prisma.deadline.create({
+              data: {
+                analysisId: analysis.id,
+                description: deadline.description,
+                legalBasis: deadline.legalBasis,
+                dueDate: new Date(deadline.dueDate),
+                status: "PENDING",
+                urgency: deadline.urgency.toUpperCase() as never,
+              },
+            });
           }
         } catch (dbError) {
           console.error("Error saving analysis result:", dbError);
         }
       }).catch(async (error) => {
-        console.error("ChiefAgent error:", error);
+        console.error("harmonizeLegalRequest error:", error);
         await prisma.analysis.update({
           where: { id: analysis.id },
           data: {
