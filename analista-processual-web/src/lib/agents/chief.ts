@@ -219,3 +219,10 @@ Gere um resumo executivo conciso (3-4 parágrafos) que:
 }
 
 export const chiefAgent = new ChiefAgent();
+
+/**
+ * Unified entry point for every legal capability. Prefer this over
+ * `chiefAgent.execute` for new code: it classifies the demand into a
+ * Legal Performance use case and runs the matching agent route.
+ */
+export { harmonizeLegalRequest } from "./legal-performance-orchestrator";
