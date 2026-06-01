@@ -105,6 +105,10 @@ confiabilidade: alta
 ---
 ```
 
+## Output de regressão
+
+Compare a saída real com o entregável fictício completo em [`expected-outputs/relatorio-recursal-resp.md`](expected-outputs/relatorio-recursal-resp.md).
+
 ## Critério de aprovação do exemplo
 
 O exemplo passa se a saída não prometer provimento, tratar prequestionamento e Súmula 7/STJ como riscos centrais e terminar com recomendação condicionada e plano de prazo.

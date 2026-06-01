@@ -196,10 +196,16 @@ legal-performance-chief
 
 | Cenário | Status esperado | Observação |
 |---|---|---|
-| Análise processual civil | Coberto | Rota e gates estão definidos em `config.yaml`; este teste formaliza a validação. |
-| Estratégia recursal | Coberto | `appeals-analyst` e `UC-LP-004` cobrem admissibilidade e mérito. |
-| Frontend jurídico | Coberto com restrição | O fluxo deve gerar brief antes de qualquer handoff ao `apex`. |
+| Análise processual civil | Coberto | Rota e gates em `config.yaml`; baseline em [`examples/expected-outputs/relatorio-civil-acao-cobranca.md`](examples/expected-outputs/relatorio-civil-acao-cobranca.md). |
+| Estratégia recursal | Coberto | Baseline em [`examples/expected-outputs/relatorio-recursal-resp.md`](examples/expected-outputs/relatorio-recursal-resp.md). |
+| Frontend jurídico | Coberto com restrição | Baseline em [`examples/expected-outputs/brief-dashboard-juridico.md`](examples/expected-outputs/brief-dashboard-juridico.md); handoff ao `apex` só após aprovação. |
+
+## Regressão com outputs esperados
+
+Índice e critérios de equivalência: [`examples/expected-outputs/README.md`](examples/expected-outputs/README.md).
 
 ## Próximo passo recomendado
 
-Após aprovar estes smoke tests e exemplos, evoluir para um pacote `examples/expected-outputs/` com relatórios completos fictícios para comparação de regressão.
+1. Executar os três smoke tests e diff semântico contra os baselines de `expected-outputs/`.
+2. Refinar agentes com exemplos adicionais por tier, se houver divergência recorrente.
+3. Após aprovação do brief, iniciar handoff de implementação com o squad `apex` e `analista-processual-web` (ver [`docs/deploy/vercel.md`](../../docs/deploy/vercel.md)).
