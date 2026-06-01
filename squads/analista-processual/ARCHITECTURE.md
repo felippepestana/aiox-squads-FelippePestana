@@ -33,12 +33,16 @@ O squad `analista-processual` implementa um pipeline 3-tier para análise de pro
 
 ## Use Cases
 
-| UC | Trigger | Tier 0 | Tier 1 | Modo |
+> **Fonte canônica:** `config.yaml > pipeline.use_cases`. A tabela abaixo é um
+> resumo; gatilhos completos, agentes acionados e modo de documentação vivem no
+> `config.yaml` e devem prevalecer em caso de divergência.
+
+| UC | Trigger (amostra) | Tier 0 | Tier 1 | Modo |
 |----|---------|--------|--------|------|
-| UC-AP-001 | mapear, etapas, fluxo, BPMN | Sim | Não | PROCESSUAL |
-| UC-AP-002 | processo judicial, peças, petição | Opcional | Todos 4 | JURIDICO |
-| UC-AP-003 | riscos, estratégia, cenários | Sim | estrategista + orientador | JURIDICO |
-| UC-AP-004 | jurisprudência, STJ, súmula | Não | pesquisador | Direto |
+| UC-AP-001 | mapear processo, etapas, fluxo, BPMN, mapeamento | Sim | Não | PROCESSUAL |
+| UC-AP-002 | processo judicial, peças, petição, sentença, recurso | Opcional | Todos 4 | JURIDICO |
+| UC-AP-003 | riscos, cenários, probabilidade, sucumbência, estratégia, acordo | Sim | estrategista + orientador | JURIDICO |
+| UC-AP-004 | jurisprudência, STJ, STF, súmula, legislação, precedente | Não | pesquisador | Direto |
 
 ## Tier 0 — Intake e Mapeamento
 
@@ -86,6 +90,8 @@ advogado-orientador (após estrategista)
 
 ## Tier Síntese
 
+> Estrutura completa das seções por modo: ver fonte canônica `templates/relatorio-processual-tmpl.md`.
+
 ```
 documentador-processual
   - Input: pacote consolidado do analista-chefe
@@ -111,17 +117,19 @@ tipo: [peca-processual | jurisprudencia | legislacao | doutrina]
 
 ## Algoritmo de Classificação do `analista-chefe`
 
+> Gatilhos espelham `config.yaml > pipeline.use_cases` (fonte canônica).
+
 ```
-IF mensagem contém {"processo judicial", "peças", "petição", "sentença", "recurso"}
+IF mensagem contém {"processo judicial", "peças", "petição", "sentença", "recurso", "analisar processo"}
   → UC-AP-002 (Análise Jurídica Completa)
 
-ELSE IF mensagem contém {"mapear", "etapas", "fluxo", "BPMN", "workflow"}
+ELSE IF mensagem contém {"mapear processo", "etapas", "fluxo", "BPMN", "workflow", "mapeamento"}
   → UC-AP-001 (Mapeamento de Processo)
 
-ELSE IF mensagem contém {"riscos", "estratégia", "cenários", "sucumbência", "acordo"}
+ELSE IF mensagem contém {"riscos", "cenários", "probabilidade", "sucumbência", "estratégia", "acordo"}
   → UC-AP-003 (Análise Estratégica)
 
-ELSE IF mensagem contém {"jurisprudência", "STJ", "STF", "súmula", "precedente"}
+ELSE IF mensagem contém {"jurisprudência", "STJ", "STF", "súmula", "legislação", "precedente"}
   → UC-AP-004 (Pesquisa Jurisprudencial)
 
 ELSE

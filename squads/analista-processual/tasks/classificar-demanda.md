@@ -23,7 +23,7 @@ Classifica a demanda recebida em um dos 4 use cases do squad e define o plano de
 ## Action Items
 
 1. Leia a mensagem do usuário identificando palavras-chave
-2. Aplique o algoritmo de classificação (ver `config.yaml > pipeline > use_cases`)
+2. Aplique o algoritmo de classificação usando os gatilhos da **fonte canônica** `config.yaml > pipeline.use_cases` (não duplique a lista de gatilhos aqui)
 3. Se ambíguo, pergunte ao usuário para esclarecer
 4. Defina os agentes a acionar e a sequência de ativação
 5. Comunique o plano ao usuário brevemente antes de executar
