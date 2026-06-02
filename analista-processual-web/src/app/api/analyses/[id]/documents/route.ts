@@ -1,6 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+const TEXT_EXTENSIONS = [".txt", ".md", ".csv", ".json", ".html", ".xml", ".rtf"];
+
+/**
+ * Extracts plain text from text-based uploads. Binary formats (PDF, DOCX,
+ * images) require dedicated parsers/OCR and are not extracted here — the
+ * pipeline will report which documents lacked extractable text.
+ */
+function extractText(
+  filename: string,
+  fileType: string,
+  buffer: Buffer
+): string | null {
+  const lower = filename.toLowerCase();
+  const isTextType =
+    fileType.startsWith("text/") ||
+    fileType === "application/json" ||
+    TEXT_EXTENSIONS.some((ext) => lower.endsWith(ext));
+
+  if (!isTextType) return null;
+
+  const text = buffer.toString("utf-8").trim();
+  return text.length > 0 ? text : null;
+}
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -28,6 +52,8 @@ export async function POST(
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
+    const extractedText = extractText(file.name, file.type, buffer);
+
     const document = await prisma.document.create({
       data: {
         analysisId: id,
@@ -35,6 +61,10 @@ export async function POST(
         fileType: file.type,
         fileSize: file.size,
         storagePath: `analyses/${id}/${file.name}`,
+        extractedText,
+        metadata: {
+          textExtracted: Boolean(extractedText),
+        },
       },
     });
 
