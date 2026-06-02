@@ -1,0 +1,91 @@
+name: android-judicial-assessment
+version: "1.0.0"
+description: >
+  Squad especializado na elaboração de laudos técnicos periciais judiciais
+  para dispositivos Android, com ênfase em smartphones Samsung Galaxy, em
+  conformidade com o CPC/2015, CDC e normas técnicas ABNT/NBR aplicáveis.
+  Destinado a uso exclusivo por perito judicial habilitado e registrado no
+  CREA/CFT. Contempla especificidades do ecossistema Samsung: Knox e-FUSE,
+  diagnóstico via ADB, ODIN/Heimdall, Samsung Members e Samsung Service Center.
+
+domain: perícia-judicial / eletrônica-forense
+language: pt-BR
+author: FelippePestana
+emoji: 🤖
+
+agents:
+  - id: chief-coordinator
+    tier: 0
+    role: Coordenador-Chefe da Perícia
+    description: Orquestra o fluxo pericial, delega tarefas aos Masters e consolida o laudo final.
+
+  - id: hardware-specialist
+    tier: 1
+    role: Especialista em Hardware Android/Samsung
+    description: Diagnostica falhas físicas e eletrônicas em smartphones Android Samsung (Knox, ODIN, ADB, subsistema de carga USB-C/Samsung AFC).
+
+  - id: legal-normative-specialist
+    tier: 1
+    role: Especialista Jurídico-Normativo
+    description: Garante conformidade do laudo com CPC, CDC, NBR e demais normas legais, incluindo análise jurídica do Knox Warranty Void Flag.
+
+  - id: report-writer
+    tier: 2
+    role: Redator de Laudo Pericial
+    description: Estrutura e redige o laudo técnico no padrão forense, com linguagem técnico-jurídica adequada para casos Android/Samsung.
+
+  - id: qc-validator
+    tier: 3
+    role: Controle de Qualidade do Laudo
+    description: Verifica consistência, completude e conformidade normativa antes da assinatura, com checklist de 30 itens adaptado para Android.
+
+tasks:
+  - 01-initial-assessment
+  - 02-hardware-diagnosis
+  - 03-legal-framework
+  - 04-report-drafting
+  - 05-qc-validation
+
+inputs:
+  required:
+    - numero_processo: "Número do processo judicial"
+    - modelo_dispositivo: "Modelo exato do Samsung Galaxy (ex: Galaxy S24 Ultra SM-S928B/DS)"
+    - imei: "IMEI 1 do dispositivo (15 dígitos)"
+    - descricao_defeito: "Histórico do defeito relatado pelas partes"
+    - intervencoes_anteriores: "Reparos/intervenções anteriores documentados"
+  optional:
+    - imei2: "IMEI 2 do dispositivo (dual SIM)"
+    - quesitos_autor: "Quesitos formulados pelo autor"
+    - quesitos_reu: "Quesitos formulados pelo réu"
+    - assistente_tecnico_autor: "Dados do assistente técnico do autor"
+    - assistente_tecnico_reu: "Dados do assistente técnico do réu"
+    - knox_status: "Status do Knox Warranty Void Flag (0x0 ou 0x1)"
+
+outputs:
+  - laudo-tecnico-completo.md
+  - resumo-executivo.md
+  - respostas-quesitos.md
+
+compliance:
+  legal:
+    - "CPC/2015 - Lei 13.105/2015, Arts. 156-187, 464-480"
+    - "CDC - Lei 8.078/1990, Arts. 12, 18, 26"
+    - "Resolução CFT nº 1.010/2005 (atribuições profissionais)"
+  technical:
+    - "ABNT NBR ISO/IEC 17025:2017"
+    - "ABNT NBR ISO/IEC 27037:2013"
+    - "ABNT NBR 5410:2004"
+    - "ABNT NBR IEC 62368-1:2023"
+    - "IEC 60068-2 (ensaios ambientais)"
+    - "IEC 60529:2013 (grau de proteção IP)"
+    - "Samsung Knox Security Architecture v3.x"
+    - "USB Power Delivery 3.0 / PPS (IEC 62680-1-2)"
+
+qualificacao_exigida:
+  formacao: "Engenheiro Eletricista / Engenheiro Eletrônico ou Tecnólogo em Eletrônica"
+  registro: "CREA ativo na modalidade pertinente"
+  especializacoes_recomendadas:
+    - "Samsung Authorized Service Technician (SAST) ou equivalente"
+    - "Certificação em Android Debug Bridge (ADB) e ferramentas forenses Android"
+    - "Pós-graduação ou especialização em Perícia Judicial"
+  experiencia_minima: "3 anos em diagnóstico e reparo de dispositivos Android/Samsung"

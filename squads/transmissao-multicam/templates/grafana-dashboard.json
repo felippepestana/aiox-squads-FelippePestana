@@ -1,0 +1,115 @@
+{
+  "_comment": "Grafana dashboard skeleton for the auto-switch-engine Prometheus exporter (F7). Import via Dashboards -> New -> Import. Replace ${DS_PROMETHEUS} with your data source UID.",
+  "uid": "tx-multicam-auto-switch",
+  "title": "Transmissão Multicam — Auto-switch Engine",
+  "tags": ["transmissao-multicam", "obs", "auto-switch"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "time": { "from": "now-1h", "to": "now" },
+  "refresh": "10s",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Switches per minute",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "rate(tx_multicam_switches_total[1m]) * 60",
+          "legendFormat": "switches/min",
+          "refId": "A"
+        }
+      ],
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 }
+    },
+    {
+      "id": 2,
+      "title": "Ping-pong ratio",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "tx_multicam_pingpong_total / clamp_min(tx_multicam_switches_total, 1)",
+          "legendFormat": "ping-pong / switch",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 0.05 },
+              { "color": "red", "value": 0.1 }
+            ]
+          }
+        }
+      },
+      "gridPos": { "h": 8, "w": 6, "x": 12, "y": 0 }
+    },
+    {
+      "id": 3,
+      "title": "Failovers + camera dropouts",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "tx_multicam_failovers_total",
+          "legendFormat": "failovers",
+          "refId": "A"
+        },
+        {
+          "expr": "tx_multicam_camera_dropouts_total",
+          "legendFormat": "dropouts",
+          "refId": "B"
+        }
+      ],
+      "gridPos": { "h": 8, "w": 6, "x": 18, "y": 0 }
+    },
+    {
+      "id": 4,
+      "title": "Switches by target",
+      "type": "barchart",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "tx_multicam_switches_by_target",
+          "legendFormat": "{{target}}",
+          "refId": "A"
+        }
+      ],
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 }
+    },
+    {
+      "id": 5,
+      "title": "Operator overrides",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "rate(tx_multicam_overrides_total[5m])",
+          "legendFormat": "overrides/s",
+          "refId": "A"
+        }
+      ],
+      "gridPos": { "h": 8, "w": 6, "x": 12, "y": 8 }
+    },
+    {
+      "id": 6,
+      "title": "Motion-triggered switches (F8)",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "targets": [
+        {
+          "expr": "tx_multicam_motion_triggers_total",
+          "legendFormat": "motion triggers",
+          "refId": "A"
+        }
+      ],
+      "gridPos": { "h": 8, "w": 6, "x": 18, "y": 8 }
+    }
+  ]
+}

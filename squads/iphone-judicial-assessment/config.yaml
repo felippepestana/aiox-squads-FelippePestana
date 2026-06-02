@@ -1,0 +1,84 @@
+name: iphone-judicial-assessment
+version: "1.0.0"
+description: >
+  Squad especializado na elaboração de laudos técnicos periciais judiciais
+  para dispositivos iPhone, em conformidade com o CPC/2015, CDC e normas
+  técnicas ABNT/NBR aplicáveis. Destinado a uso exclusivo por perito judicial
+  habilitado e registrado no CREA/CFT.
+
+domain: perícia-judicial / eletrônica-forense
+language: pt-BR
+author: FelippePestana
+
+agents:
+  - id: chief-coordinator
+    tier: 0
+    role: Coordenador-Chefe da Perícia
+    description: Orquestra o fluxo pericial, delega tarefas aos Masters e consolida o laudo final.
+
+  - id: hardware-specialist
+    tier: 1
+    role: Especialista em Hardware Apple
+    description: Diagnostica falhas físicas e eletrônicas em iPhones (placa-lógica, portas, bateria, ICs de carga).
+
+  - id: legal-normative-specialist
+    tier: 1
+    role: Especialista Jurídico-Normativo
+    description: Garante conformidade do laudo com CPC, CDC, NBR e demais normas legais.
+
+  - id: report-writer
+    tier: 2
+    role: Redator de Laudo Pericial
+    description: Estrutura e redige o laudo técnico no padrão forense, com linguagem técnico-jurídica adequada.
+
+  - id: qc-validator
+    tier: 3
+    role: Controle de Qualidade do Laudo
+    description: Verifica consistência, completude e conformidade normativa antes da assinatura.
+
+tasks:
+  - 01-initial-assessment
+  - 02-hardware-diagnosis
+  - 03-legal-framework
+  - 04-report-generation
+  - 05-qc-validation
+
+inputs:
+  required:
+    - numero_processo: "Número do processo judicial"
+    - modelo_dispositivo: "Modelo exato do iPhone (ex: iPhone 16 Pro Max A3293)"
+    - imei: "IMEI do dispositivo"
+    - descricao_defeito: "Histórico do defeito relatado pelas partes"
+    - intervencoes_anteriores: "Reparos/intervenções anteriores documentados"
+  optional:
+    - quesitos_autor: "Quesitos formulados pelo autor"
+    - quesitos_reu: "Quesitos formulados pelo réu"
+    - assistente_tecnico_autor: "Dados do assistente técnico do autor"
+    - assistente_tecnico_reu: "Dados do assistente técnico do réu"
+
+outputs:
+  - laudo-tecnico-completo.md
+  - resumo-executivo.md
+  - respostas-quesitos.md
+
+compliance:
+  legal:
+    - "CPC/2015 - Lei 13.105/2015, Arts. 156-187, 464-480"
+    - "CDC - Lei 8.078/1990, Arts. 12, 18, 26"
+    - "Resolução CFT nº 1.010/2005 (atribuições profissionais)"
+  technical:
+    - "ABNT NBR ISO/IEC 17025:2017"
+    - "ABNT NBR ISO/IEC 27037:2013"
+    - "ABNT NBR 5410:2004"
+    - "ABNT NBR IEC 62368-1:2023"
+    - "IEC 60068-2 (ensaios ambientais)"
+    - "Apple Service Fundamentals (ASF)"
+
+qualificacao_exigida:
+  formacao: "Engenheiro Eletricista / Engenheiro Eletrônico ou Tecnólogo em Eletrônica"
+  registro: "CREA ativo na modalidade pertinente"
+  especializacoes_recomendadas:
+    - "Apple Certified Mac Technician (ACMT)"
+    - "Apple Certified iOS Technician (ACiT)"
+    - "Pós-graduação ou especialização em Perícia Judicial"
+  experiencia_minima: "3 anos em diagnóstico e reparo de dispositivos Apple"

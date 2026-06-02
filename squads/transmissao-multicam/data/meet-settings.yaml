@@ -1,0 +1,83 @@
+# Google Workspace Enterprise Plus — settings for the broadcast account
+# Account: transmissao@<domain>
+# Plan: Enterprise Plus + Acesso Ampliado à IA (Gemini for Workspace)
+
+account:
+  type: "dedicated"
+  email_pattern: "transmissao@<domain>"
+  rationale: "Conta única usada apenas para hospedar transmissões. Isola configs e telemetria."
+
+plan:
+  name: "Google Workspace Enterprise Plus"
+  participants_limit: 1000
+  target_usage: 300
+  add_ons:
+    - "Acesso Ampliado à IA (Gemini for Workspace)"
+    - "Archived User (não impacta esta operação)"
+
+admin_console:
+  path: "Apps → Google Workspace → Google Meet"
+  required_settings:
+    cloud_recording:
+      value: "ON"
+      scope: "Recording auto-starts when host enters meeting"
+    live_streaming:
+      value: "ON"
+      audience: "in-domain (até 100k espectadores)"
+    attendance_tracking:
+      value: "ON"
+    breakout_rooms:
+      value: "ON"
+    cohost_management:
+      value: "ON"
+    captions:
+      value: "ON"
+      languages: ["pt-BR", "en-US"]
+    translated_captions:
+      value: "ON (Gemini)"
+    take_notes_for_me:
+      value: "ON (Gemini)"
+    noise_cancellation:
+      value: "ON"
+
+broadcast_account_overrides:
+  studio_look:
+    value: "OFF"
+    reason: "OBS Virtual Camera já entrega a imagem tratada. Studio Look reprocessaria e degradaria qualidade."
+  studio_lighting:
+    value: "OFF"
+    reason: "Mesmo motivo do Studio Look."
+  studio_sound:
+    value: "OFF"
+    reason: "Áudio é mixado externamente. Studio Sound aplicaria ducking duplicado."
+  default_camera:
+    value: "OBS Virtual Camera"
+  default_microphone:
+    value: "<interface multicanal mixada>"
+  background_blur:
+    value: "OFF"
+    reason: "Aplicado pelo OBS quando necessário."
+
+vault:
+  recording_retention_days: 365
+  policy: "Definida pela compliance da empresa"
+
+operator_workflow:
+  pre_event:
+    - "Login com transmissao@<domain>"
+    - "Validar Câmera = OBS Virtual Camera"
+    - "Validar Microfone = interface multicanal"
+    - "Confirmar Studio Look/Lighting/Sound OFF"
+    - "Confirmar 'Iniciar gravação automaticamente' = ON"
+  during_event:
+    - "Companion mode em tablet/celular para Q&A e chat"
+    - "Live stream link distribuído antes do evento"
+  post_event:
+    - "Verificar gravação salva em Drive compartilhado"
+    - "Arquivar link do streaming"
+    - "Limpar tela e fechar sala"
+
+things_NOT_to_enable:
+  - "Multi-camera per participant (não existe no Meet)"
+  - "Studio Look/Lighting/Sound na conta de transmissão"
+  - "Background blur na conta de transmissão"

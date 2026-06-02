@@ -1,13 +1,67 @@
 metadata:
-  version: 1.5.0
-  last_updated: '2026-03-31'
-  total_squads: 10
+  version: 1.7.0
+  last_updated: '2026-05-18'
+  total_squads: 11
   maintainer: squad-creator
   generated_by: "scripts/refresh-registry.py --write (100% deterministic)"
 squads:
+  analista-estrategista-processual-civil:
+    path: squads/analista-estrategista-processual-civil/
+    version: 1.0.0
+    score: 9.5
+    maturity: DEVELOPING
+    validated: false
+    validated_explicit: false
+    auto_promoted: false
+    description: >
+      Squad especializado em Direito Processual Civil (CPC 2015) com pipeline 3-tier:
+      Triagem CPC (classificação + auditoria de compliance), Análise Jurídica
+      (leitura de peças, pesquisa CPC/STJ/teses repetitivas, estratégia, análise
+      recursal, plano de ação) e Síntese Final (relatório estratégico estruturado).
+      Cobre análise completa, diagnóstico rápido, recursos, defesas e execução.
+    slashPrefix: ''
+    counts:
+      agents: 9
+      tasks: 8
+      workflows: 2
+      templates: 1
+      checklists: 2
+      data_files: 1
+    agent_names:
+    - chefe-estrategico
+    - classificador-civel
+    - auditor-processual
+    - leitor-pecas-civel
+    - pesquisador-cpc
+    - estrategista-civel
+    - analista-recursos
+    - orientador-civel
+    - redator-estrategico
+    has_readme: true
+    has_changelog: true
+    domain: legal
+    keywords:
+    - analista-estrategista-processual-civil
+    - processual-civil
+    - cpc-2015
+    - estrategia-civel
+    - recursos-processuais
+    - stj
+    - teses-repetitivas
+    - auditoria-cpc
+    - relatorio-estrategico
+    - brasil
+    - direito-civil
+    - juridico
+    highlights:
+    - 9 agents, 8 tasks
+    - 2 workflows available
+    - README documented
+    - Pipeline 3-tier CPC 2015
+    example_use: Use analista-estrategista-processual-civil for CPC strategy and legal analysis.
   analista-processual:
     path: squads/analista-processual/
-    version: 1.0.0
+    version: 1.1.0
     score: 9.0
     maturity: DEVELOPING
     validated: false
@@ -23,7 +77,7 @@ squads:
       agents: 8
       tasks: 9
       workflows: 2
-      templates: 1
+      templates: 2
       checklists: 2
       data_files: 1
     agent_names:
@@ -45,7 +99,7 @@ squads:
     - jurisprudencia
     - processo
     - pecas-processuais
-    - estrategia-juridica
+    - estrategia-processual
     - relatorio
     - brasil
     - direito-civil
@@ -162,46 +216,6 @@ squads:
     - 5 workflows available
     - README documented
     example_use: Use curator for curator tasks.
-  devops:
-    path: squads/devops/
-    version: 1.0.0
-    score: 9.0
-    maturity: DEVELOPING
-    validated: false
-    validated_explicit: false
-    auto_promoted: false
-    description: "Pipeline-driven infrastructure automation squad. Designs CI/CD pipelines, containerizes applications, provisions cloud infrastructure as code, and implements observability."
-    slashPrefix: ''
-    counts:
-      agents: 6
-      tasks: 6
-      workflows: 0
-      templates: 0
-      checklists: 0
-      data_files: 0
-    agent_names:
-    - devops-chief
-    - pipeline-architect
-    - container-engineer
-    - infra-coder
-    - monitor-sentinel
-    - devsecops-guardian
-    has_readme: true
-    has_changelog: true
-    domain: devops
-    keywords:
-    - devops
-    - ci-cd
-    - docker
-    - kubernetes
-    - terraform
-    - monitoring
-    - cloud
-    - security
-    highlights:
-    - 6 agents, 6 tasks
-    - README documented
-    example_use: Use devops for CI/CD pipeline design and infrastructure automation.
   deep-research:
     path: squads/deep-research/
     version: 1.0.0
@@ -256,6 +270,46 @@ squads:
     - 3 workflows available
     - README documented
     example_use: Use deep-research for research tasks.
+  devops:
+    path: squads/devops/
+    version: 1.0.0
+    score: 9.0
+    maturity: DEVELOPING
+    validated: false
+    validated_explicit: false
+    auto_promoted: false
+    description: "Pipeline-driven infrastructure automation squad. Designs CI/CD pipelines, containerizes applications, provisions cloud infrastructure as code, and implements observability."
+    slashPrefix: ''
+    counts:
+      agents: 6
+      tasks: 6
+      workflows: 0
+      templates: 0
+      checklists: 0
+      data_files: 0
+    agent_names:
+    - devops-chief
+    - pipeline-architect
+    - container-engineer
+    - infra-coder
+    - monitor-sentinel
+    - devsecops-guardian
+    has_readme: true
+    has_changelog: true
+    domain: devops
+    keywords:
+    - devops
+    - ci-cd
+    - docker
+    - kubernetes
+    - terraform
+    - monitoring
+    - cloud
+    - security
+    highlights:
+    - 6 agents, 6 tasks
+    - README documented
+    example_use: Use devops for CI/CD pipeline design and infrastructure automation.
   dispatch:
     path: squads/dispatch/
     version: 1.0.0
@@ -358,8 +412,8 @@ squads:
     validated: false
     validated_explicit: false
     auto_promoted: false
-    description: O squad que vigia e melhora todos os outros. Analisa continuamente o ecossistema de agentes, squads, ferramentas
-      e competências. Detecta gaps, monitora performance, recomenda novos recursos. O sistema nervoso do seu projeto.
+    description: "O squad que vigia e melhora todos os outros. Analisa continuamente o ecossistema de agentes, squads, ferramentas\
+      \ e competências. Detecta gaps, monitora performance, recomenda novos recursos. O sistema nervoso do seu projeto."
     slashPrefix: kaizen
     counts:
       agents: 7
@@ -457,7 +511,7 @@ squads:
     description: "Base meta-squad para criar squads de agentes via templates e validacao estrutural. Orchestrator: @squad-chief\
       \ (triage, routing, criacao template-driven de squads). Base mode: 24 tasks, 3 workflows, 1 agent. Pro mode: auto-detected\
       \ via squad-creator-pro/ (adds mind cloning, DNA extraction, multi-agent orchestration, model routing, advanced optimization).\
-      \ v4.0: Base/Pro split \u2014 template-driven base, mind-cloning pro."
+      \ v4.0: Base/Pro split — template-driven base, mind-cloning pro."
     slashPrefix: squadCreator
     counts:
       agents: 1
@@ -492,20 +546,45 @@ squads:
     example_use: Use /squadCreator to execute squad-creator workflows in squad-creator.
 domain_index:
   legal:
+  - analista-estrategista-processual-civil
   - analista-processual
+  processual-civil:
+  - analista-estrategista-processual-civil
+  cpc-2015:
+  - analista-estrategista-processual-civil
+  estrategia-civel:
+  - analista-estrategista-processual-civil
+  recursos-processuais:
+  - analista-estrategista-processual-civil
+  stj:
+  - analista-estrategista-processual-civil
+  teses-repetitivas:
+  - analista-estrategista-processual-civil
+  auditoria-cpc:
+  - analista-estrategista-processual-civil
+  relatorio-estrategico:
+  - analista-estrategista-processual-civil
   analista-processual:
   - analista-processual
   mapeamento:
   - analista-processual
   juridico:
+  - analista-estrategista-processual-civil
   - analista-processual
   jurisprudencia:
+  - analista-estrategista-processual-civil
   - analista-processual
   processo:
   - analista-processual
   relatorio:
   - analista-processual
-  estrategia-juridica:
+  estrategia-processual:
+  - analista-estrategista-processual-civil
+  - analista-processual
+  direito-civil:
+  - analista-estrategista-processual-civil
+  - analista-processual
+  pecas-processuais:
   - analista-processual
   devops:
   - devops
@@ -520,6 +599,8 @@ domain_index:
   monitoring:
   - devops
   cloud:
+  - devops
+  security:
   - devops
   design-system:
   - apex
@@ -702,13 +783,13 @@ domain_index:
   squad-chief:
   - squad-creator
 summary:
-  total_agents: 87
-  total_tasks: 189
-  total_workflows: 32
-  total_templates: 62
+  total_agents: 96
+  total_tasks: 197
+  total_workflows: 34
+  total_templates: 63
   total_checklists: 82
   total_data_files: 71
 maturity_summary:
   DRAFT: 0
-  DEVELOPING: 10
+  DEVELOPING: 11
   OPERATIONAL: 0

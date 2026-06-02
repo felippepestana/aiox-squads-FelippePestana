@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { PericiaView } from "./PericiaView";
 import {
   chatStream,
   clearPortalKey,
@@ -59,6 +60,7 @@ export function App() {
 
   const [squads, setSquads] = useState<SquadSummary[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [showPericia, setShowPericia] = useState(false);
   const [squadId, setSquadId] = useState("");
   const [agentId, setAgentId] = useState("");
   const [agentSearch, setAgentSearch] = useState("");
@@ -622,6 +624,15 @@ export function App() {
             ))}
           </select>
         </div>
+        {squadId === "iphone-judicial-assessment" && (
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => setShowPericia(true)}
+          >
+            Formulario Pericial
+          </button>
+        )}
         {!sessionId ? (
           <button
             type="button"
@@ -728,7 +739,10 @@ export function App() {
       </aside>
 
       <main className="main">
-        <div className="messages">
+        {showPericia ? (
+          <PericiaView onClose={() => setShowPericia(false)} />
+        ) : null}
+        <div className="messages" style={showPericia ? { display: "none" } : undefined}>
           {!sessionId && (
             <p className="loading">
               Escolha squad e agente e clique em <strong>Iniciar sessão</strong>
@@ -802,7 +816,7 @@ export function App() {
           <div ref={messagesEndRef} aria-hidden />
         </div>
 
-        <div className="composer">
+        <div className="composer" style={showPericia ? { display: "none" } : undefined}>
           {error ? <div className="error-banner">{error}</div> : null}
           {sessionId ? (
             <>

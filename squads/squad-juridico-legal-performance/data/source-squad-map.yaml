@@ -1,0 +1,16 @@
+source_squads:
+  analista-processual:
+    contributes:
+      agents: [analista-chefe, mapeador-processual, avaliador-processual, leitor-de-pecas, pesquisador-juridico, estrategista-processual, advogado-orientador, documentador-processual]
+      concepts: [mapeamento-processual, avaliacao-maturidade, pesquisa-juridica, estrategia, relatorio-rastreado]
+  analista-estrategista-processual-civil:
+    contributes:
+      agents: [chefe-estrategico, classificador-civel, auditor-processual, leitor-pecas-civel, pesquisador-cpc, estrategista-civel, analista-recursos, orientador-civel, redator-estrategico]
+      concepts: [cpc-2015, diagnostico-processual, recursos, execucao, defesa, prazos]
+  iphone-judicial-assessment:
+    contributes:
+      agents: [chief-coordinator, hardware-specialist, legal-normative-specialist, report-writer, qc-validator]
+      concepts: [pericia-judicial, iphone, cadeia-custodia, laudo-tecnico, abnt, cdc]
+  apex:
+    contributes:
+      concepts: [frontend-premium, design-system, acessibilidade, performance, visual-qa]

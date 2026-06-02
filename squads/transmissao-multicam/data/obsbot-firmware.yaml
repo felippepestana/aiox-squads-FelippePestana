@@ -1,0 +1,52 @@
+# OBSBOT Tiny 2 / Tiny 2 Lite — firmware baseline and update protocol
+
+firmware_baseline:
+  tiny_2:
+    min_firmware: "2.5.0"
+    rationale: "Versões anteriores apresentam disputa do UVC Extension Unit ao trocar de OBSBOT Center para o OBS Plugin"
+    features_required:
+      - "Auto-Track on-camera"
+      - "Gesture Control"
+      - "PTZ via UVC XU"
+      - "OBS Plugin compatibility"
+  tiny_2_lite:
+    min_firmware: "1.3.0"
+    rationale: "Mesma justificativa do Tiny 2"
+    features_required:
+      - "Auto-Track on-camera"
+      - "PTZ via UVC XU"
+      - "OBS Plugin compatibility"
+
+update_protocol:
+  description: |
+    OBSBOT Center é a única ferramenta oficial para flash de firmware. Para evitar
+    conflito persistente com o OBS Plugin durante a operação, instale o Center
+    APENAS para a janela de update e desinstale logo após.
+  steps:
+    - "Instalar OBSBOT Center oficial em máquina de bancada (idealmente NÃO na máquina de transmissão)"
+    - "Conectar cada câmera individualmente via USB-C direto"
+    - "Verificar versão atual em Center → Settings → Firmware"
+    - "Atualizar para versão mais recente disponível"
+    - "Reiniciar a câmera (desconectar/reconectar)"
+    - "Validar versão após reboot"
+    - "Repetir para as 4 câmeras"
+    - "Desinstalar OBSBOT Center da máquina de bancada (ou nunca instalar na máquina de transmissão)"
+
+post_update_validation:
+  - "Câmera reconhecida como UVC pelo OS (sem drivers extras)"
+  - "OBS Studio identifica como dispositivo de captura"
+  - "OBSBOT OBS Plugin lista a câmera no painel lateral"
+  - "PTZ digital responde aos comandos do plugin"
+  - "Auto-Track ativa/desativa via plugin (não há disputa com Center)"
+
+forbidden_after_update:
+  - "Manter OBSBOT Center instalado na máquina de transmissão"
+  - "Rodar OBSBOT Center e OBS simultaneamente em qualquer máquina"
+
+troubleshooting:
+  - issue: "Câmera não aparece no OBS após update"
+    fix: "Trocar de porta USB; testar em controlador raiz diferente"
+  - issue: "PTZ via plugin não responde"
+    fix: "Reiniciar OBS; confirmar que Center não está rodando em segundo plano"
+  - issue: "Plugin lista câmera mas Auto-Track falha"
+    fix: "Reflashar firmware; se persistir, abrir issue com OBSBOT Support"

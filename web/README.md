@@ -43,6 +43,8 @@ NODE_ENV=production node dist/server/index.js
 
 Abra http://127.0.0.1:8787 — o Express passa a servir o bundle estático em `dist/client/` se existir.
 
+> **Vercel:** este projeto usa Express + Vite + SSE/upload em um servidor único. Para Vercel, o caminho recomendado hoje é publicar o app Next.js [`../analista-processual-web`](../analista-processual-web/) e manter este portal em Docker/VPS até uma refatoração serverless. Veja [`../docs/deploy/vercel.md`](../docs/deploy/vercel.md).
+
 ## Docker Compose (raiz do repositório)
 
 Na raiz do repo (onde está `squads/`):

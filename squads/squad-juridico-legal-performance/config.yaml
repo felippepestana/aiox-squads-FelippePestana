@@ -1,0 +1,284 @@
+name: squad-juridico-legal-performance
+version: "1.0.0"
+title: "Squad Jurídico — Legal Performance"
+description: >
+  Squad unificado para atividades processuais, jurídicas, estratégicas,
+  recursais, periciais e de produto jurídico. Consolida os squads
+  analista-processual, analista-estrategista-processual-civil e
+  iphone-judicial-assessment em uma arquitetura hierárquica com
+  orquestração central, módulos especializados e quality gates rastreáveis.
+author: "FelippePestana"
+language: pt-BR
+slashPrefix: "legal-performance"
+patternPrefix: "LP"
+
+source_squads:
+  - id: analista-processual
+    path: ../analista-processual
+    role: "Base de análise processual ampla, pesquisa jurídica, estratégia, orientação e documentação."
+  - id: analista-estrategista-processual-civil
+    path: ../analista-estrategista-processual-civil
+    role: "Base CPC 2015 para diagnóstico civil, auditoria processual, recursos e execução."
+  - id: iphone-judicial-assessment
+    path: ../iphone-judicial-assessment
+    role: "Módulo pericial técnico-normativo para laudos judiciais de dispositivos iPhone."
+  - id: apex
+    path: ../apex
+    role: "Referência de frontend, design system, acessibilidade e performance para ambiente de usabilidade."
+
+entry_agent: legal-performance-chief
+
+tiers:
+  tier_0:
+    name: "Orquestração Legal Performance"
+    agents: [legal-performance-chief]
+    purpose: "Classificar demanda, definir rota, controlar handoffs, aplicar gates e preservar supervisão humana."
+  tier_1:
+    name: "Intake, Triagem e Diagnóstico"
+    agents: [process-intake-analyst, civil-procedure-classifier, procedural-auditor]
+    purpose: "Coletar insumos, identificar tipo/fase do processo, classificar UC e auditar riscos processuais iniciais."
+  tier_2:
+    name: "Análise Jurídico-Processual"
+    agents: [process-mapper, risk-and-maturity-evaluator, legal-document-reader, jurisprudence-researcher]
+    purpose: "Mapear fluxos, avaliar maturidade, extrair peças e pesquisar legislação, CPC, STJ/STF e fontes autorizadas."
+  tier_3:
+    name: "Estratégia, Recursos e Orientação"
+    agents: [litigation-strategist, appeals-analyst, legal-action-advisor]
+    purpose: "Produzir cenários, avaliar admissibilidade recursal, definir plano de ação e comunicação ao cliente."
+  tier_4:
+    name: "Perícia Técnica Judicial"
+    agents: [forensic-device-specialist, legal-normative-specialist]
+    purpose: "Executar raciocínio técnico-pericial, cadeia de custódia, normas ABNT/NBR, CPC, CDC e limites de atuação do perito."
+  tier_5:
+    name: "Produto, Síntese e Compliance"
+    agents: [legal-ux-architect, legal-report-writer, quality-compliance-validator]
+    purpose: "Projetar usabilidade, consolidar relatórios/laudos e validar rastreabilidade, completude e conformidade."
+
+agents:
+  legal-performance-chief:
+    file: agents/legal-performance-chief.md
+    tier: tier_0
+    focus: "Orquestração, roteamento, handoffs, quality gates e governança jurídica."
+  process-intake-analyst:
+    file: agents/process-intake-analyst.md
+    tier: tier_1
+    focus: "Coleta de insumos, escopo, documentos, partes, objetivos, limitações e classificação preliminar."
+  civil-procedure-classifier:
+    file: agents/civil-procedure-classifier.md
+    tier: tier_1
+    focus: "Tipo de ação, fase processual, polo, competência, execução, recursos e urgências CPC."
+  procedural-auditor:
+    file: agents/procedural-auditor.md
+    tier: tier_1
+    focus: "Auditoria CPC: pressupostos, condições da ação, prescrição, preclusão, nulidades e prazos."
+  process-mapper:
+    file: agents/process-mapper.md
+    tier: tier_2
+    focus: "Mapeamento pseudo-BPMN de etapas, atores, entradas, saídas, decisões e sistemas."
+  risk-and-maturity-evaluator:
+    file: agents/risk-and-maturity-evaluator.md
+    tier: tier_2
+    focus: "Maturidade 0-5, gargalos, riscos operacionais, conformidade e roadmap."
+  legal-document-reader:
+    file: agents/legal-document-reader.md
+    tier: tier_2
+    focus: "Extração estruturada de peças, decisões, provas, pedidos, fundamentos e eventos."
+  jurisprudence-researcher:
+    file: agents/jurisprudence-researcher.md
+    tier: tier_2
+    focus: "Pesquisa em legislação, CPC, STF/STJ, TJs/TRFs, súmulas, repetitivos e doutrina."
+  litigation-strategist:
+    file: agents/litigation-strategist.md
+    tier: tier_3
+    focus: "Posicionamento processual, cenários com percentuais, acordo e tática jurídica."
+  appeals-analyst:
+    file: agents/appeals-analyst.md
+    tier: tier_3
+    focus: "Admissibilidade e mérito recursal: apelação, agravo, REsp, RE e embargos."
+  legal-action-advisor:
+    file: agents/legal-action-advisor.md
+    tier: tier_3
+    focus: "Plano de ação, prazos, medidas urgentes, monitoramento e comunicação com cliente."
+  forensic-device-specialist:
+    file: agents/forensic-device-specialist.md
+    tier: tier_4
+    focus: "Diagnóstico técnico forense de iPhone, cadeia de custódia, medições, evidências e hipóteses."
+  legal-normative-specialist:
+    file: agents/legal-normative-specialist.md
+    tier: tier_4
+    focus: "CPC, CDC, ABNT/NBR, ANATEL, ICP-Brasil e limites normativos do laudo/perícia."
+  legal-ux-architect:
+    file: agents/legal-ux-architect.md
+    tier: tier_5
+    focus: "Arquitetura de informação, jornadas, design system jurídico, acessibilidade e rastreabilidade."
+  legal-report-writer:
+    file: agents/legal-report-writer.md
+    tier: tier_5
+    focus: "Relatórios processuais, estratégicos, jurídicos e laudos periciais com citações rastreadas."
+  quality-compliance-validator:
+    file: agents/quality-compliance-validator.md
+    tier: tier_5
+    focus: "Quality gates, checklists, bloqueios, completude, conformidade e revisão final."
+
+pipeline:
+  use_cases:
+    UC-LP-001:
+      name: "Triagem e Diagnóstico Processual"
+      trigger_patterns: ["diagnosticar", "status do processo", "fase processual", "verificar prazos", "situação processual"]
+      route: [process-intake-analyst, civil-procedure-classifier, procedural-auditor, legal-report-writer, quality-compliance-validator]
+    UC-LP-002:
+      name: "Análise Jurídica Completa"
+      trigger_patterns: ["processo judicial", "peças", "petição", "sentença", "acórdão", "analisar autos"]
+      route: [process-intake-analyst, legal-document-reader, jurisprudence-researcher, litigation-strategist, legal-action-advisor, legal-report-writer, quality-compliance-validator]
+    UC-LP-003:
+      name: "Análise Estratégica Processual Civil"
+      trigger_patterns: ["processo cível", "CPC", "ação civil", "contestação", "defesa", "execução", "cumprimento de sentença"]
+      route: [process-intake-analyst, civil-procedure-classifier, procedural-auditor, legal-document-reader, jurisprudence-researcher, litigation-strategist, legal-action-advisor, legal-report-writer, quality-compliance-validator]
+    UC-LP-004:
+      name: "Estratégia Recursal"
+      trigger_patterns: ["recurso", "apelação", "agravo", "REsp", "RE", "embargos de declaração", "prequestionamento"]
+      route: [process-intake-analyst, civil-procedure-classifier, procedural-auditor, legal-document-reader, jurisprudence-researcher, appeals-analyst, legal-action-advisor, legal-report-writer, quality-compliance-validator]
+    UC-LP-005:
+      name: "Mapeamento e Performance de Processo"
+      trigger_patterns: ["mapear processo", "fluxo", "workflow", "BPMN", "gargalos", "maturidade"]
+      route: [process-intake-analyst, process-mapper, risk-and-maturity-evaluator, legal-ux-architect, legal-report-writer, quality-compliance-validator]
+    UC-LP-006:
+      name: "Pesquisa Jurisprudencial e Normativa"
+      trigger_patterns: ["jurisprudência", "STJ", "STF", "súmula", "precedente", "legislação", "tese repetitiva"]
+      route: [process-intake-analyst, jurisprudence-researcher, legal-normative-specialist, legal-report-writer]
+    UC-LP-007:
+      name: "Perícia Judicial Técnica"
+      trigger_patterns: ["perícia", "laudo", "iPhone", "IMEI", "cadeia de custódia", "quesitos", "ABNT", "CDC"]
+      route: [process-intake-analyst, legal-normative-specialist, forensic-device-specialist, legal-report-writer, quality-compliance-validator]
+    UC-LP-008:
+      name: "Design de Produto Jurídico"
+      trigger_patterns: ["frontend", "interface", "usabilidade", "dashboard", "design", "produto jurídico", "experiência do usuário"]
+      route: [process-intake-analyst, legal-ux-architect, legal-report-writer, quality-compliance-validator]
+
+quality_gates:
+  QG-LP-001:
+    name: "Classificação e escopo"
+    agent: legal-performance-chief
+    criteria: "UC-LP definido, escopo documentado, rota de agentes e modo de saída declarados antes da execução."
+  QG-LP-002:
+    name: "Rastreabilidade de fontes"
+    agent: jurisprudence-researcher
+    criteria: "Toda lei, jurisprudência, peça, medição ou norma contém origem, data e confiabilidade."
+  QG-LP-003:
+    name: "Auditoria processual CPC"
+    agent: procedural-auditor
+    criteria: "Riscos CPC relevantes identificados com artigo aplicável ou justificativa de inexistência."
+  QG-LP-004:
+    name: "Estratégia quantificada"
+    agent: litigation-strategist
+    criteria: "Cenários otimista, realista e pessimista somam 100% e indicam premissas."
+  QG-LP-005:
+    name: "Validação pericial normativa"
+    agent: legal-normative-specialist
+    criteria: "Fluxos periciais respeitam CPC, CDC, ABNT/NBR, cadeia de custódia e limites de atuação técnica."
+  QG-LP-006:
+    name: "Revisão humana e responsabilidade profissional"
+    agent: quality-compliance-validator
+    criteria: "Saída declara que não substitui advogado/perito habilitado e requer revisão humana antes de uso externo."
+  QG-LP-007:
+    name: "Design antes do frontend"
+    agent: legal-ux-architect
+    criteria: "Jornada, personas, estados, acessibilidade e rastreabilidade definidos antes da implementação visual."
+  QG-LP-008:
+    name: "Relatório/laudo completo"
+    agent: legal-report-writer
+    criteria: "Documento final contém seções obrigatórias, citações rastreadas, anexos/limitações e checklist aplicável."
+
+tasks:
+  - id: classify-legal-demand
+    path: tasks/classify-legal-demand.md
+  - id: run-intake-triage
+    path: tasks/run-intake-triage.md
+  - id: map-and-evaluate-process
+    path: tasks/map-and-evaluate-process.md
+  - id: read-and-research-case
+    path: tasks/read-and-research-case.md
+  - id: build-litigation-strategy
+    path: tasks/build-litigation-strategy.md
+  - id: analyze-appeal-strategy
+    path: tasks/analyze-appeal-strategy.md
+  - id: conduct-forensic-assessment
+    path: tasks/conduct-forensic-assessment.md
+  - id: design-legal-product-ux
+    path: tasks/design-legal-product-ux.md
+  - id: generate-final-deliverable
+    path: tasks/generate-final-deliverable.md
+  - id: validate-legal-output
+    path: tasks/validate-legal-output.md
+
+workflows:
+  - id: wf-legal-performance-full
+    path: workflows/wf-legal-performance-full.yaml
+    description: "Pipeline completo jurídico-processual com triagem, análise, estratégia, relatório e validação."
+  - id: wf-forensic-assessment
+    path: workflows/wf-forensic-assessment.yaml
+    description: "Pipeline pericial técnico-normativo para laudos judiciais e quesitos."
+  - id: wf-legal-product-design
+    path: workflows/wf-legal-product-design.yaml
+    description: "Pipeline de planejamento de frontend jurídico antes da implementação."
+
+templates:
+  - templates/legal-performance-report-tmpl.md
+  - templates/forensic-technical-report-tmpl.md
+  - templates/legal-product-design-brief-tmpl.md
+
+checklists:
+  - checklists/legal-output-quality-checklist.md
+  - checklists/forensic-compliance-checklist.md
+  - checklists/design-readiness-checklist.md
+
+data:
+  - data/source-squad-map.yaml
+  - data/legal-reference-map.yaml
+  - data/ux-principles.yaml
+  - data/quality-gates.yaml
+
+settings:
+  activation:
+    prefix: "squad-juridico-legal-performance"
+    example: "@squad-juridico-legal-performance:legal-performance-chief"
+  greeting:
+    show_use_cases: true
+    show_pipeline_status: true
+  language: "pt-BR"
+
+quality_standards:
+  min_score: 8.5
+  smoke_tests:
+    - "Diagnosticar processo civil em fase de conhecimento com riscos CPC."
+    - "Gerar análise jurídica completa com pesquisa jurisprudencial e citações rastreadas."
+    - "Avaliar estratégia recursal com admissibilidade e recomendação."
+    - "Produzir roteiro de laudo pericial iPhone com cadeia de custódia e normas aplicáveis."
+    - "Gerar brief de frontend jurídico com personas, jornadas, acessibilidade e rastreabilidade."
+  functional_review:
+    path: SMOKE_TESTS.md
+    priority_scenarios:
+      - id: ST-LP-001
+        name: "Análise processual civil"
+        expected_use_case: UC-LP-003
+        example: examples/processo-civil-acao-cobranca.md
+        validates: ["classificação CPC", "auditoria processual", "pesquisa jurídica", "estratégia", "relatório"]
+      - id: ST-LP-002
+        name: "Estratégia recursal"
+        expected_use_case: UC-LP-004
+        example: examples/estrategia-recursal-resp.md
+        validates: ["admissibilidade", "prequestionamento", "prazo", "mérito recursal", "plano de ação"]
+      - id: ST-LP-003
+        name: "Planejamento de frontend jurídico"
+        expected_use_case: UC-LP-008
+        example: examples/frontend-juridico-dashboard.md
+        validates: ["personas", "jornadas", "acessibilidade", "rastreabilidade", "handoff para apex"]
+
+stats:
+  total_agents: 16
+  total_tasks: 10
+  total_workflows: 3
+  total_checklists: 3
+  total_templates: 3
+  total_data_files: 4
+  total_examples: 3

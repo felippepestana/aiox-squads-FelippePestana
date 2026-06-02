@@ -1,0 +1,16 @@
+ux_principles:
+  trust_first:
+    description: "O usuário precisa entender de onde veio cada conclusão."
+    requirements: ["evidence links", "source labels", "audit trail"]
+  human_in_control:
+    description: "A IA apoia; advogado, perito ou usuário autorizado decide."
+    requirements: ["review states", "approval checkpoints", "clear responsibility"]
+  legal_density_without_overload:
+    description: "Dados complexos devem ser progressivamente revelados."
+    requirements: ["summary first", "details expandable", "tables with filters"]
+  urgency_visibility:
+    description: "Prazos e riscos críticos devem ser visíveis imediatamente."
+    requirements: ["deadline badges", "critical alerts", "timeline"]
+  accessibility_by_default:
+    description: "WCAG AA é requisito mínimo."
+    requirements: ["keyboard", "screen reader", "contrast", "focus states"]

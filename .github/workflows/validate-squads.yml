@@ -23,6 +23,11 @@ jobs:
           ERRORS=0
           SQUADS_DIR="squads"
 
+          if [ ! -d "$SQUADS_DIR" ]; then
+            echo "No squads/ directory found — skipping validation"
+            exit 0
+          fi
+
           echo "=== Validating Squad Structure ==="
 
           for squad_dir in "$SQUADS_DIR"/*/; do

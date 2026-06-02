@@ -1,0 +1,109 @@
+{
+  "_comment": "Reference OBS Scene Collection skeleton for transmissao-multicam squad. This is a documentation template, NOT a directly importable .json. Real scene collections vary by OBS version and OS. Use this as a checklist when manually building scenes via build-scene-pack.md, then export the actual collection from OBS to overwrite this file with a working version.",
+  "name": "transmissao-multicam-v1",
+  "canvas": {
+    "base_width": 1920,
+    "base_height": 1080,
+    "output_width": 1920,
+    "output_height": 1080,
+    "fps_numerator": 30,
+    "fps_denominator": 1
+  },
+  "scene_pack": [
+    {
+      "name": "STANDBY",
+      "purpose": "Pré-show com cronômetro regressivo",
+      "sources": [
+        {"type": "image_source", "name": "BG_STANDBY", "fullscreen": true},
+        {"type": "image_source", "name": "LOGO", "x": 760, "y": 220, "width": 400, "height": 200},
+        {"type": "text_gdiplus", "name": "TXT_TOPO", "text": "A transmissão iniciará em", "x": 460, "y": 470},
+        {"type": "advanced_timer", "name": "TIMER", "x": 760, "y": 580, "width": 400, "height": 140, "format": "MM:SS"},
+        {"type": "text_gdiplus", "name": "TXT_TITULO", "text": "Próxima sessão: <dinâmico>", "x": 460, "y": 760}
+      ]
+    },
+    {
+      "name": "CAM1",
+      "purpose": "Palco principal — câmera 1 em tela cheia",
+      "sources": [
+        {"type": "video_capture_device", "name": "CAM1_SRC", "device": "OBSBOT Tiny 2 (CAM1)", "fullscreen": true, "format": "MJPEG", "resolution": "1920x1080", "fps": 30}
+      ]
+    },
+    {
+      "name": "CAM2",
+      "purpose": "Plateia — câmera 2 em tela cheia",
+      "sources": [
+        {"type": "video_capture_device", "name": "CAM2_SRC", "device": "OBSBOT Tiny 2 (CAM2)", "fullscreen": true}
+      ]
+    },
+    {
+      "name": "CAM3",
+      "purpose": "Closeup — câmera 3 em tela cheia",
+      "sources": [
+        {"type": "video_capture_device", "name": "CAM3_SRC", "device": "OBSBOT Tiny 2 (CAM3)", "fullscreen": true}
+      ]
+    },
+    {
+      "name": "CAM4",
+      "purpose": "Geral — câmera 4 em tela cheia",
+      "sources": [
+        {"type": "video_capture_device", "name": "CAM4_SRC", "device": "OBSBOT Tiny 2 (CAM4)", "fullscreen": true}
+      ]
+    },
+    {
+      "name": "GRID",
+      "purpose": "Mosaico 2x2 das 4 câmeras",
+      "sources": [
+        {"type": "scene_source_mirror", "name": "GRID_CAM1", "mirror_of": "CAM1", "x": 0, "y": 0, "width": 960, "height": 540},
+        {"type": "scene_source_mirror", "name": "GRID_CAM2", "mirror_of": "CAM2", "x": 960, "y": 0, "width": 960, "height": 540},
+        {"type": "scene_source_mirror", "name": "GRID_CAM3", "mirror_of": "CAM3", "x": 0, "y": 540, "width": 960, "height": 540},
+        {"type": "scene_source_mirror", "name": "GRID_CAM4", "mirror_of": "CAM4", "x": 960, "y": 540, "width": 960, "height": 540}
+      ]
+    },
+    {
+      "name": "SLIDES_FULL",
+      "purpose": "Slides ocupam canvas inteiro",
+      "sources": [
+        {"type": "window_capture", "name": "SLIDES_SRC", "window": "PowerPoint|Keynote", "fullscreen": true}
+      ]
+    },
+    {
+      "name": "SLIDES_PIP",
+      "purpose": "Slides + câmera ativa em PiP no canto inferior direito",
+      "sources": [
+        {"type": "window_capture", "name": "SLIDES_SRC", "window": "PowerPoint|Keynote", "fullscreen": true},
+        {"type": "scene_source_mirror", "name": "CamAtivaMirror_PIP", "mirror_of": "CamAtivaMirror", "x": 1410, "y": 780, "width": 480, "height": 270, "filters": ["stroke_2px_white", "drop_shadow"]}
+      ]
+    },
+    {
+      "name": "TELA_PIP",
+      "purpose": "Tela cheia (qualquer app) + câmera em PiP",
+      "sources": [
+        {"type": "display_capture", "name": "DISPLAY_SRC", "display": 1, "fullscreen": true},
+        {"type": "scene_source_mirror", "name": "CamAtivaMirror_PIP", "mirror_of": "CamAtivaMirror", "x": 1410, "y": 780, "width": 480, "height": 270, "filters": ["stroke_2px_white", "drop_shadow"]}
+      ]
+    },
+    {
+      "name": "ENCERRAMENTO",
+      "purpose": "Créditos finais",
+      "sources": [
+        {"type": "image_source", "name": "BG_ENCERRAMENTO", "fullscreen": true},
+        {"type": "text_gdiplus", "name": "TXT_OBRIGADO", "text": "Obrigado por participar"},
+        {"type": "text_gdiplus", "name": "TXT_CREDITOS", "text": "Créditos: <dinâmico>"}
+      ]
+    }
+  ],
+  "global_sources": [
+    {
+      "type": "scene_source_mirror",
+      "name": "CamAtivaMirror",
+      "mirror_of": "CAM1",
+      "_note": "Updated via obs-websocket SetInputSettings when active camera changes"
+    }
+  ],
+  "transitions": {
+    "default": "Cut",
+    "secondary": {"type": "Fade", "duration_ms": 300}
+  },
+  "studio_mode": true,
+  "_validation": "Use scripts/obs-headless-check.py to verify all scenes exist via obs-websocket"
+}

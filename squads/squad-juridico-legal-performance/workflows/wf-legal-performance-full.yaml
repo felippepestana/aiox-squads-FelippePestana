@@ -1,0 +1,32 @@
+id: wf-legal-performance-full
+name: Legal Performance Full Pipeline
+trigger: "Demanda jurídica, processual ou estratégica completa"
+steps:
+  - id: classify
+    agent: legal-performance-chief
+    task: classify-legal-demand
+    gate: QG-LP-001
+  - id: intake
+    agent: process-intake-analyst
+    task: run-intake-triage
+  - id: triage
+    parallel: false
+    agents: [civil-procedure-classifier, procedural-auditor]
+  - id: evidence
+    parallel: true
+    agents: [legal-document-reader, jurisprudence-researcher]
+    gate: QG-LP-002
+  - id: strategy
+    agents: [litigation-strategist, appeals-analyst, legal-action-advisor]
+    gate: QG-LP-004
+  - id: report
+    agent: legal-report-writer
+    task: generate-final-deliverable
+    gate: QG-LP-008
+  - id: validate
+    agent: quality-compliance-validator
+    task: validate-legal-output
+    gate: QG-LP-006
+outputs:
+  - legal-performance-report.md
+  - validation-summary.md

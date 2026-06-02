@@ -38,12 +38,14 @@ jobs:
           sleep 5
 
       - name: Check chatbot health
+        continue-on-error: true
         run: |
-          docker compose exec -T chatbot wget -qO- http://127.0.0.1:3000/ || true
+          docker compose exec -T chatbot wget -qO- http://127.0.0.1:3000/
 
       - name: Check web health
+        continue-on-error: true
         run: |
-          docker compose exec -T squads-web wget -qO- http://127.0.0.1:8787/api/health || true
+          docker compose exec -T squads-web wget -qO- http://127.0.0.1:8787/api/health
 
       - name: View logs on failure
         if: failure()
