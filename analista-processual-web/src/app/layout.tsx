@@ -8,12 +8,14 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: {
-    default: "Analista Processual | Análise Inteligente de Processos Jurídicos",
-    template: "%s | Analista Processual",
+    default: "Legal Performance | Felippe Pestana — Soluções Jurídicas Especializadas",
+    template: "%s | Legal Performance",
   },
   description:
-    "Plataforma de análise processual jurídica brasileira potenciada por multiagentes IA. Análise completa de processos, prazos, riscos e jurisprudência.",
+    "Plataforma jurídica Felippe Pestana — Legal Performance: análise processual, estratégia, recursos, pesquisa jurisprudencial e perícia técnica orquestradas por multiagentes IA.",
   keywords: [
+    "Legal Performance",
+    "Felippe Pestana",
     "análise processual",
     "jurídico",
     "advocacia",
@@ -22,12 +24,13 @@ export const metadata: Metadata = {
     "processo judicial",
     "prazos",
     "jurisprudência",
+    "perícia judicial",
   ],
-  authors: [{ name: "Analista Processual" }],
+  authors: [{ name: "Felippe Pestana" }],
   openGraph: {
     type: "website",
     locale: "pt_BR",
-    siteName: "Analista Processual",
+    siteName: "Legal Performance",
   },
 };
 

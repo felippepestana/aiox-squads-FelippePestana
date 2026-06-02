@@ -8,7 +8,7 @@ import {
   FileText,
   Library,
   Settings,
-  Scale,
+  Sparkles,
   LogOut,
   ChevronLeft,
   ChevronRight,
@@ -20,9 +20,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Logo, LogoMark } from "@/components/brand/logo";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Assistente", href: "/dashboard/assistente", icon: Sparkles },
   { name: "Análises", href: "/dashboard/analises", icon: FileText },
   { name: "Biblioteca", href: "/dashboard/biblioteca", icon: Library },
   { name: "Configurações", href: "/dashboard/config", icon: Settings },
@@ -41,18 +43,13 @@ export function Sidebar() {
     >
       <div className="flex h-16 items-center justify-between border-b border-border px-4">
         {!collapsed && (
-          <Link href="/dashboard" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <Scale className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="font-semibold text-foreground">Analista</span>
+          <Link href="/dashboard">
+            <Logo />
           </Link>
         )}
         {collapsed && (
           <Link href="/dashboard" className="mx-auto">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <Scale className="h-5 w-5 text-primary-foreground" />
-            </div>
+            <LogoMark className="h-8 w-8" />
           </Link>
         )}
       </div>
