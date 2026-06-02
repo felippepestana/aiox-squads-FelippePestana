@@ -5,10 +5,28 @@ Plataforma web de análise processual jurídica brasileira potenciada por multia
 ## Stack
 
 - **Frontend:** Next.js 15 (App Router), React 19, TypeScript 5
-- **Styling:** Tailwind CSS 4, Shadcn/UI
+- **Styling:** Tailwind CSS 3, componentes estilo shadcn/ui (Radix)
 - **State:** Zustand, TanStack Query
-- **Database:** Supabase (PostgreSQL)
-- **LLM Gateway:** Multi-provider (OpenAI, Anthropic, DeepSeek, Qwen, Kimi, MiniMax, Gemini)
+- **Database:** PostgreSQL via Prisma (compatível com Supabase)
+- **LLM Gateway:** OpenAI por padrão; provedores compatíveis com OpenAI
+  (DeepSeek, Qwen, Kimi, MiniMax) habilitáveis via `*_API_KEY` + `*_BASE_URL`
+
+## Estado atual (modo demo)
+
+A plataforma funciona ponta-a-ponta para o fluxo principal: **criar análise →
+enviar documentos → pipeline multiagente → visualizar resultado** (resumo,
+partes, cronologia, pedidos, prazos e riscos).
+
+Limitações conhecidas (modo demo):
+
+- **Autenticação ainda não habilitada** — as análises são atribuídas a um perfil
+  demo (`demo@analista-processual.local`), criado automaticamente.
+- **Extração de texto** cobre arquivos textuais (`.txt`, `.md`, `.csv`, `.json`,
+  etc.). PDF/DOCX/imagens são armazenados, mas exigem parser/OCR dedicado (a
+  análise informa quais documentos não tiveram texto extraível).
+- **Biblioteca de jurisprudência** ainda é placeholder.
+- O processamento é executado de forma síncrona na rota `/api/analyses/[id]/process`
+  (sem fila/worker dedicado).
 
 ## Arquitetura
 
@@ -54,6 +72,7 @@ cp .env.example .env.local
 ```bash
 npx prisma generate
 npx prisma db push
+npm run db:seed   # cria o perfil demo
 ```
 
 ### 4. Execute
@@ -61,6 +80,10 @@ npx prisma db push
 ```bash
 npm run dev
 ```
+
+> Defina ao menos `OPENAI_API_KEY` no `.env.local` para que o pipeline de
+> análise execute. Sem provedor configurado, a análise é marcada como `FAILED`
+> com uma mensagem explicativa (a aplicação não quebra).
 
 ## Deploy
 
@@ -85,14 +108,16 @@ Veja o guia completo em [`../docs/deploy/vercel.md`](../docs/deploy/vercel.md), 
 ## Roadmap
 
 - [x] Setup do projeto
-- [x] Configuração de banco de dados
-- [x] LLM Gateway com seleção inteligente
-- [x] Agente Navegador implementado
-- [ ] Agentes restantes (Extrator, Calculador, Mapeador)
-- [ ] Upload de documentos
-- [ ] Interface de análise
-- [ ] Biblioteca de jurisprudência
-- [ ] Deploy em produção
+- [x] Configuração de banco de dados (Prisma)
+- [x] LLM Gateway com seleção de modelo ciente do provedor
+- [x] Agentes implementados (Navegador, Extrator, Calculador, Mapeador, Chief)
+- [x] Upload de documentos + extração de texto (formatos textuais)
+- [x] Fluxo de análise ponta-a-ponta (criar → processar → visualizar)
+- [x] Dashboard e listagem com dados reais
+- [ ] Autenticação (Supabase) — substituir o perfil demo
+- [ ] Extração de PDF/DOCX (parser/OCR)
+- [ ] Biblioteca de jurisprudência (busca semântica)
+- [ ] Fila/worker dedicado para processamento assíncrono
 
 ## Licença
 
