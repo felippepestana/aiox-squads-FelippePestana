@@ -468,4 +468,4 @@ roadmap:
       stack: "Pacote Node.js separado para deployments onde operator-panel não roda no mesmo host do TouchOSC"
     - phase: "F11"
       name: "Validação em hardware real + Supabase production"
-      stack: "Executar tasks/* contra 4 câmeras + OBS + Meet reais (projeto Supabase já provisionado em hlwdnwqcctslwjlzhfsz com migrations aplicadas)"
+      stack: "Executar tasks/* contra 4 câmeras + OBS + Meet reais (projeto Supabase de produção já provisionado com migrations aplicadas; URL/keys em .env.local)"
