@@ -39,7 +39,7 @@ A Ticket And Go **não oferece API pública**. A única forma de integração de
 
 O **sistema Legendários TOP** é uma plataforma web operacional que digitaliza e integra todo o ciclo de vida do participante em um evento TOP:
 
-```
+```text
 ANTES DO EVENTO              NO EVENTO                 DURANTE O EVENTO
 ────────────────────         ────────────────────       ────────────────────
 Inscrição (Ticket And Go)    Credenciamento NFC         Atendimento médico
@@ -249,7 +249,8 @@ Aceita arquivo `.xlsx` exportado do painel Ticket And Go. Realiza **upsert** de 
 6. Quando online: sincronização automática com Supabase
 
 **Dados gravados na TAG NFC**:
-```
+
+```text
 id, nome, tipo_sanguineo, plano_saude, risco,
 imc, peso, altura, comorbidades, status, telefone
 ```
@@ -304,6 +305,7 @@ Visão geral de todos os participantes com:
 **Rota**: `/hakuna/senderistas/{id}/mensagens` — Visualização Hakuna
 
 **Tipos de mensagem aceitos**:
+
 | Tipo | Formato | Tamanho máx. |
 |------|---------|-------------|
 | Carta | Texto (5.000 chars) | — |
