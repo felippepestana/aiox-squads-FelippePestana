@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   typedRoutes: false,
+  // Keep document parsers out of the bundler so they run with their native
+  // module resolution in the Node serverless runtime.
+  serverExternalPackages: ["unpdf", "mammoth"],
   images: {
     domains: ["localhost", "supabase.co"],
   },
