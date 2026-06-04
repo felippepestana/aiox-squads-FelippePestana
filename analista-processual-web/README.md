@@ -21,9 +21,10 @@ Limitações conhecidas (modo demo):
 
 - **Autenticação ainda não habilitada** — as análises são atribuídas a um perfil
   demo (`demo@analista-processual.local`), criado automaticamente.
-- **Extração de texto** cobre arquivos textuais (`.txt`, `.md`, `.csv`, `.json`,
-  etc.). PDF/DOCX/imagens são armazenados, mas exigem parser/OCR dedicado (a
-  análise informa quais documentos não tiveram texto extraível).
+- **Extração de texto** cobre formatos textuais (`.txt`, `.md`, `.csv`, `.json`,
+  etc.), **PDF** (via `unpdf`) e **DOCX** (via `mammoth`). Formatos legados
+  (`.doc`) e imagens exigem OCR e não são extraídos (a análise informa quais
+  documentos não tiveram texto extraível).
 - **Biblioteca de jurisprudência** ainda é placeholder.
 - O processamento é executado de forma síncrona na rota `/api/analyses/[id]/process`
   (sem fila/worker dedicado).
@@ -85,6 +86,33 @@ npm run dev
 > análise execute. Sem provedor configurado, a análise é marcada como `FAILED`
 > com uma mensagem explicativa (a aplicação não quebra).
 
+### Desenvolvimento local no macOS (passo a passo)
+
+Pré-requisitos: Node 20+ e Docker Desktop.
+
+```bash
+# 1. Subir um Postgres local (Docker Desktop)
+docker compose up -d
+
+# 2. Variáveis de ambiente
+cp .env.example .env.local
+# Em .env.local, defina:
+#   DATABASE_URL="postgresql://analista:analista@localhost:5432/analista_processual"
+#   OPENAI_API_KEY="sk-..."
+
+# 3. Instalar e preparar o banco
+npm install
+npm run db:push
+npm run db:seed
+
+# 4. Rodar
+npm run dev   # http://localhost:3000
+```
+
+Teste o fluxo: **Dashboard → Nova Análise**, envie um `.txt`/`.pdf`/`.docx` e
+acompanhe o resultado (resumo, partes, prazos e riscos). Para encerrar o banco:
+`docker compose down` (use `-v` para apagar os dados).
+
 ## Deploy
 
 ### Hostinger VPS
@@ -111,11 +139,11 @@ Veja o guia completo em [`../docs/deploy/vercel.md`](../docs/deploy/vercel.md), 
 - [x] Configuração de banco de dados (Prisma)
 - [x] LLM Gateway com seleção de modelo ciente do provedor
 - [x] Agentes implementados (Navegador, Extrator, Calculador, Mapeador, Chief)
-- [x] Upload de documentos + extração de texto (formatos textuais)
+- [x] Upload de documentos + extração de texto (texto, PDF e DOCX)
 - [x] Fluxo de análise ponta-a-ponta (criar → processar → visualizar)
 - [x] Dashboard e listagem com dados reais
 - [ ] Autenticação (Supabase) — substituir o perfil demo
-- [ ] Extração de PDF/DOCX (parser/OCR)
+- [ ] OCR para `.doc` legado e imagens
 - [ ] Biblioteca de jurisprudência (busca semântica)
 - [ ] Fila/worker dedicado para processamento assíncrono
 
