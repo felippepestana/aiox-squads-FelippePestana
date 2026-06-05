@@ -72,6 +72,7 @@ description: >-
 - `ANTHROPIC_API_KEY` — análise
 - `GOOGLE_API_KEY` ou `GEMINI_API_KEY` — geração
 - `MURAL_GEMINI_MODEL` — opcional
+- `MURAL_DEMO_MODE=1` — modo offline: análise sintética + pôster SVG do brief (sem chaves)
 
 ## Multi-agente
 

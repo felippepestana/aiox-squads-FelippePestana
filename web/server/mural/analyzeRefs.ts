@@ -1,6 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { MuralComposeRequest, ReferenceAnalysis } from "./types.js";
 import { isImageRole } from "./types.js";
+import { isMuralDemoMode, synthesizeAnalyses } from "./demo.js";
 
 function stripDataUrl(b64: string): string {
   const idx = b64.indexOf(",");
@@ -20,15 +21,22 @@ function roleLabel(role: string): string {
 }
 
 export async function analyzeReferences(
-  anthropic: Anthropic,
+  anthropic: Anthropic | null,
   request: MuralComposeRequest
 ): Promise<ReferenceAnalysis[]> {
-  const results: ReferenceAnalysis[] = [];
-
   for (const ref of request.references) {
     if (!isImageRole(ref.role)) {
       throw new Error(`Papel inválido: ${ref.role}`);
     }
+  }
+
+  if (!anthropic || isMuralDemoMode()) {
+    return synthesizeAnalyses(request);
+  }
+
+  const results: ReferenceAnalysis[] = [];
+
+  for (const ref of request.references) {
     const mediaType = ref.mimeType.startsWith("image/")
       ? (ref.mimeType as "image/jpeg" | "image/png" | "image/gif" | "image/webp")
       : "image/jpeg";

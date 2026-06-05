@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI, type Part } from "@google/generative-ai";
 import type { MuralBrief, MuralReferenceInput } from "./types.js";
+import { buildDemoSvg, isMuralDemoMode } from "./demo.js";
 
 function getGeminiApiKey(): string {
   const key =
@@ -74,6 +75,19 @@ export async function generateMuralImages(
   references: MuralReferenceInput[],
   variantCount: number
 ): Promise<Array<{ buffer: Buffer; mimeType: string }>> {
+  const count = Math.min(Math.max(variantCount, 1), 4);
+
+  if (isMuralDemoMode()) {
+    const demo: Array<{ buffer: Buffer; mimeType: string }> = [];
+    for (let i = 0; i < count; i++) {
+      demo.push({
+        buffer: buildDemoSvg(brief, references, i, count),
+        mimeType: "image/svg+xml",
+      });
+    }
+    return demo;
+  }
+
   const genAI = new GoogleGenerativeAI(getGeminiApiKey());
   const model = genAI.getGenerativeModel({
     model: geminiModelName(),
@@ -84,7 +98,6 @@ export async function generateMuralImages(
   });
 
   const parts = buildParts(brief, references);
-  const count = Math.min(Math.max(variantCount, 1), 4);
   const all: Array<{ buffer: Buffer; mimeType: string }> = [];
 
   for (let i = 0; i < count; i++) {

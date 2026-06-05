@@ -20,13 +20,14 @@ import type {
 } from "./types.js";
 
 function extForMime(mime: string): string {
+  if (mime.includes("svg")) return "svg";
   if (mime.includes("jpeg") || mime.includes("jpg")) return "jpg";
   if (mime.includes("webp")) return "webp";
   return "png";
 }
 
 export async function runAnalyzePipeline(
-  anthropic: Anthropic,
+  anthropic: Anthropic | null,
   request: MuralComposeRequest
 ): Promise<{ brief: MuralBrief; analyses: ReferenceAnalysis[] }> {
   const err = validateComposeRequest(request);
@@ -38,7 +39,7 @@ export async function runAnalyzePipeline(
 }
 
 export async function runComposePipeline(
-  anthropic: Anthropic,
+  anthropic: Anthropic | null,
   request: MuralComposeRequest,
   existingJobId?: string
 ): Promise<MuralJob> {
@@ -127,7 +128,7 @@ export async function runComposePipeline(
 }
 
 export async function runComposeAsync(
-  anthropic: Anthropic,
+  anthropic: Anthropic | null,
   request: MuralComposeRequest
 ): Promise<MuralJob> {
   const job = createJob();

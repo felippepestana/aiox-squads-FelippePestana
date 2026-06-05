@@ -4,6 +4,7 @@ import type { RateLimitRequestHandler } from "express-rate-limit";
 import { getJob } from "./jobs.js";
 import { runAnalyzePipeline, runComposePipeline, runComposeAsync } from "./pipeline.js";
 import { assetExists, readJobAsset } from "./storage.js";
+import { isMuralDemoMode } from "./demo.js";
 import type { MuralComposeRequest } from "./types.js";
 
 type AsyncHandler = (
@@ -47,13 +48,25 @@ export function registerMuralRoutes(
     ? ((_req: Request, _res: Response, next: NextFunction) => next()) as RateLimitRequestHandler
     : deps.heavyLimiter;
 
+  // In demo mode (no ANTHROPIC key) analysis is synthetic, so skip the client.
+  const anthropicOrNull = (): Anthropic | null => {
+    if (isMuralDemoMode() && !process.env.ANTHROPIC_API_KEY?.trim()) {
+      return null;
+    }
+    try {
+      return deps.getAnthropic();
+    } catch {
+      return null;
+    }
+  };
+
   app.post(
     "/api/mural/analyze",
     limit,
     asyncHandler(async (req, res) => {
       const request = parseComposeBody(req.body);
       const { brief, analyses } = await runAnalyzePipeline(
-        deps.getAnthropic(),
+        anthropicOrNull(),
         request
       );
       res.json({ brief, analyses });
@@ -69,12 +82,12 @@ export function registerMuralRoutes(
         req.query.async === "1" || req.query.async === "true";
 
       if (asyncMode) {
-        const job = await runComposeAsync(deps.getAnthropic(), request);
+        const job = await runComposeAsync(anthropicOrNull(), request);
         res.status(202).json({ jobId: job.id, status: job.status });
         return;
       }
 
-      const job = await runComposePipeline(deps.getAnthropic(), request);
+      const job = await runComposePipeline(anthropicOrNull(), request);
       res.json(job);
     })
   );
@@ -120,7 +133,9 @@ export function registerMuralRoutes(
           ? "image/jpeg"
           : ext === "webp"
             ? "image/webp"
-            : "image/png";
+            : ext === "svg"
+              ? "image/svg+xml"
+              : "image/png";
       res.setHeader("Content-Type", mime);
       res.setHeader("Cache-Control", "private, max-age=3600");
       res.send(buf);

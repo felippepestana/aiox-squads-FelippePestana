@@ -29,6 +29,20 @@ Comandos: `*mural-compor`, `*mural-analisar`, `*mural-serie`
 | `GOOGLE_API_KEY` ou `GEMINI_API_KEY` | Geração de imagem (Gemini) |
 | `MURAL_GEMINI_MODEL` | Modelo (padrão: `gemini-2.0-flash-preview-image-generation`) |
 | `MURAL_OUTPUT_DIR` | Pasta de saída (padrão: `web/data/mural-output`) |
+| `MURAL_DEMO_MODE` | `1` força modo demo offline (sem chaves); auto-ativado quando não há chave Gemini |
+
+## Modo demo (sem chaves)
+
+Quando nenhuma chave de geração está configurada (ou `MURAL_DEMO_MODE=1`), o pipeline
+roda totalmente offline: as referências recebem análise sintética por papel e a saída
+é um pôster SVG real do brief (prompt, identity lock, cena e papéis). Útil para
+demonstração, testes e CI sem custo de API.
+
+```bash
+cd web
+MURAL_DEMO_MODE=1 npm run dev:server   # em um terminal
+MURAL_DEMO_MODE=1 npm run test:smoke:mural  # valida geração funcional
+```
 
 ## API (portal web)
 

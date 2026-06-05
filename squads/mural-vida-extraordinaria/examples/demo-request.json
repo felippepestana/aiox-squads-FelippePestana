@@ -1,0 +1,10 @@
+{
+  "prompt": "Inserir a identidade da pessoa da referência X em um corpo atlético correndo na praia ao amanhecer, estilo documental com luz dourada",
+  "references": [
+    { "id": "x", "role": "identity", "mimeType": "image/png", "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==" },
+    { "id": "y", "role": "environment", "mimeType": "image/png", "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==" },
+    { "id": "w", "role": "activity", "mimeType": "image/png", "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==" },
+    { "id": "z", "role": "body_pose", "mimeType": "image/png", "dataBase64": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==" }
+  ],
+  "options": { "variants": 2 }
+}

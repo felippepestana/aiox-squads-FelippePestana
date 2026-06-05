@@ -65,6 +65,47 @@ async function main() {
   }
   console.log("ok /api/mural/jobs/:id (404)");
 
+  // Functional compose check: in demo mode (no AI keys) this returns a real asset.
+  const demoMode =
+    process.env.MURAL_DEMO_MODE === "1" ||
+    process.env.MURAL_DEMO_MODE === "true" ||
+    (!process.env.GOOGLE_API_KEY && !process.env.GEMINI_API_KEY);
+  if (demoMode) {
+    const pixel =
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
+    const compose = await fetch(`${base}/api/mural/compose`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        prompt: "Smoke demo: identidade na praia ao amanhecer",
+        references: [
+          { id: "x", role: "identity", mimeType: "image/png", dataBase64: pixel },
+          { id: "y", role: "environment", mimeType: "image/png", dataBase64: pixel },
+        ],
+        options: { variants: 1 },
+      }),
+    });
+    if (!compose.ok) {
+      console.error(`compose demo: HTTP ${compose.status} ${await compose.text()}`);
+      process.exit(1);
+    }
+    const job = await compose.json();
+    if (job.status !== "completed" || !job.assets?.length) {
+      console.error(`compose demo: status=${job.status} assets=${job.assets?.length}`);
+      process.exit(1);
+    }
+    const asset = await fetch(`${base}${job.assets[0].url}`, {
+      headers: portalKey ? { "X-Portal-Key": portalKey } : {},
+    });
+    if (!asset.ok) {
+      console.error(`asset demo: HTTP ${asset.status}`);
+      process.exit(1);
+    }
+    console.log(`ok /api/mural/compose (demo) gerou ${job.assets.length} asset(s)`);
+  } else {
+    console.log("skip compose funcional (chaves de IA presentes; evita custo)");
+  }
+
   const squads = await fetch(`${base}/api/squads`, {
     headers: portalKey ? { "X-Portal-Key": portalKey } : {},
   });
