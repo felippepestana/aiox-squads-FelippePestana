@@ -1,0 +1,38 @@
+name: profiler-dna
+display_name: "Profiler-DNA — Inteligência Comportamental"
+version: "0.1.0"
+domain: behavioral-intelligence
+entry_agent: profiler-dna-chief
+description: "Motor de inteligência comportamental transversal. Mapeia estilos de trabalho (DISC), traços (Big Five) e fornece contexto de desenvolvimento (Eneagrama) para outros módulos, sempre como contexto — nunca como decisão."
+
+keywords:
+  - disc
+  - big five
+  - eneagrama
+  - perfil comportamental
+  - fit cultural
+  - inteligência comportamental
+
+metadata:
+  type: module
+  status: DEVELOPING
+  platform: apex-talent
+
+tier_structure:
+  tier_0:
+    role: "Module Orchestration"
+    agents: ["profiler-dna-chief"]
+
+workflow:
+  primary: "module intake (skeleton)"
+  phases:
+    - "Phase 1: INTAKE - Understand the need within this module's domain"
+    - "Phase 2: SCOPE - Define the specialist flow to build next"
+
+entry_points:
+  intake: "*map-profile"
+
+workspace_integration:
+  level: none
+  rationale: >-
+    Modulo profiler-dna em desenvolvimento (esqueleto). O Chief faz intake e escopo; ainda nao consome nem produz artefatos no workspace/.

@@ -1,0 +1,39 @@
+name: insights
+display_name: "Insights — People Analytics"
+version: "0.1.0"
+domain: people-analytics
+entry_agent: insights-chief
+description: "People analytics que cruza todos os módulos: dashboards (headcount, turnover, absenteísmo, custo), turnover preditivo, risco de burnout, diversidade e narrativas executivas."
+
+keywords:
+  - people analytics
+  - turnover preditivo
+  - headcount
+  - burnout
+  - diversidade
+  - dashboard
+  - rh preditivo
+
+metadata:
+  type: module
+  status: DEVELOPING
+  platform: apex-talent
+
+tier_structure:
+  tier_0:
+    role: "Module Orchestration"
+    agents: ["insights-chief"]
+
+workflow:
+  primary: "module intake (skeleton)"
+  phases:
+    - "Phase 1: INTAKE - Understand the need within this module's domain"
+    - "Phase 2: SCOPE - Define the specialist flow to build next"
+
+entry_points:
+  intake: "*dashboard"
+
+workspace_integration:
+  level: none
+  rationale: >-
+    Modulo insights em desenvolvimento (esqueleto). O Chief faz intake e escopo; ainda nao consome nem produz artefatos no workspace/.
