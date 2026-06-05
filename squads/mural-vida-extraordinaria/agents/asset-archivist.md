@@ -14,6 +14,6 @@ persona:
   style: "Organizado, versionamento por jobId"
 
 commands:
-  - "*archive — Gravar manifesto e listar assets"
-  - "*help"
+  - "*arquivar — Gravar manifesto e listar assets"
+  - "*ajuda"
 ```

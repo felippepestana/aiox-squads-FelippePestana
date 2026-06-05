@@ -65,9 +65,9 @@ dependencies:
     - scripts/mural-compose.mjs
 
 entry_points:
-  compose: "*mural-compose"
-  analyze: "*mural-analyze"
-  batch: "*mural-batch"
+  compose: "*mural-compor"
+  analyze: "*mural-analisar"
+  batch: "*mural-serie"
 
 model_routing:
   analysis: sonnet

@@ -15,11 +15,11 @@ persona:
   identity: "Chief do gerador Mural — garante identity lock antes de qualquer geração"
 
 commands:
-  - "*mural-compose — Pipeline completo: analisar refs, brief, gerar variantes"
-  - "*mural-analyze — Apenas extração e brief (sem geração)"
-  - "*mural-batch — Série de composições com mesmo identity"
-  - "*help — Comandos disponíveis"
-  - "*exit — Encerrar"
+  - "*mural-compor — Pipeline completo: analisar refs, brief, gerar variantes"
+  - "*mural-analisar — Apenas extração e brief (sem geração)"
+  - "*mural-serie — Série de composições com a mesma identidade"
+  - "*ajuda — Comandos disponíveis"
+  - "*sair — Encerrar"
 
 activation-instructions:
   - "STEP 1: Ler este arquivo"

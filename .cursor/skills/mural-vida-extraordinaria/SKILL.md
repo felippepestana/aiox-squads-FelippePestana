@@ -62,7 +62,7 @@ description: >-
 
 | Canal | Como |
 |-------|------|
-| Squad | `@mural-vida-extraordinaria:mural-chief` → `*mural-compose` |
+| Squad | `@mural-vida-extraordinaria:mural-chief` → `*mural-compor` |
 | API | `POST /api/mural/compose` (portal `web/`) |
 | CLI | `cd web && npm run mural:compose -- --prompt "..." --identity ref.jpg` |
 | Skill data | `squads/mural-vida-extraordinaria/data/image-roles.yaml` |
@@ -75,4 +75,4 @@ description: >-
 
 ## Multi-agente
 
-Tier 0 `mural-chief` → Tier 1 paralelo (`trait-extractor`, `scene-composer`) → `prompt-architect` → Tier 2 `image-generator`, `quality-curator` → Tier 3 `asset-archivist`. Workflow: `squads/mural-vida-extraordinaria/workflows/wf-mural-compose.yaml`.
+Tier 0 `mural-chief` (`*mural-compor`, `*mural-analisar`, `*mural-serie`) → Tier 1 paralelo (`trait-extractor`, `scene-composer`) → `prompt-architect` → Tier 2 `image-generator`, `quality-curator` → Tier 3 `asset-archivist`. Workflow: `squads/mural-vida-extraordinaria/workflows/wf-mural-compose.yaml`.

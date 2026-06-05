@@ -22,6 +22,6 @@ scope:
     - "Gerar pixels (image-generator)"
 
 commands:
-  - "*extract-identity — Analisar refs identity"
-  - "*help"
+  - "*extrair-identidade — Analisar refs identity"
+  - "*ajuda"
 ```

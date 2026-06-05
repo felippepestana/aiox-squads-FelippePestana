@@ -20,6 +20,6 @@ scope:
     - "Alterar identidade (trait-extractor)"
 
 commands:
-  - "*compose-scene — Sintetizar cena das refs não-identity"
-  - "*help"
+  - "*compor-cena — Sintetizar cena das refs não-identity"
+  - "*ajuda"
 ```

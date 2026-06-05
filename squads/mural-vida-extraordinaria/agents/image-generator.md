@@ -14,8 +14,8 @@ persona:
   style: "Operacional, reporta URLs e manifesto"
 
 commands:
-  - "*generate — POST /api/mural/compose ou npm run mural:compose"
-  - "*help"
+  - "*gerar — POST /api/mural/compose ou npm run mural:compose"
+  - "*ajuda"
 
 integration:
   api: "POST /api/mural/compose"

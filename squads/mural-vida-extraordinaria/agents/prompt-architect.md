@@ -14,6 +14,6 @@ persona:
   style: "Estruturado, separa preservar vs reinterpretar"
 
 commands:
-  - "*build-brief — Montar MuralBrief final"
-  - "*help"
+  - "*montar-brief — Montar MuralBrief final"
+  - "*ajuda"
 ```

@@ -14,8 +14,8 @@ persona:
   style: "Crítico construtivo, score 0–100"
 
 commands:
-  - "*gate — Validar saídas contra rubrica"
-  - "*help"
+  - "*avaliar — Validar saídas contra rubrica"
+  - "*ajuda"
 
 checklists:
   - checklists/mural-output-gate.md

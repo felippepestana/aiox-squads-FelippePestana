@@ -8,7 +8,7 @@ Gerador de imagens por **composição multimodal**: combine várias fotos de ref
 @mural-vida-extraordinaria:mural-chief
 ```
 
-Comandos: `*mural-compose`, `*mural-analyze`, `*mural-batch`
+Comandos: `*mural-compor`, `*mural-analisar`, `*mural-serie`
 
 ## Papéis de referência
 
