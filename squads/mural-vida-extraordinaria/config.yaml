@@ -1,0 +1,75 @@
+squad:
+  name: mural-vida-extraordinaria
+  icon: "🖼️"
+  title: "Mural Da Vida Extraordinária"
+  version: "1.0.0"
+  status: active
+  description: >-
+    Gerador de imagens por composição multimodal: combina referências com papéis
+    (identidade, ambiente, atividade, pose, estilo) e um prompt para criar cenas
+    da vida extraordinária.
+  author: AIOX Community
+  entry_agent: mural-chief
+  slashPrefix: muralVida
+
+domain: creative-image-composition
+keywords:
+  - image-generation
+  - multimodal
+  - mural
+  - identity-transfer
+  - reference-composition
+
+workspace_integration:
+  level: read_write
+  rationale: "Lê referências do workspace e grava manifestos e saídas em mural-output"
+  read_paths:
+    - workspace/
+    - web/data/mural-output/
+  write_paths:
+    - web/data/mural-output/
+  template_namespace: mural
+
+architecture:
+  tiers:
+    tier_0:
+      name: Orchestration
+      agents:
+        - mural-chief
+    tier_1:
+      name: Analysis and Brief
+      agents:
+        - trait-extractor
+        - scene-composer
+        - prompt-architect
+    tier_2:
+      name: Generation and QA
+      agents:
+        - image-generator
+        - quality-curator
+    tier_3:
+      name: Support
+      agents:
+        - asset-archivist
+  orchestrator:
+    agents:
+      - mural-chief
+
+dependencies:
+  apis:
+    - name: Google Gemini
+      env: GOOGLE_API_KEY
+    - name: Anthropic
+      env: ANTHROPIC_API_KEY
+  scripts:
+    - scripts/mural-compose.mjs
+
+entry_points:
+  compose: "*mural-compose"
+  analyze: "*mural-analyze"
+  batch: "*mural-batch"
+
+model_routing:
+  analysis: sonnet
+  generation: gemini-image
+  orchestration: opus

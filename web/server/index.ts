@@ -22,6 +22,7 @@ import {
   mimeForExtension,
   type UploadedFile,
 } from "./files.js";
+import { registerMuralRoutes } from "./mural/routes.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -187,6 +188,14 @@ app.get("/api/auth/status", (_req, res) => {
 app.get("/api/squads", (_req, res) => {
   const squads = loadAllSquads();
   res.json(squadsSummary(squads));
+});
+
+registerMuralRoutes(app, {
+  getAnthropic,
+  heavyLimiter: rateLimitDisabled
+    ? ((_req, _res, next) => next()) as typeof heavyLimiter
+    : heavyLimiter,
+  rateLimitDisabled,
 });
 
 app.post(

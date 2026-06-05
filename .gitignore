@@ -7,6 +7,7 @@ chatbot/dist/
 web/node_modules/
 web/dist/
 web/hint-report/
+web/data/mural-output/
 web/.env
 web/worker/*.js
 .env

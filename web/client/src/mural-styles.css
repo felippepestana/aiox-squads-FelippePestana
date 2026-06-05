@@ -1,0 +1,83 @@
+.mural-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1rem 1.25rem;
+  overflow: auto;
+  gap: 1rem;
+}
+
+.mural-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.mural-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.mural-ref-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mural-ref-row {
+  display: grid;
+  grid-template-columns: 1fr 140px  auto;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.5rem;
+  border: 1px solid var(--border, #333);
+  border-radius: 8px;
+}
+
+.mural-ref-row img {
+  max-height: 64px;
+  max-width: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.mural-prompt {
+  width: 100%;
+  min-height: 80px;
+  resize: vertical;
+  font: inherit;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border, #333);
+  background: var(--input-bg, #1a1a1a);
+  color: inherit;
+}
+
+.mural-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.mural-gallery img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border, #333);
+}
+
+.mural-status {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.mural-error {
+  color: #f87171;
+}
+
+.mural-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}

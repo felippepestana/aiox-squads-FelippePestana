@@ -8,6 +8,7 @@ import {
   useState,
 } from "react";
 import { PericiaView } from "./PericiaView";
+import { MuralView } from "./MuralView";
 import {
   chatStream,
   clearPortalKey,
@@ -61,6 +62,7 @@ export function App() {
   const [squads, setSquads] = useState<SquadSummary[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [showPericia, setShowPericia] = useState(false);
+  const [showMural, setShowMural] = useState(false);
   const [squadId, setSquadId] = useState("");
   const [agentId, setAgentId] = useState("");
   const [agentSearch, setAgentSearch] = useState("");
@@ -624,11 +626,24 @@ export function App() {
             ))}
           </select>
         </div>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => {
+            setShowPericia(false);
+            setShowMural(true);
+          }}
+        >
+          Mural Da Vida Extraordinária
+        </button>
         {squadId === "iphone-judicial-assessment" && (
           <button
             type="button"
-            className="btn btn-primary"
-            onClick={() => setShowPericia(true)}
+            className="btn btn-ghost"
+            onClick={() => {
+              setShowMural(false);
+              setShowPericia(true);
+            }}
           >
             Formulario Pericial
           </button>
@@ -742,7 +757,15 @@ export function App() {
         {showPericia ? (
           <PericiaView onClose={() => setShowPericia(false)} />
         ) : null}
-        <div className="messages" style={showPericia ? { display: "none" } : undefined}>
+        {showMural ? (
+          <MuralView onClose={() => setShowMural(false)} />
+        ) : null}
+        <div
+          className="messages"
+          style={
+            showPericia || showMural ? { display: "none" } : undefined
+          }
+        >
           {!sessionId && (
             <p className="loading">
               Escolha squad e agente e clique em <strong>Iniciar sessão</strong>
@@ -816,7 +839,10 @@ export function App() {
           <div ref={messagesEndRef} aria-hidden />
         </div>
 
-        <div className="composer" style={showPericia ? { display: "none" } : undefined}>
+        <div
+          className="composer"
+          style={showPericia || showMural ? { display: "none" } : undefined}
+        >
           {error ? <div className="error-banner">{error}</div> : null}
           {sessionId ? (
             <>

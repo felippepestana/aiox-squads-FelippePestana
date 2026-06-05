@@ -1,0 +1,19 @@
+quality_rubric:
+  identity_fidelity:
+    weight: 40
+    checks:
+      - "Rosto e traços reconhecíveis em relação à ref identity"
+      - "Sem alteração não solicitada de etnia, idade ou gênero aparente"
+  scene_coherence:
+    weight: 30
+    checks:
+      - "Ambiente alinhado às refs environment/location"
+      - "Atividade visível e coerente com refs activity/body_pose"
+  technical_quality:
+    weight: 30
+    checks:
+      - "Sem membros duplicados ou deformados"
+      - "Sem texto ilegível ou watermark"
+      - "Iluminação consistente"
+
+pass_threshold: 70

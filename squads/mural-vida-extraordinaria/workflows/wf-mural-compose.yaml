@@ -1,0 +1,57 @@
+workflow:
+  id: wf-mural-compose
+  name: "Mural Compose Pipeline"
+  version: "1.0"
+  orchestrator: mural-chief
+  squad: mural-vida-extraordinaria
+  description: "Composição multimodal com análise paralela, geração e QA"
+
+phases:
+  - id: PHASE-1
+    name: Intake
+    agent: mural-chief
+    tier: 0
+    execution_mode: SEQUENTIAL
+    tasks:
+      - mural-compose.md
+    checkpoint:
+      - "identity ref presente"
+      - "prompt não vazio"
+
+  - id: PHASE-2
+    name: Analysis
+    tier: 1
+    execution_mode: PARALLEL
+    agents:
+      - trait-extractor
+      - scene-composer
+    checkpoint:
+      - "analyses por ref"
+
+  - id: PHASE-3
+    name: Brief
+    agent: prompt-architect
+    tier: 1
+    checkpoint:
+      - "generation_prompt completo"
+
+  - id: PHASE-4
+    name: Generation
+    agent: image-generator
+    tier: 2
+    checkpoint:
+      - "≥1 asset gerado"
+
+  - id: PHASE-5
+    name: Quality Gate
+    agent: quality-curator
+    tier: 2
+    retry_max: 2
+    checklist: checklists/mural-output-gate.md
+
+  - id: PHASE-6
+    name: Archive
+    agent: asset-archivist
+    tier: 3
+    checkpoint:
+      - "manifest.json gravado"

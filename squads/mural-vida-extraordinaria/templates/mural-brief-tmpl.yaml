@@ -1,0 +1,10 @@
+brief:
+  user_prompt: "{USER_PROMPT}"
+  identity_lock: []
+  scene_spec: ""
+  generation_prompt: ""
+  negative_constraints:
+    - "Sem distorção facial"
+    - "Sem texto watermark"
+  quality_checks: []
+  reference_analyses: []
