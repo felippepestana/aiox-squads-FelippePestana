@@ -63,3 +63,11 @@ cd chatbot && npx tsc
 
 - `ANTHROPIC_API_KEY` — required for `web/` and `chatbot/` chat functionality
 - `OPENAI_API_KEY` — required for `analista-processual-web/` (optional for other services)
+- `GOOGLE_API_KEY` or `GEMINI_API_KEY` — required for **Mural Da Vida Extraordinária** image generation (`POST /api/mural/compose`)
+
+### Mural Da Vida Extraordinária
+
+- Squad: `squads/mural-vida-extraordinaria/` — entry `@mural-vida-extraordinaria:mural-chief`
+- Portal UI: sidebar button **Mural Da Vida Extraordinária**
+- CLI: `cd web && npm run mural:compose -- --prompt "..." --identity ./ref.jpg`
+- Smoke: `npm run test:smoke:mural` (server must be running)

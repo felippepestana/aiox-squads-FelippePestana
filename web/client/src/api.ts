@@ -150,6 +150,94 @@ type StreamEvent =
   | { type: "done" }
   | { type: "error"; message: string };
 
+export type ImageRole =
+  | "identity"
+  | "environment"
+  | "activity"
+  | "body_pose"
+  | "style"
+  | "location";
+
+export interface MuralReferencePayload {
+  id: string;
+  role: ImageRole;
+  mimeType: string;
+  dataBase64: string;
+}
+
+export interface MuralBrief {
+  userPrompt: string;
+  identityLock: string[];
+  sceneSpec: string;
+  generationPrompt: string;
+  negativeConstraints: string[];
+  qualityChecks: string[];
+}
+
+export interface MuralGeneratedAsset {
+  filename: string;
+  url: string;
+  variantIndex: number;
+}
+
+export interface MuralJob {
+  id: string;
+  status: string;
+  error?: string;
+  brief?: MuralBrief;
+  assets: MuralGeneratedAsset[];
+}
+
+export async function muralCompose(
+  body: {
+    prompt: string;
+    references: MuralReferencePayload[];
+    options?: { variants?: number };
+  },
+  opts?: { async?: boolean }
+): Promise<MuralJob | { jobId: string; status: string }> {
+  const q = opts?.async ? "?async=1" : "";
+  const r = await fetch(`/api/mural/compose${q}`, {
+    method: "POST",
+    headers: portalHeaders(true),
+    body: JSON.stringify(body),
+  });
+  if (!r.ok) {
+    const j = await r.json().catch(() => ({}));
+    throw new Error((j as { error?: string }).error ?? (await r.text()));
+  }
+  return r.json();
+}
+
+export async function muralFetchJob(jobId: string): Promise<MuralJob> {
+  const r = await fetch(`/api/mural/jobs/${jobId}`, {
+    headers: portalHeaders(false),
+  });
+  if (!r.ok) {
+    const j = await r.json().catch(() => ({}));
+    throw new Error((j as { error?: string }).error ?? (await r.text()));
+  }
+  return r.json();
+}
+
+export async function muralPollJob(
+  jobId: string,
+  onTick?: (job: MuralJob) => void
+): Promise<MuralJob> {
+  for (let i = 0; i < 120; i++) {
+    const job = await muralFetchJob(jobId);
+    onTick?.(job);
+    if (job.status === "completed" || job.status === "failed") {
+      if (job.status === "failed") {
+        throw new Error(job.error ?? "Job falhou");
+      }
+      return job;
+    }
+    await new Promise((r) => setTimeout(r, 2000));
+  }
+  throw new Error("Timeout aguardando geração");
+}
+
 export async function chatStream(
   sessionId: string,
   text: string,

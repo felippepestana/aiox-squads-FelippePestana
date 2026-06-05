@@ -11,10 +11,13 @@
     "start": "node dist/server/index.js",
     "preview": "vite preview --config client/vite.config.ts",
     "test:smoke": "node scripts/smoke-api.mjs",
+    "test:smoke:mural": "node scripts/smoke-mural.mjs",
+    "mural:compose": "node ../squads/mural-vida-extraordinaria/scripts/mural-compose.mjs",
     "lint:webhint": "hint ."
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.54.0",
+    "@google/generative-ai": "^0.24.1",
     "@sentry/node": "^10.46.0",
     "@sentry/react": "^10.46.0",
     "cors": "^2.8.5",

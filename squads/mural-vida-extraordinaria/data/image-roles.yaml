@@ -1,0 +1,26 @@
+# Papéis de referência — Mural Da Vida Extraordinária
+roles:
+  identity:
+    label: Identidade
+    description: Traços pessoais, rosto, expressão, características que devem ser preservadas
+    required_for_compose: true
+  environment:
+    label: Ambiente
+    description: Cenário, clima, hora do dia, elementos de fundo
+  activity:
+    label: Atividade
+    description: Ação, esporte, profissão, contexto de movimento
+  body_pose:
+    label: Corpo e pose
+    description: Silhueta, postura, físico, roupa de atividade
+  style:
+    label: Estilo visual
+    description: Paleta, iluminação, grão, estética fotográfica
+  location:
+    label: Local
+    description: Geografia, arquitetura, paisagem reconhecível
+
+compose_rules:
+  min_references: 1
+  require_identity: true
+  max_variants: 4
