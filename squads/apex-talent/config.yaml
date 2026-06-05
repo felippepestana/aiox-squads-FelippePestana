@@ -1,0 +1,56 @@
+name: apex-talent
+display_name: "Apex-Talent — Plataforma de Gestão de Pessoas AI-Native"
+version: "1.0.0"
+domain: human-resources
+entry_agent: apex-talent-chief
+description: "Plataforma guarda-chuva de RH/People AI-native. Orquestra módulos especializados (R&S, comportamental, desempenho, clima, DP/folha, ponto, onboarding, treinamento, people analytics, cargos & salários, benefícios), cada um como um squad AIOX. Roteia o usuário ao módulo certo e consolida visões cross-módulo."
+
+keywords:
+  - human resources
+  - people management
+  - recrutamento e seleção
+  - gestão de desempenho
+  - clima organizacional
+  - departamento pessoal
+  - people analytics
+  - hris
+  - gestão de talentos
+  - rh ai-native
+
+metadata:
+  type: platform
+  status: ACTIVE
+  modules:
+    - { squad: "talent-compass", area: "Recrutamento & Seleção + Entrevistas", status: ACTIVE }
+    - { squad: "profiler-dna", area: "Inteligência Comportamental", status: DEVELOPING }
+    - { squad: "performa", area: "Gestão de Desempenho", status: DEVELOPING }
+    - { squad: "pulse", area: "Clima & Engajamento", status: DEVELOPING }
+    - { squad: "peopleops", area: "Departamento Pessoal & Folha", status: DEVELOPING }
+    - { squad: "chronos", area: "Controle de Ponto", status: DEVELOPING }
+    - { squad: "onboard", area: "Onboarding & Integração", status: DEVELOPING }
+    - { squad: "academy", area: "Treinamento & Desenvolvimento", status: DEVELOPING }
+    - { squad: "insights", area: "People Analytics", status: DEVELOPING }
+    - { squad: "org-architect", area: "Cargos, Salários & Org Design", status: DEVELOPING }
+    - { squad: "benefits-hub", area: "Benefícios", status: DEVELOPING }
+
+tier_structure:
+  tier_0:
+    role: "Platform Orchestration"
+    agents: ["apex-talent-chief"]
+
+workflow:
+  primary: "module routing"
+  phases:
+    - "Phase 1: INTAKE - Entender a necessidade de RH do usuário"
+    - "Phase 2: ROUTE - Encaminhar ao módulo (squad) responsável"
+    - "Phase 3: SYNTHESIZE - Consolidar resultados cross-módulo quando aplicável"
+
+entry_points:
+  catalog: "*catalog"
+  route: "*route"
+  roadmap: "*roadmap"
+
+workspace_integration:
+  level: none
+  rationale: >-
+    O apex-talent e um orquestrador de plataforma. Roteia entre modulos (squads) e nao consome nem produz artefatos diretamente no workspace/.
