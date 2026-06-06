@@ -5,11 +5,22 @@ Plataforma web de análise processual jurídica brasileira potenciada por multia
 ## Stack
 
 - **Frontend:** Next.js 15 (App Router), React 19, TypeScript 5
-- **Styling:** Tailwind CSS 3, componentes estilo shadcn/ui (Radix)
+- **Design System:** [`@aiox/design-system`](../packages/design-system) — pacote
+  reutilizável (tokens + primitivos Radix + componentes de agente), consumido via
+  npm workspace + `transpilePackages`. Inclui modo claro/escuro.
 - **State:** Zustand, TanStack Query
 - **Database:** PostgreSQL via Prisma (compatível com Supabase)
 - **LLM Gateway:** OpenAI por padrão; provedores compatíveis com OpenAI
   (DeepSeek, Qwen, Kimi, MiniMax) habilitáveis via `*_API_KEY` + `*_BASE_URL`
+
+## Ambiente web interativo
+
+O app expõe os agentes por uma UI intuitiva: o usuário envia documentos e
+**acompanha o pipeline multiagente ao vivo** (Navegador → Extrator → Calculador →
+Mapeador → Síntese) na página da análise, via streaming SSE
+(`POST /api/analyses/[id]/process`) com fallback de polling
+(`GET /api/analyses/[id]/status`). O progresso é persistido (`Analysis.progress`/
+`currentStep`) para permitir reconexão.
 
 ## Estado atual (modo demo)
 
@@ -101,7 +112,9 @@ cp .env.example .env.local
 #   OPENAI_API_KEY="sk-..."
 
 # 3. Instalar e preparar o banco
-npm install
+# Este app faz parte de um npm workspace na raiz (junto do design system).
+# Rode o install na RAIZ do repositório (instala app + @aiox/design-system):
+npm install --prefix ..
 npm run db:push
 npm run db:seed
 
