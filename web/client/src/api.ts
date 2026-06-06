@@ -145,6 +145,110 @@ export async function uploadFile(
   return r.json();
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// talent-compass — interview feature
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface RoleProfile {
+  role_title: string;
+  performance_objectives: { id: string; outcome: string; metric: string }[];
+  competencies: {
+    technical: { name: string; bars: Record<string, string> }[];
+    behavioral: { name: string; bars: Record<string, string> }[];
+    motivation: string[];
+  };
+  scorecard_weights: {
+    technical: number;
+    behavioral: number;
+    motivation: number;
+    behavioral_style: number;
+  };
+}
+
+export interface GuideQuestion {
+  id: string;
+  competency: string;
+  type: "behavioral" | "situational";
+  text: string;
+  probes: string[];
+  bars: Record<string, string>;
+}
+export interface InterviewGuide {
+  role_title: string;
+  questions: GuideQuestion[];
+}
+
+export interface Scorecard {
+  candidate: string;
+  role_title: string;
+  categories: {
+    technical: { score: number; max: number; evidence: string };
+    behavioral: { score: number; max: number; evidence: string };
+    motivation: { score: number; max: number; evidence: string };
+  };
+  behavioral_style_context: string;
+  total: number;
+  grade: string;
+  strengths: string[];
+  gaps: string[];
+  recommendation: string;
+  fairness_status: "pass" | "review";
+  fairness_notes: string;
+}
+
+async function postJson<T>(url: string, body: unknown): Promise<T> {
+  const r = await fetch(url, {
+    method: "POST",
+    headers: portalHeaders(true),
+    body: JSON.stringify(body),
+  });
+  if (!r.ok) {
+    const j = await r.json().catch(() => ({}));
+    throw new Error((j as { error?: string }).error ?? (await r.text()));
+  }
+  return r.json();
+}
+
+export async function interviewStatus(): Promise<{ dbEnabled: boolean }> {
+  const r = await fetch("/api/interview/status", { headers: portalHeaders(false) });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+export async function defineRole(role: string): Promise<RoleProfile> {
+  const { profile } = await postJson<{ profile: RoleProfile }>(
+    "/api/interview/define-role",
+    { role }
+  );
+  return profile;
+}
+
+export async function buildGuide(role: RoleProfile): Promise<InterviewGuide> {
+  const { guide } = await postJson<{ guide: InterviewGuide }>(
+    "/api/interview/build-guide",
+    { role }
+  );
+  return guide;
+}
+
+export async function scoreCandidate(args: {
+  role: RoleProfile;
+  guide: InterviewGuide;
+  candidateName: string;
+  answers: { questionId: string; competency: string; answer: string }[];
+  behavioralStyle?: string;
+}): Promise<{ scorecard: Scorecard; persisted: boolean }> {
+  return postJson("/api/interview/score", args);
+}
+
+export async function persistDocument(args: {
+  templateKey: string;
+  renderedHtml: string;
+  data: unknown;
+}): Promise<{ id: string | null; persisted: boolean }> {
+  return postJson("/api/interview/document", args);
+}
+
 type StreamEvent =
   | { type: "chunk"; text: string }
   | { type: "done" }

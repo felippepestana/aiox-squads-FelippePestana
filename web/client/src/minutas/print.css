@@ -1,0 +1,33 @@
+/* Minutas — print-optimized styles. The on-screen minuta uses a light, serif,
+ * paper-like look; @media print hides app chrome and prints only the document. */
+
+.minuta-printable {
+  background: #ffffff;
+  color: #111;
+  font-family: var(--ds-font-serif, Georgia, serif);
+  line-height: 1.5;
+  padding: 32px 40px;
+  border-radius: 8px;
+  border: 1px solid #e2e5ea;
+  max-width: 780px;
+}
+.minuta-printable h1 { font-size: 20px; margin: 0 0 4px; }
+.minuta-printable h2 { font-size: 15px; margin: 18px 0 6px; }
+.minuta-printable p { margin: 8px 0; }
+.minuta-printable table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13px; }
+.minuta-printable th, .minuta-printable td {
+  border: 1px solid #d8dce3; padding: 6px 10px; text-align: left;
+}
+.minuta-printable .muted { color: #555; font-size: 12px; }
+.minuta-printable .sign { margin-top: 28px; }
+.minuta-printable .rule { border: none; border-top: 1px solid #d8dce3; margin: 16px 0; }
+
+@media print {
+  body * { visibility: hidden; }
+  .minuta-printable, .minuta-printable * { visibility: visible; }
+  .minuta-printable {
+    position: absolute; left: 0; top: 0; width: 100%;
+    border: none; border-radius: 0; max-width: none;
+  }
+  .no-print { display: none !important; }
+}
