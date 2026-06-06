@@ -237,7 +237,12 @@ export async function scoreCandidate(args: {
   candidateName: string;
   answers: { questionId: string; competency: string; answer: string }[];
   behavioralStyle?: string;
-}): Promise<{ scorecard: Scorecard; persisted: boolean }> {
+}): Promise<{
+  scorecard: Scorecard;
+  persisted: boolean;
+  applicationId: string | null;
+  scorecardId: string | null;
+}> {
   return postJson("/api/interview/score", args);
 }
 
@@ -245,6 +250,8 @@ export async function persistDocument(args: {
   templateKey: string;
   renderedHtml: string;
   data: unknown;
+  entityType?: string;
+  entityId?: string | null;
 }): Promise<{ id: string | null; persisted: boolean }> {
   return postJson("/api/interview/document", args);
 }

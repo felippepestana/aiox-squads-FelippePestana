@@ -198,6 +198,12 @@ Return JSON:
   "fairness_status": "pass" | "review", // "review" if evidence is thin or any bias risk
   "fairness_notes": string              // what was checked: coded language, consistency, personality weight 0
 }
-Every category score must be justified by cited evidence from the answers. Total = technical+behavioral+motivation.`;
+Every category score must be justified by cited evidence from the answers.
+Scoring method (apply consistently to every candidate):
+1. For each question, assign a BARS rating from 1 to 5 against its anchors.
+2. For each category (technical, behavioral, motivation), average the BARS ratings of its questions, then normalize to 0-1 by computing (avg - 1) / 4.
+3. Multiply that normalized value by the category max (technical 40, behavioral 35, motivation 25) and round to an integer. Never exceed the max or go below 0.
+4. total = technical + behavioral + motivation (0-100).
+If a category has no usable evidence, rate its questions low (1-2) rather than guessing high.`;
   return askJson<Scorecard>(anthropic, CORE_RULES, user, 2500);
 }

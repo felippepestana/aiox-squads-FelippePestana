@@ -15,6 +15,13 @@ import type {
 const ORG_NAME = "Apex-Talent Demo";
 let cachedOrgId: string | null = null;
 
+/** Surface Supabase errors to server logs instead of swallowing them.
+ * Persistence stays best-effort (callers still get null), but failures are
+ * no longer silent — they are logged for diagnosis and Sentry breadcrumbs. */
+function logDbError(op: string, error: unknown): void {
+  if (error) console.error(`[apex-talent db] ${op} failed:`, error);
+}
+
 /** Get-or-create a demo org so the web flow can persist without an auth login. */
 export async function ensureOrgId(): Promise<string | null> {
   const db = getDb();
@@ -26,6 +33,7 @@ export async function ensureOrgId(): Promise<string | null> {
     .eq("name", ORG_NAME)
     .limit(1)
     .maybeSingle();
+  logDbError("ensureOrgId(select)", existing.error);
   if (existing.data?.id) {
     cachedOrgId = existing.data.id as string;
     return cachedOrgId;
@@ -35,6 +43,7 @@ export async function ensureOrgId(): Promise<string | null> {
     .insert({ name: ORG_NAME })
     .select("id")
     .single();
+  logDbError("ensureOrgId(insert)", created.error);
   cachedOrgId = (created.data?.id as string) ?? null;
   return cachedOrgId;
 }
@@ -47,7 +56,7 @@ export async function saveJob(input: {
   const db = getDb();
   const orgId = await ensureOrgId();
   if (!db || !orgId) return null;
-  const { data } = await db
+  const { data, error } = await db
     .from("apex_talent_jobs")
     .insert({
       org_id: orgId,
@@ -58,6 +67,7 @@ export async function saveJob(input: {
     })
     .select("*")
     .single();
+  logDbError("saveJob", error);
   return (data as JobRow) ?? null;
 }
 
@@ -69,7 +79,7 @@ export async function saveCandidate(input: {
   const db = getDb();
   const orgId = await ensureOrgId();
   if (!db || !orgId) return null;
-  const { data } = await db
+  const { data, error } = await db
     .from("apex_talent_candidates")
     .insert({
       org_id: orgId,
@@ -79,6 +89,7 @@ export async function saveCandidate(input: {
     })
     .select("*")
     .single();
+  logDbError("saveCandidate", error);
   return (data as CandidateRow) ?? null;
 }
 
@@ -89,7 +100,7 @@ export async function saveApplication(input: {
   const db = getDb();
   const orgId = await ensureOrgId();
   if (!db || !orgId) return null;
-  const { data } = await db
+  const { data, error } = await db
     .from("apex_talent_applications")
     .insert({
       org_id: orgId,
@@ -100,6 +111,7 @@ export async function saveApplication(input: {
     })
     .select("*")
     .single();
+  logDbError("saveApplication", error);
   return (data as ApplicationRow) ?? null;
 }
 
@@ -110,7 +122,7 @@ export async function saveInterview(input: {
   const db = getDb();
   const orgId = await ensureOrgId();
   if (!db || !orgId) return null;
-  const { data } = await db
+  const { data, error } = await db
     .from("apex_talent_interviews")
     .insert({
       org_id: orgId,
@@ -121,6 +133,7 @@ export async function saveInterview(input: {
     })
     .select("*")
     .single();
+  logDbError("saveInterview", error);
   return (data as InterviewRow) ?? null;
 }
 
@@ -135,11 +148,12 @@ export async function saveScorecard(input: {
   const db = getDb();
   const orgId = await ensureOrgId();
   if (!db || !orgId) return null;
-  const { data } = await db
+  const { data, error } = await db
     .from("apex_talent_scorecards")
     .insert({ org_id: orgId, ...input })
     .select("*")
     .single();
+  logDbError("saveScorecard", error);
   return (data as ScorecardRow) ?? null;
 }
 
@@ -153,7 +167,7 @@ export async function saveDocument(input: {
   const db = getDb();
   const orgId = await ensureOrgId();
   if (!db || !orgId) return null;
-  const { data } = await db
+  const { data, error } = await db
     .from("apex_talent_documents")
     .insert({
       org_id: orgId,
@@ -166,5 +180,6 @@ export async function saveDocument(input: {
     })
     .select("*")
     .single();
+  logDbError("saveDocument", error);
   return (data as DocumentRow) ?? null;
 }

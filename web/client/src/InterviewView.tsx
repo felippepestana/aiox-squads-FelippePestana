@@ -46,6 +46,7 @@ export function InterviewView({ onClose }: { onClose: () => void }) {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [behavioralStyle, setBehavioralStyle] = useState("");
   const [scorecard, setScorecard] = useState<Scorecard | null>(null);
+  const [scorecardId, setScorecardId] = useState<string | null>(null);
 
   useEffect(() => {
     interviewStatus()
@@ -88,7 +89,7 @@ export function InterviewView({ onClose }: { onClose: () => void }) {
         competency: q.competency,
         answer: answers[q.id] ?? "",
       }));
-      const { scorecard: sc } = await scoreCandidate({
+      const { scorecard: sc, scorecardId: scId } = await scoreCandidate({
         role,
         guide,
         candidateName: candidateName || "Candidato",
@@ -96,6 +97,7 @@ export function InterviewView({ onClose }: { onClose: () => void }) {
         behavioralStyle: behavioralStyle || undefined,
       });
       setScorecard(sc);
+      setScorecardId(scId);
       setStep(3);
     });
 
@@ -237,7 +239,13 @@ export function InterviewView({ onClose }: { onClose: () => void }) {
           <Minutas
             parecer={parecer}
             onPersist={(templateKey, renderedHtml, data) => {
-              void persistDocument({ templateKey, renderedHtml, data }).catch(() => undefined);
+              void persistDocument({
+                templateKey,
+                renderedHtml,
+                data,
+                entityType: "scorecard",
+                entityId: scorecardId,
+              }).catch(() => undefined);
             }}
           />
           <div className="no-print" style={{ marginTop: 12 }}>

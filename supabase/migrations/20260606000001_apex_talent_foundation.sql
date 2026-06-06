@@ -179,10 +179,13 @@ alter table public.apex_talent_behavioral_profiles enable row level security;
 alter table public.apex_talent_fairness_audits     enable row level security;
 alter table public.apex_talent_documents           enable row level security;
 
--- profiles: a user sees their own profile and profiles within their org
+-- profiles: a user sees only their own profile row. This policy intentionally
+-- does NOT call apex_talent_current_org_id() (which itself reads this table) so
+-- there is zero recursion risk even where the definer owner lacks RLS bypass.
+-- Org-wide reads are not needed here: the server uses the service-role client.
 drop policy if exists apex_talent_profiles_self_select on public.apex_talent_profiles;
 create policy apex_talent_profiles_self_select on public.apex_talent_profiles
-  for select using (id = auth.uid() or org_id = public.apex_talent_current_org_id());
+  for select using (id = auth.uid());
 drop policy if exists apex_talent_profiles_self_update on public.apex_talent_profiles;
 create policy apex_talent_profiles_self_update on public.apex_talent_profiles
   for update using (id = auth.uid());
