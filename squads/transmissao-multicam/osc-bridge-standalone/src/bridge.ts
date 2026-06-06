@@ -1,41 +1,39 @@
-import "server-only";
-
-/**
- * OSC bridge — runs inside the Next.js Node.js process and translates
- * UDP/OSC messages from TouchOSC into obs-websocket commands. It also
- * subscribes to obs-websocket events and pushes status back to TouchOSC
- * over UDP so the tablet displays live feedback.
- *
- * Booted from instrumentation.ts when OSC_BRIDGE_ENABLED=true.
- *
- * Defensive: if the `osc` package or obs-websocket-js is missing the
- * panel still boots — only the bridge is disabled. Logs a single warning.
- */
+// OSC bridge core — ported from
+// operator-panel/src/server/osc-bridge.ts.
+//
+// Differences vs the Next.js version:
+//  - No `"server-only"` boundary
+//  - Imports `osc` and `obs-websocket-js` directly (no defensive require)
+//  - Path imports use ./ (no @/lib alias)
+//  - `startBridge()` returns a handle so the entry point can keep the
+//    process alive and shut down cleanly on SIGINT.
 
 import OBSWebSocket, { EventSubscription } from "obs-websocket-js";
+import { UDPPort } from "osc";
 
-import { loadOscMapping } from "./osc-mapping-loader";
-import { loadOperationConfig } from "@/lib/mic-loader";
-import {
-  PIP_FALLBACK,
-  PIP_MIRROR_SOURCE,
-  PipCorner,
-  PipSize,
-  pipGeometry,
-} from "@/lib/scenes";
+import { loadOperationConfig, loadOscMapping } from "./config-loader.js";
+import { PIP_FALLBACK, PIP_MIRROR_SOURCE, pipGeometry } from "./scenes.js";
 import type {
   OscArgValue,
   OscBridgeStatus,
   OscMapping,
-} from "@/lib/osc-types";
+  OperationConfig,
+  PipCorner,
+  PipSize,
+} from "./types.js";
 
 interface OscRawMessage {
   address: string;
   args: Array<{ type: string; value: OscArgValue }>;
 }
 
+export interface BridgeHandle {
+  status: OscBridgeStatus;
+  close(): Promise<void>;
+}
+
 let started = false;
-let status: OscBridgeStatus = {
+const status: OscBridgeStatus = {
   enabled: false,
   listening: false,
   port: 0,
@@ -48,24 +46,11 @@ export function getBridgeStatus(): OscBridgeStatus {
   return { ...status, last_messages: status.last_messages.slice(-5) };
 }
 
-export async function startOscBridge(): Promise<void> {
-  if (started) return;
+export async function startBridge(): Promise<BridgeHandle> {
+  if (started) {
+    return { status, close: async () => undefined };
+  }
   started = true;
-
-  if (process.env.OSC_BRIDGE_ENABLED !== "true") {
-    return;
-  }
-
-  let oscModule: typeof import("osc");
-  try {
-    oscModule = require("osc");
-  } catch (err) {
-    console.warn(
-      "[osc-bridge] `osc` package not installed; bridge disabled.",
-      err instanceof Error ? err.message : err,
-    );
-    return;
-  }
 
   const mapping = loadOscMapping();
   const op = loadOperationConfig();
@@ -76,28 +61,28 @@ export async function startOscBridge(): Promise<void> {
     process.env.OSC_FEEDBACK_PORT ?? mapping.feedback_port,
   );
 
-  // ─── obs-websocket client (server-side, separate from browser session)
+  // ─── obs-websocket client
   const obs = new OBSWebSocket();
   const obsHost = process.env.OBS_WS_HOST ?? "localhost";
   const obsPort = Number(process.env.OBS_WS_PORT ?? "4455");
   const obsPassword = process.env.OSC_OBS_PASSWORD ?? "";
   const RECONNECT_DELAY_MS = 5000;
 
-  // Auto-reconnect: OBS restarts mid-show should heal without restarting
-  // the panel. The bridge has no `close()` (process lifetime == Next.js
-  // dev/prod server), so we always retry — there's no shutdown state to
-  // coordinate with.
+  // Set to true by close() so the reconnect timer doesn't fire after
+  // intentional shutdown.
+  let closed = false;
 
   const connectObs = async () => {
+    if (closed) return;
     try {
       await obs.connect(`ws://${obsHost}:${obsPort}`, obsPassword, {
         eventSubscriptions: EventSubscription.All,
       });
-      console.log("[osc-bridge] obs-websocket connected");
+      console.log("[bridge] obs-websocket connected");
       sendFeedback("/tx/feedback/connected", [1]);
     } catch (err) {
       console.warn(
-        `[osc-bridge] obs-websocket connection failed; retrying in ${RECONNECT_DELAY_MS / 1000}s:`,
+        `[bridge] obs-websocket connection failed; retrying in ${RECONNECT_DELAY_MS / 1000}s:`,
         err instanceof Error ? err.message : err,
       );
       setTimeout(() => void connectObs(), RECONNECT_DELAY_MS);
@@ -106,10 +91,12 @@ export async function startOscBridge(): Promise<void> {
 
   obs.on("ConnectionClosed", () => {
     sendFeedback("/tx/feedback/connected", [0]);
-    console.log(
-      `[osc-bridge] obs-websocket connection closed; retrying in ${RECONNECT_DELAY_MS / 1000}s`,
-    );
-    setTimeout(() => void connectObs(), RECONNECT_DELAY_MS);
+    if (!closed) {
+      console.log(
+        `[bridge] obs-websocket connection closed; retrying in ${RECONNECT_DELAY_MS / 1000}s`,
+      );
+      setTimeout(() => void connectObs(), RECONNECT_DELAY_MS);
+    }
   });
 
   obs.on("CurrentProgramSceneChanged", (data: { sceneName: string }) => {
@@ -121,7 +108,10 @@ export async function startOscBridge(): Promise<void> {
   });
 
   // ─── UDP socket
-  const udp = new oscModule.UDPPort({
+  // The `osc` package's UDPPort handles both inbound and outbound traffic
+  // on the same socket; we set the remote endpoint to the tablet so
+  // `udp.send` reaches it.
+  const udp = new UDPPort({
     localAddress: "0.0.0.0",
     localPort: port,
     remoteAddress: feedbackHost,
@@ -141,7 +131,7 @@ export async function startOscBridge(): Promise<void> {
         }),
       });
     } catch (err) {
-      console.warn("[osc-bridge] feedback send failed:", err);
+      console.warn("[bridge] feedback send failed:", err);
     }
   }
 
@@ -169,14 +159,14 @@ export async function startOscBridge(): Promise<void> {
     status.feedback_target = `${feedbackHost}:${feedbackPort}`;
     status.enabled = true;
     console.log(
-      `[osc-bridge] listening on UDP :${port}, feedback → ${feedbackHost}:${feedbackPort}`,
+      `[bridge] listening on UDP :${port}, feedback → ${feedbackHost}:${feedbackPort}`,
     );
   });
 
   udp.on("error", (err: unknown) => {
     status.errors_total += 1;
     const message = err instanceof Error ? err.message : String(err);
-    console.error("[osc-bridge] UDP error:", message);
+    console.error("[bridge] UDP error:", message);
   });
 
   udp.on("message", (raw: unknown) => {
@@ -188,7 +178,7 @@ export async function startOscBridge(): Promise<void> {
     void dispatchCommand(msg, mapping, obs, op).catch((err) => {
       status.errors_total += 1;
       console.error(
-        `[osc-bridge] dispatch failed for ${msg.address}:`,
+        `[bridge] dispatch failed for ${msg.address}:`,
         err instanceof Error ? err.message : err,
       );
     });
@@ -207,17 +197,32 @@ export async function startOscBridge(): Promise<void> {
 
   udp.open();
   await connectObs();
+
+  return {
+    status,
+    close: async () => {
+      // Stop the auto-reconnect loop before tearing down so we don't
+      // race with a pending setTimeout reconnecting after disconnect().
+      closed = true;
+      try {
+        udp.close();
+      } catch { /* socket may already be closed */ }
+      try {
+        await obs.disconnect();
+      } catch { /* already disconnected */ }
+    },
+  };
 }
 
 async function dispatchCommand(
   msg: OscRawMessage,
   mapping: OscMapping,
   obs: OBSWebSocket,
-  op: ReturnType<typeof loadOperationConfig>,
+  op: OperationConfig,
 ): Promise<void> {
   const cmd = mapping.commands.find((c) => c.address === msg.address);
   if (!cmd) {
-    console.debug(`[osc-bridge] unmapped address: ${msg.address}`);
+    console.debug(`[bridge] unmapped address: ${msg.address}`);
     return;
   }
   const argValues = msg.args.map((a) => a.value);
@@ -249,7 +254,7 @@ async function dispatchCommand(
             sceneItems: Array<{ sceneItemId: number; sourceName: string }>;
           };
           const mirror = items.sceneItems.find((it) => it.sourceName === PIP_MIRROR_SOURCE);
-          if (!mirror) continue; // operator may have non-PIP scene customized
+          if (!mirror) continue;
           await obs.call("SetSceneItemTransform", {
             sceneName: scene,
             sceneItemId: mirror.sceneItemId,
@@ -263,7 +268,7 @@ async function dispatchCommand(
           });
         } catch (err) {
           console.warn(
-            `[osc-bridge] Failed to set PiP layout for scene ${scene}:`,
+            `[bridge] Failed to set PiP layout for scene ${scene}:`,
             err instanceof Error ? err.message : err,
           );
         }
@@ -275,7 +280,7 @@ async function dispatchCommand(
       const idx = Number(resolved.input_index);
       const channel = op.channels.find((c) => c.id === idx);
       if (!channel) {
-        console.warn(`[osc-bridge] unknown input_index ${idx}`);
+        console.warn(`[bridge] unknown input_index ${idx}`);
         return;
       }
       const muted = toBool(resolved.muted);
@@ -323,7 +328,7 @@ async function dispatchCommand(
 
     default: {
       const _exhaustive: never = cmd.action;
-      console.warn(`[osc-bridge] unhandled action: ${_exhaustive}`);
+      console.warn(`[bridge] unhandled action: ${_exhaustive as string}`);
     }
   }
   // Note: scene-active feedback is published from the
