@@ -1,3 +1,8 @@
-export { PartiesSection } from "./parties-section";
-export { TimelineSection } from "./timeline-section";
-export { ClaimsSection } from "./claims-section";
+export {
+  PartiesSection,
+  TimelineSection,
+  ClaimsSection,
+  type Party,
+  type TimelineEvent,
+  type Claim,
+} from "@aiox/design-system";

@@ -18,6 +18,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@aiox/design-system": "file:../packages/design-system",
     "@hookform/resolvers": "^3.9.0",
     "@prisma/client": "^5.22.0",
     "@radix-ui/react-avatar": "^1.1.1",
