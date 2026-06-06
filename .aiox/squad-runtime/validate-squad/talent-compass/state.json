@@ -1,0 +1,74 @@
+{
+  "workflow": "validate-squad",
+  "squad_name": "talent-compass",
+  "created_at": "2026-06-05T23:59:24.640Z",
+  "phases": {
+    "phase_1_structure": {
+      "status": "completed",
+      "started_at": "2026-06-06T00:00:03.767Z",
+      "completed_at": "2026-06-06T00:00:03.842Z"
+    },
+    "phase_2_security_scan": {
+      "status": "completed",
+      "started_at": "2026-06-06T00:00:03.876Z",
+      "completed_at": "2026-06-06T00:00:03.929Z"
+    },
+    "phase_3_cross_reference": {
+      "status": "completed",
+      "started_at": "2026-06-06T00:00:03.965Z",
+      "completed_at": "2026-06-06T00:00:04.039Z"
+    },
+    "phase_3_5_workflow_contracts": {
+      "status": "completed",
+      "started_at": "2026-06-06T00:00:04.075Z",
+      "completed_at": "2026-06-06T00:00:04.268Z"
+    },
+    "phase_4_type_detection": {
+      "status": "completed",
+      "started_at": "2026-06-06T00:00:04.303Z",
+      "completed_at": "2026-06-06T00:00:04.350Z"
+    },
+    "phase_5_production_validation": {
+      "status": "completed",
+      "started_at": "2026-06-06T00:00:04.394Z",
+      "completed_at": "2026-06-06T00:00:04.446Z"
+    },
+    "phase_6_quality_analysis": {
+      "status": "completed",
+      "started_at": "2026-06-06T00:00:04.482Z",
+      "completed_at": "2026-06-06T00:00:04.519Z"
+    },
+    "phase_7_final_scoring": {
+      "status": "completed",
+      "started_at": "2026-06-06T00:00:04.557Z",
+      "completed_at": "2026-06-06T00:00:04.602Z"
+    }
+  },
+  "phase_order": [
+    "phase_1_structure",
+    "phase_2_security_scan",
+    "phase_3_cross_reference",
+    "phase_3_5_workflow_contracts",
+    "phase_4_type_detection",
+    "phase_5_production_validation",
+    "phase_6_quality_analysis",
+    "phase_7_final_scoring"
+  ],
+  "status": "in_progress",
+  "current_phase": "phase_7_final_scoring",
+  "updated_at": "2026-06-06T00:00:04.602Z",
+  "started_at": "2026-06-05T23:59:24.640Z",
+  "completed_at": null,
+  "result": null,
+  "final_score": null,
+  "exit_code": null,
+  "error": null,
+  "summary": null,
+  "options": {
+    "mode": "quick",
+    "model": "opus",
+    "quick": true,
+    "verbose": false,
+    "json": false
+  }
+}
