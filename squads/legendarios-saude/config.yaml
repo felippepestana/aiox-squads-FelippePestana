@@ -1,0 +1,90 @@
+metadata:
+  version: "1.0"
+  created: "2026-05-23"
+  squad: "legendarios-saude"
+
+squad:
+  name: "legendarios-saude"
+  display_name: "Legendários Saúde"
+  version: "1.0.0"
+  domain: "Triagem médica e suporte clínico para eventos outdoor"
+  description: |
+    Squad especializado em triagem médica para os eventos TOP do programa Legendários.
+    Apoia Hakunas na classificação de risco, avaliação de exames, composição de mensagens
+    e orientações clínicas de campo para atividades de alta intensidade (montanhismo, trekking).
+  philosophy: |
+    Segurança antes da participação. Toda decisão clínica respeita os protocolos estabelecidos.
+    O squad apoia — nunca substitui — o julgamento do profissional de saúde presente.
+  keywords:
+    - triagem
+    - medicina esportiva
+    - eventos outdoor
+    - NFC
+    - prontuário
+    - legendarios
+    - TOP
+  entry_agent: triagem-chefe
+
+tiers:
+  tier_0:
+    name: "Orquestração"
+    agents: [triagem-chefe]
+    purpose: "Recebe demanda, classifica urgência, roteia para especialistas"
+  tier_1:
+    name: "Especialistas Primários"
+    agents: [classificador-risco, avaliador-exames]
+    purpose: "Classificação de risco e validação de exames médicos"
+  tier_2:
+    name: "Suporte"
+    agents: [compositor-mensagem]
+    purpose: "Composição de mensagens e comunicação com senderistas"
+
+agents:
+  triagem-chefe:
+    file: agents/triagem-chefe.md
+    tier: tier_0
+    icon: "🏥"
+    focus: "Orquestração da triagem e roteamento clínico"
+  classificador-risco:
+    file: agents/classificador-risco.md
+    tier: tier_1
+    icon: "⚕️"
+    focus: "Classificação de risco por idade e comorbidades"
+  avaliador-exames:
+    file: agents/avaliador-exames.md
+    tier: tier_1
+    icon: "📋"
+    focus: "Orientação para validação de exames médicos"
+  compositor-mensagem:
+    file: agents/compositor-mensagem.md
+    tier: tier_2
+    icon: "💬"
+    focus: "Composição de mensagens WhatsApp para senderistas"
+
+handoffs:
+  triagem-chefe:
+    routes_to: [classificador-risco, avaliador-exames, compositor-mensagem]
+  classificador-risco:
+    hands_off_to: [compositor-mensagem]
+  avaliador-exames:
+    hands_off_to: [compositor-mensagem]
+
+settings:
+  activation:
+    prefix: "legendarios"
+    example: "@legendarios:triagem-chefe"
+  greeting:
+    show_use_cases: true
+    show_pipeline_status: false
+  language: "pt-BR"
+
+quality_standards:
+  smoke_tests:
+    - "Participante 35 anos sem comorbidades → Baixo Risco → apenas atestado CG"
+    - "Participante 42 anos com HAS → Risco Alto → esteira + cardiologista"
+    - "Participante 61 anos → Risco Alto independente de comorbidades"
+
+stats:
+  total_agents: 4
+  total_tasks: 1
+  total_workflows: 0
