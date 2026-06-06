@@ -44,7 +44,7 @@ phases:
   # ═══════════════════════════════════════════════════════════════════════════
   phase_2_screen:
     name: "Resume Screening"
-    description: "Parse and rank candidates by aderência to the performance objectives. Screening is advisory; no rejection on protected attributes."
+    description: "Parse and rank candidates by adherence to the performance objectives. Screening is advisory; no rejection on protected attributes."
     depends_on: "phase_1_define"
     agents: ["evidence-scorer"]
     execution: "batch"

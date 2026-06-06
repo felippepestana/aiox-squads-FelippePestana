@@ -1,6 +1,6 @@
 # Academy — Treinamento & Desenvolvimento
 
-> 🟡 **Em desenvolvimento (esqueleto).** Este módulo da plataforma [Apex-Talent](../apex-talent/) disponibiliza hoje apenas o agente **Chief** (`academy-chief`), que faz o intake da área e escopa o fluxo de especialistas a ser construído. Os agentes especialistas, tasks e templates serão adicionados nas próximas iterações.
+> 🟡 **Em desenvolvimento (esqueleto).** Este módulo da plataforma [Apex-Talent](../apex-talent/) disponibiliza hoje apenas o agente **Chief** (`academy-chief`), que faz o intake da área e escopa o fluxo de especialistas a ser construído. Os agentes especialistas, tarefas e modelos serão adicionados nas próximas iterações.
 
 ## Área
 
@@ -33,10 +33,10 @@ Comandos do Chief:
 - `*help` — lista os comandos
 - `*exit` — encerra o agente
 
-## Roadmap
+## Roteiro
 
 1. **Agora:** Chief (intake + escopo do fluxo). ✅
-2. **Próximo:** agentes especialistas (Tier 1/2), tasks e templates da área.
+2. **Próximo:** agentes especialistas (Tier 1/2), tarefas e modelos da área.
 3. **Depois:** workflow `wf-*` e integração de dados com os demais módulos.
 
 ## Referência

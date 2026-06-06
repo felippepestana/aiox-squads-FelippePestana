@@ -49,6 +49,7 @@ entry_points:
   catalog: "*catalog"
   route: "*route"
   roadmap: "*roadmap"
+  lifecycle: "*lifecycle"
 
 workspace_integration:
   level: none

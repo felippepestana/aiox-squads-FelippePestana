@@ -190,6 +190,12 @@ drop policy if exists apex_talent_profiles_self_update on public.apex_talent_pro
 create policy apex_talent_profiles_self_update on public.apex_talent_profiles
   for update using (id = auth.uid());
 
+-- Hardening: a signed-in user may edit only benign profile fields. This prevents
+-- changing org_id (which would pivot every org-scoped RLS/storage policy to
+-- another tenant) or escalating role. Server uses the service-role client.
+revoke update on public.apex_talent_profiles from authenticated;
+grant update (full_name) on public.apex_talent_profiles to authenticated;
+
 -- orgs: members can read their own org
 drop policy if exists apex_talent_orgs_member_select on public.apex_talent_orgs;
 create policy apex_talent_orgs_member_select on public.apex_talent_orgs

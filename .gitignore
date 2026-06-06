@@ -16,3 +16,6 @@ analista-processual-web/dist/
 analista-processual-web/.next/
 squads/transmissao-multicam/auto-switch-engine/src/tx_multicam_auto_switch.egg-info/
 squads/transmissao-multicam/operator-panel/tsconfig.tsbuildinfo
+
+# Squad validation runtime state (ephemeral)
+.aiox/squad-runtime/validate-squad/
