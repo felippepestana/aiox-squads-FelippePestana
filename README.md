@@ -156,6 +156,7 @@ Squads publicados pela comunidade neste repositório.
 |-------|-----------|--------|
 | [**analista-processual**](squads/analista-processual/) | Análise completa de processos organizacionais e jurídicos brasileiros — pipeline 3-tier com 8 agentes, do mapeamento ao relatório estratégico | 🟢 |
 | [**apex**](squads/apex/) | Squad ultra-premium de frontend (Web, Mobile, Spatial) — 14 agentes cobrindo design system, React/RN, animações, 3D/WebXR, acessibilidade e performance | 🟢 |
+| [**apex-talent**](squads/apex-talent/) | Plataforma de Gestão de Pessoas AI-native (estilo Sólides) — orquestrador guarda-chuva de 11 módulos de RH (R&S, comportamental, desempenho, clima, DP/folha, ponto, onboarding, treinamento, people analytics, cargos & salários, benefícios) | 🟢 |
 | [**curator**](squads/curator/) | Minera transcrições de vídeo, identifica momentos de alto impacto com timestamps e monta roteiros de corte prontos para edição | 🟢 |
 | [**deep-research**](squads/deep-research/) | Pipeline de pesquisa profunda baseada em evidências com 11 agentes — da formulação da pergunta à síntese auditada por viés cognitivo | 🟡 |
 | [**devops**](squads/devops/) | Squad de engenharia DevOps com 6 agentes — CI/CD pipelines, containerização, IaC, monitoramento e DevSecOps | 🟢 |
@@ -166,8 +167,18 @@ Squads publicados pela comunidade neste repositório.
 | [**squad-juridico-legal-performance**](squads/squad-juridico-legal-performance/) | Squad jurídico unificado — integra análise processual, CPC, estratégia recursal, perícia técnica judicial e planejamento de frontend jurídico de alta usabilidade | 🟢 |
 | [**squad-creator**](squads/squad-creator/) | Meta-squad que cria outros squads via templates estruturais, validação de qualidade e extração de DNA de especialistas reais | 🟢 |
 | [**squad-creator-pro**](squads/squad-creator-pro/) | Upgrade do Squad Creator com mind cloning, roteamento de modelos, 3 agentes especialistas e benchmarks de qualidade | 🟢 |
+| [**talent-compass**](squads/talent-compass/) | Flagship de Recrutamento & Seleção do Apex-Talent — ciclo por evidência (objetivos de performance → roteiro BARS+STAR → entrevista IA → scorecard 0-100 → auditoria de viés). DISC/Eneagrama como contexto (peso 0). Feature web dedicada + minutas | 🟢 |
 
 > Tem um squad pronto? [Abra um PR](#contribuindo) e compartilhe com a comunidade.
+
+### Plataforma Apex-Talent (suíte de RH AI-native)
+
+[**Apex-Talent**](squads/apex-talent/) é uma suíte de RH no espírito do universo Sólides/Gupy/Feedz: cada área é um squad AIOX independente, orquestrado pelo `apex-talent-chief`.
+
+- 🟢 **Flagship construído:** [`talent-compass`](squads/talent-compass/) (R&S + entrevistas) — 8 agentes (T0→T3), tasks, templates, checklists, workflow, **feature web dedicada** (`web/`) e **minutas** imprimíveis, com persistência opcional em **Supabase**.
+- 🟡 **Esqueletos (Chief-only):** `profiler-dna`, `performa`, `pulse`, `peopleops`, `chronos`, `onboard`, `academy`, `insights`, `org-architect`, `benefits-hub`.
+
+Veja o [blueprint por área](squads/apex-talent/data/platform-blueprint.md) e o [mapa de oportunidades de IA](squads/apex-talent/data/ai-opportunity-map.md).
 
 ### Squad Creator: Free vs Pro
 
