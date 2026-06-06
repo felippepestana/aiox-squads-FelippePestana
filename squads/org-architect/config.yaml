@@ -1,0 +1,39 @@
+name: org-architect
+display_name: "Org-Architect — Cargos, Salários & Org Design"
+version: "0.1.0"
+domain: org-design
+entry_agent: org-architect-chief
+description: "Arquitetura organizacional: descrições de cargo, plano de carreira, faixas salariais, organograma, job architecture skills-based (4R) e equidade salarial."
+
+keywords:
+  - cargos e salários
+  - job architecture
+  - faixa salarial
+  - organograma
+  - plano de carreira
+  - equidade salarial
+  - 4r
+
+metadata:
+  type: module
+  status: DEVELOPING
+  platform: apex-talent
+
+tier_structure:
+  tier_0:
+    role: "Module Orchestration"
+    agents: ["org-architect-chief"]
+
+workflow:
+  primary: "module intake (skeleton)"
+  phases:
+    - "Phase 1: INTAKE - Understand the need within this module's domain"
+    - "Phase 2: SCOPE - Define the specialist flow to build next"
+
+entry_points:
+  intake: "*write-jd"
+
+workspace_integration:
+  level: none
+  rationale: >-
+    Modulo org-architect em desenvolvimento (esqueleto). O Chief faz intake e escopo; ainda nao consome nem produz artefatos no workspace/.

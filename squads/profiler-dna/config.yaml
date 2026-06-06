@@ -1,0 +1,69 @@
+name: profiler-dna
+display_name: "Profiler-DNA — Inteligência Comportamental"
+version: "1.0.0"
+domain: behavioral-intelligence
+entry_agent: profiler-dna-chief
+description: "Motor de inteligência comportamental da plataforma Apex-Talent. Mapeia estilo de trabalho (DISC), traços (Big Five) e oferece lente de desenvolvimento (Eneagrama), sintetizando tudo em um perfil acionável para comunicação, gestão e onboarding. Princípio inegociável: é CONTEXTO de desenvolvimento, peso 0 — nunca filtro de seleção, promoção ou remuneração. Todo perfil passa por um gate de ética/consentimento/anti-estereótipo."
+
+keywords:
+  - disc
+  - big five
+  - ocean
+  - eneagrama
+  - perfil comportamental
+  - fit cultural
+  - inteligência comportamental
+  - plano de desenvolvimento
+  - estilo de trabalho
+
+metadata:
+  type: module
+  status: ACTIVE
+  platform: apex-talent
+
+tier_structure:
+  tier_0:
+    role: "Orchestration & Synthesis"
+    agents: ["profiler-dna-chief"]
+  tier_1:
+    role: "Core Lenses"
+    agents: ["disc-mapper", "bigfive-assessor"]
+  tier_2:
+    role: "Development & Fit"
+    agents: ["enneagram-lens", "fit-advisor"]
+  tier_3:
+    role: "Ethics Gate"
+    agents: ["ethics-gate"]
+
+# Profiler-DNA does NOT produce a selection score. It produces a profile with a
+# confidence level. Personality never carries decision weight.
+assessment_model:
+  output: "behavioral profile (not a score)"
+  confidence_levels: ["low", "medium", "high"]
+  decision_weight: 0
+  note: "Context for communication, management and development only. Never a selection/promotion/pay filter."
+
+workflow:
+  primary: "wf-behavioral-profile.yaml"
+  phases:
+    - "Phase 1: INTAKE - Consent + data (answers/free text/questionnaire)"
+    - "Phase 2: DISC - Work-style read"
+    - "Phase 3: BIG FIVE - OCEAN traits"
+    - "Phase 4: ENNEAGRAM - Developmental lens (optional, consent-based)"
+    - "Phase 5: SYNTHESIZE - One coherent multi-lens narrative"
+    - "Phase 6: FIT - Advisory culture/role/team fit (optional)"
+    - "Phase 7: ETHICS GATE - Consent, anti-stereotype, weight-0 verification"
+    - "Phase 8: DEV PLAN - Management tips + development plan"
+
+entry_points:
+  full_profile: "*map-profile"
+  disc_only: "*read-disc"
+  fit: "*fit-analysis"
+  dev_plan: "*dev-plan"
+
+workspace_integration:
+  level: none
+  rationale: >-
+    O profiler-dna e self-contained: consome respostas/textos fornecidos pelo
+    usuario (com consentimento) e devolve um perfil comportamental na conversa,
+    sem ler nem escrever no workspace/ do repositorio.

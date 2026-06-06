@@ -1,0 +1,39 @@
+name: performa
+display_name: "Performa — Gestão de Desempenho"
+version: "0.1.0"
+domain: performance-management
+entry_agent: performa-chief
+description: "Gestão de desempenho ponta a ponta: avaliações 90/180/360, matriz 9-Box, PDI, OKRs, feedback contínuo, 1:1, ciclos e calibração."
+
+keywords:
+  - avaliação de desempenho
+  - 9-box
+  - okr
+  - pdi
+  - feedback
+  - 1:1
+  - calibração
+
+metadata:
+  type: module
+  status: DEVELOPING
+  platform: apex-talent
+
+tier_structure:
+  tier_0:
+    role: "Module Orchestration"
+    agents: ["performa-chief"]
+
+workflow:
+  primary: "module intake (skeleton)"
+  phases:
+    - "Phase 1: INTAKE - Understand the need within this module's domain"
+    - "Phase 2: SCOPE - Define the specialist flow to build next"
+
+entry_points:
+  intake: "*run-review"
+
+workspace_integration:
+  level: none
+  rationale: >-
+    Modulo performa em desenvolvimento (esqueleto). O Chief faz intake e escopo; ainda nao consome nem produz artefatos no workspace/.

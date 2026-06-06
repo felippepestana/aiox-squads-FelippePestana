@@ -1,0 +1,35 @@
+# behavioral-profile-template — output of synthesize-profile (profiler-dna-chief)
+# Context for communication/management/development. Weight 0 in any people decision.
+behavioral_profile:
+  person: "{name/identifier}"
+  consent: true            # MUST be true to produce/deliver
+  date: "{YYYY-MM-DD}"
+
+  disc:
+    blend: "{e.g., high-I/S}"
+    tendencies: ["{...}"]
+    confidence: "{low|medium|high}"
+
+  big_five:
+    openness: "{tendency + evidence}"
+    conscientiousness: "{...}"
+    extraversion: "{...}"
+    agreeableness: "{...}"
+    neuroticism: "{neutral framing}"
+    confidence: "{low|medium|high}"
+
+  enneagram:               # optional, consent-based, development only
+    type: "{self-reported, or omitted}"
+    growth_edges: ["{...}"]
+
+  synthesis:
+    narrative: "{one coherent story across lenses}"
+    lens_agreement: "{where DISC/Big Five/Enneagram align or diverge}"
+
+  working_guidance:
+    communication: ["{how to communicate with this person}"]
+    management: ["{how to delegate / give feedback}"]
+    onboarding: ["{how to ramp them up}"]
+
+  weight: 0                # never a selection/promotion/pay factor
+  ethics_status: "{PENDING|PASS|VETO}"   # must be PASS before delivery

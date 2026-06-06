@@ -1,0 +1,38 @@
+name: pulse
+display_name: "Pulse — Clima & Engajamento"
+version: "0.1.0"
+domain: climate-engagement
+entry_agent: pulse-chief
+description: "Escuta organizacional contínua: pesquisa de clima, eNPS, pulses, ouvidoria anônima, gamificação, reconhecimento e planos de ação a partir dos dados."
+
+keywords:
+  - clima organizacional
+  - engajamento
+  - enps
+  - pesquisa de pulso
+  - ouvidoria
+  - reconhecimento
+
+metadata:
+  type: module
+  status: DEVELOPING
+  platform: apex-talent
+
+tier_structure:
+  tier_0:
+    role: "Module Orchestration"
+    agents: ["pulse-chief"]
+
+workflow:
+  primary: "module intake (skeleton)"
+  phases:
+    - "Phase 1: INTAKE - Understand the need within this module's domain"
+    - "Phase 2: SCOPE - Define the specialist flow to build next"
+
+entry_points:
+  intake: "*design-survey"
+
+workspace_integration:
+  level: none
+  rationale: >-
+    Modulo pulse em desenvolvimento (esqueleto). O Chief faz intake e escopo; ainda nao consome nem produz artefatos no workspace/.

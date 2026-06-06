@@ -1,0 +1,38 @@
+name: benefits-hub
+display_name: "Benefits-Hub — Benefícios"
+version: "0.1.0"
+domain: benefits
+entry_agent: benefits-hub-chief
+description: "Gestão e curadoria de benefícios: catálogo, elegibilidade, adesão, recomendação personalizada por perfil/momento de vida e análise de custo/adesão."
+
+keywords:
+  - benefícios
+  - total rewards
+  - adesão
+  - elegibilidade
+  - vale
+  - recomendação de benefícios
+
+metadata:
+  type: module
+  status: DEVELOPING
+  platform: apex-talent
+
+tier_structure:
+  tier_0:
+    role: "Module Orchestration"
+    agents: ["benefits-hub-chief"]
+
+workflow:
+  primary: "module intake (skeleton)"
+  phases:
+    - "Phase 1: INTAKE - Understand the need within this module's domain"
+    - "Phase 2: SCOPE - Define the specialist flow to build next"
+
+entry_points:
+  intake: "*catalog"
+
+workspace_integration:
+  level: none
+  rationale: >-
+    Modulo benefits-hub em desenvolvimento (esqueleto). O Chief faz intake e escopo; ainda nao consome nem produz artefatos no workspace/.

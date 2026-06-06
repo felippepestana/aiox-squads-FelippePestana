@@ -1,0 +1,92 @@
+name: talent-compass
+display_name: "Talent-Compass — Recrutamento, Seleção & Entrevistas"
+version: "1.0.0"
+domain: recruiting-selection
+entry_agent: talent-compass-chief
+description: "Squad flagship da plataforma Apex-Talent. Conduz o ciclo completo de R&S por objetivos de performance: define a vaga, triagem de currículos, gera roteiro estruturado (BARS+STAR), conduz entrevista assistida por IA, pontua por evidência (scorecard 0-100), compara candidatos e aplica auditoria de viés antes de qualquer recomendação. Personalidade (DISC/Eneagrama) entra apenas como contexto — peso zero na decisão."
+
+keywords:
+  - recrutamento e seleção
+  - entrevista estruturada
+  - performance-based hiring
+  - scorecard de competências
+  - bars
+  - star
+  - triagem de currículos
+  - auditoria de viés
+  - ats
+  - seleção por evidência
+
+metadata:
+  type: module
+  status: ACTIVE
+  platform: apex-talent
+
+tier_structure:
+  tier_0:
+    role: "Orchestration & Scorecard"
+    agents: ["talent-compass-chief"]
+  tier_1:
+    role: "Core Specialists"
+    agents: ["role-architect", "guide-builder", "ai-interviewer"]
+  tier_2:
+    role: "Assessment Specialists"
+    agents: ["behavior-analyst", "enneagram-coach", "evidence-scorer"]
+  tier_3:
+    role: "Quality Gate"
+    agents: ["fairness-gate"]
+
+scoring_system:
+  total: 100
+  note: "Decisão governada por evidência de competências. Personalidade é contexto (peso 0)."
+  categories:
+    technical_competencies:
+      weight: 40
+      agent: "evidence-scorer"
+      checks: "Hard skills and role-specific knowledge proven by concrete examples against BARS anchors"
+    behavioral_competencies:
+      weight: 35
+      agent: "evidence-scorer"
+      checks: "STAR-validated behaviors (collaboration, ownership, problem-solving) with situation-action-result evidence"
+    motivation_fit:
+      weight: 25
+      agent: "evidence-scorer"
+      checks: "Alignment to the role's performance objectives and intrinsic motivation for the work"
+    behavioral_style_context:
+      weight: 0
+      agent: "behavior-analyst"
+      checks: "DISC work-style and Enneagram developmental lens — CONTEXT ONLY, never scored, never a filter"
+
+  grade_scale:
+    excellent: { min: 90, label: "A+" }
+    strong: { min: 80, label: "A" }
+    good: { min: 70, label: "B" }
+    borderline: { min: 55, label: "C" }
+    weak: { min: 40, label: "D" }
+    no_fit: { min: 0, label: "F" }
+
+workflow:
+  primary: "wf-hire-full-cycle.yaml"
+  phases:
+    - "Phase 1: DEFINE - Role and performance objectives -> scorecard"
+    - "Phase 2: SCREEN - Resume triage and ranking by fit"
+    - "Phase 3: GUIDE - Structured interview guide (BARS+STAR)"
+    - "Phase 4: INTERVIEW - Conduct adaptive interview"
+    - "Phase 5: SCORE - Evidence-based scorecard (0-100)"
+    - "Phase 6: FAIRNESS - Bias/compliance audit (veto gate)"
+    - "Phase 7: DECIDE - Compare, recommend, generate report and minutas"
+
+entry_points:
+  full_cycle: "*run-hire-cycle"
+  define_role: "*define-role"
+  build_guide: "*build-guide"
+  conduct: "*conduct-interview"
+  score: "*score-candidate"
+  audit: "*fairness-audit"
+
+workspace_integration:
+  level: none
+  rationale: >-
+    O talent-compass e self-contained: consome insumos fornecidos pelo usuario
+    (descricao de vaga, curriculos) e devolve artefatos (scorecards, relatorios,
+    minutas) na conversa/web, sem ler nem escrever no workspace/ do repositorio.

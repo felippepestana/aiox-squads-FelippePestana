@@ -1,0 +1,102 @@
+/* Apex-Talent Design System — component styles (token-driven). */
+
+.ds-root {
+  font-family: var(--ds-font);
+  color: var(--ds-text);
+  font-size: var(--ds-fs-base);
+}
+
+/* Button */
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  border: 1px solid var(--ds-border);
+  background: var(--ds-panel-2);
+  color: var(--ds-text);
+  padding: var(--ds-space-2) var(--ds-space-4);
+  border-radius: var(--ds-radius-sm);
+  font-size: var(--ds-fs-base);
+  cursor: pointer;
+  transition: filter 0.12s ease, opacity 0.12s ease;
+}
+.ds-btn:hover:not(:disabled) { filter: brightness(1.08); }
+.ds-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.ds-btn--primary {
+  background: var(--ds-accent);
+  color: var(--ds-accent-contrast);
+  border-color: transparent;
+  font-weight: 600;
+}
+.ds-btn--ghost { background: transparent; }
+
+/* Card */
+.ds-card {
+  background: var(--ds-panel);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius);
+  padding: var(--ds-space-5);
+  box-shadow: var(--ds-shadow);
+}
+.ds-card__title {
+  font-size: var(--ds-fs-lg);
+  font-weight: 600;
+  margin: 0 0 var(--ds-space-3);
+}
+
+/* Field */
+.ds-field { display: flex; flex-direction: column; gap: var(--ds-space-2); margin-bottom: var(--ds-space-4); }
+.ds-field__label { font-size: var(--ds-fs-sm); color: var(--ds-muted); }
+.ds-input, .ds-textarea {
+  background: var(--ds-bg);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-text);
+  padding: var(--ds-space-3);
+  font: inherit;
+  width: 100%;
+  box-sizing: border-box;
+}
+.ds-textarea { min-height: 96px; resize: vertical; }
+.ds-input:focus, .ds-textarea:focus { outline: 2px solid var(--ds-accent); outline-offset: 1px; }
+
+/* Badge */
+.ds-badge {
+  display: inline-block;
+  padding: 2px var(--ds-space-2);
+  border-radius: 999px;
+  font-size: var(--ds-fs-sm);
+  font-weight: 600;
+  border: 1px solid var(--ds-border);
+}
+.ds-badge--success { color: var(--ds-success); border-color: var(--ds-success); }
+.ds-badge--warn { color: var(--ds-warn); border-color: var(--ds-warn); }
+.ds-badge--info { color: var(--ds-info); border-color: var(--ds-info); }
+.ds-badge--muted { color: var(--ds-muted); }
+
+/* Stepper */
+.ds-stepper { display: flex; gap: var(--ds-space-2); margin-bottom: var(--ds-space-5); flex-wrap: wrap; }
+.ds-step {
+  display: flex; align-items: center; gap: var(--ds-space-2);
+  padding: var(--ds-space-2) var(--ds-space-3);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border);
+  color: var(--ds-muted);
+  font-size: var(--ds-fs-sm);
+}
+.ds-step--active { color: var(--ds-text); border-color: var(--ds-accent); }
+.ds-step--done { color: var(--ds-success); }
+.ds-step__num {
+  width: 20px; height: 20px; border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--ds-panel-2); font-size: 11px;
+}
+.ds-step--active .ds-step__num { background: var(--ds-accent); color: var(--ds-accent-contrast); }
+
+/* Simple table */
+.ds-table { width: 100%; border-collapse: collapse; font-size: var(--ds-fs-sm); }
+.ds-table th, .ds-table td {
+  text-align: left; padding: var(--ds-space-2) var(--ds-space-3);
+  border-bottom: 1px solid var(--ds-border);
+}
+.ds-table th { color: var(--ds-muted); font-weight: 600; }

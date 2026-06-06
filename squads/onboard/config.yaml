@@ -1,0 +1,38 @@
+name: onboard
+display_name: "Onboard — Onboarding & Integração"
+version: "0.1.0"
+domain: onboarding
+entry_agent: onboard-chief
+description: "Jornada de integração do novo colaborador: trilhas personalizadas, checklists dinâmicos, coleta de documentos, assinatura de contrato e acompanhamento 30/60/90."
+
+keywords:
+  - onboarding
+  - integração
+  - 30-60-90
+  - checklist
+  - novo colaborador
+  - buddy
+
+metadata:
+  type: module
+  status: DEVELOPING
+  platform: apex-talent
+
+tier_structure:
+  tier_0:
+    role: "Module Orchestration"
+    agents: ["onboard-chief"]
+
+workflow:
+  primary: "module intake (skeleton)"
+  phases:
+    - "Phase 1: INTAKE - Understand the need within this module's domain"
+    - "Phase 2: SCOPE - Define the specialist flow to build next"
+
+entry_points:
+  intake: "*build-journey"
+
+workspace_integration:
+  level: none
+  rationale: >-
+    Modulo onboard em desenvolvimento (esqueleto). O Chief faz intake e escopo; ainda nao consome nem produz artefatos no workspace/.

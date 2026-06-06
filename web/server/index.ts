@@ -17,6 +17,24 @@ import { loadAllSquads, findAgent, type Agent, type Squad } from "./agents.js";
 import { ChatSession } from "./chatSession.js";
 import { generateLaudo, assistQuesito, type PericiaData } from "./pericia.js";
 import {
+  defineRole,
+  buildGuide,
+  scoreCandidate,
+  type RoleProfile,
+  type InterviewGuide,
+  type Scorecard,
+} from "./interview.js";
+import { dbEnabled } from "./db/client.js";
+import {
+  saveJob,
+  saveCandidate,
+  saveApplication,
+  saveInterview,
+  saveScorecard,
+  saveDocument,
+} from "./db/repositories.js";
+import type { Json } from "./db/types.js";
+import {
   uploadFileFromBuffer,
   supportedExtensions,
   mimeForExtension,
@@ -176,6 +194,153 @@ app.post(
     } catch (e) {
       const message = e instanceof Error ? e.message : String(e);
       res.status(500).json({ error: message });
+    }
+  })
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// talent-compass — dedicated interview feature
+// ─────────────────────────────────────────────────────────────────────────────
+
+app.get("/api/interview/status", (_req, res) => {
+  res.json({ dbEnabled: dbEnabled() });
+});
+
+app.post(
+  "/api/interview/define-role",
+  rateLimitDisabled ? ((_req, _res, next) => next()) : heavyLimiter,
+  asyncHandler(async (req, res) => {
+    const role = String(req.body?.role ?? "").trim();
+    if (!role) {
+      res.status(400).json({ error: "Campo 'role' é obrigatório" });
+      return;
+    }
+    try {
+      const profile = await defineRole(getAnthropic(), role);
+      res.json({ profile });
+    } catch (e) {
+      Sentry.captureException(e);
+      res.status(502).json({ error: e instanceof Error ? e.message : String(e) });
+    }
+  })
+);
+
+app.post(
+  "/api/interview/build-guide",
+  rateLimitDisabled ? ((_req, _res, next) => next()) : heavyLimiter,
+  asyncHandler(async (req, res) => {
+    const role = req.body?.role as RoleProfile | undefined;
+    if (!role || typeof role !== "object") {
+      res.status(400).json({ error: "Campo 'role' (RoleProfile) é obrigatório" });
+      return;
+    }
+    try {
+      const guide = await buildGuide(getAnthropic(), role);
+      res.json({ guide });
+    } catch (e) {
+      Sentry.captureException(e);
+      res.status(502).json({ error: e instanceof Error ? e.message : String(e) });
+    }
+  })
+);
+
+app.post(
+  "/api/interview/score",
+  rateLimitDisabled ? ((_req, _res, next) => next()) : heavyLimiter,
+  asyncHandler(async (req, res) => {
+    const role = req.body?.role as RoleProfile | undefined;
+    const guide = req.body?.guide as InterviewGuide | undefined;
+    const candidateName = String(req.body?.candidateName ?? "").trim();
+    const answers = req.body?.answers;
+    const behavioralStyle = req.body?.behavioralStyle as string | undefined;
+    if (!role || !guide || !candidateName || !Array.isArray(answers)) {
+      res
+        .status(400)
+        .json({ error: "Campos 'role', 'guide', 'candidateName' e 'answers' são obrigatórios" });
+      return;
+    }
+    try {
+      const scorecard: Scorecard = await scoreCandidate(getAnthropic(), {
+        role,
+        guide,
+        candidateName,
+        answers,
+        behavioralStyle,
+      });
+      // Best-effort persistence — never blocks the response.
+      // The generated ids are returned so the client can link minutas (documents)
+      // to the persisted records instead of leaving them orphaned.
+      let persisted = false;
+      let applicationId: string | null = null;
+      let scorecardId: string | null = null;
+      try {
+        const job = await saveJob({
+          title: role.role_title,
+          performance_objectives: role.performance_objectives as unknown as Json,
+          competencies: role.competencies as unknown as Json,
+        });
+        const candidate = await saveCandidate({ name: candidateName });
+        if (job && candidate) {
+          const application = await saveApplication({
+            job_id: job.id,
+            candidate_id: candidate.id,
+          });
+          if (application) {
+            applicationId = application.id;
+            await saveInterview({
+              application_id: application.id,
+              guide: guide as unknown as Json,
+            });
+            const sc = await saveScorecard({
+              application_id: application.id,
+              total_score: scorecard.total,
+              grade: scorecard.grade,
+              category_scores: scorecard.categories as unknown as Json,
+              recommendation: scorecard.recommendation,
+              fairness_status: scorecard.fairness_status,
+            });
+            scorecardId = sc?.id ?? null;
+            persisted = true;
+          }
+        }
+      } catch (persistErr) {
+        Sentry.captureException(persistErr);
+      }
+      res.json({ scorecard, persisted, applicationId, scorecardId });
+    } catch (e) {
+      Sentry.captureException(e);
+      res.status(502).json({ error: e instanceof Error ? e.message : String(e) });
+    }
+  })
+);
+
+app.post(
+  "/api/interview/document",
+  rateLimitDisabled ? ((_req, _res, next) => next()) : heavyLimiter,
+  asyncHandler(async (req, res) => {
+    const templateKey = String(req.body?.templateKey ?? "").trim();
+    const renderedHtml = String(req.body?.renderedHtml ?? "");
+    const data = (req.body?.data ?? {}) as Json;
+    const entityType = String(req.body?.entityType ?? "scorecard");
+    const rawEntityId = req.body?.entityId;
+    const entityId =
+      typeof rawEntityId === "string" && rawEntityId ? rawEntityId : null;
+    if (!templateKey || !renderedHtml) {
+      res.status(400).json({ error: "'templateKey' e 'renderedHtml' são obrigatórios" });
+      return;
+    }
+    try {
+      const doc = await saveDocument({
+        entity_type: entityType,
+        entity_id: entityId,
+        template_key: templateKey,
+        data,
+        rendered_html: renderedHtml,
+      });
+      res.json({ id: doc?.id ?? null, persisted: doc !== null });
+    } catch (e) {
+      Sentry.captureException(e);
+      res.status(502).json({ error: e instanceof Error ? e.message : String(e) });
     }
   })
 );
