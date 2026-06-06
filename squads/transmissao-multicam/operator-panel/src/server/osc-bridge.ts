@@ -81,6 +81,12 @@ export async function startOscBridge(): Promise<void> {
   const obsHost = process.env.OBS_WS_HOST ?? "localhost";
   const obsPort = Number(process.env.OBS_WS_PORT ?? "4455");
   const obsPassword = process.env.OSC_OBS_PASSWORD ?? "";
+  const RECONNECT_DELAY_MS = 5000;
+
+  // Auto-reconnect: OBS restarts mid-show should heal without restarting
+  // the panel. The bridge has no `close()` (process lifetime == Next.js
+  // dev/prod server), so we always retry — there's no shutdown state to
+  // coordinate with.
 
   const connectObs = async () => {
     try {
@@ -91,14 +97,19 @@ export async function startOscBridge(): Promise<void> {
       sendFeedback("/tx/feedback/connected", [1]);
     } catch (err) {
       console.warn(
-        "[osc-bridge] obs-websocket connection failed; bridge will retry on demand:",
+        `[osc-bridge] obs-websocket connection failed; retrying in ${RECONNECT_DELAY_MS / 1000}s:`,
         err instanceof Error ? err.message : err,
       );
+      setTimeout(() => void connectObs(), RECONNECT_DELAY_MS);
     }
   };
 
   obs.on("ConnectionClosed", () => {
     sendFeedback("/tx/feedback/connected", [0]);
+    console.log(
+      `[osc-bridge] obs-websocket connection closed; retrying in ${RECONNECT_DELAY_MS / 1000}s`,
+    );
+    setTimeout(() => void connectObs(), RECONNECT_DELAY_MS);
   });
 
   obs.on("CurrentProgramSceneChanged", (data: { sceneName: string }) => {
@@ -141,10 +152,12 @@ export async function startOscBridge(): Promise<void> {
     for (const input of inputs) {
       const ch = channels.find((c) => c.obsSourceName === input.inputName);
       if (!ch) continue;
-      const peakMul = Math.max(
-        0,
-        ...input.inputLevelsMul.flat().filter((v) => Number.isFinite(v)),
-      );
+      // OBS may omit inputLevelsMul during pauses; guard so `.flat()` doesn't
+      // throw and kill the whole meter pipeline for the other channels.
+      const levels = input.inputLevelsMul;
+      const peakMul = Array.isArray(levels)
+        ? Math.max(0, ...levels.flat().filter((v) => Number.isFinite(v)))
+        : 0;
       const peakDb = peakMul > 0 ? Math.max(20 * Math.log10(peakMul), -60) : -60;
       sendFeedback(`/tx/feedback/audio/level/${ch.id}`, [peakDb]);
     }
@@ -228,23 +241,32 @@ async function dispatchCommand(
       const size = (Number(resolved.size) as PipSize | undefined) ?? op.pip.defaultSizePercent;
       const cfg = op.pip ?? PIP_FALLBACK;
       const geo = pipGeometry(size, corner, cfg);
+      // Per-scene try/catch: if SLIDES_PIP is missing in this OBS scene
+      // collection, we still want TELA_PIP to be updated, and vice versa.
       for (const scene of ["SLIDES_PIP", "TELA_PIP"]) {
-        const items = (await obs.call("GetSceneItemList", { sceneName: scene })) as {
-          sceneItems: Array<{ sceneItemId: number; sourceName: string }>;
-        };
-        const mirror = items.sceneItems.find((it) => it.sourceName === PIP_MIRROR_SOURCE);
-        if (!mirror) continue; // operator may have non-PIP scene customized
-        await obs.call("SetSceneItemTransform", {
-          sceneName: scene,
-          sceneItemId: mirror.sceneItemId,
-          sceneItemTransform: {
-            positionX: geo.x,
-            positionY: geo.y,
-            boundsWidth: geo.width,
-            boundsHeight: geo.height,
-            boundsType: "OBS_BOUNDS_SCALE_INNER",
-          },
-        });
+        try {
+          const items = (await obs.call("GetSceneItemList", { sceneName: scene })) as {
+            sceneItems: Array<{ sceneItemId: number; sourceName: string }>;
+          };
+          const mirror = items.sceneItems.find((it) => it.sourceName === PIP_MIRROR_SOURCE);
+          if (!mirror) continue; // operator may have non-PIP scene customized
+          await obs.call("SetSceneItemTransform", {
+            sceneName: scene,
+            sceneItemId: mirror.sceneItemId,
+            sceneItemTransform: {
+              positionX: geo.x,
+              positionY: geo.y,
+              boundsWidth: geo.width,
+              boundsHeight: geo.height,
+              boundsType: "OBS_BOUNDS_SCALE_INNER",
+            },
+          });
+        } catch (err) {
+          console.warn(
+            `[osc-bridge] Failed to set PiP layout for scene ${scene}:`,
+            err instanceof Error ? err.message : err,
+          );
+        }
       }
       break;
     }

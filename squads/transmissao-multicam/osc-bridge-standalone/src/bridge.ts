@@ -66,8 +66,14 @@ export async function startBridge(): Promise<BridgeHandle> {
   const obsHost = process.env.OBS_WS_HOST ?? "localhost";
   const obsPort = Number(process.env.OBS_WS_PORT ?? "4455");
   const obsPassword = process.env.OSC_OBS_PASSWORD ?? "";
+  const RECONNECT_DELAY_MS = 5000;
+
+  // Set to true by close() so the reconnect timer doesn't fire after
+  // intentional shutdown.
+  let closed = false;
 
   const connectObs = async () => {
+    if (closed) return;
     try {
       await obs.connect(`ws://${obsHost}:${obsPort}`, obsPassword, {
         eventSubscriptions: EventSubscription.All,
@@ -76,14 +82,21 @@ export async function startBridge(): Promise<BridgeHandle> {
       sendFeedback("/tx/feedback/connected", [1]);
     } catch (err) {
       console.warn(
-        "[bridge] obs-websocket connection failed; bridge will retry on demand:",
+        `[bridge] obs-websocket connection failed; retrying in ${RECONNECT_DELAY_MS / 1000}s:`,
         err instanceof Error ? err.message : err,
       );
+      setTimeout(() => void connectObs(), RECONNECT_DELAY_MS);
     }
   };
 
   obs.on("ConnectionClosed", () => {
     sendFeedback("/tx/feedback/connected", [0]);
+    if (!closed) {
+      console.log(
+        `[bridge] obs-websocket connection closed; retrying in ${RECONNECT_DELAY_MS / 1000}s`,
+      );
+      setTimeout(() => void connectObs(), RECONNECT_DELAY_MS);
+    }
   });
 
   obs.on("CurrentProgramSceneChanged", (data: { sceneName: string }) => {
@@ -129,10 +142,12 @@ export async function startBridge(): Promise<BridgeHandle> {
     for (const input of inputs) {
       const ch = channels.find((c) => c.obsSourceName === input.inputName);
       if (!ch) continue;
-      const peakMul = Math.max(
-        0,
-        ...input.inputLevelsMul.flat().filter((v) => Number.isFinite(v)),
-      );
+      // OBS may omit inputLevelsMul during pauses; guard so `.flat()` doesn't
+      // throw and kill the whole meter pipeline for the other channels.
+      const levels = input.inputLevelsMul;
+      const peakMul = Array.isArray(levels)
+        ? Math.max(0, ...levels.flat().filter((v) => Number.isFinite(v)))
+        : 0;
       const peakDb = peakMul > 0 ? Math.max(20 * Math.log10(peakMul), -60) : -60;
       sendFeedback(`/tx/feedback/audio/level/${ch.id}`, [peakDb]);
     }
@@ -186,6 +201,9 @@ export async function startBridge(): Promise<BridgeHandle> {
   return {
     status,
     close: async () => {
+      // Stop the auto-reconnect loop before tearing down so we don't
+      // race with a pending setTimeout reconnecting after disconnect().
+      closed = true;
       try {
         udp.close();
       } catch { /* socket may already be closed */ }
@@ -228,23 +246,32 @@ async function dispatchCommand(
       const size = (Number(resolved.size) as PipSize | undefined) ?? op.pip.defaultSizePercent;
       const cfg = op.pip ?? PIP_FALLBACK;
       const geo = pipGeometry(size, corner, cfg);
+      // Per-scene try/catch: if SLIDES_PIP is missing in this OBS scene
+      // collection, we still want TELA_PIP to be updated, and vice versa.
       for (const scene of ["SLIDES_PIP", "TELA_PIP"]) {
-        const items = (await obs.call("GetSceneItemList", { sceneName: scene })) as {
-          sceneItems: Array<{ sceneItemId: number; sourceName: string }>;
-        };
-        const mirror = items.sceneItems.find((it) => it.sourceName === PIP_MIRROR_SOURCE);
-        if (!mirror) continue;
-        await obs.call("SetSceneItemTransform", {
-          sceneName: scene,
-          sceneItemId: mirror.sceneItemId,
-          sceneItemTransform: {
-            positionX: geo.x,
-            positionY: geo.y,
-            boundsWidth: geo.width,
-            boundsHeight: geo.height,
-            boundsType: "OBS_BOUNDS_SCALE_INNER",
-          },
-        });
+        try {
+          const items = (await obs.call("GetSceneItemList", { sceneName: scene })) as {
+            sceneItems: Array<{ sceneItemId: number; sourceName: string }>;
+          };
+          const mirror = items.sceneItems.find((it) => it.sourceName === PIP_MIRROR_SOURCE);
+          if (!mirror) continue;
+          await obs.call("SetSceneItemTransform", {
+            sceneName: scene,
+            sceneItemId: mirror.sceneItemId,
+            sceneItemTransform: {
+              positionX: geo.x,
+              positionY: geo.y,
+              boundsWidth: geo.width,
+              boundsHeight: geo.height,
+              boundsType: "OBS_BOUNDS_SCALE_INNER",
+            },
+          });
+        } catch (err) {
+          console.warn(
+            `[bridge] Failed to set PiP layout for scene ${scene}:`,
+            err instanceof Error ? err.message : err,
+          );
+        }
       }
       break;
     }
