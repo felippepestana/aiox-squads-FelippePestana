@@ -9,6 +9,9 @@ export async function GET() {
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
 
+  const { data: hakuna } = await supabase.from("hakunas").select("id").eq("email", user.email!).single();
+  if (!hakuna) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+
   const [
     { data: senderistas },
     { data: atividades },

@@ -109,10 +109,12 @@ export default function EventoDashboard() {
   }, [fetch72h]);
 
   async function marcarRealizado(id: string) {
+    const atividade = data?.atividades.find(a => a.id === id);
+    if (!atividade) return;
     await fetch("/api/admin/evento", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, nome: "", tipo: "outro", hora_real: new Date().toISOString() }),
+      body: JSON.stringify({ id, nome: atividade.nome, tipo: atividade.tipo, hora_real: new Date().toISOString() }),
     });
     fetch72h();
   }

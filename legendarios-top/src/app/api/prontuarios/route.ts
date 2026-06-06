@@ -9,7 +9,7 @@ const schema = z.object({
   queixas: z.string().optional().nullable(),
   condutas: z.string().optional().nullable(),
   fotos_urls: z.array(z.string()).default([]),
-  created_at: z.string().optional(),
+  created_at: z.string().datetime().optional(),
 });
 
 export async function POST(request: Request) {
@@ -27,21 +27,30 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
   }
 
-  const { data: hakuna } = await supabase
+  const { data: hakuna, error: hakunaError } = await supabase
     .from("hakunas")
     .select("id")
     .eq("email", user.email!)
     .maybeSingle();
 
-  const { data, error } = await supabase.from("prontuarios").insert({
+  if (hakunaError) {
+    console.error("Hakuna lookup error:", hakunaError);
+    return NextResponse.json({ error: "Erro ao verificar permissão" }, { status: 500 });
+  }
+
+  if (!hakuna) {
+    return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+  }
+
+  const { data, error } = await supabase.from("prontuarios").upsert({
     id: parsed.data.id,
     senderista_id: parsed.data.senderista_id,
-    hakuna_id: hakuna?.id ?? null,
+    hakuna_id: hakuna.id,
     queixas: parsed.data.queixas,
     condutas: parsed.data.condutas,
     fotos_urls: parsed.data.fotos_urls,
     created_at: parsed.data.created_at,
-  }).select("id").single();
+  }, { onConflict: "id" }).select("id").single();
 
   if (error) {
     console.error("Prontuario insert error:", error);

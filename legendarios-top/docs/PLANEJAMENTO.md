@@ -65,7 +65,7 @@ Priorização derivada do DESCRITIVO.md seção 7 (Gaps), ordenada por impacto o
 - Botão "Notificar via WhatsApp" (stub se Evolution não configurada): envia mensagem de resultado
 
 **Endpoints**:
-```
+```http
 PATCH /api/exames/[exameId]/validar
   body: { validado: boolean, motivo_reprovacao?: string }
 ```
@@ -341,7 +341,7 @@ import * as Sentry from "@sentry/nextjs";
 
 ## 6. Dependências Críticas (caminho crítico)
 
-```
+```text
 Resposta P8 (Evolution API) ──► Sprint 3 item 3.10 (WhatsApp automatizado)
 Resposta P1 (API TicketGo)  ──► Sprint 4 item 3.12 (automação sync)
 Resposta P4 (roles Hakunas) ──► Sprint 3 item 3.9 (confirmação da tabela de permissões)

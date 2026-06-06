@@ -21,7 +21,17 @@ export async function PATCH(request: Request, { params }: Params) {
     return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
   }
 
-  const body = await request.json();
+  if (!user.email) {
+    return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+  }
+
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "JSON inválido" }, { status: 400 });
+  }
+
   const parsed = schema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
@@ -32,24 +42,33 @@ export async function PATCH(request: Request, { params }: Params) {
   const { data: hakuna } = await admin
     .from("hakunas")
     .select("id")
-    .eq("email", user.email!)
+    .eq("email", user.email)
     .maybeSingle();
 
-  const { error } = await admin
+  if (!hakuna) {
+    return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+  }
+
+  const { data: updated, error } = await admin
     .from("exames")
     .update({
       validado: parsed.data.validado,
-      validado_por: hakuna?.id ?? null,
+      validado_por: hakuna.id,
       motivo_reprovacao: !parsed.data.validado
         ? (parsed.data.motivo_reprovacao ?? null)
         : null,
     })
-    .eq("id", exameId);
+    .eq("id", exameId)
+    .select("id")
+    .single();
 
   if (error) {
+    if (error.code === "PGRST116") {
+      return NextResponse.json({ error: "Exame não encontrado" }, { status: 404 });
+    }
     console.error("Exam validation error:", error);
     return NextResponse.json({ error: "Erro ao validar exame" }, { status: 500 });
   }
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ ok: true, id: updated.id });
 }

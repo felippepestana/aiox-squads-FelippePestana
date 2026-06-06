@@ -39,8 +39,7 @@ export async function POST(request: Request) {
 
     const supabase = createAdminClient();
 
-    // Upsert by CPF when provided to avoid duplicates
-    const record = {
+    const baseFields = {
       nome: data.nome,
       telefone: data.telefone,
       data_nascimento: data.data_nascimento,
@@ -52,7 +51,6 @@ export async function POST(request: Request) {
       comorbidades: data.comorbidades,
       classificacao_risco: triagem.risco,
       exames_exigidos: triagem.exames,
-      status: "pendente",
       cpf,
       restricao_alimentar: data.restricao_alimentar,
       nome_conjuge: data.nome_conjuge ?? null,
@@ -63,17 +61,35 @@ export async function POST(request: Request) {
 
     let senderista;
     if (cpf) {
-      const { data: upserted, error } = await supabase
+      // Preserve existing status on re-submission — only set "pendente" on first insert
+      const { data: existing } = await supabase
         .from("senderistas")
-        .upsert(record, { onConflict: "cpf", ignoreDuplicates: false })
-        .select("id, upload_token, mensagens_token")
-        .single();
-      if (error) throw error;
-      senderista = upserted;
+        .select("id")
+        .eq("cpf", cpf)
+        .maybeSingle();
+
+      if (existing) {
+        const { data: updated, error } = await supabase
+          .from("senderistas")
+          .update(baseFields)
+          .eq("id", existing.id)
+          .select("id, upload_token, mensagens_token")
+          .single();
+        if (error) throw error;
+        senderista = updated;
+      } else {
+        const { data: inserted, error } = await supabase
+          .from("senderistas")
+          .insert({ ...baseFields, status: "pendente" })
+          .select("id, upload_token, mensagens_token")
+          .single();
+        if (error) throw error;
+        senderista = inserted;
+      }
     } else {
       const { data: inserted, error } = await supabase
         .from("senderistas")
-        .insert(record)
+        .insert({ ...baseFields, status: "pendente" })
         .select("id, upload_token, mensagens_token")
         .single();
       if (error) throw error;

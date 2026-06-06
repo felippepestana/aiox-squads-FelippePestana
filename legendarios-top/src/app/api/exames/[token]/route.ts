@@ -87,7 +87,7 @@ export async function POST(request: Request, { params }: Params) {
 
 export async function PATCH(request: Request, { params }: Params) {
   const { token } = await params;
-  const supabase = await createClient();
+  const admin = createAdminClient();
 
   const body = await request.json();
   if (body.status !== "exames_enviados") {
@@ -95,7 +95,7 @@ export async function PATCH(request: Request, { params }: Params) {
   }
 
   // Only allow status change if participant is still pending — prevent downgrade from aprovado/reprovado
-  const { data: current, error: readError } = await supabase
+  const { data: current, error: readError } = await admin
     .from("senderistas")
     .select("status")
     .eq("upload_token", token)
@@ -109,7 +109,7 @@ export async function PATCH(request: Request, { params }: Params) {
     return NextResponse.json({ error: "Status não pode ser alterado" }, { status: 409 });
   }
 
-  const { error } = await supabase
+  const { error } = await admin
     .from("senderistas")
     .update({ status: "exames_enviados", updated_at: new Date().toISOString() })
     .eq("upload_token", token);
