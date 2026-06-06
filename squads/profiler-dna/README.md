@@ -1,24 +1,27 @@
 # Profiler-DNA — Inteligência Comportamental
 
-> 🟡 **Em desenvolvimento (esqueleto).** Este módulo da plataforma [Apex-Talent](../apex-talent/) disponibiliza hoje apenas o agente **Chief** (`profiler-dna-chief`), que faz o intake da área e escopa o fluxo de especialistas a ser construído. Os agentes especialistas, tasks e templates serão adicionados nas próximas iterações.
+> 🟢 **Módulo ativo** da plataforma [Apex-Talent](../apex-talent/). É o **motor comportamental transversal** — reutilizável por R&S, onboarding, desempenho e gestão.
 
-## Área
+Profiler-DNA mapeia **estilo de trabalho (DISC)**, **traços (Big Five/OCEAN)** e oferece uma **lente de desenvolvimento (Eneagrama)**, sintetizando tudo em um perfil acionável para **comunicação, gestão e onboarding**.
 
-**Inteligência Comportamental** — parte da suíte de RH AI-native Apex-Talent.
+**Princípio inegociável:** é **contexto de desenvolvimento, peso 0** — nunca filtro de seleção, promoção ou remuneração. Todo perfil passa por um **gate de ética/consentimento/anti-estereótipo** com poder de veto.
 
-Motor de inteligência comportamental transversal. Mapeia estilos de trabalho (DISC), traços (Big Five) e fornece contexto de desenvolvimento (Eneagrama) para outros módulos, sempre como contexto — nunca como decisão.
+## Cadeia de comando (tiers)
 
-## Funcionalidades-alvo
+| Tier | Agente | Papel |
+|------|--------|-------|
+| 0 | `profiler-dna-chief` | Orquestra as lentes e sintetiza o perfil |
+| 1 | `disc-mapper` | Estilo de trabalho DISC (D/I/S/C) |
+| 1 | `bigfive-assessor` | Traços OCEAN (Big Five) |
+| 2 | `enneagram-lens` | Lente Eneagrama de desenvolvimento (consentida) |
+| 2 | `fit-advisor` | Fit cultura/cargo/time (advisory) |
+| 3 | `ethics-gate` | Gate de ética/consentimento/anti-estereótipo — **veto** |
 
-- Mapeamento DISC (executor / comunicador / analista / planejador)
-- Big Five (OCEAN)
-- Eneagrama como lente de desenvolvimento
-- Fit cultura, cargo e time (advisory)
-- Relatório de liderança, gaps e dicas de gestão
+## Fluxo (workflow `wf-behavioral-profile`)
 
-## Diferencial de IA
-
-Veja o [mapa de oportunidades de IA](../apex-talent/data/ai-opportunity-map.md) para o detalhe da abordagem AI-native desta área.
+```text
+CONSENT ─▶ DISC ─▶ BIG FIVE ─▶ ENEAGRAMA(opt) ─▶ SÍNTESE ─▶ FIT(opt) ─▶ ÉTICA(veto) ─▶ PLANO DE DEV
+```
 
 ## Como usar
 
@@ -26,19 +29,25 @@ Selecione `profiler-dna:profiler-dna-chief` no chatbot ou na web.
 
 Comandos do Chief:
 
-- `*map-profile — Map a behavioral profile (DISC + context)`
-- `*fit-analysis — Advisory culture/role/team fit`
-- `*dev-plan — Development plan and management tips per profile`
-- `*team-fit — Read complementarity within a team`
-- `*help` — lista os comandos
-- `*exit` — encerra o agente
+- `*map-profile` — perfil completo (DISC + Big Five + síntese)
+- `*read-disc` — só o estilo DISC
+- `*assess-bigfive` — só os traços OCEAN
+- `*enneagram-lens` — lente Eneagrama (consentida)
+- `*fit-analysis` — fit advisory (cultura/cargo/time)
+- `*dev-plan` — dicas de gestão + plano de desenvolvimento
+- `*ethics-review` — roda o gate de ética
+- `*help` / `*exit`
 
-## Roadmap
+## Conexão com outros módulos
 
-1. **Agora:** Chief (intake + escopo do fluxo). ✅
-2. **Próximo:** agentes especialistas (Tier 1/2), tasks e templates da área.
-3. **Depois:** workflow `wf-*` e integração de dados com os demais módulos.
+- **talent-compass:** fornece a leitura comportamental como **contexto (peso 0)** — a seleção continua por evidência.
+- **onboard:** personaliza a jornada 30/60/90 pelo perfil.
+- **performa:** informa PDI e dicas de gestão.
 
-## Referência
+## Ética por design
 
-Baseado em: *DiSC + Big Five (OCEAN) + The Enneagram in Business*.
+Veja [`data/anti-stereotype-guardrails.md`](data/anti-stereotype-guardrails.md): consentimento obrigatório, tendências (não tipos), peso 0, sem proxy de atributos protegidos, sem claims clínicos. O `ethics-gate` veta o que violar.
+
+## Referências
+
+Baseado em: *DiSC (Marston)*, *Big Five / Five-Factor Model (OCEAN)* e *The Enneagram in Business* — usados estritamente como contexto.

@@ -100,7 +100,7 @@ output_examples:
       | Módulo | Área | Status |
       |--------|------|--------|
       | talent-compass | Recrutamento & Seleção + Entrevistas | 🟢 Ativo |
-      | profiler-dna | Inteligência Comportamental | 🟡 Em desenvolvimento |
+      | profiler-dna | Inteligência Comportamental | 🟢 Ativo |
       | performa | Gestão de Desempenho | 🟡 Em desenvolvimento |
       | pulse | Clima & Engajamento | 🟡 Em desenvolvimento |
       | peopleops | Departamento Pessoal & Folha | 🟡 Em desenvolvimento |

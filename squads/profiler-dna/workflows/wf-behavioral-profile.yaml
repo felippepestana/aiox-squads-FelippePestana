@@ -1,0 +1,103 @@
+name: wf-behavioral-profile
+display_name: "Behavioral Profile: Consent → DISC → Big Five → Enneagram → Synthesize → Fit → Ethics → Dev Plan"
+version: "1.0.0"
+description: "Consent-first behavioral profiling. Reads DISC and Big Five (and optionally an Enneagram developmental lens), synthesizes one coherent narrative, optionally advises on fit, passes a mandatory ethics/anti-stereotype gate, and produces management tips + a development plan. Output is context with weight 0 — never a selection/promotion/pay factor."
+
+trigger: "*map-profile"
+orchestrator: "profiler-dna-chief"
+
+inputs:
+  - name: "consent"
+    description: "Explicit informed consent to profile (required)"
+    required: true
+    elicit: true
+  - name: "source"
+    description: "Answers, free text, or questionnaire to read from"
+    required: true
+    elicit: true
+  - name: "team_context"
+    description: "Team/role context for optional fit analysis"
+    required: false
+
+phases:
+  phase_1_intake:
+    name: "Consent & Intake"
+    description: "Confirm informed consent and gather the source material. No consent, no profile."
+    agents: ["profiler-dna-chief"]
+    execution: "interactive"
+    checkpoint:
+      name: "Consent Confirmed"
+      veto_conditions:
+        - "No explicit consent → HALT"
+
+  phase_2_disc:
+    name: "DISC Work-Style"
+    description: "Read the DISC blend as context with confidence."
+    depends_on: "phase_1_intake"
+    agents: ["disc-mapper"]
+    tasks:
+      - { agent: "disc-mapper", task: "map-disc.md", output: "disc-read.yaml" }
+
+  phase_3_bigfive:
+    name: "Big Five (OCEAN)"
+    description: "Read OCEAN trait tendencies with cited evidence."
+    depends_on: "phase_1_intake"
+    agents: ["bigfive-assessor"]
+    tasks:
+      - { agent: "bigfive-assessor", task: "assess-bigfive.md", output: "bigfive-read.yaml" }
+
+  phase_4_enneagram:
+    name: "Enneagram Lens (optional)"
+    description: "Optional developmental lens from self-reported type, consent-based, weight 0."
+    depends_on: "phase_1_intake"
+    agents: ["enneagram-lens"]
+    optional: true
+    tasks:
+      - { agent: "enneagram-lens", task: "enneagram-lens.md", output: "enneagram-lens.yaml" }
+
+  phase_5_synthesize:
+    name: "Synthesize Profile"
+    description: "Reconcile lenses into one coherent narrative; note disagreements."
+    depends_on: ["phase_2_disc", "phase_3_bigfive"]
+    agents: ["profiler-dna-chief"]
+    tasks:
+      - { agent: "profiler-dna-chief", task: "synthesize-profile.md", output: "behavioral-profile.yaml" }
+
+  phase_6_fit:
+    name: "Advisory Fit (optional)"
+    description: "Advisory culture/role/team fit — complementarity over sameness, weight 0."
+    depends_on: "phase_5_synthesize"
+    agents: ["fit-advisor"]
+    optional: true
+    tasks:
+      - { agent: "fit-advisor", task: "fit-analysis.md", output: "fit-report.yaml" }
+
+  phase_7_ethics:
+    name: "Ethics & Anti-Stereotype Gate"
+    description: "Mandatory gate: consent, anti-stereotype, weight-0, no clinical overreach. Veto power."
+    depends_on: "phase_5_synthesize"
+    agents: ["ethics-gate"]
+    execution: "audit"
+    tasks:
+      - { agent: "ethics-gate", task: "ethics-review.md", output: "ethics-audit.yaml" }
+    checkpoint:
+      name: "Ethics Verdict"
+      veto_conditions:
+        - "No consent → VETO"
+        - "Deterministic stereotyping language → VETO"
+        - "Used/framed as a decision factor → VETO"
+        - "Clinical/diagnostic claim → VETO"
+
+  phase_8_devplan:
+    name: "Development Plan"
+    description: "Management tips + development plan. Requires a PASSED ethics audit."
+    depends_on: "phase_7_ethics"
+    agents: ["profiler-dna-chief"]
+    tasks:
+      - { agent: "profiler-dna-chief", task: "dev-plan.md", output: "development-plan.md" }
+
+outputs:
+  - "behavioral-profile.yaml — Multi-lens profile (context, weight 0)"
+  - "fit-report.yaml — Advisory fit (optional)"
+  - "ethics-audit.yaml — Ethics/anti-stereotype verdict (PASS/VETO)"
+  - "development-plan.md — Management tips + development plan"

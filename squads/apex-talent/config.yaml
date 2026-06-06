@@ -22,7 +22,7 @@ metadata:
   status: ACTIVE
   modules:
     - { squad: "talent-compass", area: "Recrutamento & Seleção + Entrevistas", status: ACTIVE }
-    - { squad: "profiler-dna", area: "Inteligência Comportamental", status: DEVELOPING }
+    - { squad: "profiler-dna", area: "Inteligência Comportamental", status: ACTIVE }
     - { squad: "performa", area: "Gestão de Desempenho", status: DEVELOPING }
     - { squad: "pulse", area: "Clima & Engajamento", status: DEVELOPING }
     - { squad: "peopleops", area: "Departamento Pessoal & Folha", status: DEVELOPING }

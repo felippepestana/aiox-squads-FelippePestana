@@ -176,7 +176,8 @@ Squads publicados pela comunidade neste repositório.
 [**Apex-Talent**](squads/apex-talent/) é uma suíte de RH no espírito do universo Sólides/Gupy/Feedz: cada área é um squad AIOX independente, orquestrado pelo `apex-talent-chief`.
 
 - 🟢 **Flagship construído:** [`talent-compass`](squads/talent-compass/) (R&S + entrevistas) — 8 agentes (T0→T3), tasks, templates, checklists, workflow, **feature web dedicada** (`web/`) e **minutas** imprimíveis, com persistência opcional em **Supabase**.
-- 🟡 **Esqueletos (Chief-only):** `profiler-dna`, `performa`, `pulse`, `peopleops`, `chronos`, `onboard`, `academy`, `insights`, `org-architect`, `benefits-hub`.
+- 🟢 **Motor comportamental construído:** [`profiler-dna`](squads/profiler-dna/) (DISC + Big Five + Eneagrama) — 6 agentes (T0→T3), tasks, templates, checklist e workflow, com gate de ética/consentimento e princípio de contexto peso 0.
+- 🟡 **Esqueletos (Chief-only):** `performa`, `pulse`, `peopleops`, `chronos`, `onboard`, `academy`, `insights`, `org-architect`, `benefits-hub`.
 
 Veja o [blueprint por área](squads/apex-talent/data/platform-blueprint.md) e o [mapa de oportunidades de IA](squads/apex-talent/data/ai-opportunity-map.md).
 
