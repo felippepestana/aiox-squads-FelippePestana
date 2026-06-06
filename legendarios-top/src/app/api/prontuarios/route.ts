@@ -27,9 +27,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
   }
 
+  const { data: hakuna } = await supabase
+    .from("hakunas")
+    .select("id")
+    .eq("email", user.email!)
+    .maybeSingle();
+
   const { data, error } = await supabase.from("prontuarios").insert({
     id: parsed.data.id,
     senderista_id: parsed.data.senderista_id,
+    hakuna_id: hakuna?.id ?? null,
     queixas: parsed.data.queixas,
     condutas: parsed.data.condutas,
     fotos_urls: parsed.data.fotos_urls,

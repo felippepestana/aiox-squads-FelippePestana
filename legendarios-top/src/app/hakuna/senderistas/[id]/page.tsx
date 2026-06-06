@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { RISK_LABELS, EXAM_LABELS, type RiskLevel, type ExamType } from "@/lib/triage";
 import SenderistActions from "@/components/hakuna-dashboard/senderista-actions";
+import ExameValidar from "@/components/hakuna-dashboard/exame-validar";
 import Link from "next/link";
 import { ChevronLeft, Heart } from "lucide-react";
 
@@ -125,18 +126,24 @@ export default async function SenderistaDetailPage({ params }: Props) {
           ) : (
             <div className="space-y-2">
               {exames.map((e) => (
-                <div key={e.id} className="flex items-center justify-between border rounded p-3">
-                  <div>
-                    <p className="text-sm font-medium">{EXAM_LABELS[e.tipo as ExamType] ?? e.tipo}</p>
-                    {e.signed_url && (
-                      <a href={e.signed_url} target="_blank" className="text-xs text-blue-600 underline">
-                        Ver arquivo
-                      </a>
-                    )}
+                <div key={e.id} className="border rounded p-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium">{EXAM_LABELS[e.tipo as ExamType] ?? e.tipo}</p>
+                      {e.signed_url && (
+                        <a href={e.signed_url} target="_blank" className="text-xs text-blue-600 underline">
+                          Ver arquivo
+                        </a>
+                      )}
+                      {e.validado === false && e.motivo_reprovacao && (
+                        <p className="text-xs text-red-600 mt-0.5">Reprovado: {e.motivo_reprovacao}</p>
+                      )}
+                    </div>
+                    <Badge variant={e.validado === true ? "aprovado" : e.validado === false ? "reprovado" : "pendente"}>
+                      {e.validado === true ? "Aprovado" : e.validado === false ? "Reprovado" : "Pendente"}
+                    </Badge>
                   </div>
-                  <Badge variant={e.validado === true ? "aprovado" : e.validado === false ? "reprovado" : "pendente"}>
-                    {e.validado === true ? "Aprovado" : e.validado === false ? "Reprovado" : "Pendente"}
-                  </Badge>
+                  <ExameValidar exameId={e.id} validado={e.validado ?? null} />
                 </div>
               ))}
             </div>
@@ -167,9 +174,16 @@ export default async function SenderistaDetailPage({ params }: Props) {
                 {p.queixas && <p><strong>Queixas:</strong> {p.queixas}</p>}
                 {p.condutas && <p><strong>Condutas:</strong> {p.condutas}</p>}
                 {p.fotos_urls?.length > 0 && (
-                  <div className="flex gap-2 flex-wrap">
+                  <div className="flex gap-2 flex-wrap mt-2">
                     {p.fotos_urls.map((url: string, i: number) => (
-                      <a key={i} href={url} target="_blank" className="text-blue-600 underline text-xs">Foto {i + 1}</a>
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <a key={i} href={url} target="_blank" rel="noreferrer">
+                        <img
+                          src={url}
+                          alt={`Foto ${i + 1}`}
+                          className="w-20 h-20 object-cover rounded border hover:opacity-80 transition-opacity"
+                        />
+                      </a>
                     ))}
                   </div>
                 )}
