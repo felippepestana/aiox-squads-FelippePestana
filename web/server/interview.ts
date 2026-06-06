@@ -73,15 +73,24 @@ function extractText(msg: Anthropic.Message): string {
   return block && block.type === "text" ? block.text : "";
 }
 
-/** Parse a JSON object from a model response, tolerating code fences/prose. */
+/** Parse a JSON object from a model response, tolerating code fences/prose.
+ * Fails fast if the result is not a non-null object, so malformed model output
+ * never gets coerced into a typed shape downstream. */
 function parseJson<T>(raw: string): T {
   let s = raw.trim();
   const fence = s.match(/```(?:json)?\s*([\s\S]*?)```/i);
   if (fence) s = fence[1].trim();
   const start = s.indexOf("{");
   const end = s.lastIndexOf("}");
-  if (start >= 0 && end > start) s = s.slice(start, end + 1);
-  return JSON.parse(s) as T;
+  if (start < 0 || end <= start) {
+    throw new Error("Model response did not contain a JSON object.");
+  }
+  s = s.slice(start, end + 1);
+  const parsed: unknown = JSON.parse(s);
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+    throw new Error("Model response was not a valid JSON object.");
+  }
+  return parsed as T;
 }
 
 async function askJson<T>(

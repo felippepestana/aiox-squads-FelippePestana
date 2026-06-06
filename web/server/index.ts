@@ -316,6 +316,7 @@ app.post(
 
 app.post(
   "/api/interview/document",
+  rateLimitDisabled ? ((_req, _res, next) => next()) : heavyLimiter,
   asyncHandler(async (req, res) => {
     const templateKey = String(req.body?.templateKey ?? "").trim();
     const renderedHtml = String(req.body?.renderedHtml ?? "");

@@ -202,11 +202,31 @@ async function postJson<T>(url: string, body: unknown): Promise<T> {
     headers: portalHeaders(true),
     body: JSON.stringify(body),
   });
-  if (!r.ok) {
-    const j = await r.json().catch(() => ({}));
-    throw new Error((j as { error?: string }).error ?? (await r.text()));
+
+  // Read the body once as text, then parse — avoids double-consuming the body
+  // and preserves the original payload when the response is not valid JSON.
+  const text = await r.text();
+  let parsed: unknown;
+  if (text) {
+    try {
+      parsed = JSON.parse(text);
+    } catch {
+      parsed = undefined;
+    }
   }
-  return r.json();
+
+  if (!r.ok) {
+    const maybeError =
+      parsed && typeof parsed === "object" && "error" in parsed
+        ? (parsed as { error?: string }).error
+        : undefined;
+    throw new Error(maybeError || text || r.statusText);
+  }
+
+  if (parsed === undefined && text) {
+    throw new Error("Resposta JSON inválida do servidor.");
+  }
+  return parsed as T;
 }
 
 export async function interviewStatus(): Promise<{ dbEnabled: boolean }> {

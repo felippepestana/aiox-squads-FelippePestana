@@ -28,13 +28,15 @@ function tryLoadFromBundle(): Squad[] | null {
     _bundleCache = raw.map((s) => ({
       id: s.id,
       meta: s.meta,
-      agents: s.agents.map((a) => ({
-        id: a.id,
-        name: a.name,
-        squad: s.id,
-        filePath: `bundled:${s.id}/${a.id}`,
-        systemPrompt: buildSystemPrompt(a.content, a.name, s.id),
-      })),
+      agents: orderAgents(
+        s.agents.map((a) => ({
+          id: a.id,
+          name: a.name,
+          squad: s.id,
+          filePath: `bundled:${s.id}/${a.id}`,
+          systemPrompt: buildSystemPrompt(a.content, a.name, s.id),
+        }))
+      ),
     }));
     return _bundleCache;
   } catch {
@@ -105,6 +107,33 @@ function loadSquadMeta(squadDir: string, squadId: string): SquadMeta {
   }
 }
 
+/** Lê o entry_agent declarado no config.yaml (se houver). */
+function loadEntryAgent(squadDir: string): string | null {
+  const configPath = path.join(squadDir, "config.yaml");
+  if (!fs.existsSync(configPath)) return null;
+  try {
+    const raw = fs.readFileSync(configPath, "utf-8");
+    const m = raw.match(/^\s*entry_agent:\s*"?([^\n"]+)"?\s*$/m);
+    return m ? m[1].trim() : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Coloca o agente de entrada primeiro: entry_agent declarado, senão o `*-chief`.
+ * Garante que iniciar uma sessão abra o orquestrador, não o primeiro alfabético. */
+function orderAgents<T extends { id: string }>(
+  agents: T[],
+  entryId?: string | null
+): T[] {
+  let i = entryId ? agents.findIndex((a) => a.id === entryId) : -1;
+  if (i < 0) i = agents.findIndex((a) => a.id.endsWith("-chief"));
+  if (i <= 0) return agents; // já é o primeiro, ou não encontrado
+  const copy = [...agents];
+  const [entry] = copy.splice(i, 1);
+  return [entry, ...copy];
+}
+
 /** Carrega todos os agentes de todos os squads disponíveis */
 export function loadAllSquads(): Squad[] {
   // Try bundle first (Cloudflare Workers deploy)
@@ -147,7 +176,12 @@ export function loadAllSquads(): Squad[] {
       };
     });
 
-    squads.push({ id: squadId, meta: loadSquadMeta(squadPath, squadId), agents });
+    const orderedAgents = orderAgents(agents, loadEntryAgent(squadPath));
+    squads.push({
+      id: squadId,
+      meta: loadSquadMeta(squadPath, squadId),
+      agents: orderedAgents,
+    });
   }
 
   return squads;
