@@ -1,0 +1,28 @@
+{
+  "name": "transmissao-multicam-osc-bridge-standalone",
+  "version": "0.1.0",
+  "private": true,
+  "description": "F10 — Standalone Node.js OSC↔OBS bridge for the transmissao-multicam squad. Same protocol as the operator-panel embedded bridge; runs as its own process for deployments where Next.js isn't available (Vercel, edge LAN with Raspberry Pi, etc.).",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch & node --watch dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "dotenv": "16.4.5",
+    "obs-websocket-js": "5.0.8",
+    "osc": "2.4.5",
+    "yaml": "2.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.14.0",
+    "typescript": "5.5.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
