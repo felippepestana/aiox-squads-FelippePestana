@@ -1,0 +1,174 @@
+name: wf-hire-full-cycle
+display_name: "Hiring Full Cycle: Define → Screen → Guide → Interview → Score → Fairness → Decide"
+version: "1.0.0"
+description: "Seven-phase, evidence-based hiring workflow. Defines the role as performance objectives, screens resumes, builds a structured BARS+STAR interview, conducts it, scores on evidence (0-100), audits for bias (mandatory veto gate), and produces a recommendation with report and minutas. Personality (DISC/Enneagram) is context only — weight 0."
+
+trigger: "*run-hire-cycle"
+orchestrator: "talent-compass-chief"
+
+inputs:
+  - name: "role"
+    description: "The role to hire for (title + context, or a job description)"
+    required: true
+    elicit: true
+  - name: "resumes"
+    description: "Candidate CVs to screen (optional at start; can be added later)"
+    required: false
+    elicit: true
+  - name: "candidates"
+    description: "Candidate identifiers for the interview/score phases"
+    required: false
+
+phases:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # PHASE 1: DEFINE — Performance objectives -> scorecard
+  # ═══════════════════════════════════════════════════════════════════════════
+  phase_1_define:
+    name: "Define Role & Scorecard"
+    description: "Convert the role into 4-6 measurable performance objectives, derive competencies and BARS anchors, assemble the weighted scorecard (technical 40 / behavioral 35 / motivation 25 / style 0)."
+    agents: ["role-architect"]
+    execution: "interactive"
+    tasks:
+      - agent: "role-architect"
+        task: "define-role.md"
+        output: "role-profile.yaml"
+    checkpoint:
+      name: "Role Defined"
+      action: "Confirm objectives and scorecard with the user."
+      veto_conditions:
+        - "Fewer than 4 performance objectives → keep defining"
+        - "Any weight assigned to behavioral_style → reset to 0"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # PHASE 2: SCREEN — Resume triage and ranking
+  # ═══════════════════════════════════════════════════════════════════════════
+  phase_2_screen:
+    name: "Resume Screening"
+    description: "Parse and rank candidates by aderência to the performance objectives. Screening is advisory; no rejection on protected attributes."
+    depends_on: "phase_1_define"
+    agents: ["evidence-scorer"]
+    execution: "batch"
+    tasks:
+      - agent: "evidence-scorer"
+        task: "score-candidate.md"
+        note: "Screening pass — rank on objective-fit signals from the CV; flag unknowns to probe in interview."
+    checkpoint:
+      name: "Shortlist Ready"
+      veto_conditions:
+        - "Any screen-out justified by a protected attribute → VETO"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # PHASE 3: GUIDE — Structured interview guide
+  # ═══════════════════════════════════════════════════════════════════════════
+  phase_3_guide:
+    name: "Build Interview Guide"
+    description: "Turn competencies into ONE structured BARS+STAR guide used identically for every candidate."
+    depends_on: "phase_1_define"
+    agents: ["guide-builder", "behavior-analyst"]
+    execution: "sequential"
+    tasks:
+      - agent: "behavior-analyst"
+        task: "(optional) read-style for question tailoring — CONTEXT, weight 0"
+      - agent: "guide-builder"
+        task: "build-interview-guide.md"
+        output: "interview-guide.yaml"
+    checkpoint:
+      name: "Guide Ready"
+      action: "Bias pre-check by fairness-gate."
+      veto_conditions:
+        - "Question touches a protected attribute → rewrite"
+        - "Missing BARS anchors on a scored question → add"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # PHASE 4: INTERVIEW — Conduct the structured interview
+  # ═══════════════════════════════════════════════════════════════════════════
+  phase_4_interview:
+    name: "Conduct Interview"
+    description: "Run the core guide identically per candidate; adapt only probes. Capture raw evidence; no scoring during the interview."
+    depends_on: "phase_3_guide"
+    agents: ["ai-interviewer"]
+    execution: "interactive_per_candidate"
+    tasks:
+      - agent: "ai-interviewer"
+        task: "conduct-interview.md"
+        output: "interview-responses.yaml"
+    checkpoint:
+      name: "Interview Captured"
+      veto_conditions:
+        - "Core questions skipped → re-ask"
+        - "Off-guide protected-attribute question asked → flag to fairness-gate"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # PHASE 5: SCORE — Evidence-based scorecard
+  # ═══════════════════════════════════════════════════════════════════════════
+  phase_5_score:
+    name: "Score on Evidence"
+    description: "Rate responses against BARS anchors; aggregate to 0-100. Behavioral style attached as weight-0 context only."
+    depends_on: "phase_4_interview"
+    agents: ["evidence-scorer", "behavior-analyst", "enneagram-coach"]
+    execution: "sequential"
+    tasks:
+      - agent: "evidence-scorer"
+        task: "score-candidate.md"
+        output: "scorecard.yaml"
+      - agent: "behavior-analyst"
+        task: "read-style — CONTEXT, weight 0"
+      - agent: "enneagram-coach"
+        task: "(optional) dev-lens for onboarding — CONTEXT, weight 0"
+    checkpoint:
+      name: "Scorecard Ready"
+      veto_conditions:
+        - "Any score without cited evidence → rescore"
+        - "Behavioral style contributed points → reset to 0"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # PHASE 6: FAIRNESS — Mandatory bias/compliance gate
+  # ═══════════════════════════════════════════════════════════════════════════
+  phase_6_fairness:
+    name: "Fairness & Compliance Gate"
+    description: "Mandatory audit before any recommendation. Veto power. Checks language, consistency, personality weight-0, and protected-attribute leakage."
+    depends_on: "phase_5_score"
+    agents: ["fairness-gate"]
+    execution: "audit"
+    tasks:
+      - agent: "fairness-gate"
+        task: "fairness-audit.md"
+        output: "fairness-audit.yaml"
+    checkpoint:
+      name: "Gate Verdict"
+      action: "PASS → proceed to decide. VETO → remediate and re-audit."
+      veto_conditions:
+        - "Unresolved bias finding → HALT, no recommendation"
+        - "Personality leaked into score → HALT"
+        - "Inconsistent rigor across candidates → HALT"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # PHASE 7: DECIDE — Compare, recommend, report, minutas
+  # ═══════════════════════════════════════════════════════════════════════════
+  phase_7_decide:
+    name: "Compare, Recommend & Report"
+    description: "Compare finalists on the same rubric, produce an evidence-based recommendation (human decides), and render the candidate report and relevant minutas."
+    depends_on: "phase_6_fairness"
+    agents: ["evidence-scorer", "talent-compass-chief"]
+    execution: "sequential"
+    tasks:
+      - agent: "evidence-scorer"
+        task: "compare-candidates.md"
+        output: "comparison-report.md"
+      - agent: "talent-compass-chief"
+        task: "generate-report.md"
+        output: "candidate-report.md + minutas/*"
+    checkpoint:
+      name: "Recommendation Delivered"
+      veto_conditions:
+        - "Report generated without a PASSED fairness audit → HALT"
+        - "Output phrased as an autonomous decision → reframe as recommendation"
+
+outputs:
+  - "role-profile.yaml — Performance objectives, competencies, scorecard weights"
+  - "interview-guide.yaml — Structured BARS+STAR guide (one per role)"
+  - "interview-responses.yaml — Captured evidence per candidate"
+  - "scorecard.yaml — Evidence-based 0-100 scorecard (style weight 0)"
+  - "fairness-audit.yaml — Bias/compliance verdict (PASS/VETO)"
+  - "comparison-report.md — Finalist comparison on the same rubric"
+  - "candidate-report.md + minutas/* — Recommendation and printable documents"

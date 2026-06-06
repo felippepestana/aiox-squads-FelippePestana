@@ -1,0 +1,40 @@
+# interview-guide-template — output of build-interview-guide (guide-builder)
+# ONE guide per role, used identically for every candidate (fairness).
+interview_guide:
+  role_title: "{role}"
+  total_minutes: 60
+  sections:
+    - phase: warm_up
+      minutes: 5
+      script: "Brief, friendly intro. 'Specific examples help most; no trick questions.' No leading."
+
+    - phase: core_competencies
+      minutes: 45
+      questions:
+        - id: Q1
+          competency: "{technical competency name}"
+          type: behavioral          # behavioral (STAR) | situational
+          text: "{e.g., Tell me about the worst production incident you owned. What happened, what did you do, what was the result?}"
+          probes:
+            - "What did YOU specifically do vs. the team?"
+            - "How did you isolate the cause?"
+            - "What changed afterward? Any measurable result?"
+          bars:
+            "1": "{vague; blames others; no result}"
+            "3": "{clear actions; partial result}"
+            "5": "{systematic isolation; measurable fix; prevention follow-through}"
+        - id: Q2
+          competency: "{behavioral competency name}"
+          type: situational
+          text: "{scenario-based question}"
+          probes: ["{...}"]
+          bars: { "1": "{...}", "3": "{...}", "5": "{...}" }
+        # ... one or more anchored questions per competency
+
+    - phase: candidate_questions
+      minutes: 10
+      script: "Invite the candidate's questions; explain next steps."
+
+  compliance:
+    forbidden_topics: ["age", "race", "religion", "marital/family status", "health/disability", "pregnancy", "national origin"]
+    bias_precheck: "Run fairness-gate review before use."

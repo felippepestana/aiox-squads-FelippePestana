@@ -1,0 +1,42 @@
+# scorecard-template — output of score-candidate (evidence-scorer)
+# Every point traces to evidence. Behavioral style is weight 0.
+scorecard:
+  candidate: "{name/identifier}"
+  role_title: "{role}"
+  date: "{YYYY-MM-DD}"
+
+  categories:
+    technical_competencies:
+      max: 40
+      score: 0
+      items:
+        - competency: "{name}"
+          bars_rating: 0          # 1-5 against the anchor
+          evidence: "{specific quote/example that justifies the rating}"
+          confidence: "{low|medium|high}"
+    behavioral_competencies:
+      max: 35
+      score: 0
+      items:
+        - competency: "{name}"
+          bars_rating: 0
+          evidence: "{STAR example: situation/task/action/result}"
+          confidence: "{...}"
+    motivation_fit:
+      max: 25
+      score: 0
+      items:
+        - signal: "{motivation aligned to objectives}"
+          evidence: "{...}"
+
+  behavioral_style_context:    # CONTEXT ONLY — never scored
+    weight: 0
+    disc_read: "{tendency, confidence — for communication/onboarding only}"
+    enneagram_lens: "{optional, consent-based, development only}"
+    note: "Not included in the total. Use to work with the person, not to decide."
+
+  total: 0                      # 0-100, sum of category scores only
+  grade: "{A+|A|B|C|D|F}"       # A+90 A80 B70 C55 D40 F0
+  gaps: ["{open question to probe in follow-up}"]
+  recommendation: "{evidence-based recommendation + confidence — the human decides}"
+  fairness_status: "{PENDING|PASS|VETO}"   # must be PASS before any recommendation ships
