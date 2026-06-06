@@ -5,6 +5,8 @@ import type { ChiefOutput } from "@/lib/agents/chief";
 export interface RunAnalysisOptions {
   processType?: string;
   analysisGoal?: string;
+  /** Invoked on each pipeline step (for live SSE streaming). */
+  onProgress?: (step: string, progress: number) => void;
 }
 
 /**
@@ -72,7 +74,7 @@ export async function runAnalysisPipeline(
 
   await prisma.analysis.update({
     where: { id: analysisId },
-    data: { status: "PROCESSING" },
+    data: { status: "PROCESSING", progress: 0, currentStep: "Iniciando análise..." },
   });
 
   if (!llmGateway.isConfigured()) {
@@ -105,7 +107,16 @@ export async function runAnalysisPipeline(
         analysisGoal: options.analysisGoal,
       },
       (step, progress) => {
-        console.log(`[Analysis ${analysisId}] ${step} (${progress}%)`);
+        // Stream to the caller (SSE) and best-effort persist for polling/resume.
+        options.onProgress?.(step, progress);
+        void prisma.analysis
+          .update({
+            where: { id: analysisId },
+            data: { progress, currentStep: step },
+          })
+          .catch(() => {
+            // ignore transient progress-write failures
+          });
       }
     );
 
@@ -116,6 +127,8 @@ export async function runAnalysisPipeline(
       where: { id: analysisId },
       data: {
         status: succeeded ? "COMPLETED" : "FAILED",
+        progress: 100,
+        currentStep: succeeded ? "Concluído" : "Falhou",
         result: JSON.parse(JSON.stringify(normalized)),
       },
     });
