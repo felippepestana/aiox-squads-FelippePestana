@@ -7,7 +7,7 @@
 
 ## Overview
 
-Classifica a demanda recebida em um dos 4 use cases do squad e define o plano de ativação dos agentes. Esta é sempre a primeira tarefa executada (QG-AP-001).
+Classifica a demanda recebida em um dos 5 use cases do squad e define o plano de ativação dos agentes. Esta é sempre a primeira tarefa executada (QG-AP-001).
 
 ## Input
 
@@ -16,9 +16,9 @@ Classifica a demanda recebida em um dos 4 use cases do squad e define o plano de
 
 ## Output
 
-- Use case classificado (UC-AP-001, 002, 003 ou 004)
+- Use case classificado (UC-AP-001, 002, 003, 004 ou 005)
 - Lista de agentes a serem ativados
-- Modo de documentação final (MODO_PROCESSUAL ou MODO_JURIDICO)
+- Modo de documentação final (MODO_PROCESSUAL, MODO_JURIDICO, RESPOSTA_DIRETA ou ELABORACAO_PECA)
 
 ## Action Items
 
@@ -30,7 +30,7 @@ Classifica a demanda recebida em um dos 4 use cases do squad e define o plano de
 
 ## Acceptance Criteria
 
-- [ ] Use case atribuído (UC-AP-001 a 004)
+- [ ] Use case atribuído (UC-AP-001 a 005)
 - [ ] Lista de agentes definida
 - [ ] Modo de documentação definido
 - [ ] Nenhum agente acionado antes da classificação
