@@ -130,15 +130,35 @@ compose usa `network_mode: host` — UDP em bridge NAT do Docker silenciosamente
 descarta pacotes fragmentados e não preserva o IP de origem. Sem host mode,
 o feedback OSC para o TouchOSC quebra.
 
-### Opção 2 — Docker com imagem pré-buildada (futuro F10.2.1)
+### Opção 2 — Docker compose com imagem pré-buildada (GHCR)
 
-A imagem ainda não é publicada em GHCR. Para usar:
+A imagem é publicada automaticamente em
+`ghcr.io/felippepestana/aiox-squads-felippepestana/osc-bridge` pelo
+workflow `.github/workflows/osc-bridge-publish.yml`, em build
+multi-platform (`linux/amd64` + `linux/arm64` para Raspberry Pi 4/5).
 
-1. Build local: `docker build -f osc-bridge-standalone/Dockerfile -t ghcr.io/felippepestana/aiox-squads-felippepestana/osc-bridge:dev ..` (rodar da `squads/transmissao-multicam/`)
-2. Atualizar `docker-compose.yml`: comentar o bloco `build:`, descomentar a linha `image:`
+Tags publicadas:
+- `:latest` — último commit de `main`
+- `:main-<sha>` — pin específico de commit (ex: `:main-01b39c0`)
+- `:<branch>` — última build da branch. **Importante**: Docker tags não aceitam `/`, então `docker/metadata-action` sanitiza branch names substituindo `/` por `-`. Branch `feat/f10.2.1-osc-bridge-ghcr-publish` vira tag `feat-f10.2.1-osc-bridge-ghcr-publish`.
 
-Quando um GitHub Actions workflow para publicar em GHCR for adicionado, o
-operador só precisa de `docker compose pull && docker compose up -d`.
+Para usar no Pi (sem build local — direto pull):
+
+```bash
+cd squads/transmissao-multicam/osc-bridge-standalone
+cp .env.example .env
+$EDITOR .env
+
+# Editar docker-compose.yml: comentar o bloco `build:`,
+# descomentar a linha `image: ghcr.io/...`
+
+docker compose pull
+docker compose up -d
+docker compose logs -f
+```
+
+Vantagem no Pi: dispensa instalar Node + buildar TypeScript localmente
+— a imagem já vem pronta e o arm64 é nativo (sem QEMU em runtime).
 
 ### Opção 3 — systemd (Raspberry Pi sem Docker)
 
