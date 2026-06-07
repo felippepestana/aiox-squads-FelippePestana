@@ -139,8 +139,8 @@ multi-platform (`linux/amd64` + `linux/arm64` para Raspberry Pi 4/5).
 
 Tags publicadas:
 - `:latest` — último commit de `main`
-- `:main-<sha>` — pin específico de commit
-- `:<branch>` — última build da branch (quando o workflow é disparado por push em branch)
+- `:main-<sha>` — pin específico de commit (ex: `:main-01b39c0`)
+- `:<branch>` — última build da branch. **Importante**: Docker tags não aceitam `/`, então `docker/metadata-action` sanitiza branch names substituindo `/` por `-`. Branch `feat/f10.2.1-osc-bridge-ghcr-publish` vira tag `feat-f10.2.1-osc-bridge-ghcr-publish`.
 
 Para usar no Pi (sem build local — direto pull):
 

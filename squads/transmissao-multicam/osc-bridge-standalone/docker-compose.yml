@@ -10,7 +10,9 @@
 #   docker compose down         # stop + remove
 #
 # Usage (pull from GHCR — no local build, faster on the Pi):
-#   Edit this file: comment out `build:` and uncomment `image:`.
+#   Edit this file: comment out the ENTIRE `build:` block (including
+#   `context:` and `dockerfile:` — leaving them orphaned would break YAML)
+#   and uncomment the `image:` line below.
 #   Then:
 #     docker compose pull
 #     docker compose up -d
