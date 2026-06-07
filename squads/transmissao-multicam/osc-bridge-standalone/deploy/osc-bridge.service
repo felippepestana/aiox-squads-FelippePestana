@@ -57,6 +57,10 @@ MemoryMax=256M
 TasksMax=64
 
 # Hardening — defense-in-depth, no functional impact.
+# Logs go to journal (StandardOutput=journal below), so we don't need any
+# writable paths. ReadWritePaths was previously set to /var/log/osc-bridge
+# but that directory isn't created by the install steps — systemd would
+# refuse to start the unit. Dropped intentionally.
 NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
@@ -64,7 +68,6 @@ ProtectHome=true
 ProtectKernelTunables=true
 ProtectKernelModules=true
 ProtectControlGroups=true
-ReadWritePaths=/var/log/osc-bridge
 
 # Logging — journal captures stdout. Aggregate with `journalctl -u osc-bridge`.
 StandardOutput=journal

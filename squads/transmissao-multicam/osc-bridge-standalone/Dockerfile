@@ -38,6 +38,12 @@ ENV NODE_ENV=production
 
 # Copy only what runtime needs: built JS + production node_modules + the
 # YAML mappings the bridge reads at startup.
+#
+# IMPORTANT: package.json must be in the runtime CWD too. The project uses
+# ES modules (`"type": "module"`), and Node looks at the nearest package.json
+# to decide how to parse `.js` files. Without it `node dist/index.js` throws
+# `SyntaxError: Cannot use import statement outside a module`.
+COPY --from=build --chown=node:node /app/package.json ./package.json
 COPY --from=build --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /app/dist ./dist
 COPY --chown=node:node data ./data

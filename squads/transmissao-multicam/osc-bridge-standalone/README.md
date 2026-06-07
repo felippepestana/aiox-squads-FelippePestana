@@ -178,7 +178,7 @@ O unit (`deploy/osc-bridge.service`) já vem com hardening básico
 |---|---|---|---|---|
 | Docker compose (build local) | Docker | `docker compose up -d --build` | container limit | dev / testes |
 | Docker compose (GHCR pull) | Docker | `docker compose pull && up -d` | container limit | produção replicada |
-| systemd bare-metal | Node 20+ | `git pull && npm ci && npm run build && systemctl restart` | `MemoryMax=256M` no unit | Pi headless, low-power |
+| systemd bare-metal | Node 20+ | `git pull && npm ci && npm run build && sudo systemctl restart osc-bridge` | `MemoryMax=256M` no unit | Pi headless, low-power |
 
 ## Comparativo com o bridge embutido
 
