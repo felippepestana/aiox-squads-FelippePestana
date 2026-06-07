@@ -1,0 +1,78 @@
+# systemd unit for the standalone OSC bridge.
+#
+# Use when you want bare-metal deployment without Docker (e.g. headless
+# Raspberry Pi running Raspbian, or a dedicated Linux mini-PC behind the
+# operator's mixer).
+#
+# Install (as root):
+#   1. Build once on the target host:
+#        cd /opt && git clone <repo> aiox-squads-felippepestana
+#        cd aiox-squads-felippepestana/squads/transmissao-multicam/osc-bridge-standalone
+#        npm ci && npm run build
+#   2. Create the runtime env file (chmod 600, owned by root):
+#        cp .env.example /etc/osc-bridge/env
+#        chmod 600 /etc/osc-bridge/env
+#        # edit /etc/osc-bridge/env with real values (OBS host/password, tablet IP)
+#   3. Install the unit:
+#        cp deploy/osc-bridge.service /etc/systemd/system/
+#        systemctl daemon-reload
+#        systemctl enable --now osc-bridge.service
+#   4. Inspect:
+#        systemctl status osc-bridge
+#        journalctl -u osc-bridge -f
+#
+# Adjust ExecStart / WorkingDirectory if you cloned somewhere other than
+# /opt/aiox-squads-felippepestana.
+
+[Unit]
+Description=Transmissao Multicam — Standalone OSC bridge (TouchOSC ↔ OBS)
+Documentation=https://github.com/felippepestana/aiox-squads-FelippePestana
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+
+# Run as an unprivileged user — create with:
+#   useradd --system --no-create-home --shell /usr/sbin/nologin osc-bridge
+User=osc-bridge
+Group=osc-bridge
+
+WorkingDirectory=/opt/aiox-squads-felippepestana/squads/transmissao-multicam/osc-bridge-standalone
+
+# Use the system node (Node 20+). Adjust path if you installed via nvm/asdf:
+#   ExecStart=/home/osc-bridge/.nvm/versions/node/v22.x.x/bin/node dist/index.js
+ExecStart=/usr/bin/node dist/index.js
+
+# Environment file. KEY=VALUE per line, no quotes. NOT in the repo —
+# operator creates this manually so secrets don't sync via git.
+EnvironmentFile=/etc/osc-bridge/env
+
+# Restart policy: recover from OBS / network blips automatically.
+Restart=on-failure
+RestartSec=5s
+
+# Resource limits — the bridge is tiny, but cap to catch leaks.
+MemoryMax=256M
+TasksMax=64
+
+# Hardening — defense-in-depth, no functional impact.
+# Logs go to journal (StandardOutput=journal below), so we don't need any
+# writable paths. ReadWritePaths was previously set to /var/log/osc-bridge
+# but that directory isn't created by the install steps — systemd would
+# refuse to start the unit. Dropped intentionally.
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+
+# Logging — journal captures stdout. Aggregate with `journalctl -u osc-bridge`.
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=osc-bridge
+
+[Install]
+WantedBy=multi-user.target
