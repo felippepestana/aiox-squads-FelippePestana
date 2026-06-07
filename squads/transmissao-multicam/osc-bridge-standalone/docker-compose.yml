@@ -4,13 +4,16 @@
 # so the Dockerfile can COPY data/*.yaml. Run compose from this file's
 # directory; the `context: ..` resolves relative to that.
 #
-# Usage:
+# Usage (build local — fastest iteration):
 #   docker compose up -d        # build + run in background
 #   docker compose logs -f      # follow logs (bridge writes to stdout)
 #   docker compose down         # stop + remove
 #
-# To use the pre-built GHCR image instead of building locally, comment
-# out the `build:` block and uncomment the `image:` line below.
+# Usage (pull from GHCR — no local build, faster on the Pi):
+#   Edit this file: comment out `build:` and uncomment `image:`.
+#   Then:
+#     docker compose pull
+#     docker compose up -d
 
 services:
   osc-bridge:
@@ -21,7 +24,12 @@ services:
       context: ..
       dockerfile: osc-bridge-standalone/Dockerfile
 
-    # ─── OR use pre-built image from GHCR ────────────────────
+    # ─── OR use pre-built multi-platform image from GHCR ─────
+    # Image is published automatically by
+    # .github/workflows/osc-bridge-publish.yml on every push to main that
+    # touches osc-bridge-standalone/ or data/*.yaml. Supports amd64 +
+    # arm64 (Raspberry Pi 4/5). Pin to `:latest` for the bleeding edge
+    # or `:main-<sha>` for a specific commit.
     # image: ghcr.io/felippepestana/aiox-squads-felippepestana/osc-bridge:latest
 
     restart: unless-stopped
