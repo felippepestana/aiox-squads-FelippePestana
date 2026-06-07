@@ -1,0 +1,58 @@
+# Standalone OSC bridge — docker-compose for local dev and Raspberry Pi.
+#
+# Build context MUST be the parent directory (squads/transmissao-multicam/)
+# so the Dockerfile can COPY data/*.yaml. Run compose from this file's
+# directory; the `context: ..` resolves relative to that.
+#
+# Usage:
+#   docker compose up -d        # build + run in background
+#   docker compose logs -f      # follow logs (bridge writes to stdout)
+#   docker compose down         # stop + remove
+#
+# To use the pre-built GHCR image instead of building locally, comment
+# out the `build:` block and uncomment the `image:` line below.
+
+services:
+  osc-bridge:
+    container_name: osc-bridge
+
+    # ─── Build local (default) ────────────────────────────────
+    build:
+      context: ..
+      dockerfile: osc-bridge-standalone/Dockerfile
+
+    # ─── OR use pre-built image from GHCR ────────────────────
+    # image: ghcr.io/felippepestana/aiox-squads-felippepestana/osc-bridge:latest
+
+    restart: unless-stopped
+
+    # ─── Network: host mode is REQUIRED ──────────────────────
+    # The bridge speaks UDP to TouchOSC (typically on a tablet on the same
+    # LAN). Docker's default bridge network NAT silently drops fragmented
+    # UDP and doesn't preserve the source IP, both of which break OSC
+    # feedback. host mode lets the bridge bind 0.0.0.0:9300 directly on
+    # the host interface — operator's LAN sees the bridge as a regular
+    # service on the host's IP.
+    network_mode: host
+
+    # ─── Environment ─────────────────────────────────────────
+    # Pull from .env file in this directory, or set inline below.
+    # Variables not set here fall back to the defaults baked into the
+    # image (OSC_PORT=9300, OSC_MAPPING_PATH=/app/data/osc-mapping.yaml).
+    env_file:
+      - .env
+    # Examples (uncomment + adjust for your LAN):
+    # environment:
+    #   OSC_FEEDBACK_HOST: 192.168.1.42   # IP of the iPad running TouchOSC
+    #   OSC_FEEDBACK_PORT: 9301
+    #   OBS_WS_HOST: 192.168.1.10         # IP of the PC running OBS
+    #   OBS_WS_PORT: 4455
+    #   OSC_OBS_PASSWORD: "${OSC_OBS_PASSWORD}"
+
+    # ─── Logs ────────────────────────────────────────────────
+    # Cap log volume so a long-running Pi deployment doesn't fill the SD card.
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

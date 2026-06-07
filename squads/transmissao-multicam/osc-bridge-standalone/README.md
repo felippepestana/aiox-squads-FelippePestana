@@ -1,8 +1,9 @@
 # OSC Bridge Standalone
 
-> **F10 — entregue.** Bridge OSC↔OBS rodando como processo Node.js
-> independente, para quando o bridge embutido no `operator-panel/`
-> não é apropriado para o deployment.
+> **F10 + F10.2 + F10.3 + F10.4 — entregues.** Bridge OSC↔OBS rodando
+> como processo Node.js independente, com Dockerfile multi-stage,
+> docker-compose e systemd unit, para quando o bridge embutido no
+> `operator-panel/` não é apropriado para o deployment.
 
 ## Quando usar
 
@@ -108,70 +109,76 @@ Arquivos espelhados:
 | `src/types.ts` | `src/lib/osc-types.ts` + `src/lib/mic-config.ts` + tipos PiP de `src/lib/scenes.ts` |
 | `src/scenes.ts` | `src/lib/scenes.ts` (apenas PiP) |
 
-## Roadmap futuro
+## Deployment
 
-Esta entrega cobre **F10 + F10.1** (código Node.js standalone). As
-próximas evoluções ficam como roteiro:
+Três caminhos prontos, escolha conforme infra:
 
-### F10.2 — Dockerfile
+### Opção 1 — Docker (mais simples)
 
-Multi-stage com `node:22-alpine`. Image final ~30MB:
+Pré-requisito: Docker + Compose v2 no host.
 
-```dockerfile
-# (roteiro — não implementado nesta entrega)
-FROM node:22-alpine AS build
-WORKDIR /app
-COPY package*.json tsconfig.json ./
-RUN npm ci
-COPY src ./src
-RUN npm run build && npm prune --production
-
-FROM node:22-alpine AS runtime
-WORKDIR /app
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/dist ./dist
-COPY ../data ../data
-ENV NODE_ENV=production
-EXPOSE 9300/udp
-CMD ["node", "dist/index.js"]
+```bash
+# A partir de osc-bridge-standalone/
+cp .env.example .env
+$EDITOR .env             # OBS_WS_HOST, OSC_FEEDBACK_HOST, etc.
+docker compose up -d     # build local + start
+docker compose logs -f   # acompanhar
 ```
 
-Publicar em GHCR via `.github/workflows/`.
+A imagem final é multi-stage `node:22-alpine` (~50MB). Importante: o
+compose usa `network_mode: host` — UDP em bridge NAT do Docker silenciosamente
+descarta pacotes fragmentados e não preserva o IP de origem. Sem host mode,
+o feedback OSC para o TouchOSC quebra.
 
-### F10.3 — docker-compose para Raspberry Pi 5
+### Opção 2 — Docker com imagem pré-buildada (futuro F10.2.1)
 
-```yaml
-# (roteiro)
-services:
-  osc-bridge:
-    image: ghcr.io/felippepestana/aiox-squads/osc-bridge:latest
-    network_mode: host   # essencial: UDP precisa enxergar a LAN
-    environment:
-      OSC_FEEDBACK_HOST: 192.168.1.42   # IP do tablet
-      OBS_WS_HOST: 192.168.1.10         # IP do PC com OBS
-    restart: unless-stopped
+A imagem ainda não é publicada em GHCR. Para usar:
+
+1. Build local: `docker build -f osc-bridge-standalone/Dockerfile -t ghcr.io/felippepestana/aiox-squads-felippepestana/osc-bridge:dev ..` (rodar da `squads/transmissao-multicam/`)
+2. Atualizar `docker-compose.yml`: comentar o bloco `build:`, descomentar a linha `image:`
+
+Quando um GitHub Actions workflow para publicar em GHCR for adicionado, o
+operador só precisa de `docker compose pull && docker compose up -d`.
+
+### Opção 3 — systemd (Raspberry Pi sem Docker)
+
+Pré-requisito: Node 20+ no host (`apt install nodejs`).
+
+```bash
+# Build uma vez no Pi
+cd /opt && git clone <repo> aiox-squads-felippepestana
+cd aiox-squads-felippepestana/squads/transmissao-multicam/osc-bridge-standalone
+npm ci && npm run build
+
+# Cria usuário dedicado
+sudo useradd --system --no-create-home --shell /usr/sbin/nologin osc-bridge
+sudo chown -R osc-bridge:osc-bridge .
+
+# Env file (NÃO versionado — segredos)
+sudo mkdir -p /etc/osc-bridge
+sudo cp .env.example /etc/osc-bridge/env
+sudo chmod 600 /etc/osc-bridge/env
+sudo $EDITOR /etc/osc-bridge/env
+
+# Instala e inicia o service
+sudo cp deploy/osc-bridge.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now osc-bridge.service
+sudo systemctl status osc-bridge
+sudo journalctl -u osc-bridge -f
 ```
 
-### F10.4 — systemd unit
+O unit (`deploy/osc-bridge.service`) já vem com hardening básico
+(`NoNewPrivileges`, `ProtectSystem=strict`, `MemoryMax=256M`) e
+`Restart=on-failure` com backoff de 5s.
 
-Para deployment direto no Pi sem Docker:
+### Comparativo dos 3 caminhos
 
-```ini
-# (roteiro — /etc/systemd/system/osc-bridge.service)
-[Unit]
-Description=Transmissao Multicam OSC bridge
-After=network.target
-
-[Service]
-Type=simple
-ExecStart=/usr/bin/node /opt/osc-bridge/dist/index.js
-EnvironmentFile=/etc/osc-bridge/env
-Restart=on-failure
-RestartSec=5
-
-[Install]
-WantedBy=multi-user.target
-```
+| Caminho | Pré-req | Update | Resource cap | Use case |
+|---|---|---|---|---|
+| Docker compose (build local) | Docker | `docker compose up -d --build` | container limit | dev / testes |
+| Docker compose (GHCR pull) | Docker | `docker compose pull && up -d` | container limit | produção replicada |
+| systemd bare-metal | Node 20+ | `git pull && npm ci && npm run build && systemctl restart` | `MemoryMax=256M` no unit | Pi headless, low-power |
 
 ## Comparativo com o bridge embutido
 
