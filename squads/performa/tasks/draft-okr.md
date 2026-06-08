@@ -38,14 +38,17 @@ What scope are we setting OKRs for, and what higher-level goal should they ladde
 ```yaml
 okrs:
   scope: {team|person}
-  objective: {qualitative, inspiring}
-  aligns_to: {higher-level goal}
+  cycle: {e.g., Q3 2026}
+  aligns_to: {higher-level objective}
+  objective: {qualitative, inspiring, time-bound}
   key_results:
-    - kr: {outcome}
-      baseline: {x}
-      target: {y}
+    - kr: {measurable outcome}
+      baseline: {current value}
+      target: {ambitious-but-credible value}
+      metric_source: {where the number comes from}
   cadence: {weekly|biweekly}
-
+  scoring: "0.0-1.0 per KR at cycle end (learning signal, not a verdict)"
+  note: "Advisory — not tied directly to compensation." 
 ```
 
 ### Veto Conditions

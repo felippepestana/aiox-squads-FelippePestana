@@ -48,13 +48,18 @@ review:
   person: {name}
   type: 90|180|360
   period: {window}
+  reviewers: [{self}, {manager}, {peers...}]
   competencies:
     - name: {competency}
       rating: 1-5
       evidence: {recent concrete example}
-  strengths: [{...}]
-  growth_areas: [{...}]
-  bias_flags: [{recency|halo|leniency}]
+      confidence: low|medium|high
+  strengths:
+    - {strength + evidence}
+  growth_areas:
+    - {gap + evidence}
+  bias_flags: [recency|halo|leniency|none]
+  personality_context: {optional profiler-dna read — weight 0, development only}
   calibration_status: PENDING
 ```
 

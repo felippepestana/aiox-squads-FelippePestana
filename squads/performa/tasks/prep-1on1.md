@@ -35,13 +35,13 @@ What's happened since the last 1:1 — wins, blockers, feedback?
 - Reserve the first part of the agenda for the person's topics, not the manager's.
 
 ### Output Format
-```yaml
+```markdown
 # 1:1 — {pessoa} ({data})
-1. Pauta da pessoa (espaco reservado)
+1. Pauta da pessoa (espaço reservado)
 2. Wins recentes
-3. Bloqueios / ajuda necessaria
-4. Feedback (SBI: situacao-comportamento-impacto)
-5. PDI/OKRs — progresso e proximos passos
+3. Bloqueios / ajuda necessária
+4. Feedback (SBI: situação-comportamento-impacto)
+5. PDI/OKRs — progresso e próximos passos
 ```
 
 ### Veto Conditions

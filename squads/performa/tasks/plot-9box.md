@@ -38,12 +38,13 @@ potential_signals: learning agility, scope growth, aspiration
 ninebox:
   person: {name}
   performance: low|medium|high
-  performance_evidence: {...}
+  performance_evidence: {from the review — delivery/quality/collaboration/ownership}
   potential: low|medium|high
-  potential_evidence: {agility/scope/aspiration}
-  cell: {e.g., High Perf / Medium Potential}
-  implication: {development/stretch}
+  potential_evidence: {learning agility / scope growth / aspiration — NOT personality}
+  cell: {e.g., High Performance / Medium Potential}
+  implication: {development/stretch move this cell implies}
   confidence: low|medium|high
+  note: "Input to a human talent conversation — not a promotion/pay decision."
   calibration_status: PENDING
 ```
 

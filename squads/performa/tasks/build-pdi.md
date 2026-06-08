@@ -35,12 +35,24 @@ goals: career path / OKRs
 - Every item gets an action, an owner and a timeline; tie to OKRs/career path.
 
 ### Output Format
-```yaml
-# Plano de Desenvolvimento — {pessoa}
-Objetivos de desenvolvimento (a partir dos gaps)
-Para cada: 70 (experiencial) / 20 (social) / 10 (formal)
-Contexto comportamental (peso 0): {como comunicar/dar feedback}
-Proximos passos: acao | responsavel | prazo
+```markdown
+# Plano de Desenvolvimento Individual (PDI) — {pessoa}
+**Ciclo:** {período} · **Gestor(a):** {gestor}
+
+## Objetivos de desenvolvimento (2–3, focados)
+1. {objetivo — gap que endereça}
+
+## Plano 70-20-10 (por objetivo)
+| Objetivo | 70 — Experiencial (no trabalho) | 20 — Social (pessoas) | 10 — Formal (curso/leitura) |
+
+## Contexto comportamental (peso 0)
+{Como comunicar, delegar e dar feedback a esta pessoa — não influencia a nota}
+
+## Próximos passos
+| Ação | Responsável | Prazo |
+
+## Conexão com metas
+{Como o PDI sustenta os OKRs / o plano de carreira}
 ```
 
 ### Veto Conditions
