@@ -1,0 +1,58 @@
+/**
+ * AIOX Design System — design tokens (CSS custom properties).
+ * Fonte canônica das cores/raio do tema. Importe em qualquer app:
+ *   import "@aiox/design-system/styles/tokens.css";
+ * Linguagem visual: "Notion meets Bloomberg Terminal" (azul institucional + âmbar).
+ */
+:root {
+  --background: 210 20% 98%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222 47% 11%;
+  --primary: 213 52% 29%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 215 16% 47%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --accent: 38 92% 50%;
+  --accent-foreground: 222 47% 11%;
+  --success: 160 84% 39%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 92% 50%;
+  --warning-foreground: 222 47% 11%;
+  --danger: 0 84% 60%;
+  --danger-foreground: 0 0% 100%;
+  --border: 214 32% 91%;
+  --input: 214 32% 91%;
+  --ring: 213 52% 29%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 222 47% 8%;
+  --foreground: 210 40% 98%;
+  --card: 222 47% 11%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222 47% 11%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 213 70% 55%;
+  --primary-foreground: 222 47% 8%;
+  --secondary: 215 16% 47%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 16% 65%;
+  --accent: 38 92% 50%;
+  --accent-foreground: 222 47% 11%;
+  --success: 160 84% 39%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 92% 50%;
+  --warning-foreground: 222 47% 11%;
+  --danger: 0 84% 60%;
+  --danger-foreground: 0 0% 100%;
+  --border: 217 33% 22%;
+  --input: 217 33% 22%;
+  --ring: 213 70% 55%;
+}

@@ -1,0 +1,10 @@
+{
+  "name": "aiox-squads-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Workspace raiz com escopo restrito ao design system e ao app analista-processual-web. Os demais apps (web/, chatbot/, landing-pages/) permanecem independentes.",
+  "workspaces": [
+    "packages/*",
+    "analista-processual-web"
+  ]
+}

@@ -1,75 +1,61 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useToast } from "@/hooks/use-toast";
+import { useParams, useSearchParams } from "next/navigation";
 import {
   ArrowLeft,
   FileText,
   Clock,
   AlertTriangle,
-  CheckCircle,
   Loader2,
   Calendar,
   Scale,
   User,
-  Building,
   Download,
   Share,
   RefreshCw,
+  Sparkles,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PartiesSection, TimelineSection, ClaimsSection } from "@/components/analysis";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+  StatCard,
+  StatusBadge,
+  PipelineStepper,
+  EmptyState,
+  PartiesSection,
+  TimelineSection,
+  ClaimsSection,
+  RiskList,
+  DeadlineCard,
+} from "@aiox/design-system";
+import { useToast } from "@/hooks/use-toast";
 
-// Type definitions for components
 type PartyRole = "author" | "defendant" | "third_party" | "witness" | "expert";
 type ClaimStatus = "pending" | "granted" | "denied" | "partial";
 type TimelineType = "filing" | "decision" | "hearing" | "motion" | "other";
 
-interface Party {
-  name: string;
-  role: PartyRole;
-  document?: string;
-  attorney?: string;
-}
-
-interface Claim {
-  type: string;
-  description: string;
-  value?: number;
-  status: ClaimStatus;
-}
-
-interface TimelineEvent {
-  date: string;
-  description: string;
-  type: TimelineType;
-}
-
-// Validation and conversion functions
-function isValidPartyRole(value: unknown): value is PartyRole {
-  return ["author", "defendant", "third_party", "witness", "expert"].includes(
-    String(value)
-  );
-}
-
-function isValidClaimStatus(value: unknown): value is ClaimStatus {
-  return ["pending", "granted", "denied", "partial"].includes(String(value));
-}
-
-function isValidTimelineType(value: unknown): value is TimelineType {
-  return ["filing", "decision", "hearing", "motion", "other"].includes(
-    String(value)
-  );
-}
-
-function normalizeParty(party: unknown): Party {
+function normalizeParty(party: unknown) {
   const p = party as Record<string, unknown>;
-  const role = isValidPartyRole(p?.role) ? p.role : "third_party";
+  const roles: PartyRole[] = [
+    "author",
+    "defendant",
+    "third_party",
+    "witness",
+    "expert",
+  ];
+  const role = roles.includes(p?.role as PartyRole)
+    ? (p.role as PartyRole)
+    : "third_party";
   return {
     name: String(p?.name || "Desconhecido"),
     role,
@@ -78,9 +64,12 @@ function normalizeParty(party: unknown): Party {
   };
 }
 
-function normalizeClaim(claim: unknown): Claim {
+function normalizeClaim(claim: unknown) {
   const c = claim as Record<string, unknown>;
-  const status = isValidClaimStatus(c?.status) ? c.status : "pending";
+  const statuses: ClaimStatus[] = ["pending", "granted", "denied", "partial"];
+  const status = statuses.includes(c?.status as ClaimStatus)
+    ? (c.status as ClaimStatus)
+    : "pending";
   return {
     type: String(c?.type || "Genérico"),
     description: String(c?.description || ""),
@@ -89,9 +78,18 @@ function normalizeClaim(claim: unknown): Claim {
   };
 }
 
-function normalizeTimelineEvent(event: unknown): TimelineEvent {
+function normalizeTimeline(event: unknown) {
   const e = event as Record<string, unknown>;
-  const type = isValidTimelineType(e?.type) ? e.type : "other";
+  const types: TimelineType[] = [
+    "filing",
+    "decision",
+    "hearing",
+    "motion",
+    "other",
+  ];
+  const type = types.includes(e?.type as TimelineType)
+    ? (e.type as TimelineType)
+    : "other";
   return {
     date: String(e?.date || new Date().toISOString()),
     description: String(e?.description || ""),
@@ -105,107 +103,158 @@ interface AnalysisDetail {
   court: string | null;
   processClass: string | null;
   status: string;
+  progress?: number;
+  currentStep?: string | null;
   result: Record<string, unknown> | null;
   createdAt: string;
-  documents: Array<{
-    id: string;
-    filename: string;
-    fileType: string | null;
-  }>;
+  documents: Array<{ id: string; filename: string; fileType: string | null }>;
   deadlines: Array<{
     id: string;
     description: string;
     dueDate: string;
     priority: string;
+    urgency?: string;
     status: string;
   }>;
-  events: Array<{
-    id: string;
-    event: string;
-    createdAt: string;
-  }>;
+  events: Array<{ id: string; event: string; createdAt: string }>;
 }
 
-function getStatusBadge(status: string) {
-  switch (status) {
-    case "COMPLETED":
-      return <Badge className="bg-success text-success-foreground">Concluída</Badge>;
-    case "PROCESSING":
-      return (
-        <Badge className="bg-warning text-warning-foreground">
-          <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-          Processando
-        </Badge>
-      );
-    case "PENDING":
-      return <Badge variant="secondary">Pendente</Badge>;
-    case "FAILED":
-      return <Badge className="bg-danger text-danger-foreground">Falhou</Badge>;
-    default:
-      return <Badge variant="secondary">{status}</Badge>;
-  }
+interface LiveState {
+  status: string;
+  progress: number;
+  currentStep: string | null;
 }
 
-function getPriorityBadge(priority: string) {
-  switch (priority) {
-    case "CRITICAL":
-      return <Badge className="bg-danger text-danger-foreground">Crítico</Badge>;
-    case "HIGH":
-      return <Badge className="bg-warning text-warning-foreground">Alta</Badge>;
-    case "NORMAL":
-      return <Badge variant="secondary">Normal</Badge>;
-    case "LOW":
-      return <Badge variant="outline">Baixa</Badge>;
-    default:
-      return <Badge variant="secondary">{priority}</Badge>;
-  }
-}
-
-export default function AnaliseDetailPage() {
+function AnaliseDetailContent() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const { toast } = useToast();
+  const id = params.id as string;
+
   const [analysis, setAnalysis] = useState<AnalysisDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [live, setLive] = useState<LiveState>({
+    status: "PENDING",
+    progress: 0,
+    currentStep: null,
+  });
+  const startedRef = useRef(false);
 
   const fetchAnalysis = useCallback(async () => {
+    const response = await fetch(`/api/analyses/${id}`);
+    if (!response.ok) throw new Error("Análise não encontrada");
+    const { data } = (await response.json()) as { data: AnalysisDetail };
+    setAnalysis(data);
+    setLive({
+      status: data.status,
+      progress: data.progress ?? (data.status === "COMPLETED" ? 100 : 0),
+      currentStep: data.currentStep ?? null,
+    });
+    return data;
+  }, [id]);
+
+  const streamProcessing = useCallback(async () => {
     try {
-      const response = await fetch(`/api/analyses/${params.id}`);
-      if (!response.ok) {
-        throw new Error("Análise não encontrada");
+      const res = await fetch(`/api/analyses/${id}/process`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
+      if (!res.body) {
+        await fetchAnalysis();
+        return;
       }
-      const { data } = await response.json();
-      setAnalysis(data);
-      setError(null);
-      return data as AnalysisDetail;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro desconhecido");
-      return null;
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      setLive((prev) => ({ ...prev, status: "PROCESSING" }));
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const chunks = buffer.split("\n\n");
+        buffer = chunks.pop() || "";
+        for (const chunk of chunks) {
+          const eventMatch = chunk.match(/^event: (.+)$/m);
+          const dataMatch = chunk.match(/^data: (.+)$/m);
+          if (!dataMatch) continue;
+          const event = eventMatch?.[1];
+          const data = JSON.parse(dataMatch[1]);
+          if (event === "progress") {
+            setLive({
+              status: "PROCESSING",
+              progress: data.progress ?? 0,
+              currentStep: data.step ?? null,
+            });
+          } else if (event === "done") {
+            setLive((prev) => ({
+              ...prev,
+              status: data.status,
+              progress: 100,
+            }));
+          }
+        }
+      }
+    } catch {
+      // fall through to refetch
     } finally {
-      setLoading(false);
+      await fetchAnalysis().catch(() => undefined);
     }
-  }, [params.id]);
+  }, [id, fetchAnalysis]);
 
+  // Initial load + decide whether to stream or poll.
   useEffect(() => {
-    fetchAnalysis();
-  }, [fetchAnalysis]);
+    let cancelled = false;
+    (async () => {
+      try {
+        const data = await fetchAnalysis();
+        if (cancelled || startedRef.current) return;
+        const shouldStart = searchParams.get("start") === "1";
+        if (data.status === "PENDING" && shouldStart) {
+          startedRef.current = true;
+          streamProcessing();
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Erro desconhecido");
+      } finally {
+        setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [fetchAnalysis, streamProcessing, searchParams]);
 
-  // Poll while the analysis is still being processed.
+  // Poll while processing if we are not actively streaming (e.g. revisited tab).
   useEffect(() => {
-    if (!analysis) return;
-    if (analysis.status !== "PENDING" && analysis.status !== "PROCESSING") {
-      return;
-    }
-    const interval = setInterval(() => {
-      fetchAnalysis();
-    }, 4000);
+    if (live.status !== "PROCESSING" && live.status !== "PENDING") return;
+    if (startedRef.current) return;
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/analyses/${id}/status`);
+        const { data } = await res.json();
+        if (!data) return;
+        setLive({
+          status: data.status,
+          progress: data.progress ?? 0,
+          currentStep: data.currentStep ?? null,
+        });
+        if (data.status === "COMPLETED" || data.status === "FAILED") {
+          await fetchAnalysis();
+        }
+      } catch {
+        // ignore
+      }
+    }, 3500);
     return () => clearInterval(interval);
-  }, [analysis, fetchAnalysis]);
+  }, [live.status, id, fetchAnalysis]);
 
   const handleRefresh = useCallback(async () => {
     setRefreshing(true);
-    await fetchAnalysis();
+    await fetchAnalysis().catch(() => undefined);
     setRefreshing(false);
   }, [fetchAnalysis]);
 
@@ -224,10 +273,10 @@ export default function AnaliseDetailPage() {
 
   const handleShare = useCallback(async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href);
+      await navigator.clipboard.writeText(window.location.href.split("?")[0]);
       toast({
         title: "Link copiado",
-        description: "O link da análise foi copiado para a área de transferência.",
+        description: "O link da análise foi copiado.",
       });
     } catch {
       toast({
@@ -252,24 +301,33 @@ export default function AnaliseDetailPage() {
   if (error || !analysis) {
     return (
       <div className="flex h-[50vh] items-center justify-center">
-        <div className="text-center">
-          <AlertTriangle className="mx-auto h-8 w-8 text-danger" />
-          <p className="mt-4 text-lg font-medium">{error || "Análise não encontrada"}</p>
-          <Button variant="outline" className="mt-4" asChild>
-            <Link href="/dashboard/analises">Voltar às análises</Link>
-          </Button>
-        </div>
+        <EmptyState
+          icon={AlertTriangle}
+          title={error || "Análise não encontrada"}
+          action={
+            <Button variant="outline" asChild>
+              <Link href="/dashboard/analises">Voltar às análises</Link>
+            </Button>
+          }
+        />
       </div>
     );
   }
 
-  const result = analysis.result as Record<string, unknown> | null;
+  const result = analysis.result;
   const isComplete = analysis.status === "COMPLETED";
+  const isRunning = live.status === "PROCESSING" || live.status === "PENDING";
+  const extracted = (result?.extractedData as Record<string, unknown>) || null;
+  const risks = (result?.risks as Array<{
+    type: string;
+    description?: string;
+    severity?: string;
+  }>) || [];
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center gap-3">
           <Button variant="ghost" size="icon" asChild>
             <Link href="/dashboard/analises">
               <ArrowLeft className="h-5 w-5" />
@@ -280,7 +338,7 @@ export default function AnaliseDetailPage() {
               <h1 className="text-2xl font-bold tracking-tight">
                 {analysis.processNumber || "Análise sem número"}
               </h1>
-              {getStatusBadge(analysis.status)}
+              <StatusBadge status={live.status} />
             </div>
             <p className="text-muted-foreground">
               {analysis.court && `${analysis.court} • `}
@@ -289,8 +347,15 @@ export default function AnaliseDetailPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing}>
-            <RefreshCw className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRefresh}
+            disabled={refreshing}
+          >
+            <RefreshCw
+              className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`}
+            />
             Atualizar
           </Button>
           <Button variant="outline" size="sm" onClick={handleShare}>
@@ -303,6 +368,28 @@ export default function AnaliseDetailPage() {
           </Button>
         </div>
       </div>
+
+      {/* Live pipeline while running */}
+      {isRunning && (
+        <Card className="border-primary/30">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-primary" />
+              Agentes em ação
+            </CardTitle>
+            <CardDescription>
+              Acompanhe o pipeline multiagente analisando os documentos.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <PipelineStepper
+              status={live.status}
+              progress={live.progress}
+              currentStep={live.currentStep}
+            />
+          </CardContent>
+        </Card>
+      )}
 
       {analysis.status === "FAILED" && (
         <Card className="border-danger/50">
@@ -321,56 +408,30 @@ export default function AnaliseDetailPage() {
 
       {isComplete && result && (
         <div className="grid gap-4 md:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Score Geral</CardTitle>
-              <Scale className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {result.score ? `${result.score}/100` : "N/A"}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {String(result.scoreDescription || "Análise completada")}
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Partes</CardTitle>
-              <User className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {String(result.partiesCount || "N/A")}
-              </div>
-              <p className="text-xs text-muted-foreground">Identificadas</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Prazos</CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {analysis.deadlines.length}
-              </div>
-              <p className="text-xs text-muted-foreground">Identificados</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Riscos</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {String(result.risksCount || 0)}
-              </div>
-              <p className="text-xs text-muted-foreground">Encontrados</p>
-            </CardContent>
-          </Card>
+          <StatCard
+            title="Score de Risco"
+            value={result.score != null ? `${result.score}/100` : "N/A"}
+            icon={Scale}
+            hint={String(result.scoreDescription || "Análise completada")}
+          />
+          <StatCard
+            title="Partes"
+            value={String(result.partiesCount ?? 0)}
+            icon={User}
+            hint="Identificadas"
+          />
+          <StatCard
+            title="Prazos"
+            value={analysis.deadlines.length}
+            icon={Calendar}
+            hint="Identificados"
+          />
+          <StatCard
+            title="Riscos"
+            value={String(result.risksCount ?? 0)}
+            icon={AlertTriangle}
+            hint="Encontrados"
+          />
         </div>
       )}
 
@@ -394,14 +455,11 @@ export default function AnaliseDetailPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="prose prose-sm max-w-none">
-                    <p className="whitespace-pre-wrap text-sm">
-                      {result.summary as string || "Resumo não disponível."}
-                    </p>
-                  </div>
+                  <p className="whitespace-pre-wrap text-sm">
+                    {(result.summary as string) || "Resumo não disponível."}
+                  </p>
                 </CardContent>
               </Card>
-
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -410,99 +468,54 @@ export default function AnaliseDetailPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {(result.risks as Array<{ type: string; description: string; severity: string }>)?.length >
-                  0 ? (
-                    <div className="space-y-3">
-                      {(result.risks as Array<{ type: string; description: string; severity: string }>).map(
-                        (risk, index) => (
-                          <div
-                            key={index}
-                            className="flex items-start gap-3 rounded-lg border p-3"
-                          >
-                            <div
-                              className={`mt-0.5 h-2 w-2 rounded-full ${
-                                risk.severity === "HIGH"
-                                  ? "bg-danger"
-                                  : risk.severity === "MEDIUM"
-                                  ? "bg-warning"
-                                  : "bg-info"
-                              }`}
-                            />
-                            <div>
-                              <p className="font-medium">{risk.type}</p>
-                              <p className="text-sm text-muted-foreground">
-                                {risk.description}
-                              </p>
-                            </div>
-                          </div>
-                        )
-                      )}
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <CheckCircle className="h-4 w-4 text-success" />
-                      Nenhum risco crítico identificado
-                    </div>
-                  )}
+                  <RiskList risks={risks} />
                 </CardContent>
               </Card>
             </div>
           ) : (
             <Card>
-              <CardContent className="flex h-[300px] items-center justify-center">
-                <div className="text-center">
-                  <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
-                  <p className="mt-4 text-lg font-medium">
-                    {analysis.status === "PROCESSING"
-                      ? "Processando documentos..."
-                      : "Aguardando processamento"}
-                  </p>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    Este processo pode levar alguns minutos.
-                  </p>
-                </div>
+              <CardContent className="py-10">
+                {isRunning ? (
+                  <div className="text-center">
+                    <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
+                    <p className="mt-4 text-sm text-muted-foreground">
+                      {live.currentStep || "Processando documentos..."}
+                    </p>
+                  </div>
+                ) : (
+                  <EmptyState
+                    icon={AlertTriangle}
+                    title="Sem resultado disponível"
+                    description="A análise não produziu um resultado."
+                  />
+                )}
               </CardContent>
             </Card>
           )}
         </TabsContent>
 
         <TabsContent value="dados-extraidos" className="space-y-4">
-          {isComplete && result && result.extractedData ? (
+          {isComplete && extracted ? (
             <div className="grid gap-6 lg:grid-cols-2">
               <PartiesSection
                 parties={
-                  Array.isArray(
-                    (result.extractedData as Record<string, unknown>)?.parties
-                  )
-                    ? (
-                        (result.extractedData as Record<string, unknown>)
-                          ?.parties as unknown[]
-                      ).map(normalizeParty)
+                  Array.isArray(extracted.parties)
+                    ? (extracted.parties as unknown[]).map(normalizeParty)
                     : []
                 }
               />
               <ClaimsSection
                 claims={
-                  Array.isArray(
-                    (result.extractedData as Record<string, unknown>)?.claims
-                  )
-                    ? (
-                        (result.extractedData as Record<string, unknown>)
-                          ?.claims as unknown[]
-                      ).map(normalizeClaim)
+                  Array.isArray(extracted.claims)
+                    ? (extracted.claims as unknown[]).map(normalizeClaim)
                     : []
                 }
               />
               <div className="lg:col-span-2">
                 <TimelineSection
                   timeline={
-                    Array.isArray(
-                      (result.extractedData as Record<string, unknown>)?.timeline
-                    )
-                      ? (
-                          (result.extractedData as Record<string, unknown>)
-                            ?.timeline as unknown[]
-                        ).map(normalizeTimelineEvent)
+                    Array.isArray(extracted.timeline)
+                      ? (extracted.timeline as unknown[]).map(normalizeTimeline)
                       : []
                   }
                 />
@@ -510,23 +523,18 @@ export default function AnaliseDetailPage() {
             </div>
           ) : (
             <Card>
-              <CardContent className="flex h-[300px] items-center justify-center">
-                <div className="text-center">
-                  {analysis.status === "PROCESSING" ? (
-                    <>
-                      <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
-                      <p className="mt-4 text-lg font-medium">Processando documentos...</p>
-                    </>
-                  ) : (
-                    <>
-                      <AlertTriangle className="mx-auto h-8 w-8 text-muted-foreground" />
-                      <p className="mt-4 text-lg font-medium">Dados não disponíveis</p>
-                      <p className="mt-2 text-sm text-muted-foreground">
-                        Aguarde o processamento da análise
-                      </p>
-                    </>
-                  )}
-                </div>
+              <CardContent className="py-10">
+                <EmptyState
+                  icon={isRunning ? Loader2 : AlertTriangle}
+                  title={
+                    isRunning ? "Extraindo dados..." : "Dados não disponíveis"
+                  }
+                  description={
+                    isRunning
+                      ? "Os dados aparecem assim que a análise concluir."
+                      : "Aguarde o processamento da análise."
+                  }
+                />
               </CardContent>
             </Card>
           )}
@@ -537,7 +545,7 @@ export default function AnaliseDetailPage() {
             <CardHeader>
               <CardTitle>Documentos Analisados</CardTitle>
               <CardDescription>
-                {analysis.documents.length} documento(s) enviado(s) para análise
+                {analysis.documents.length} documento(s) enviado(s)
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -546,34 +554,22 @@ export default function AnaliseDetailPage() {
                   {analysis.documents.map((doc) => (
                     <div
                       key={doc.id}
-                      className="flex items-center justify-between rounded-lg border p-3"
+                      className="flex items-center gap-3 rounded-lg border p-3"
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                          <FileText className="h-5 w-5 text-primary" />
-                        </div>
-                        <div>
-                          <p className="font-medium">{doc.filename}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {doc.fileType || "Tipo desconhecido"}
-                          </p>
-                        </div>
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                        <FileText className="h-5 w-5 text-primary" />
                       </div>
-                      <Button variant="ghost" size="sm">
-                        <Download className="h-4 w-4" />
-                      </Button>
+                      <div>
+                        <p className="font-medium">{doc.filename}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {doc.fileType || "Tipo desconhecido"}
+                        </p>
+                      </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="flex h-[200px] items-center justify-center border-2 border-dashed">
-                  <div className="text-center">
-                    <FileText className="mx-auto h-8 w-8 text-muted-foreground" />
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      Nenhum documento enviado
-                    </p>
-                  </div>
-                </div>
+                <EmptyState icon={FileText} title="Nenhum documento enviado" />
               )}
             </CardContent>
           </Card>
@@ -584,66 +580,22 @@ export default function AnaliseDetailPage() {
             <CardHeader>
               <CardTitle>Prazos Processuais</CardTitle>
               <CardDescription>
-                {analysis.deadlines.length} prazo(s) identificado(s) na análise
+                {analysis.deadlines.length} prazo(s) identificado(s)
               </CardDescription>
             </CardHeader>
             <CardContent>
               {analysis.deadlines.length > 0 ? (
                 <div className="space-y-3">
-                  {analysis.deadlines.map((deadline) => {
-                    const daysLeft = Math.ceil(
-                      (new Date(deadline.dueDate).getTime() - Date.now()) /
-                        (1000 * 60 * 60 * 24)
-                    );
-                    return (
-                      <div
-                        key={deadline.id}
-                        className="flex items-center justify-between rounded-lg border p-4"
-                      >
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <p className="font-medium">{deadline.description}</p>
-                            {getPriorityBadge(deadline.priority)}
-                          </div>
-                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                            <span className="flex items-center gap-1">
-                              <Calendar className="h-4 w-4" />
-                              {new Date(deadline.dueDate).toLocaleDateString(
-                                "pt-BR"
-                              )}
-                            </span>
-                            <span
-                              className={
-                                daysLeft < 0
-                                  ? "text-danger"
-                                  : daysLeft <= 5
-                                  ? "text-warning"
-                                  : ""
-                              }
-                            >
-                              {daysLeft < 0
-                                ? `${Math.abs(daysLeft)} dia(s) em atraso`
-                                : `${daysLeft} dia(s) restante(s)`}
-                            </span>
-                          </div>
-                        </div>
-                        <Button variant="outline" size="sm">
-                          <CheckCircle className="mr-2 h-4 w-4" />
-                          Marcar como concluído
-                        </Button>
-                      </div>
-                    );
-                  })}
+                  {analysis.deadlines.map((deadline) => (
+                    <DeadlineCard key={deadline.id} deadline={deadline} />
+                  ))}
                 </div>
               ) : (
-                <div className="flex h-[200px] items-center justify-center border-2 border-dashed">
-                  <div className="text-center">
-                    <Clock className="mx-auto h-8 w-8 text-muted-foreground" />
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      Nenhum prazo identificado
-                    </p>
-                  </div>
-                </div>
+                <EmptyState
+                  icon={Clock}
+                  title="Nenhum prazo identificado"
+                  description="Os prazos aparecem após uma análise concluída."
+                />
               )}
             </CardContent>
           </Card>
@@ -654,7 +606,7 @@ export default function AnaliseDetailPage() {
             <CardHeader>
               <CardTitle>Histórico de Eventos</CardTitle>
               <CardDescription>
-                Linha do tempo de todas as ações realizadas nesta análise
+                Linha do tempo das ações desta análise
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -663,29 +615,36 @@ export default function AnaliseDetailPage() {
                   {[...analysis.events].reverse().map((event) => (
                     <div key={event.id} className="relative">
                       <div className="absolute -left-[25px] h-4 w-4 rounded-full border-2 border-background bg-primary" />
-                      <div className="space-y-1">
-                        <p className="font-medium">{event.event.replace(/_/g, " ")}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {new Date(event.createdAt).toLocaleString("pt-BR")}
-                        </p>
-                      </div>
+                      <p className="font-medium">
+                        {event.event.replace(/_/g, " ")}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {new Date(event.createdAt).toLocaleString("pt-BR")}
+                      </p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="flex h-[200px] items-center justify-center border-2 border-dashed">
-                  <div className="text-center">
-                    <Clock className="mx-auto h-8 w-8 text-muted-foreground" />
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      Nenhum evento registrado
-                    </p>
-                  </div>
-                </div>
+                <EmptyState icon={Clock} title="Nenhum evento registrado" />
               )}
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
     </div>
+  );
+}
+
+export default function AnaliseDetailPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-[50vh] items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      }
+    >
+      <AnaliseDetailContent />
+    </Suspense>
   );
 }

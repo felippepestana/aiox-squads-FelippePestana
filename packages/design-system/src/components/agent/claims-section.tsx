@@ -1,18 +1,21 @@
 "use client";
 
 import { Scale, Banknote } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 
-interface Claim {
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Badge } from "../ui/badge";
+
+export interface Claim {
   type: string;
   description: string;
   value?: number;
   status: "pending" | "granted" | "denied" | "partial";
-}
-
-interface ClaimsSectionProps {
-  claims: Claim[];
 }
 
 function getStatusBadge(status: Claim["status"]) {
@@ -34,7 +37,7 @@ function formatCurrency(value?: number) {
   }).format(value);
 }
 
-export function ClaimsSection({ claims }: ClaimsSectionProps) {
+export function ClaimsSection({ claims }: { claims: Claim[] }) {
   if (!claims || claims.length === 0) {
     return (
       <Card>
@@ -58,13 +61,15 @@ export function ClaimsSection({ claims }: ClaimsSectionProps) {
           <Scale className="h-5 w-5" />
           Pedidos
         </CardTitle>
-        <CardDescription>{claims.length} pedido(s) identificado(s)</CardDescription>
+        <CardDescription>
+          {claims.length} pedido(s) identificado(s)
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {totalValue > 0 && (
-          <div className="bg-muted p-3 rounded-lg flex items-center justify-between">
+          <div className="flex items-center justify-between rounded-lg bg-muted p-3">
             <span className="text-sm font-medium">Valor Total Reclamado</span>
-            <span className="text-lg font-bold flex items-center gap-1">
+            <span className="flex items-center gap-1 text-lg font-bold">
               <Banknote className="h-4 w-4" />
               {formatCurrency(totalValue)}
             </span>
@@ -73,16 +78,18 @@ export function ClaimsSection({ claims }: ClaimsSectionProps) {
 
         <div className="space-y-3">
           {claims.map((claim, idx) => (
-            <div key={idx} className="border rounded-lg p-3">
-              <div className="flex items-start justify-between mb-2">
+            <div key={idx} className="rounded-lg border p-3">
+              <div className="mb-2 flex items-start justify-between">
                 <div>
-                  <p className="font-semibold text-sm">{claim.type}</p>
-                  <p className="text-sm text-muted-foreground">{claim.description}</p>
+                  <p className="text-sm font-semibold">{claim.type}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {claim.description}
+                  </p>
                 </div>
                 {getStatusBadge(claim.status)}
               </div>
               {claim.value && claim.value > 0 && (
-                <p className="text-sm font-medium text-primary flex items-center gap-1">
+                <p className="flex items-center gap-1 text-sm font-medium text-primary">
                   <Banknote className="h-3 w-3" />
                   {formatCurrency(claim.value)}
                 </p>

@@ -1,90 +1,92 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Upload, File, X, Loader2, FileText, CheckCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Loader2, CheckCircle } from "lucide-react";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Input,
+  Label,
+  PageHeader,
+  FileDropzone,
+  type DropzoneFile,
+} from "@aiox/design-system";
 import { useToast } from "@/hooks/use-toast";
 
-interface FileWithPreview extends File {
-  preview?: string;
+interface TrackedFile {
   id: string;
+  file: File;
 }
+
+const courts = [
+  "STF - Supremo Tribunal Federal",
+  "STJ - Superior Tribunal de Justiça",
+  "TRF1 - Tribunal Regional Federal 1ª Região",
+  "TRF3 - Tribunal Regional Federal 3ª Região",
+  "TJSP - Tribunal de Justiça de São Paulo",
+  "TJRJ - Tribunal de Justiça do Rio de Janeiro",
+  "TJMG - Tribunal de Justiça de Minas Gerais",
+];
+
+const processClasses = [
+  "Ação de Cobrança",
+  "Ação de Indenização por Danos Morais",
+  "Ação de Indenização por Danos Materiais",
+  "Ação de Despejo",
+  "Ação Declaratória",
+  "Ação Monitória",
+  "Apelação",
+  "Mandado de Segurança",
+  "Processo de Conhecimento",
+  "Processo de Execução",
+  "Recurso Especial",
+];
 
 export default function NovaAnalisePage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [isDragging, setIsDragging] = useState(false);
-  const [files, setFiles] = useState<FileWithPreview[]>([]);
-  const [isUploading, setIsUploading] = useState(false);
+  const [tracked, setTracked] = useState<TrackedFile[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [processInfo, setProcessInfo] = useState({
     processNumber: "",
     court: "",
     processClass: "",
   });
 
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-  }, []);
+  const dropzoneFiles: DropzoneFile[] = tracked.map((t) => ({
+    id: t.id,
+    name: t.file.name,
+    size: t.file.size,
+  }));
 
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-  }, []);
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
-
-    const droppedFiles = Array.from(e.dataTransfer.files);
-    addFiles(droppedFiles);
-  }, []);
-
-  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const selectedFiles = Array.from(e.target.files);
-      addFiles(selectedFiles);
-    }
-  }, []);
-
-  const addFiles = (newFiles: File[]) => {
-    const filesWithId = newFiles.map((file) =>
-      Object.assign(file, {
-        id: Math.random().toString(36).substring(7),
-        preview: file.type.startsWith("text/")
-          ? undefined
-          : URL.createObjectURL(file),
-      })
-    );
-    setFiles((prev) => [...prev, ...filesWithId]);
+  const handleFilesAdded = (files: File[]) => {
+    const next = files.map((file) => ({
+      id: `${file.name}-${file.size}-${Math.random().toString(36).slice(2, 7)}`,
+      file,
+    }));
+    setTracked((prev) => [...prev, ...next]);
   };
 
-  const removeFile = (id: string) => {
-    setFiles((prev) => {
-      const file = prev.find((f) => f.id === id);
-      if (file?.preview) {
-        URL.revokeObjectURL(file.preview);
-      }
-      return prev.filter((f) => f.id !== id);
-    });
+  const handleFileRemoved = (id: string) => {
+    setTracked((prev) => prev.filter((t) => t.id !== id));
   };
 
   const handleSubmit = async () => {
-    if (files.length === 0) {
+    if (tracked.length === 0) {
       toast({
         title: "Nenhum arquivo",
-        description: "Por favor, envie pelo menos um documento para análise.",
+        description: "Envie pelo menos um documento para análise.",
         variant: "destructive",
       });
       return;
     }
 
-    setIsUploading(true);
-
+    setIsSubmitting(true);
     try {
       const response = await fetch("/api/analyses", {
         method: "POST",
@@ -95,17 +97,12 @@ export default function NovaAnalisePage() {
           processClass: processInfo.processClass || undefined,
         }),
       });
-
-      if (!response.ok) {
-        throw new Error("Erro ao criar análise");
-      }
-
+      if (!response.ok) throw new Error("Erro ao criar análise");
       const { data: analysis } = await response.json();
 
-      for (const file of files) {
+      for (const t of tracked) {
         const formData = new FormData();
-        formData.append("file", file);
-
+        formData.append("file", t.file);
         await fetch(`/api/analyses/${analysis.id}/documents`, {
           method: "POST",
           body: formData,
@@ -114,107 +111,33 @@ export default function NovaAnalisePage() {
 
       toast({
         title: "Documentos enviados",
-        description: "Iniciando análise multiagente...",
+        description: "Acompanhe os agentes trabalhando na análise.",
       });
 
-      // Trigger the pipeline and wait for completion before navigating so the
-      // results page opens with the final state. The detail page also polls as
-      // a safety net.
-      const processResponse = await fetch(
-        `/api/analyses/${analysis.id}/process`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            processType: processInfo.processClass || undefined,
-          }),
-        }
-      );
-
-      const processResult = await processResponse.json().catch(() => ({}));
-
-      if (processResult?.status === "FAILED") {
-        toast({
-          title: "Análise concluída com erros",
-          description:
-            processResult?.message || "Verifique os detalhes da análise.",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Análise concluída!",
-          description: "Os resultados estão disponíveis.",
-        });
-      }
-
-      router.push(`/dashboard/analises/${analysis.id}`);
+      // Navigate immediately; the detail page starts the pipeline and shows it live.
+      router.push(`/dashboard/analises/${analysis.id}?start=1`);
     } catch {
       toast({
         title: "Erro",
         description: "Não foi possível criar a análise. Tente novamente.",
         variant: "destructive",
       });
-    } finally {
-      setIsUploading(false);
+      setIsSubmitting(false);
     }
   };
 
-  const courts = [
-    "Selecione o tribunal...",
-    "STF - Supremo Tribunal Federal",
-    "STJ - Superior Tribunal de Justiça",
-    "TRF1 - Tribunal Regional Federal 1ª Região",
-    "TRF2 - Tribunal Regional Federal 2ª Região",
-    "TRF3 - Tribunal Regional Federal 3ª Região",
-    "TJSP - Tribunal de Justiça de São Paulo",
-    "TJRJ - Tribunal de Justiça do Rio de Janeiro",
-    "TJMG - Tribunal de Justiça de Minas Gerais",
-    "TJBA - Tribunal de Justiça da Bahia",
-  ];
-
-  const processClasses = [
-    "Selecione a classe...",
-    "Ação Penal - Crimes Comuns",
-    "Ação Penal - Crimes contra a Administração Pública",
-    "Ação de Cobrança",
-    "Ação de Despejo",
-    "Ação de Indenização por Danos Morais",
-    "Ação de Indenização por Danos Materiais",
-    "Ação Declaratória",
-    "Ação Penal Privada",
-    "Ação Popular",
-    "Ação Rescisória",
-    "Alienação Fiduciária",
-    "Apelação",
-    "Ação Civil Pública",
-    "Ação Trabalhista",
-    "Ação Tributária",
-    "Assistência Judiciária",
-    "Atos Unilaterais",
-    "Ação Monitória",
-    "Mandado de Segurança",
-    "Medida Cautelar",
-    "Processo de Conhecimento",
-    "Processo de Execução",
-    "Recurso Especial",
-    "Recurso Extraordinário",
-    "Tutela Antecipada",
-  ];
-
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Nova Análise</h1>
-        <p className="text-muted-foreground">
-          Envie os documentos do processo para análise inteligente
-        </p>
-      </div>
+      <PageHeader
+        title="Nova Análise"
+        description="Envie os documentos do processo para a análise multiagente"
+      />
 
       <Card>
         <CardHeader>
           <CardTitle>Informações do Processo</CardTitle>
           <CardDescription>
-            Opcional. Forneça os dados disponíveis para enriquecimento da análise.
+            Opcional. Forneça os dados disponíveis para enriquecer a análise.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -226,10 +149,7 @@ export default function NovaAnalisePage() {
                 placeholder="0001234-56.2024.8.26.0000"
                 value={processInfo.processNumber}
                 onChange={(e) =>
-                  setProcessInfo((prev) => ({
-                    ...prev,
-                    processNumber: e.target.value,
-                  }))
+                  setProcessInfo((p) => ({ ...p, processNumber: e.target.value }))
                 }
               />
             </div>
@@ -237,15 +157,16 @@ export default function NovaAnalisePage() {
               <Label htmlFor="court">Tribunal</Label>
               <select
                 id="court"
-                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 value={processInfo.court}
                 onChange={(e) =>
-                  setProcessInfo((prev) => ({ ...prev, court: e.target.value }))
+                  setProcessInfo((p) => ({ ...p, court: e.target.value }))
                 }
               >
-                {courts.map((court) => (
-                  <option key={court} value={court.includes("Selecione") ? "" : court}>
-                    {court}
+                <option value="">Selecione o tribunal...</option>
+                {courts.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
                   </option>
                 ))}
               </select>
@@ -255,21 +176,16 @@ export default function NovaAnalisePage() {
             <Label htmlFor="processClass">Classe Processual</Label>
             <select
               id="processClass"
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               value={processInfo.processClass}
               onChange={(e) =>
-                setProcessInfo((prev) => ({
-                  ...prev,
-                  processClass: e.target.value,
-                }))
+                setProcessInfo((p) => ({ ...p, processClass: e.target.value }))
               }
             >
-              {processClasses.map((clazz) => (
-                <option
-                  key={clazz}
-                  value={clazz.includes("Selecione") ? "" : clazz}
-                >
-                  {clazz}
+              <option value="">Selecione a classe...</option>
+              {processClasses.map((c) => (
+                <option key={c} value={c}>
+                  {c}
                 </option>
               ))}
             </select>
@@ -281,82 +197,16 @@ export default function NovaAnalisePage() {
         <CardHeader>
           <CardTitle>Documentos</CardTitle>
           <CardDescription>
-            Arraste e solte os arquivos ou clique para selecionar. Formatos aceitos:
-            PDF, DOCX, TXT, imagens.
+            Arraste e solte ou clique. Texto, PDF e DOCX têm o conteúdo extraído
+            automaticamente.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            className={`relative flex min-h-[200px] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors ${
-              isDragging
-                ? "border-primary bg-primary/5"
-                : "border-muted-foreground/25 hover:border-primary/50 hover:bg-muted/50"
-            }`}
-          >
-            <input
-              type="file"
-              multiple
-              accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.tiff"
-              onChange={handleFileSelect}
-              className="absolute inset-0 z-10 cursor-pointer opacity-0"
-            />
-            <Upload
-              className={`h-10 w-10 ${
-                isDragging ? "text-primary" : "text-muted-foreground"
-              }`}
-            />
-            <p className="mt-4 text-sm text-muted-foreground">
-              {isDragging ? (
-                <span className="font-medium text-primary">
-                  Solte os arquivos aqui
-                </span>
-              ) : (
-                <>
-                  <span className="font-medium text-foreground">
-                    Clique para selecionar
-                  </span>{" "}
-                  ou arraste e solte
-                </>
-              )}
-            </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              PDF, DOC, DOCX, TXT até 10MB
-            </p>
-          </div>
-
-          {files.length > 0 && (
-            <div className="mt-4 space-y-2">
-              {files.map((file) => (
-                <div
-                  key={file.id}
-                  className="flex items-center justify-between rounded-lg border bg-muted/50 p-3"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                      <FileText className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">{file.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {(file.size / 1024 / 1024).toFixed(2)} MB
-                      </p>
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removeFile(file.id)}
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-          )}
+          <FileDropzone
+            files={dropzoneFiles}
+            onFilesAdded={handleFilesAdded}
+            onFileRemoved={handleFileRemoved}
+          />
         </CardContent>
       </Card>
 
@@ -364,11 +214,14 @@ export default function NovaAnalisePage() {
         <Button variant="outline" onClick={() => router.back()}>
           Cancelar
         </Button>
-        <Button onClick={handleSubmit} disabled={isUploading || files.length === 0}>
-          {isUploading ? (
+        <Button
+          onClick={handleSubmit}
+          disabled={isSubmitting || tracked.length === 0}
+        >
+          {isSubmitting ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Analisando...
+              Enviando...
             </>
           ) : (
             <>

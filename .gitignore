@@ -1,5 +1,7 @@
 .DS_Store
 .npm-cache/
+/node_modules/
+node_modules/
 __pycache__/
 *.pyc
 chatbot/node_modules/

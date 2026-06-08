@@ -4,16 +4,25 @@ import { useEffect, useState } from "react";
 import {
   FileText,
   Clock,
-  AlertTriangle,
   CheckCircle2,
   Plus,
   ArrowRight,
   Loader2,
+  Compass,
 } from "lucide-react";
 import Link from "next/link";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Button,
+  StatCard,
+  StatusBadge,
+  PageHeader,
+  EmptyState,
+} from "@aiox/design-system";
 
 interface AnalysisItem {
   id: string;
@@ -22,32 +31,12 @@ interface AnalysisItem {
   processClass: string | null;
   status: string;
   createdAt: string;
-  _count?: { deadlines: number };
 }
 
 interface DeadlineItem {
   id: string;
   description: string;
   dueDate: string;
-  urgency: string;
-}
-
-function getStatusBadge(status: string) {
-  switch (status) {
-    case "COMPLETED":
-      return <Badge className="bg-success text-success-foreground">Concluída</Badge>;
-    case "PROCESSING":
-      return (
-        <Badge className="bg-warning text-warning-foreground">
-          <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-          Processando
-        </Badge>
-      );
-    case "FAILED":
-      return <Badge className="bg-danger text-danger-foreground">Falhou</Badge>;
-    default:
-      return <Badge variant="secondary">Pendente</Badge>;
-  }
 }
 
 export default function DashboardPage() {
@@ -56,23 +45,22 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function load() {
+    (async () => {
       try {
-        const [analysesRes, deadlinesRes] = await Promise.all([
+        const [a, d] = await Promise.all([
           fetch("/api/analyses?limit=5"),
           fetch("/api/deadlines?upcoming=true"),
         ]);
-        const analysesJson = await analysesRes.json();
-        const deadlinesJson = await deadlinesRes.json();
-        setAnalyses(analysesJson.data ?? []);
-        setDeadlines(deadlinesJson.data ?? []);
-      } catch (error) {
-        console.error("Error loading dashboard:", error);
+        const aj = await a.json();
+        const dj = await d.json();
+        setAnalyses(aj.data ?? []);
+        setDeadlines(dj.data ?? []);
+      } catch (e) {
+        console.error("Error loading dashboard:", e);
       } finally {
         setLoading(false);
       }
-    }
-    load();
+    })();
   }, []);
 
   const completed = analyses.filter((a) => a.status === "COMPLETED").length;
@@ -89,38 +77,28 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Bem-vindo de volta!</h2>
-          <p className="text-muted-foreground">
-            Resumo das suas análises processuais.
-          </p>
-        </div>
-        <Button asChild>
-          <Link href="/dashboard/nova-analise">
-            <Plus className="mr-2 h-4 w-4" />
-            Nova Análise
-          </Link>
-        </Button>
-      </div>
+      <PageHeader
+        title="Bem-vindo de volta!"
+        description="Resumo das suas análises processuais."
+        actions={
+          <Button asChild>
+            <Link href="/dashboard/nova-analise">
+              <Plus className="mr-2 h-4 w-4" />
+              Nova Análise
+            </Link>
+          </Button>
+        }
+      />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <Card key={stat.title}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-                <Icon className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {loading ? "—" : stat.value}
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
+        {stats.map((stat) => (
+          <StatCard
+            key={stat.title}
+            title={stat.title}
+            value={loading ? "—" : stat.value}
+            icon={stat.icon}
+          />
+        ))}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -129,7 +107,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle>Análises Recentes</CardTitle>
-                <CardDescription>Suas últimas análises processuais</CardDescription>
+                <CardDescription>Suas últimas análises</CardDescription>
               </div>
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/dashboard/analises">
@@ -145,39 +123,40 @@ export default function DashboardPage() {
                 <Loader2 className="h-6 w-6 animate-spin text-primary" />
               </div>
             ) : analyses.length > 0 ? (
-              <div className="space-y-4">
-                {analyses.map((analysis) => (
+              <div className="space-y-3">
+                {analyses.map((a) => (
                   <Link
-                    key={analysis.id}
-                    href={`/dashboard/analises/${analysis.id}`}
+                    key={a.id}
+                    href={`/dashboard/analises/${a.id}`}
                     className="block"
                   >
                     <div className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/50">
                       <div className="space-y-1">
                         <p className="text-sm font-medium leading-none">
-                          {analysis.processNumber || "Análise sem número"}
+                          {a.processNumber || "Análise sem número"}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {[analysis.court, analysis.processClass]
-                            .filter(Boolean)
-                            .join(" • ") || "Sem metadados"}
+                          {[a.court, a.processClass].filter(Boolean).join(" • ") ||
+                            "Sem metadados"}
                         </p>
                       </div>
-                      {getStatusBadge(analysis.status)}
+                      <StatusBadge status={a.status} />
                     </div>
                   </Link>
                 ))}
               </div>
             ) : (
-              <div className="flex h-[160px] flex-col items-center justify-center text-center">
-                <FileText className="h-10 w-10 text-muted-foreground/50" />
-                <p className="mt-3 text-sm text-muted-foreground">
-                  Nenhuma análise ainda.
-                </p>
-                <Button className="mt-3" size="sm" asChild>
-                  <Link href="/dashboard/nova-analise">Criar primeira análise</Link>
-                </Button>
-              </div>
+              <EmptyState
+                icon={FileText}
+                title="Nenhuma análise ainda"
+                action={
+                  <Button size="sm" asChild>
+                    <Link href="/dashboard/nova-analise">
+                      Criar primeira análise
+                    </Link>
+                  </Button>
+                }
+              />
             )}
           </CardContent>
         </Card>
@@ -203,24 +182,24 @@ export default function DashboardPage() {
                 <Loader2 className="h-6 w-6 animate-spin text-primary" />
               </div>
             ) : deadlines.length > 0 ? (
-              <div className="space-y-4">
-                {deadlines.slice(0, 5).map((deadline) => {
+              <div className="space-y-3">
+                {deadlines.slice(0, 5).map((d) => {
                   const daysLeft = Math.ceil(
-                    (new Date(deadline.dueDate).getTime() - Date.now()) /
+                    (new Date(d.dueDate).getTime() - Date.now()) /
                       (1000 * 60 * 60 * 24)
                   );
                   return (
                     <div
-                      key={deadline.id}
+                      key={d.id}
                       className="flex items-center justify-between rounded-lg border p-3"
                     >
                       <div className="space-y-1">
                         <p className="text-sm font-medium leading-none">
-                          {deadline.description}
+                          {d.description}
                         </p>
                         <p className="text-xs text-muted-foreground">
                           Vence em{" "}
-                          {new Date(deadline.dueDate).toLocaleDateString("pt-BR")}
+                          {new Date(d.dueDate).toLocaleDateString("pt-BR")}
                         </p>
                       </div>
                       <span
@@ -235,12 +214,7 @@ export default function DashboardPage() {
                 })}
               </div>
             ) : (
-              <div className="flex h-[160px] flex-col items-center justify-center text-center">
-                <Clock className="h-10 w-10 text-muted-foreground/50" />
-                <p className="mt-3 text-sm text-muted-foreground">
-                  Nenhum prazo pendente.
-                </p>
-              </div>
+              <EmptyState icon={Clock} title="Nenhum prazo pendente" />
             )}
           </CardContent>
         </Card>
@@ -248,7 +222,10 @@ export default function DashboardPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Como funciona</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Compass className="h-5 w-5" />
+            Como funciona
+          </CardTitle>
           <CardDescription>
             Pipeline multiagente de análise processual
           </CardDescription>

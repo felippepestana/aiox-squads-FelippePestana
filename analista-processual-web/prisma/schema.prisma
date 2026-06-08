@@ -31,6 +31,8 @@ model Analysis {
   court         String?
   processClass  String?
   status        AnalysisStatus @default(PENDING)
+  progress      Int          @default(0)
+  currentStep   String?
   result        Json?
   documents     Document[]
   deadlines     Deadline[]
