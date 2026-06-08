@@ -1,9 +1,9 @@
 name: benefits-hub
 display_name: "Benefits-Hub — Benefícios"
-version: "0.1.0"
+version: "1.0.0"
 domain: benefits
 entry_agent: benefits-hub-chief
-description: "Gestão e curadoria de benefícios: catálogo, elegibilidade, adesão, recomendação personalizada por perfil/momento de vida e análise de custo/adesão."
+description: "Gestão e curadoria de benefícios (Total Rewards): catálogo e regras de elegibilidade, recomendação personalizada por perfil e momento de vida, condução de adesão em linguagem clara e análise de custo vs. adoção. Gate de consentimento/privacidade obrigatório (dado de saúde minimizado, consentimento antes da adesão, sigilo das escolhas de terceiros) antes de qualquer adesão. O melhor benefício é o que cabe na vida da pessoa agora."
 
 keywords:
   - benefícios
@@ -12,27 +12,90 @@ keywords:
   - elegibilidade
   - vale
   - recomendação de benefícios
+  - momento de vida
+  - custo e adoção
+  - lgpd
 
 metadata:
   type: module
-  status: DEVELOPING
+  status: ACTIVE
   platform: apex-talent
+  privacy_model: lgpd
+  data_residency: br-only
 
 tier_structure:
   tier_0:
-    role: "Module Orchestration"
+    role: "Orchestration & Total Rewards Strategy"
     agents: ["benefits-hub-chief"]
+  tier_1:
+    role: "Catalog & Eligibility"
+    agents: ["catalog-keeper", "eligibility-checker"]
+  tier_2:
+    role: "Recommendation & Value"
+    agents: ["fit-advisor", "value-analyst"]
+  tier_3:
+    role: "Consent & Privacy Gate"
+    agents: ["consent-gate"]
+
+scoring_system:
+  total: 100
+  categories:
+    catalog_accuracy:
+      weight: 15
+      agent: catalog-keeper
+      checks: ["up_to_date", "vendor_verified", "plain_language"]
+    eligibility_correctness:
+      weight: 20
+      agent: eligibility-checker
+      checks: ["rules_correct", "deterministic", "cct_compliant"]
+    recommendation_fit:
+      weight: 25
+      agent: fit-advisor
+      checks: ["life_moment_match", "consent_respected", "no_overselling"]
+    value_insight:
+      weight: 15
+      agent: value-analyst
+      checks: ["cost_vs_adoption", "perceived_value", "no_vanity_metric"]
+    consent_privacy:
+      weight: 25
+      agent: consent-gate
+      checks: ["health_data_minimized", "consent_obtained", "no_third_party_disclosure", "audit_trail_complete"]
+  grade_scale:
+    - { min: 90, label: "Fits & Compliant", color: "#ff6b00" }
+    - { min: 75, label: "Good with Notes", color: "#f59e0b" }
+    - { min: 60, label: "Needs Review", color: "#f59e0b" }
+    - { min: 0, label: "Not Enrollable / Blocked", color: "#e5484d" }
 
 workflow:
-  primary: "module intake (skeleton)"
+  primary: "wf-benefits-completo"
   phases:
-    - "Phase 1: INTAKE - Understand the need within this module's domain"
-    - "Phase 2: SCOPE - Define the specialist flow to build next"
+    - name: "Phase 1: INTAKE"
+      description: "Frame the need (employee request or program review) and life context"
+    - name: "Phase 2: CATALOG & ELIGIBILITY"
+      description: "Resolve the catalog and determine deterministic eligibility"
+    - name: "Phase 3: ANALYSIS"
+      description: "Personalized recommendation (life-moment fit) + cost vs. adoption value"
+    - name: "Phase 4: CONSENT GATE"
+      description: "Audit consent, health-data minimization and third-party privacy → PASS/VETO"
+    - name: "Phase 5: ENROLLMENT"
+      description: "Guide enrollment in plain language (only after PASS and explicit consent)"
 
 entry_points:
-  intake: "*catalog"
+  catalog: "*catalog"
+  recommend: "*recommend"
+  enrollment: "*enrollment"
+  cost: "*cost-analysis"
 
 workspace_integration:
-  level: none
-  rationale: >-
-    Modulo benefits-hub em desenvolvimento (esqueleto). O Chief faz intake e escopo; ainda nao consome nem produz artefatos no workspace/.
+  level: full
+  produces:
+    - "benefits_catalog.yaml"
+    - "eligibility_result.yaml"
+    - "recommendation.md"
+    - "value_analysis.yaml"
+    - "consent_audit.md"
+  consumes:
+    - "from peopleops: vínculo, salário, dependentes, admissão (elegibilidade e custo)"
+    - "from profiler-dna: contexto comportamental (advisory, opcional)"
+    - "from insights: adoção/custo agregados para análise de valor"
+  rationale: "Benefits-Hub conecta o catálogo de Total Rewards à vida real da pessoa, respeitando consentimento e privacidade de dado de saúde. Por lidar com dado sensível e escolhas pessoais, o gate de consentimento é obrigatório antes de qualquer adesão."

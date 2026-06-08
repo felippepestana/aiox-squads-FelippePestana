@@ -1,0 +1,23 @@
+# Template: Eligibility Result
+# Produced by: eligibility-checker | Consumed by: fit-advisor, consent-gate
+# Deterministic. Every verdict carries a rule trace. No pre-checked enrollment.
+
+eligibility_result:
+  employee_ref: ""               # pseudonimizado
+  checked_by: "eligibility-checker"
+  timestamp: ""
+  determinism: "same situation → same eligibility"
+
+  evaluations:
+    - benefit_id: ""
+      eligible: null
+      rule_trace: ""             # regra que sustenta o veredito (vínculo, tempo, dependente, CCT)
+      carencia: ""
+      enrollment_window: ""
+      reconsider_at: ""          # se inelegível por tempo, quando reavaliar
+
+  cct_mandatory: []              # benefícios obrigatórios por convenção
+
+  enrollment_steps:
+    - ""                         # passos; executados só após PASS do gate + consentimento
+  note: "Adesão só após PASS do consent-gate e consentimento ativo. Nenhuma opção pré-marcada."

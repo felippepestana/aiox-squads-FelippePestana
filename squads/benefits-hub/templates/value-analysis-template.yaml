@@ -1,0 +1,24 @@
+# Template: Value Analysis
+# Produced by: value-analyst
+# Aggregate only. Cost crossed with real adoption + perceived value. No vanity metrics.
+
+value_analysis:
+  period: ""
+  analyzed_by: "value-analyst"
+  timestamp: ""
+  privacy: "agregado; sem adesão individual; sem dado de saúde individual"
+
+  benefits:
+    - benefit_id: ""
+      monthly_cost: null
+      adoption_pct: null         # % que realmente usa/adere
+      perceived_value: ""        # baixo | médio | alto
+      verdict: ""                # keep | revise | expand
+      note: ""
+
+  summary:
+    total_monthly_cost: null
+    keep: null
+    revise: null
+    expand: null
+    headline_vanity_avoided: "Foco em adoção e valor, não em tamanho do catálogo."
