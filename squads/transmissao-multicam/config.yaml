@@ -466,8 +466,9 @@ roadmap:
     - "F10.3 — docker-compose para bridge standalone (host-network + env_file + logging caps para Raspberry Pi)"
     - "F10.4 — systemd unit para bridge standalone bare-metal (deploy/osc-bridge.service com hardening básico)"
     - "F10.2.1 — GitHub Actions workflow publica OSC bridge image em GHCR (multi-platform amd64+arm64, .github/workflows/osc-bridge-publish.yml)"
+    - "F11 ops prep — scripts/run-preflight.sh + tasks/run-preflight-checks.md + templates/event-card.md + runbook recovery scenarios (OBS crash, network outage, F6 offline)"
     - "Audio mapping & VAD calibration (data/mic-mapping.yaml + tasks/configure-audio.md)"
   future:
     - phase: "F11"
       name: "Validação em hardware real + Supabase production"
-      stack: "Executar tasks/* contra 4 câmeras + OBS + Meet reais (projeto Supabase de produção já provisionado com migrations aplicadas; URL/keys em .env.local)"
+      stack: "Executar tasks/* contra 4 câmeras + OBS + Meet reais (preparação operacional 100% pronta em scripts/run-preflight.sh + templates/event-card.md; resta apenas execução em hardware)"
