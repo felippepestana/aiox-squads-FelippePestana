@@ -20,8 +20,11 @@ legendarios-top/.env*
 legendarios-top/.next/
 legendarios-top/out/
 legendarios-top/.netlify/
+legendarios-top/.supabase/
 legendarios-top/supabase/.temp/
 legendarios-top/supabase/.branches/
+legendarios-top/public/sw.js*
+legendarios-top/public/workbox-*.js*
 squads/transmissao-multicam/auto-switch-engine/src/tx_multicam_auto_switch.egg-info/
 squads/transmissao-multicam/operator-panel/tsconfig.tsbuildinfo
 
