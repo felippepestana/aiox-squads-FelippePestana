@@ -8,8 +8,9 @@ Plataforma web de análise processual jurídica brasileira potenciada por multia
 - **Styling:** Tailwind CSS 3, componentes estilo shadcn/ui (Radix)
 - **State:** Zustand, TanStack Query
 - **Database:** PostgreSQL via Prisma (compatível com Supabase)
-- **LLM Gateway:** OpenAI por padrão; provedores compatíveis com OpenAI
-  (DeepSeek, Qwen, Kimi, MiniMax) habilitáveis via `*_API_KEY` + `*_BASE_URL`
+- **LLM Gateway:** multi-provedor compatível com OpenAI — OpenAI, DeepSeek,
+  Groq, Google Gemini, OpenRouter, Qwen, Kimi, MiniMax. Basta definir a chave do
+  provedor desejado (veja "Trocando de provedor LLM")
 
 ## Estado atual (modo demo)
 
@@ -55,13 +56,50 @@ Limitações conhecidas (modo demo):
 
 ### LLM Gateway
 
-Sistema inteligente de seleção de modelos baseado em complexidade:
+Sistema multi-provedor (todos compatíveis com a API OpenAI) com seleção de
+modelo por complexidade da tarefa e **fallback automático** entre os provedores
+configurados. O gateway só seleciona modelos de provedores cujas chaves estão
+presentes (`isConfigured()`), e degrada com mensagem clara quando nenhum está.
 
-| Tier | Modelos | Uso |
-|------|---------|-----|
-| Budget | DeepSeek V3, Qwen, MiniMax | Tarefas simples |
-| Standard | Kimi, GPT-4o-mini | Análise padrão |
-| Premium | Claude 3.5, GPT-4o, Gemini 2.0 | Análise complexa |
+| Tier | Exemplos de modelos |
+|------|---------------------|
+| Budget | DeepSeek V3, Qwen 2.5, MiniMax 01 |
+| Standard | GPT-4o-mini, Gemini 2.0 Flash, Llama 3.3 70B (Groq), Kimi K2 |
+| Premium | GPT-4o, Gemini 2.0 Pro |
+
+### Trocando de provedor LLM
+
+Não precisa de OpenAI: defina a chave de **qualquer** provedor suportado e o
+gateway passa a usá-lo automaticamente. A `*_BASE_URL` tem padrão embutido para
+a maioria; o modelo real pode ser ajustado com `<PROVIDER>_MODEL`.
+
+| Provedor | Variável | Observação |
+|----------|----------|------------|
+| OpenAI | `OPENAI_API_KEY` | padrão |
+| **DeepSeek** | `DEEPSEEK_API_KEY` | barato, alta qualidade |
+| **Groq** | `GROQ_API_KEY` | **tier gratuito**, muito rápido (Llama 3.3 70B) |
+| **Google Gemini** | `GEMINI_API_KEY` | **tier gratuito** |
+| **OpenRouter** | `OPENROUTER_API_KEY` | uma chave, centenas de modelos |
+| Qwen / Kimi / MiniMax | `QWEN_API_KEY` / `KIMI_API_KEY` / `MINIMAX_API_KEY` | compatíveis |
+
+Exemplos (`.env.local`):
+
+```bash
+# Usar Groq (gratuito) em vez de OpenAI
+GROQ_API_KEY=gsk_...
+
+# Ou DeepSeek
+DEEPSEEK_API_KEY=sk-...
+# DEEPSEEK_MODEL=deepseek-chat   # opcional: trocar o modelo
+
+# Ou OpenRouter com um modelo específico
+OPENROUTER_API_KEY=sk-or-...
+OPENROUTER_MODEL=anthropic/claude-3.5-sonnet
+```
+
+É possível configurar **vários** provedores ao mesmo tempo — o gateway escolhe
+por tier e usa fallback se um falhar. Reinicie o `npm run dev` (e o
+`npm run worker`, se estiver usando) após alterar as variáveis.
 
 ## Getting Started
 

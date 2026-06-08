@@ -3,9 +3,26 @@ import OpenAI from "openai";
 export type ModelTier = "budget" | "standard" | "premium";
 export type TaskComplexity = "simple" | "moderate" | "complex" | "expert";
 
+export type Provider =
+  | "openai"
+  | "anthropic"
+  | "deepseek"
+  | "qwen"
+  | "kimi"
+  | "minimax"
+  | "gemini"
+  | "groq"
+  | "openrouter";
+
 interface ModelConfig {
   name: string;
-  provider: "openai" | "anthropic" | "deepseek" | "qwen" | "kimi" | "minimax" | "gemini";
+  provider: Provider;
+  /**
+   * The model id sent to the provider API. Differs from the internal key for
+   * non-OpenAI providers (e.g. "deepseek-chat", not "deepseek-v3"). Can be
+   * overridden at runtime via `<PROVIDER>_MODEL` (e.g. DEEPSEEK_MODEL).
+   */
+  apiModel: string;
   tier: ModelTier;
   contextWindow: number;
   costPer1kTokens: { input: number; output: number };
@@ -15,6 +32,7 @@ export const MODELS: Record<string, ModelConfig> = {
   "gpt-4o": {
     name: "GPT-4o",
     provider: "openai",
+    apiModel: "gpt-4o",
     tier: "premium",
     contextWindow: 128000,
     costPer1kTokens: { input: 0.005, output: 0.015 },
@@ -22,6 +40,7 @@ export const MODELS: Record<string, ModelConfig> = {
   "gpt-4o-mini": {
     name: "GPT-4o-mini",
     provider: "openai",
+    apiModel: "gpt-4o-mini",
     tier: "standard",
     contextWindow: 128000,
     costPer1kTokens: { input: 0.00015, output: 0.0006 },
@@ -29,6 +48,7 @@ export const MODELS: Record<string, ModelConfig> = {
   "claude-3-5-sonnet": {
     name: "Claude 3.5 Sonnet",
     provider: "anthropic",
+    apiModel: "claude-3-5-sonnet-latest",
     tier: "premium",
     contextWindow: 200000,
     costPer1kTokens: { input: 0.003, output: 0.015 },
@@ -36,6 +56,7 @@ export const MODELS: Record<string, ModelConfig> = {
   "claude-3-5-haiku": {
     name: "Claude 3.5 Haiku",
     provider: "anthropic",
+    apiModel: "claude-3-5-haiku-latest",
     tier: "standard",
     contextWindow: 200000,
     costPer1kTokens: { input: 0.0008, output: 0.004 },
@@ -43,6 +64,7 @@ export const MODELS: Record<string, ModelConfig> = {
   "deepseek-v3": {
     name: "DeepSeek V3",
     provider: "deepseek",
+    apiModel: "deepseek-chat",
     tier: "budget",
     contextWindow: 64000,
     costPer1kTokens: { input: 0.00007, output: 0.00027 },
@@ -50,6 +72,7 @@ export const MODELS: Record<string, ModelConfig> = {
   "qwen-2.5": {
     name: "Qwen 2.5",
     provider: "qwen",
+    apiModel: "qwen-plus",
     tier: "budget",
     contextWindow: 32000,
     costPer1kTokens: { input: 0.0005, output: 0.0015 },
@@ -57,6 +80,7 @@ export const MODELS: Record<string, ModelConfig> = {
   "kimi-k2": {
     name: "Kimi K2",
     provider: "kimi",
+    apiModel: "moonshot-v1-128k",
     tier: "standard",
     contextWindow: 128000,
     costPer1kTokens: { input: 0.001, output: 0.004 },
@@ -64,16 +88,42 @@ export const MODELS: Record<string, ModelConfig> = {
   "minimax-01": {
     name: "MiniMax 01",
     provider: "minimax",
+    apiModel: "MiniMax-Text-01",
     tier: "budget",
     contextWindow: 1000000,
     costPer1kTokens: { input: 0.0001, output: 0.0005 },
   },
+  "gemini-2.0-flash": {
+    name: "Gemini 2.0 Flash",
+    provider: "gemini",
+    apiModel: "gemini-2.0-flash",
+    tier: "standard",
+    contextWindow: 1000000,
+    costPer1kTokens: { input: 0.0001, output: 0.0004 },
+  },
   "gemini-2.0-pro": {
     name: "Gemini 2.0 Pro",
     provider: "gemini",
+    apiModel: "gemini-2.0-pro-exp",
     tier: "premium",
     contextWindow: 1000000,
     costPer1kTokens: { input: 0.00125, output: 0.005 },
+  },
+  "groq-llama-3.3-70b": {
+    name: "Llama 3.3 70B (Groq)",
+    provider: "groq",
+    apiModel: "llama-3.3-70b-versatile",
+    tier: "standard",
+    contextWindow: 128000,
+    costPer1kTokens: { input: 0.00059, output: 0.00079 },
+  },
+  "openrouter-auto": {
+    name: "OpenRouter (configurável)",
+    provider: "openrouter",
+    apiModel: "meta-llama/llama-3.3-70b-instruct",
+    tier: "standard",
+    contextWindow: 128000,
+    costPer1kTokens: { input: 0.0001, output: 0.0003 },
   },
 };
 
@@ -123,29 +173,56 @@ class LLMGateway {
 
   private initializeClients() {
     // OpenAI is the default provider. The remaining providers expose
-    // OpenAI-compatible APIs and are only initialized when both an API key and
-    // a base URL are configured, so we never select a model we cannot call.
+    // OpenAI-compatible APIs and are only initialized when an API key (and a
+    // base URL, when not built-in) is configured, so we never select a model we
+    // cannot call. To switch providers, just set the corresponding API key.
     const openaiKey = process.env.OPENAI_API_KEY;
     if (openaiKey) {
       this.clients.set("openai", new OpenAI({ apiKey: openaiKey }));
     }
 
-    const compatibleProviders: Array<{
-      provider: string;
-      key?: string;
-      baseURL?: string;
-    }> = [
-      { provider: "deepseek", key: process.env.DEEPSEEK_API_KEY, baseURL: process.env.DEEPSEEK_BASE_URL },
-      { provider: "qwen", key: process.env.QWEN_API_KEY, baseURL: process.env.QWEN_BASE_URL },
-      { provider: "kimi", key: process.env.KIMI_API_KEY, baseURL: process.env.KIMI_BASE_URL },
-      { provider: "minimax", key: process.env.MINIMAX_API_KEY, baseURL: process.env.MINIMAX_BASE_URL },
+    // Providers with a well-known default base URL (overridable via *_BASE_URL).
+    const knownBaseURLs: Partial<Record<Provider, string>> = {
+      deepseek: "https://api.deepseek.com",
+      groq: "https://api.groq.com/openai/v1",
+      openrouter: "https://openrouter.ai/api/v1",
+      gemini: "https://generativelanguage.googleapis.com/v1beta/openai/",
+      kimi: "https://api.moonshot.cn/v1",
+      qwen: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    };
+
+    const compatibleProviders: Provider[] = [
+      "deepseek",
+      "qwen",
+      "kimi",
+      "minimax",
+      "gemini",
+      "groq",
+      "openrouter",
     ];
 
-    for (const { provider, key, baseURL } of compatibleProviders) {
+    for (const provider of compatibleProviders) {
+      const upper = provider.toUpperCase();
+      const key = process.env[`${upper}_API_KEY`];
+      const baseURL = process.env[`${upper}_BASE_URL`] || knownBaseURLs[provider];
       if (key && baseURL) {
         this.clients.set(provider, new OpenAI({ apiKey: key, baseURL }));
       }
     }
+  }
+
+  /**
+   * Resolves the model id to send to the provider API. Honors a per-provider
+   * env override (`<PROVIDER>_MODEL`), then the config's `apiModel`, then the
+   * internal id as a last resort.
+   */
+  private resolveApiModel(modelId: string): string {
+    const provider = MODELS[modelId]?.provider;
+    if (provider) {
+      const override = process.env[`${provider.toUpperCase()}_MODEL`];
+      if (override) return override;
+    }
+    return MODELS[modelId]?.apiModel ?? modelId;
   }
 
   /** True when at least one LLM provider client is available. */
@@ -231,7 +308,7 @@ class LLMGateway {
     }
 
     const response = await client.chat.completions.create({
-      model: request.model,
+      model: this.resolveApiModel(request.model),
       messages: request.messages,
       temperature: request.temperature ?? 0.7,
       max_tokens: request.max_tokens ?? 4096,
