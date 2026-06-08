@@ -18,7 +18,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["localhost", "vjzhvtnhbagxvdbpebnv.supabase.co"],
+    domains: ["localhost", "vjzhvtnhbagxvdbpebnv.supabase.co", "up.railway.app"],
   },
   async headers() {
     return [
