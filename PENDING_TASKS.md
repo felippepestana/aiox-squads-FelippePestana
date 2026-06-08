@@ -16,14 +16,20 @@
 > **Pacote definido:** `@taazkareem/clickup-mcp-server` (fonte única: `CLICKUP_SETUP.md`).
 > A incerteza de pacote foi resolvida — não usar `@clickup/mcp-server` nem
 > `@modelcontextprotocol/server-clickup` (este último não existe no npm).
+>
+> **Requisito de licença:** o modo local/stdio exige `CLICKUP_API_KEY` +
+> `CLICKUP_TEAM_ID` + `CLICKUP_MCP_LICENSE_KEY` (**licença paga**). `CLICKUP_API_TOKEN`
+> não é lida pelo servidor.
 
 ### Tasks
-- [ ] Obter ClickUp API token (https://app.clickup.com/settings/apps)
+- [ ] Obter ClickUp API key (https://app.clickup.com/settings/apps) e Workspace ID
+- [ ] Adquirir a license key (`CLICKUP_MCP_LICENSE_KEY`) para uso local/stdio
 - [ ] Configurar no Claude Code local
   ```bash
-  npm install -g @taazkareem/clickup-mcp-server
   claude mcp add ClickUp \
-    -e CLICKUP_API_TOKEN=pk_YOUR_TOKEN \
+    -e CLICKUP_API_KEY=pk_SUA_API_KEY \
+    -e CLICKUP_TEAM_ID=SEU_WORKSPACE_ID \
+    -e CLICKUP_MCP_LICENSE_KEY=SUA_LICENSE_KEY \
     -- npx -y @taazkareem/clickup-mcp-server
   ```
 - [ ] Testar conexão: `claude mcp list`
@@ -31,7 +37,7 @@
 
 ### Acceptance Criteria
 - [ ] ClickUp MCP conectado e funcional
-- [ ] Token seguramente armazenado (não commitado)
+- [ ] Credenciais (API key + license key) seguramente armazenadas (não commitadas)
 - [ ] Documentação completa
 - [ ] `claude mcp list` mostra ClickUp como connected
 

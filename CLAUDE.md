@@ -90,15 +90,19 @@ MCPs são servidores que estendem as capacidades do Claude Code. Este projeto ut
   - Requer aprovação explícita no Claude Code
 
 - **ClickUp** (opcional): Integração com ClickUp para gerenciamento de tarefas
-  - Pacote recomendado: `@taazkareem/clickup-mcp-server` (v0.14.4+)
-  - Requer: Token de API do ClickUp
-  - Obtenção do token: https://app.clickup.com/settings/apps
+  - Pacote recomendado: `@taazkareem/clickup-mcp-server`
+  - Requer (modo local/stdio): `CLICKUP_API_KEY`, `CLICKUP_TEAM_ID` (Workspace ID) e
+    `CLICKUP_MCP_LICENSE_KEY` (**licença paga**). `CLICKUP_API_TOKEN` não é lida.
+  - Obtenção da API key: https://app.clickup.com/settings/apps
   - Instalação:
     ```bash
-    npm install -g @taazkareem/clickup-mcp-server
-    export CLICKUP_API_TOKEN="seu_token_aqui"
+    export CLICKUP_API_KEY="sua_api_key"
+    export CLICKUP_TEAM_ID="seu_workspace_id"
+    export CLICKUP_MCP_LICENSE_KEY="sua_license_key"
     claude mcp add ClickUp \
-      -e CLICKUP_API_TOKEN=$CLICKUP_API_TOKEN \
+      -e CLICKUP_API_KEY=$CLICKUP_API_KEY \
+      -e CLICKUP_TEAM_ID=$CLICKUP_TEAM_ID \
+      -e CLICKUP_MCP_LICENSE_KEY=$CLICKUP_MCP_LICENSE_KEY \
       -- npx -y @taazkareem/clickup-mcp-server
     ```
 

@@ -71,7 +71,7 @@ claude mcp add shell -- npx -y mcp-server-commands
 > **Nota de redundância:** o Claude Code já possui **ferramenta Bash nativa**. Este MCP só
 > é necessário se você quiser expor `run_process` explicitamente via MCP (ex.: para outro
 > cliente). Para uso comum, a ferramenta nativa já cobre a necessidade.
-
+>
 > **Nota de viabilidade:** `npx mcp-server-commands` baixa o pacote na primeira execução,
 > exigindo egress de rede. No devcontainer, o firewall usa **allowlist** — garanta que o
 > registry do npm está liberado, ou pré-instale o pacote.
@@ -90,17 +90,24 @@ onde existe um daemon acessível via socket. Resumo de viabilidade:
 
 ### PASSO 5: ClickUp MCP (Opcional)
 Pacote definido: **`@taazkareem/clickup-mcp-server`** (ver `CLICKUP_SETUP.md`, fonte única
-do procedimento). Se a credencial estiver disponível:
+do procedimento).
+
+⚠️ **Requisito de licença:** as versões atuais deste pacote, no modo local/stdio, exigem
+**três** variáveis de ambiente — `CLICKUP_API_KEY`, `CLICKUP_TEAM_ID` (o **Workspace ID**)
+e `CLICKUP_MCP_LICENSE_KEY` (**chave de licença paga**). A variável `CLICKUP_API_TOKEN`
+**não** é lida pelo servidor. Sem a license key, o MCP é registrado, mas não inicia.
+
 ```bash
-# Obter token em: https://app.clickup.com/settings/apps
-export CLICKUP_API_TOKEN="pk_SEU_TOKEN_AQUI"
+# Obter API key em: https://app.clickup.com/settings/apps
+export CLICKUP_API_KEY="pk_SUA_API_KEY"
+export CLICKUP_TEAM_ID="SEU_WORKSPACE_ID"
+export CLICKUP_MCP_LICENSE_KEY="SUA_LICENSE_KEY"
 
-# Instalar o pacote correto
-npm install -g @taazkareem/clickup-mcp-server
-
-# Adicionar
+# Adicionar (npx baixa o pacote sob demanda; -y evita prompt interativo)
 claude mcp add ClickUp \
-  -e CLICKUP_API_TOKEN=$CLICKUP_API_TOKEN \
+  -e CLICKUP_API_KEY=$CLICKUP_API_KEY \
+  -e CLICKUP_TEAM_ID=$CLICKUP_TEAM_ID \
+  -e CLICKUP_MCP_LICENSE_KEY=$CLICKUP_MCP_LICENSE_KEY \
   -- npx -y @taazkareem/clickup-mcp-server
 ```
 
@@ -241,7 +248,7 @@ Resumo honesto do que é alcançável, fechando o gap entre diagnóstico e final
 | Componente | Viabilidade | Caminho | Observação |
 |-----------|-------------|---------|------------|
 | **shell MCP** | ✅ Funcional | `npx mcp-server-commands` | Servidor MCP real (stdio, `run_process`). Requer egress de rede (allowlist do firewall). Redundante com a Bash nativa do Claude Code. |
-| **ClickUp MCP** | ✅ Funcional | `@taazkareem/clickup-mcp-server` + token | Opcional; depende de `CLICKUP_API_TOKEN`. Ver `CLICKUP_SETUP.md`. |
+| **ClickUp MCP** | ⚠️ Funcional c/ licença | `@taazkareem/clickup-mcp-server` | Opcional; modo local exige `CLICKUP_API_KEY` + `CLICKUP_TEAM_ID` + `CLICKUP_MCP_LICENSE_KEY` (**licença paga**). Ver `CLICKUP_SETUP.md`. |
 | **MCP_DOCKER** | ⚠️ Degradado | `docker-mcp` (com socket) | Config válida, mas **não-funcional neste container** (sem `/var/run/docker.sock`). Funcional só onde o socket estiver montado. |
 | `/bin/bash` como MCP | ❌ Descartado | — | Bash puro não fala JSON-RPC; **nunca** conecta como MCP. Substituído pelo `mcp-server-commands`. |
 | `@anthropic-ai/mcp-server-bash` | ❌ Descartado | — | Pacote **não existe** no npm. |
