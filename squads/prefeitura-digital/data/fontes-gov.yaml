@@ -1,0 +1,95 @@
+# Catálogo de fontes, APIs e serviços do governo (federal/estadual) úteis ao executivo municipal.
+# Estado dos serviços verificado em jun/2026. "aberta" = consulta pública sem credencial; "token" = requer cadastro.
+
+processo_eletronico:
+  - nome: "SEI — Sistema Eletrônico de Informações"
+    orgao: "Origem TRF4; distribuição MGI (software público)"
+    api: "parcial"
+    integracao: "Módulo REST mod-wssei; mod-sei-pen (barramento Tramita GOV.br)"
+    urls:
+      - "https://softwarepublico.gov.br/social/sei/"
+      - "https://github.com/pengovbr"
+      - "https://www.gov.br/gestao/pt-br/assuntos/gestaoeinovacao/informacoes-sistemas-e-servicos-de-gestao/processo-eletronico-nacional"
+    nota: "Porto Velho já utiliza SEI (sei.portovelho.ro.gov.br)"
+
+contratacoes:
+  - nome: "PNCP — Portal Nacional de Contratações Públicas"
+    orgao: "MGI"
+    api: "aberta (consultas)"
+    urls: ["https://pncp.gov.br", "https://pncp.gov.br/api/consulta/swagger-ui/index.html"]
+    uso: "Editais, contratos, atas, preços de referência; publicação obrigatória (Lei 14.133)"
+  - nome: "Modelos AGU — Lei 14.133/2021"
+    orgao: "AGU"
+    api: "não (modelos/documentos)"
+    urls: ["https://www.gov.br/agu/pt-br/composicao/cgu/cgu/modelos/licitacoesecontratos/14133"]
+    uso: "Modelos de TR, Projeto Básico, editais e contratos"
+  - nome: "Ger@AGU — Gerador de Editais"
+    orgao: "AGU"
+    api: "ferramenta web"
+    urls: ["https://cgu.agu.gov.br/edital/"]
+    uso: "Referência de automação de editais (árvore de decisão)"
+  - nome: "Portal TCU — Licitações e Contratos"
+    orgao: "TCU"
+    api: "não"
+    urls: ["https://licitacoesecontratos.tcu.gov.br/"]
+    uso: "Orientações e estrutura de ETP, TR e Projeto Básico"
+
+orcamento_financas:
+  - nome: "SICONFI"
+    orgao: "Secretaria do Tesouro Nacional (STN)"
+    api: "aberta"
+    urls: ["https://apidatalake.tesouro.gov.br/docs/siconfi/"]
+    uso: "RREO, RGF, DCA, MSC; ente Porto Velho = 1100205"
+  - nome: "SIOPS"
+    orgao: "Ministério da Saúde / DATASUS"
+    api: "aberta"
+    urls: ["https://www.gov.br/saude/pt-br/acesso-a-informacao/siops"]
+    uso: "Monitoramento do mínimo de 15% em saúde (LC 141/2012)"
+  - nome: "SIOPE"
+    orgao: "FNDE"
+    api: "aberta"
+    urls: ["https://www.gov.br/fnde/pt-br/assuntos/sistemas/siope"]
+    uso: "Monitoramento do mínimo de 25% em educação + FUNDEB"
+  - nome: "Portal da Transparência (federal) — API"
+    orgao: "CGU"
+    api: "token"
+    urls: ["https://portaldatransparencia.gov.br/api-de-dados"]
+    uso: "Convênios, transferências, despesas, sanções (CEIS/CNEP)"
+
+dados_referencia:
+  - nome: "IBGE — Localidades"
+    orgao: "IBGE"
+    api: "aberta"
+    urls: ["https://servicodados.ibge.gov.br/api/v1/localidades/municipios/1100205"]
+    uso: "Código de município, dados geográficos"
+  - nome: "Conecta gov.br (CPF/CNPJ, CadÚnico)"
+    orgao: "MGI"
+    api: "parcial — ainda restrito a estados (jun/2026)"
+    urls: ["https://www.gov.br/conecta/catalogo/apis/"]
+    uso: "Roadmap: validação cadastral quando liberado a municípios"
+
+controle_estadual:
+  - nome: "TCE-RO — SIGAP"
+    orgao: "Tribunal de Contas do Estado de Rondônia"
+    api: "parcial (dados abertos)"
+    urls:
+      - "https://tcero.tc.br/"
+      - "https://tcero.tc.br/sigap-/"
+      - "https://transparencia.tce.ro.gov.br/transparenciatce/DadosAbertos"
+    uso: "Prestação de contas, remessas mensais, manuais e dados abertos"
+
+diario_oficial:
+  - nome: "AROM / SIGPub — Diário Oficial dos Municípios de RO"
+    orgao: "Associação Rondoniense de Municípios (AROM)"
+    api: "não (plataforma de publicação)"
+    urls: ["https://arom.org.br/", "https://www.diariomunicipal.com.br/arom/"]
+    uso: "Benchmark de DOM eletrônico (PDF assinado ICP-Brasil, biblioteca pública)"
+
+transparencia_avaliacao:
+  - nome: "EBT — Escala Brasil Transparente / PNTP"
+    orgao: "CGU"
+    api: "não (avaliação)"
+    urls:
+      - "https://www.gov.br/cgu/pt-br/assuntos/transparencia-publica/escala-brasil-transparente-360"
+      - "https://mbt.cgu.gov.br/"
+    uso: "Critérios de conformidade e selos (Prata/Ouro/Diamante)"

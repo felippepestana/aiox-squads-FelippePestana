@@ -163,6 +163,7 @@ Squads publicados pela comunidade neste repositório.
 | [**dispatch**](squads/dispatch/) | Motor de execução paralela que decompõe stories/PRDs em subtarefas atômicas, otimiza em ondas (DAG) e roteia para agentes/modelos certos | 🟢 |
 | [**education**](squads/education/) | Design instrucional que transforma expertise em cursos online conformes ao MEC, aplicando 15 frameworks pedagógicos (Bloom, Mayer, UbD, ARCS) | 🟢 |
 | [**kaizen**](squads/kaizen/) | Monitora e melhora continuamente todos os squads — analisa estrutura, performance, gargalos, competências e custos | 🟢 |
+| [**prefeitura-digital**](squads/prefeitura-digital/) | Gestão pública municipal (poder executivo) — 13 agentes em torno de um eixo orçamentário, cobrindo contratações (Lei 14.133: ETP/TR/Projeto Básico), processo administrativo (SEI), PPA/LDO/LOA, Diário Oficial, RH e transparência. Caso de referência: Porto Velho/RO | 🟡 |
 | [**seo**](squads/seo/) | Otimiza SEO de sites (score 0-100) — auditoria on-page, técnico, schema, E-E-A-T, Core Web Vitals e visibilidade para IA (GEO) | 🟡 |
 | [**squad-juridico-legal-performance**](squads/squad-juridico-legal-performance/) | Squad jurídico unificado — integra análise processual, CPC, estratégia recursal, perícia técnica judicial e planejamento de frontend jurídico de alta usabilidade | 🟢 |
 | [**squad-creator**](squads/squad-creator/) | Meta-squad que cria outros squads via templates estruturais, validação de qualidade e extração de DNA de especialistas reais | 🟢 |

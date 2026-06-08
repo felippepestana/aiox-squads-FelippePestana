@@ -1,0 +1,319 @@
+metadata:
+  version: "1.0"
+  created: "2026-06-08"
+  updated: "2026-06-08"
+  squad: "prefeitura-digital"
+
+squad:
+  name: "prefeitura-digital"
+  display_name: "Prefeitura Digital"
+  version: "1.0.0"
+  domain: "Public Administration — Brazilian Municipal Executive Branch"
+  description: |
+    Squad de automação e modernização da gestão pública municipal (poder executivo),
+    com Porto Velho/RO como caso de referência. Organizado em torno de um eixo
+    orçamentário transversal (todo ato administrativo depende de provisão e execução
+    orçamentária) e cobrindo seis módulos: (A) processo administrativo no padrão SEI,
+    (B) contratações Lei 14.133/2021 (ETP, Termo de Referência, Projeto Básico),
+    orçamento e finanças (PPA/LDO/LOA, execução, mínimos constitucionais e LRF),
+    Diário Oficial (elaboração de atos e biblioteca de consulta), Recursos Humanos
+    (Semad/RPPS/eSocial) e Portal da Transparência (LAI/PNTP/EBT/WCAG).
+  philosophy: |
+    "Todo ato do Executivo nasce vinculado ao orçamento, conforma-se à lei e publica-se com transparência."
+  keywords:
+    - prefeitura-digital
+    - gestao-municipal
+    - poder-executivo-municipal
+    - processo-administrativo
+    - sei
+    - lei-14133
+    - etp
+    - termo-de-referencia
+    - projeto-basico
+    - orcamento-publico
+    - ppa-ldo-loa
+    - lrf
+    - diario-oficial
+    - recursos-humanos
+    - rpps
+    - transparencia
+    - porto-velho
+    - rondonia
+    - brasil
+  entry_agent: chefe-de-gabinete
+
+tiers:
+  orchestrator:
+    name: "Coordenação do Gabinete"
+    agents: [chefe-de-gabinete]
+    purpose: "Classifica a demanda por secretaria e use case, roteia pelo pipeline e enforça quality gates."
+  tier_orcamento:
+    name: "Eixo Orçamentário (transversal)"
+    agents: [controlador-orcamentario, planejador-orcamentario]
+    purpose: "Verifica dotação/provisão, execução, créditos adicionais, mínimos e limites LRF; planeja PPA/LDO/LOA. Consultado por qualquer agente que gere ato com impacto financeiro."
+  tier_1:
+    name: "Núcleos Funcionais"
+    agents: [gestor-processo-adm, pesquisador-contratacoes, elaborador-etp, elaborador-tr-pb, gestor-rh, editor-diario-oficial, arquiteto-transparencia]
+    purpose: "Execução especializada por módulo. Orquestrador seleciona agentes por use case."
+  tier_2:
+    name: "Especialista de Domínio"
+    agents: [consultor-secretarias]
+    purpose: "Adapta competências, fluxos e linguagem à secretaria responsável."
+  tier_suporte:
+    name: "Suporte e Quality Gates"
+    agents: [revisor-conformidade, documentador]
+    purpose: "Gate legal/fiscal transversal e consolidação do output final."
+
+agents:
+  chefe-de-gabinete:
+    file: agents/chefe-de-gabinete.md
+    tier: orchestrator
+    icon: "🏛️"
+    focus: "Classificação de demandas por secretaria/UC, roteamento, quality gates, síntese"
+  controlador-orcamentario:
+    file: agents/controlador-orcamentario.md
+    tier: tier_orcamento
+    icon: "💰"
+    focus: "Dotação/provisão, estágios da despesa, créditos adicionais, mínimos (15%/25%/FUNDEB), limites LRF; SICONFI/SIOPS/SIOPE"
+  planejador-orcamentario:
+    file: agents/planejador-orcamentario.md
+    tier: tier_orcamento
+    icon: "📐"
+    focus: "Elaboração e atualização de PPA, LDO e LOA com observância normativa (CF 165-169, Lei 4.320, LRF)"
+  gestor-processo-adm:
+    file: agents/gestor-processo-adm.md
+    tier: tier_1
+    icon: "🗂️"
+    focus: "Instrução e trâmite de processo administrativo no padrão SEI; despachos e fluxos"
+  pesquisador-contratacoes:
+    file: agents/pesquisador-contratacoes.md
+    tier: tier_1
+    icon: "🔎"
+    focus: "Pesquisa de mercado/preços, soluções e melhores termos (WebSearch + PNCP); deep research"
+  elaborador-etp:
+    file: agents/elaborador-etp.md
+    tier: tier_1
+    icon: "📋"
+    focus: "Estudo Técnico Preliminar com os 13 elementos do art. 18 da Lei 14.133/2021"
+  elaborador-tr-pb:
+    file: agents/elaborador-tr-pb.md
+    tier: tier_1
+    icon: "📑"
+    focus: "Termo de Referência e Projeto Básico conforme modelos AGU/Lei 14.133"
+  gestor-rh:
+    file: agents/gestor-rh.md
+    tier: tier_1
+    icon: "👥"
+    focus: "Atos de pessoal, prazos (estágio probatório/férias/licenças), PAD, aposentadoria RPPS; eSocial/SIPREV/TCE"
+  editor-diario-oficial:
+    file: agents/editor-diario-oficial.md
+    tier: tier_1
+    icon: "📰"
+    focus: "Elaboração de atos oficiais por tipo/caderno a partir de dados mínimos; preparo para publicação e biblioteca"
+  arquiteto-transparencia:
+    file: agents/arquiteto-transparencia.md
+    tier: tier_1
+    icon: "🔍"
+    focus: "Conformidade LAI/LC131/SIAFIC/PNTP/EBT/WCAG e especificação da reconstrução do painel"
+  consultor-secretarias:
+    file: agents/consultor-secretarias.md
+    tier: tier_2
+    icon: "🏢"
+    focus: "Competências, fluxos e linguagem por secretaria (apoiado por data/secretarias-porto-velho.yaml)"
+  revisor-conformidade:
+    file: agents/revisor-conformidade.md
+    tier: tier_suporte
+    icon: "✅"
+    focus: "Gate legal/fiscal: Lei 14.133 + TCU/CGU/AGU + LRF + LGPD + normas TCE-RO"
+  documentador:
+    file: agents/documentador.md
+    tier: tier_suporte
+    icon: "📝"
+    focus: "Consolida outputs em artefato final estruturado e salva em output/"
+
+handoffs:
+  chefe-de-gabinete:
+    routes_to: [controlador-orcamentario, planejador-orcamentario, gestor-processo-adm, pesquisador-contratacoes, elaborador-etp, elaborador-tr-pb, gestor-rh, editor-diario-oficial, arquiteto-transparencia, consultor-secretarias, revisor-conformidade, documentador]
+  controlador-orcamentario:
+    receives_from: [chefe-de-gabinete, elaborador-etp, elaborador-tr-pb, gestor-rh, gestor-processo-adm]
+    returns_to: [chefe-de-gabinete]
+  planejador-orcamentario:
+    receives_from: [chefe-de-gabinete]
+    collaborates_with: [controlador-orcamentario]
+    returns_to: [chefe-de-gabinete]
+  gestor-processo-adm:
+    receives_from: [chefe-de-gabinete]
+    collaborates_with: [consultor-secretarias, controlador-orcamentario]
+    returns_to: [chefe-de-gabinete]
+  pesquisador-contratacoes:
+    collaborates_with: [elaborador-etp, elaborador-tr-pb]
+    returns_to: [chefe-de-gabinete]
+  elaborador-etp:
+    receives_from: [chefe-de-gabinete, pesquisador-contratacoes]
+    collaborates_with: [controlador-orcamentario, consultor-secretarias]
+    returns_to: [chefe-de-gabinete]
+    output_path: "output/contratacoes/"
+  elaborador-tr-pb:
+    receives_from: [chefe-de-gabinete, elaborador-etp]
+    collaborates_with: [controlador-orcamentario]
+    returns_to: [chefe-de-gabinete]
+    output_path: "output/contratacoes/"
+  gestor-rh:
+    receives_from: [chefe-de-gabinete]
+    collaborates_with: [controlador-orcamentario, editor-diario-oficial]
+    returns_to: [chefe-de-gabinete]
+    output_path: "output/rh/"
+  editor-diario-oficial:
+    receives_from: [chefe-de-gabinete, gestor-rh, elaborador-tr-pb]
+    returns_to: [chefe-de-gabinete]
+    output_path: "output/diario-oficial/"
+  arquiteto-transparencia:
+    receives_from: [chefe-de-gabinete]
+    returns_to: [chefe-de-gabinete]
+    output_path: "output/transparencia/"
+  consultor-secretarias:
+    receives_from: [chefe-de-gabinete]
+    returns_to: [chefe-de-gabinete]
+  revisor-conformidade:
+    receives_from: [chefe-de-gabinete, elaborador-etp, elaborador-tr-pb, gestor-rh, editor-diario-oficial, planejador-orcamentario]
+    returns_to: [chefe-de-gabinete]
+  documentador:
+    receives_from: [chefe-de-gabinete]
+    final: true
+
+pipeline:
+  use_cases:
+    UC-PD-001:
+      name: "Instruir/Tramitar Processo Administrativo (SEI)"
+      trigger_patterns: ["processo administrativo", "tramitar", "instruir processo", "despacho", "SEI", "fluxo de processo"]
+      tier_orcamento_active: false
+      tier_1_agents: [gestor-processo-adm]
+    UC-PD-002:
+      name: "Elaborar Estudo Técnico Preliminar (ETP)"
+      trigger_patterns: ["ETP", "estudo técnico preliminar", "planejar contratação"]
+      tier_orcamento_active: true
+      tier_1_agents: [pesquisador-contratacoes, elaborador-etp]
+    UC-PD-003:
+      name: "Elaborar Termo de Referência / Projeto Básico"
+      trigger_patterns: ["termo de referência", "TR", "projeto básico", "PB", "especificação técnica"]
+      tier_orcamento_active: true
+      tier_1_agents: [pesquisador-contratacoes, elaborador-tr-pb]
+    UC-PD-004:
+      name: "Pesquisa de Mercado/Preços e Soluções"
+      trigger_patterns: ["pesquisa de preços", "pesquisa de mercado", "cotação", "preço de referência", "soluções de mercado"]
+      tier_orcamento_active: false
+      tier_1_agents: [pesquisador-contratacoes]
+    UC-PD-005:
+      name: "Verificação Orçamentária (dotação/provisão/mínimos/LRF)"
+      trigger_patterns: ["dotação", "disponibilidade orçamentária", "empenho", "limite de pessoal", "mínimo da saúde", "mínimo da educação", "crédito adicional"]
+      tier_orcamento_active: true
+      tier_1_agents: []
+    UC-PD-006:
+      name: "Elaborar/Atualizar PPA, LDO ou LOA"
+      trigger_patterns: ["PPA", "plano plurianual", "LDO", "diretrizes orçamentárias", "LOA", "lei orçamentária"]
+      tier_orcamento_active: true
+      tier_1_agents: []
+    UC-PD-007:
+      name: "Elaborar Ato para o Diário Oficial"
+      trigger_patterns: ["diário oficial", "publicar", "portaria", "decreto", "edital", "extrato de contrato", "ato oficial", "publicação"]
+      tier_orcamento_active: false
+      tier_1_agents: [editor-diario-oficial]
+    UC-PD-008:
+      name: "Atos e Rotinas de Recursos Humanos"
+      trigger_patterns: ["nomeação", "exoneração", "férias", "licença", "estágio probatório", "aposentadoria", "folha de pagamento", "PAD", "progressão", "eSocial"]
+      tier_orcamento_active: true
+      tier_1_agents: [gestor-rh]
+    UC-PD-009:
+      name: "Diagnóstico e Reconstrução do Portal da Transparência"
+      trigger_patterns: ["transparência", "portal da transparência", "LAI", "dados abertos", "PNTP", "EBT", "acessibilidade", "WCAG"]
+      tier_orcamento_active: false
+      tier_1_agents: [arquiteto-transparencia]
+    UC-PD-010:
+      name: "Revisão de Conformidade (gate transversal)"
+      trigger_patterns: ["conformidade", "revisar", "checklist", "legalidade", "validar documento"]
+      tier_orcamento_active: false
+      tier_1_agents: []
+    UC-PD-011:
+      name: "Orientação por Secretaria"
+      trigger_patterns: ["secretaria", "competência", "qual órgão", "Semusa", "Semed", "Semad", "SMCL", "Seinfra"]
+      tier_orcamento_active: false
+      tier_1_agents: [consultor-secretarias]
+
+quality_gates:
+  QG-PD-001:
+    name: "Classificação da Demanda"
+    agent: chefe-de-gabinete
+    criteria: "Use case e secretaria responsável identificados; plano de ativação definido antes de qualquer execução"
+  QG-PD-002:
+    name: "Vínculo Orçamentário"
+    agent: controlador-orcamentario
+    criteria: "Todo ato com impacto financeiro indica dotação/fonte e checa disponibilidade, mínimos e limites LRF"
+  QG-PD-003:
+    name: "Completude do ETP"
+    agent: elaborador-etp
+    criteria: "Os 13 elementos do art. 18 da Lei 14.133/2021 presentes ou justificada a dispensa"
+  QG-PD-004:
+    name: "Conformidade Legal"
+    agent: revisor-conformidade
+    criteria: "Aderência a Lei 14.133 + LRF + normas aplicáveis + LGPD; pendências marcadas com [PREENCHER:]"
+  QG-PD-005:
+    name: "Publicação Conforme"
+    agent: editor-diario-oficial
+    criteria: "Ato classificado por tipo e caderno; obrigação de publicação verificada; preparado para assinatura ICP-Brasil"
+  QG-PD-006:
+    name: "Artefato Salvo"
+    agent: documentador
+    criteria: "Output final salvo via Write no diretório correto, com fontes/normas citadas"
+
+tools:
+  WebSearch:
+    used_by: [pesquisador-contratacoes, controlador-orcamentario, arquiteto-transparencia, revisor-conformidade]
+    purpose: "Pesquisa de preços/soluções, normas, dados públicos (PNCP, SICONFI, EBT/PNTP) e jurisprudência de contas"
+  Read:
+    used_by: [chefe-de-gabinete, controlador-orcamentario, planejador-orcamentario, gestor-processo-adm, elaborador-etp, elaborador-tr-pb, gestor-rh, editor-diario-oficial, consultor-secretarias, revisor-conformidade, documentador]
+    purpose: "Leitura de documentos do workspace e dos arquivos data/"
+  Write:
+    used_by: [elaborador-etp, elaborador-tr-pb, gestor-rh, editor-diario-oficial, planejador-orcamentario, arquiteto-transparencia, documentador]
+    purpose: "Salvar artefatos elaborados no diretório output/"
+  Glob:
+    used_by: [chefe-de-gabinete, gestor-processo-adm, documentador]
+    purpose: "Descoberta de documentos e artefatos no workspace"
+  Grep:
+    used_by: [revisor-conformidade, consultor-secretarias, controlador-orcamentario]
+    purpose: "Busca em documentos, dados e checklists"
+
+workspace_integration:
+  level: "read_write"
+  rationale: "Os agentes leem documentos/dados de referência e salvam artefatos elaborados (ETP, TR, atos, relatórios) no workspace."
+  read_paths:
+    - "data/"
+    - "workspace/"
+  write_paths:
+    - "output/"
+  template_namespace: "prefeitura-digital"
+
+settings:
+  activation:
+    prefix: "prefeitura-digital"
+    example: "@prefeitura-digital:chefe-de-gabinete"
+  greeting:
+    show_use_cases: true
+    show_pipeline_status: true
+  language: "pt-BR"
+
+quality_standards:
+  min_score: 7.0
+  smoke_tests:
+    - "Elaborar ETP para contratação fictícia da Semusa com verificação de dotação"
+    - "Elaborar Termo de Referência a partir de um ETP existente"
+    - "Redigir portaria de nomeação com checagem do limite de pessoal (LRF)"
+    - "Elaborar extrato de contrato para o Diário Oficial indicando o caderno"
+    - "Diagnosticar conformidade do Portal da Transparência (PNTP/EBT/WCAG)"
+    - "Consultar competências de uma secretaria específica"
+
+stats:
+  total_agents: 13
+  total_tasks: 11
+  total_templates: 9
+  total_checklists: 4
+  total_data_files: 6
