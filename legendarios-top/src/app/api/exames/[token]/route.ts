@@ -19,12 +19,21 @@ export async function POST(request: Request, { params }: Params) {
 
   const { data: senderista, error: lookupError } = await admin
     .from("senderistas")
-    .select("id")
+    .select("id, evento_data")
     .eq("upload_token", token)
     .single();
 
   if (lookupError || !senderista) {
     return NextResponse.json({ error: "Token inválido" }, { status: 404 });
+  }
+
+  if (senderista.evento_data) {
+    const deadline = new Date(senderista.evento_data);
+    deadline.setUTCDate(deadline.getUTCDate() - 3);
+    deadline.setUTCHours(23, 59, 59, 999);
+    if (new Date() > deadline) {
+      return NextResponse.json({ error: "Prazo de envio de exames encerrado" }, { status: 410 });
+    }
   }
 
   const formData = await request.formData();

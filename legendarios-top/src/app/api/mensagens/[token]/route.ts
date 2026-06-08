@@ -36,12 +36,21 @@ export async function GET(
 
   const { data: senderista, error } = await admin
     .from("senderistas")
-    .select("id, nome, evento_nome")
+    .select("id, nome, evento_nome, evento_data")
     .eq("mensagens_token", token)
     .single();
 
   if (error || !senderista) {
     return NextResponse.json({ error: "Link inválido ou expirado" }, { status: 404 });
+  }
+
+  if (senderista.evento_data) {
+    const deadline = new Date(senderista.evento_data);
+    deadline.setUTCDate(deadline.getUTCDate() + 1);
+    deadline.setUTCHours(23, 59, 59, 999);
+    if (new Date() > deadline) {
+      return NextResponse.json({ error: "Link expirado" }, { status: 410 });
+    }
   }
 
   return NextResponse.json({
@@ -61,12 +70,21 @@ export async function POST(
 
   const { data: senderista, error: lookupErr } = await admin
     .from("senderistas")
-    .select("id")
+    .select("id, evento_data")
     .eq("mensagens_token", token)
     .single();
 
   if (lookupErr || !senderista) {
     return NextResponse.json({ error: "Link inválido" }, { status: 404 });
+  }
+
+  if (senderista.evento_data) {
+    const deadline = new Date(senderista.evento_data);
+    deadline.setUTCDate(deadline.getUTCDate() + 1);
+    deadline.setUTCHours(23, 59, 59, 999);
+    if (new Date() > deadline) {
+      return NextResponse.json({ error: "Prazo para envio de mensagens encerrado" }, { status: 410 });
+    }
   }
 
   const contentType = request.headers.get("content-type") ?? "";
