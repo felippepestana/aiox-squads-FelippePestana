@@ -1,75 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { loadAnalysisForRequest } from "@/lib/auth";
+import { extractDocumentText } from "@/lib/document-extraction";
 
-// PDF/DOCX parsing relies on Node APIs; keep this route on the Node runtime.
+// PDF/DOCX parsing and OCR rely on Node APIs; keep this route on the Node
+// runtime. OCR (images/scanned docs) can be slow, so allow up to 5 minutes.
 export const runtime = "nodejs";
-export const maxDuration = 60;
-
-const TEXT_EXTENSIONS = [".txt", ".md", ".csv", ".json", ".html", ".xml", ".rtf"];
-
-function isTextLike(filename: string, fileType: string): boolean {
-  const lower = filename.toLowerCase();
-  return (
-    fileType.startsWith("text/") ||
-    fileType === "application/json" ||
-    TEXT_EXTENSIONS.some((ext) => lower.endsWith(ext))
-  );
-}
-
-function isPdf(filename: string, fileType: string): boolean {
-  return fileType === "application/pdf" || filename.toLowerCase().endsWith(".pdf");
-}
-
-function isDocx(filename: string, fileType: string): boolean {
-  return (
-    fileType ===
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-    filename.toLowerCase().endsWith(".docx")
-  );
-}
-
-async function extractPdf(buffer: Buffer): Promise<string> {
-  const { extractText, getDocumentProxy } = await import("unpdf");
-  const pdf = await getDocumentProxy(new Uint8Array(buffer));
-  const { text } = await extractText(pdf, { mergePages: true });
-  return Array.isArray(text) ? text.join("\n\n") : text;
-}
-
-async function extractDocx(buffer: Buffer): Promise<string> {
-  const mammoth = (await import("mammoth")).default;
-  const { value } = await mammoth.extractRawText({ buffer });
-  return value;
-}
-
-/**
- * Extracts plain text from uploads. Supports text formats, PDF (via unpdf) and
- * DOCX (via mammoth). Other binary formats (legacy .doc, images) require OCR and
- * return null — the pipeline reports which documents lacked extractable text.
- */
-async function extractDocumentText(
-  filename: string,
-  fileType: string,
-  buffer: Buffer
-): Promise<string | null> {
-  try {
-    let text: string | null = null;
-
-    if (isTextLike(filename, fileType)) {
-      text = buffer.toString("utf-8");
-    } else if (isPdf(filename, fileType)) {
-      text = await extractPdf(buffer);
-    } else if (isDocx(filename, fileType)) {
-      text = await extractDocx(buffer);
-    }
-
-    const trimmed = text?.trim() ?? "";
-    return trimmed.length > 0 ? trimmed : null;
-  } catch (error) {
-    console.error(`Failed to extract text from ${filename}:`, error);
-    return null;
-  }
-}
+export const maxDuration = 300;
 
 export async function POST(
   request: NextRequest,
@@ -100,7 +37,7 @@ export async function POST(
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const extractedText = await extractDocumentText(file.name, file.type, buffer);
+    const extraction = await extractDocumentText(file.name, file.type, buffer);
 
     const document = await prisma.document.create({
       data: {
@@ -109,9 +46,11 @@ export async function POST(
         fileType: file.type,
         fileSize: file.size,
         storagePath: `analyses/${id}/${file.name}`,
-        extractedText,
+        extractedText: extraction.text,
         metadata: {
-          textExtracted: Boolean(extractedText),
+          textExtracted: Boolean(extraction.text),
+          extractionMethod: extraction.method,
+          needsOcr: extraction.needsOcr,
         },
       },
     });
