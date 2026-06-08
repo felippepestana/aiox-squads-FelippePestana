@@ -77,7 +77,7 @@ export async function runAnalysisPipeline(
 
   if (!llmGateway.isConfigured()) {
     const message =
-      "Nenhum provedor LLM configurado. Defina OPENAI_API_KEY (ou outro provedor compatível) nas variáveis de ambiente para executar a análise.";
+      "Nenhum provedor LLM disponível. Defina OPENAI_API_KEY (ou outro provedor compatível), ou habilite o fallback heurístico com LLM_FALLBACK=auto (padrão).";
     await markFailed(analysisId, message);
     return { status: "FAILED", message };
   }

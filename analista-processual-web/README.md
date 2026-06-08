@@ -58,12 +58,14 @@ Limitações conhecidas (modo demo):
 
 Sistema multi-provedor (todos compatíveis com a API OpenAI) com seleção de
 modelo por complexidade da tarefa e **fallback automático** entre os provedores
-configurados. O gateway só seleciona modelos de provedores cujas chaves estão
-presentes (`isConfigured()`), e degrada com mensagem clara quando nenhum está.
+configurados. Quando nenhuma chave de API está disponível (ou após falha de
+quota/auth), o gateway usa um **motor heurístico local** (`LLM_FALLBACK=auto`,
+padrão) que extrai partes, prazos e riscos por regras — ideal para demo e
+desenvolvimento offline.
 
 | Tier | Exemplos de modelos |
 |------|---------------------|
-| Budget | DeepSeek V3, Qwen 2.5, MiniMax 01, Mistral Small, Llama 3.1 8B (Groq), Gemma 2 9B (Groq) |
+| Budget | DeepSeek V3, Qwen 2.5, MiniMax 01, Mistral Small, Llama 3.1 8B (Groq), Gemma 2 9B (Groq), **Heuristic Local** |
 | Standard | GPT-4o-mini, Gemini 2.0 Flash, Llama 3.3 70B (Groq), Kimi K2 |
 | Premium | GPT-4o, Gemini 2.0 Pro, DeepSeek R1, Mistral Large, Grok 3 |
 
@@ -84,6 +86,12 @@ a maioria; o modelo real pode ser ajustado com `<PROVIDER>_MODEL`.
 | **OpenRouter** | `OPENROUTER_API_KEY` | uma chave, centenas de modelos |
 | Qwen / Kimi / MiniMax | `QWEN_API_KEY` / `KIMI_API_KEY` / `MINIMAX_API_KEY` | Qwen 2.5 / Kimi K2 / MiniMax 01 |
 | **Custom** | `CUSTOM_API_KEY` + `CUSTOM_BASE_URL` + `CUSTOM_MODEL` | **qualquer** endpoint compatível (Together, Fireworks, Cerebras, Ollama, vLLM, LM Studio…) |
+| **Heuristic** | `LLM_FALLBACK=auto` (padrão) | **sem API** — extração local por regex/regras (demo/offline) |
+
+Controle do fallback local com `LLM_FALLBACK`:
+- `auto` (padrão) — heurística quando não há chave, ou após falha de API
+- `heuristic` — sempre heurística (ignora chaves de API)
+- `none` — exige provedor de API configurado
 
 Ajuste o modelo real de qualquer provedor com `<PROVIDER>_MODEL` (ex.:
 `DEEPSEEK_MODEL`, `GROQ_MODEL`, `MISTRAL_MODEL`).
@@ -144,9 +152,9 @@ npm run db:seed   # cria o perfil demo
 npm run dev
 ```
 
-> Defina ao menos `OPENAI_API_KEY` no `.env.local` para que o pipeline de
-> análise execute. Sem provedor configurado, a análise é marcada como `FAILED`
-> com uma mensagem explicativa (a aplicação não quebra).
+> Por padrão (`LLM_FALLBACK=auto`), o pipeline **funciona sem chave de API**
+> usando o motor heurístico local — útil para demo e smoke tests. Para análise
+> com LLM real, defina ao menos uma chave (ex.: `GROQ_API_KEY` gratuito).
 
 ### Desenvolvimento local (passo a passo)
 
@@ -226,14 +234,15 @@ Resultados possíveis:
 
 - **PASS** — o pipeline concluiu (`COMPLETED`); imprime resumo, partes, riscos e score.
 - **PASS (plumbing)** — criação/upload/extração/persistência OK, mas o pipeline
-  foi marcado `FAILED` por falta de `OPENAI_API_KEY`. Útil para validar a
-  infraestrutura sem consumir a API.
+  falhou por configuração (`LLM_FALLBACK=none` sem chave de API). Com o padrão
+  `LLM_FALLBACK=auto`, o smoke test normalmente retorna **PASS** com COMPLETED
+  via motor heurístico local.
 - **FAIL** — servidor inacessível, erro HTTP ou falha inesperada do pipeline.
 
 Opções úteis:
 
 ```bash
-npm run test:smoke -- --require-completed        # exige COMPLETED (requer chave LLM)
+npm run test:smoke -- --require-completed        # exige COMPLETED (heurística ou LLM)
 npm run test:smoke -- --base-url=http://host:porta
 npm run test:smoke -- --file=./caminho/para/seu-processo.pdf
 ```

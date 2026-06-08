@@ -1,4 +1,9 @@
 import OpenAI from "openai";
+import {
+  generateHeuristicResponse,
+  HEURISTIC_MODEL_ID,
+  isHeuristicFallbackEnabled,
+} from "./heuristic-llm";
 
 export type ModelTier = "budget" | "standard" | "premium";
 export type TaskComplexity = "simple" | "moderate" | "complex" | "expert";
@@ -15,7 +20,8 @@ export type Provider =
   | "openrouter"
   | "mistral"
   | "xai"
-  | "custom";
+  | "custom"
+  | "heuristic";
 
 interface ModelConfig {
   name: string;
@@ -195,6 +201,14 @@ export const MODELS: Record<string, ModelConfig> = {
     contextWindow: 128000,
     costPer1kTokens: { input: 0, output: 0 },
   },
+  [HEURISTIC_MODEL_ID]: {
+    name: "Heuristic Local (sem API)",
+    provider: "heuristic",
+    apiModel: HEURISTIC_MODEL_ID,
+    tier: "budget",
+    contextWindow: 128000,
+    costPer1kTokens: { input: 0, output: 0 },
+  },
 };
 
 const COMPLEXITY_RULES: Record<TaskComplexity, ModelTier> = {
@@ -304,14 +318,26 @@ class LLMGateway {
     return MODELS[modelId]?.apiModel ?? modelId;
   }
 
-  /** True when at least one LLM provider client is available. */
+  /** True when an API provider or the local heuristic fallback is available. */
   isConfigured(): boolean {
-    return this.clients.size > 0;
+    return this.clients.size > 0 || isHeuristicFallbackEnabled();
+  }
+
+  /** Whether the local heuristic engine should be used (no API key required). */
+  isHeuristicEnabled(): boolean {
+    return isHeuristicFallbackEnabled();
   }
 
   private isModelAvailable(modelId: string): boolean {
     const provider = MODELS[modelId]?.provider;
+    if (provider === "heuristic") return isHeuristicFallbackEnabled();
     return provider ? this.clients.has(provider) : false;
+  }
+
+  private shouldPreferHeuristic(): boolean {
+    const mode = (process.env.LLM_FALLBACK ?? "auto").toLowerCase();
+    if (mode === "heuristic") return true;
+    return mode === "auto" && this.clients.size === 0;
   }
 
   /** Effective tier for a model (the custom provider honors CUSTOM_TIER). */
@@ -324,22 +350,33 @@ class LLMGateway {
   }
 
   selectModel(taskComplexity: TaskComplexity, preferredTier?: ModelTier): string {
+    if (this.shouldPreferHeuristic()) {
+      return HEURISTIC_MODEL_ID;
+    }
+
     const tier = preferredTier || COMPLEXITY_RULES[taskComplexity];
 
     // Prefer an available model in the requested tier, then any available
-    // model, falling back to gpt-4o-mini (callers guard with isConfigured()).
+    // model, falling back to heuristic or gpt-4o-mini.
     const inTier = Object.keys(MODELS).filter(
-      (id) => this.modelTier(id) === tier && this.isModelAvailable(id)
+      (id) =>
+        MODELS[id]?.provider !== "heuristic" &&
+        this.modelTier(id) === tier &&
+        this.isModelAvailable(id)
     );
     if (inTier.length > 0) {
       return inTier[Math.floor(Math.random() * inTier.length)];
     }
 
-    const anyAvailable = Object.keys(MODELS).filter((id) =>
-      this.isModelAvailable(id)
+    const anyAvailable = Object.keys(MODELS).filter(
+      (id) => MODELS[id]?.provider !== "heuristic" && this.isModelAvailable(id)
     );
     if (anyAvailable.length > 0) {
       return anyAvailable[Math.floor(Math.random() * anyAvailable.length)];
+    }
+
+    if (isHeuristicFallbackEnabled()) {
+      return HEURISTIC_MODEL_ID;
     }
 
     return "gpt-4o-mini";
@@ -360,12 +397,20 @@ class LLMGateway {
     }
   ): Promise<LLMResponse> {
     const { fallbackEnabled = true, maxRetries = 3 } = options || {};
+
+    if (
+      request.model === HEURISTIC_MODEL_ID ||
+      (this.shouldPreferHeuristic() && isHeuristicFallbackEnabled())
+    ) {
+      return this.executeHeuristicRequest(request);
+    }
+
     let lastError: Error | null = null;
 
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         const response = await this.executeRequest(request, options?.onStream);
-        
+
         this.trackCost(request.model, response.usage);
 
         return response;
@@ -382,7 +427,37 @@ class LLMGateway {
       }
     }
 
+    // Last resort: local heuristic when APIs fail (quota, auth, network).
+    if (fallbackEnabled && isHeuristicFallbackEnabled()) {
+      console.warn(
+        "LLMGateway: API providers failed, falling back to heuristic local engine:",
+        lastError?.message
+      );
+      return this.executeHeuristicRequest({ ...request, model: HEURISTIC_MODEL_ID });
+    }
+
     throw lastError || new Error("LLM request failed after all retries");
+  }
+
+  private executeHeuristicRequest(request: LLMRequest): LLMResponse {
+    const messages = request.messages.map((m) => ({
+      role: m.role,
+      content: typeof m.content === "string" ? m.content : JSON.stringify(m.content),
+    }));
+
+    const { content, promptTokens, completionTokens } =
+      generateHeuristicResponse(messages);
+
+    return {
+      content,
+      model: HEURISTIC_MODEL_ID,
+      usage: {
+        prompt_tokens: promptTokens,
+        completion_tokens: completionTokens,
+        total_tokens: promptTokens + completionTokens,
+      },
+      cost: 0,
+    };
   }
 
   private async executeRequest(
@@ -437,11 +512,19 @@ class LLMGateway {
   }
 
   private getFallbackModel(model: string): string | null {
-    // Fall back to a different available model, if any.
     const candidate = Object.keys(MODELS).find(
-      (id) => id !== model && this.isModelAvailable(id)
+      (id) =>
+        id !== model &&
+        MODELS[id]?.provider !== "heuristic" &&
+        this.isModelAvailable(id)
     );
-    return candidate ?? null;
+    if (candidate) return candidate;
+
+    if (isHeuristicFallbackEnabled() && model !== HEURISTIC_MODEL_ID) {
+      return HEURISTIC_MODEL_ID;
+    }
+
+    return null;
   }
 
   private trackCost(model: string, usage: LLMResponse["usage"]) {
