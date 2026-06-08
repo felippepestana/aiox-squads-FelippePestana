@@ -1,43 +1,49 @@
-/* Apex-Talent Design System — tokens.
- * Extends the existing dark tokens in styles.css into a documented system with
- * a light theme and print tokens. Apply a theme by setting data-theme="light|dark"
- * on a container (the Interview feature sets it on its root). */
+/* ApeX Design System — tokens.
+ * Implements the ApeX brand book v1.0 (see docs/brand/). Premium dark aesthetic
+ * (Carbono Profundo) with Laranja Elétrico reserved for action. Apply a theme by
+ * setting data-theme="light|dark" on a container (the Interview feature sets it
+ * on its root); dark is the brand default. */
 
 :root,
 [data-theme="dark"] {
-  /* Surfaces */
-  --ds-bg: #0f1115;
-  --ds-panel: #171a21;
-  --ds-panel-2: #1d212b;
-  --ds-border: #2a2f3a;
-  /* Text */
-  --ds-text: #e6e9ef;
-  --ds-muted: #97a0b0;
-  /* Brand / semantic */
-  --ds-accent: #6ee7b7;
-  --ds-accent-contrast: #07120d;
-  --ds-info: #7aa2f7;
-  --ds-warn: #f7c873;
-  --ds-danger: #f7768e;
-  --ds-success: #6ee7b7;
+  /* Surfaces — Carbono Profundo + Grafite de Interface */
+  --ds-bg: #020202;          /* Carbono Profundo — fundo principal */
+  --ds-panel: #0a0a0a;       /* Grafite de Interface I — cartões e painéis */
+  --ds-panel-2: #171717;     /* Grafite de Interface II — divisores/hover */
+  --ds-border: #171717;      /* Grafite de Interface II — bordas */
+  /* Text — Branco Puro + neutros */
+  --ds-text: #ffffff;        /* Branco Puro — texto corrido, alto contraste */
+  --ds-muted: #9a9a9a;       /* neutro de apoio */
+  /* Brand / semantic — Laranja é exclusivo da ação */
+  --ds-accent: #ff6b00;      /* Laranja Elétrico — ações primárias, destaques */
+  --ds-accent-contrast: #020202; /* texto #020202 sobre laranja */
+  --ds-accent-soft: rgba(255, 107, 0, 0.15); /* halo de foco suave (15%) */
+  --ds-info: #f59e0b;        /* Âmbar de Transição (informativo/progresso) */
+  --ds-warn: #f59e0b;        /* Âmbar de Transição — alertas suaves */
+  --ds-danger: #e5484d;      /* vermelho de alerta */
+  --ds-success: #ff6b00;     /* concluído/ativo = laranja (brand) */
+  --ds-progress: #f59e0b;    /* progresso intermediário = âmbar */
   /* Elevation */
-  --ds-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  --ds-shadow: 0 6px 24px rgba(0, 0, 0, 0.55);
 }
 
 [data-theme="light"] {
-  --ds-bg: #f6f7f9;
+  /* Aplicação em fundo claro — laranja segue sendo a cor de ação */
+  --ds-bg: #f4f4f4;
   --ds-panel: #ffffff;
-  --ds-panel-2: #f0f2f5;
-  --ds-border: #d8dce3;
-  --ds-text: #1b1f27;
-  --ds-muted: #5b6472;
-  --ds-accent: #0e9f6e;
-  --ds-accent-contrast: #ffffff;
-  --ds-info: #2563eb;
+  --ds-panel-2: #ececec;
+  --ds-border: #d8d8d8;
+  --ds-text: #020202;
+  --ds-muted: #5b5b5b;
+  --ds-accent: #ff6b00;
+  --ds-accent-contrast: #020202;
+  --ds-accent-soft: rgba(255, 107, 0, 0.15);
+  --ds-info: #b45309;
   --ds-warn: #b45309;
-  --ds-danger: #be123c;
-  --ds-success: #0e9f6e;
-  --ds-shadow: 0 4px 16px rgba(16, 24, 40, 0.08);
+  --ds-danger: #c0353a;
+  --ds-success: #c2520a;
+  --ds-progress: #b45309;
+  --ds-shadow: 0 4px 16px rgba(2, 2, 2, 0.1);
 }
 
 :root {
@@ -48,11 +54,16 @@
   --ds-space-4: 16px;
   --ds-space-5: 24px;
   --ds-space-6: 32px;
-  --ds-radius-sm: 6px;
-  --ds-radius: 10px;
+  /* Cantos arredondados generosos (rounded-xl) — brand */
+  --ds-radius-sm: 10px;
+  --ds-radius: 14px;
   --ds-radius-lg: 16px;
-  --ds-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif;
+  /* Tipografia — Space Grotesk (display) · Inter (UI) · JetBrains Mono (dados) */
+  --ds-font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  --ds-font-display: "Space Grotesk", "Outfit", var(--ds-font);
+  --ds-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo,
+    Consolas, monospace;
   --ds-font-serif: Georgia, "Times New Roman", serif;
   --ds-fs-sm: 13px;
   --ds-fs-base: 15px;

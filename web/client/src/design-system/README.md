@@ -1,6 +1,8 @@
-# Apex-Talent Design System
+# ApeX Design System
 
 Sistema de design leve do front-end web, **estendendo os tokens CSS que já existiam** em `styles.css` para um conjunto documentado, com tema claro e escuro, **sem dependências pesadas**.
+
+Implementa a identidade visual **ApeX (Brand Book v1.0)** — estética premium escura (Carbono Profundo `#020202`) com **Laranja Elétrico `#FF6B00` reservado à ação**, âmbar para progresso, e tipografia Space Grotesk (display) / Inter (UI) / JetBrains Mono (dados). Veja o mapeamento completo em [`docs/brand/`](../../../../docs/brand/README.md).
 
 ## Tokens (`tokens.css`)
 

@@ -1,14 +1,19 @@
 :root {
   color-scheme: dark;
-  --bg: #0f1115;
-  --panel: #161a22;
-  --border: #2a3140;
-  --text: #e8eaef;
-  --muted: #8b93a7;
-  --accent: #6ee7b7;
-  --accent-dim: #34d399;
-  --danger: #f87171;
-  font-family: "Segoe UI", system-ui, sans-serif;
+  /* ApeX brand v1.0 — Carbono Profundo + Laranja Elétrico (see docs/brand/) */
+  --bg: #020202;
+  --panel: #0a0a0a;
+  --border: #171717;
+  --text: #ffffff;
+  --muted: #9a9a9a;
+  --accent: #ff6b00;        /* Laranja Elétrico — ação */
+  --accent-dim: #f59e0b;    /* Âmbar de Transição — hover/progresso */
+  --accent-soft: rgba(255, 107, 0, 0.15);
+  --accent-dim-soft: rgba(245, 158, 11, 0.18);
+  --danger: #e5484d;
+  --font-display: "Space Grotesk", "Outfit", "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
 }
 
 * {
@@ -48,8 +53,10 @@ body {
 }
 
 .sidebar h1 {
-  font-size: 1rem;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   margin: 0 0 0.5rem;
   color: var(--accent);
 }
@@ -91,10 +98,15 @@ select {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #065f46, #047857);
-  border-color: #059669;
-  color: #ecfdf5;
-  font-weight: 500;
+  background: var(--accent);
+  border-color: transparent;
+  color: #020202;
+  font-weight: 700;
+}
+
+.btn-primary:hover:not(:disabled) {
+  filter: brightness(1.06);
+  box-shadow: 0 0 0 4px var(--accent-soft);
 }
 
 .btn-primary:disabled {
@@ -176,8 +188,8 @@ kbd {
 }
 
 .recent-open-active {
-  border-color: var(--accent-dim);
-  box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.25);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-soft);
 }
 
 .recent-title {
@@ -234,8 +246,8 @@ kbd {
 
 .bubble.user {
   align-self: flex-end;
-  background: #1e3a5f;
-  border: 1px solid #2d4a6f;
+  background: #141414;
+  border: 1px solid rgba(255, 107, 0, 0.35);
 }
 
 .bubble.assistant {
@@ -353,7 +365,7 @@ kbd {
 }
 
 .md-root a {
-  color: var(--accent-dim);
+  color: var(--accent);
 }
 
 .md-root table {
@@ -462,8 +474,9 @@ kbd {
 }
 
 .composer textarea:focus {
-  outline: 2px solid #059669;
-  outline-offset: 0;
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .attachments {
@@ -541,8 +554,9 @@ kbd {
 }
 
 .portal-input:focus {
-  outline: 2px solid #059669;
-  outline-offset: 0;
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .portal-submit {
@@ -567,8 +581,9 @@ kbd {
 }
 
 .agent-search:focus {
-  outline: 2px solid #059669;
-  outline-offset: 0;
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .agent-search::placeholder {

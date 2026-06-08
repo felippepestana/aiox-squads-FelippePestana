@@ -1,12 +1,35 @@
-/* Apex-Talent Design System — component styles (token-driven). */
+/* ApeX Design System — component styles (token-driven, per brand book v1.0). */
 
 .ds-root {
   font-family: var(--ds-font);
   color: var(--ds-text);
   font-size: var(--ds-fs-base);
+  line-height: 1.6;
 }
 
-/* Button */
+/* Display type — Space Grotesk for titles/headings */
+.ds-card__title,
+.ds-display {
+  font-family: var(--ds-font-display);
+  letter-spacing: -0.01em;
+}
+
+/* Data / metrics — JetBrains Mono for KPIs, scores, timestamps */
+.ds-data,
+.ds-mono {
+  font-family: var(--ds-font-mono);
+  font-feature-settings: "tnum" 1;
+}
+/* Overline / kicker */
+.ds-overline {
+  font-family: var(--ds-font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  color: var(--ds-muted);
+}
+
+/* Button — rounded-xl, orange reserved for the primary action */
 .ds-btn {
   display: inline-flex;
   align-items: center;
@@ -15,32 +38,39 @@
   background: var(--ds-panel-2);
   color: var(--ds-text);
   padding: var(--ds-space-2) var(--ds-space-4);
-  border-radius: var(--ds-radius-sm);
+  border-radius: var(--ds-radius);
+  font-family: inherit;
   font-size: var(--ds-fs-base);
+  font-weight: 500;
   cursor: pointer;
-  transition: filter 0.12s ease, opacity 0.12s ease;
+  transition: filter 0.12s ease, opacity 0.12s ease, box-shadow 0.12s ease;
 }
 .ds-btn:hover:not(:disabled) { filter: brightness(1.08); }
 .ds-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+/* Primary = Laranja Elétrico with #020202 text (never amber on primary) */
 .ds-btn--primary {
   background: var(--ds-accent);
   color: var(--ds-accent-contrast);
   border-color: transparent;
-  font-weight: 600;
+  font-weight: 700;
 }
+.ds-btn--primary:hover:not(:disabled) {
+  box-shadow: 0 0 0 4px var(--ds-accent-soft);
+}
+/* Secondary = graphite surface; Tertiary = ghost */
 .ds-btn--ghost { background: transparent; }
 
 /* Card */
 .ds-card {
   background: var(--ds-panel);
   border: 1px solid var(--ds-border);
-  border-radius: var(--ds-radius);
+  border-radius: var(--ds-radius-lg);
   padding: var(--ds-space-5);
   box-shadow: var(--ds-shadow);
 }
 .ds-card__title {
   font-size: var(--ds-fs-lg);
-  font-weight: 600;
+  font-weight: 700;
   margin: 0 0 var(--ds-space-3);
 }
 
@@ -58,9 +88,14 @@
   box-sizing: border-box;
 }
 .ds-textarea { min-height: 96px; resize: vertical; }
-.ds-input:focus, .ds-textarea:focus { outline: 2px solid var(--ds-accent); outline-offset: 1px; }
+/* Focus = orange border + soft halo (15%) per brand */
+.ds-input:focus, .ds-textarea:focus {
+  outline: none;
+  border-color: var(--ds-accent);
+  box-shadow: 0 0 0 3px var(--ds-accent-soft);
+}
 
-/* Badge */
+/* Badge — Laranja = concluído/ativo · Âmbar = progresso · Grafite = neutro */
 .ds-badge {
   display: inline-block;
   padding: 2px var(--ds-space-2);
@@ -70,8 +105,10 @@
   border: 1px solid var(--ds-border);
 }
 .ds-badge--success { color: var(--ds-success); border-color: var(--ds-success); }
+.ds-badge--progress { color: var(--ds-progress); border-color: var(--ds-progress); }
 .ds-badge--warn { color: var(--ds-warn); border-color: var(--ds-warn); }
 .ds-badge--info { color: var(--ds-info); border-color: var(--ds-info); }
+.ds-badge--danger { color: var(--ds-danger); border-color: var(--ds-danger); }
 .ds-badge--muted { color: var(--ds-muted); }
 
 /* Stepper */
@@ -89,9 +126,22 @@
 .ds-step__num {
   width: 20px; height: 20px; border-radius: 999px;
   display: inline-flex; align-items: center; justify-content: center;
-  background: var(--ds-panel-2); font-size: 11px;
+  background: var(--ds-panel-2); font-family: var(--ds-font-mono); font-size: 11px;
 }
 .ds-step--active .ds-step__num { background: var(--ds-accent); color: var(--ds-accent-contrast); }
+
+/* Progress bar — âmbar → laranja indica aproximação do ápice */
+.ds-progress {
+  height: 8px; width: 100%;
+  background: var(--ds-panel-2);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.ds-progress__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ds-progress), var(--ds-accent));
+  border-radius: 999px;
+}
 
 /* Simple table */
 .ds-table { width: 100%; border-collapse: collapse; font-size: var(--ds-fs-sm); }

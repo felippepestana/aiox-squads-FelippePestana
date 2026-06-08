@@ -62,13 +62,13 @@
 
 .pericia-step-dot.active {
   border-color: var(--accent);
-  background: #065f46;
+  background: var(--accent-soft);
   color: var(--accent);
 }
 
 .pericia-step-dot.done {
   border-color: var(--accent-dim);
-  background: #064e3b;
+  background: var(--accent-dim-soft);
   color: var(--accent-dim);
 }
 
@@ -177,7 +177,9 @@
 .pericia-field input:focus,
 .pericia-field select:focus,
 .pericia-field textarea:focus {
-  outline: 2px solid #059669;
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
   outline-offset: 0;
 }
 
@@ -252,7 +254,9 @@
 }
 
 .pericia-quesito-fields textarea:focus {
-  outline: 2px solid #059669;
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
   outline-offset: 0;
 }
 
@@ -305,8 +309,8 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.2rem 0.55rem;
-  border-radius: 6px;
-  border: 1px solid #059669;
+  border-radius: 14px;
+  border: 1px solid var(--accent);
   background: transparent;
   color: var(--accent-dim);
   cursor: pointer;
@@ -317,7 +321,7 @@
 }
 
 .pericia-ai-btn:hover:not(:disabled) {
-  background: #065f46;
+  background: var(--accent-soft);
   color: var(--accent);
 }
 
@@ -361,7 +365,9 @@
 }
 
 .pericia-repair-item input:focus {
-  outline: 2px solid #059669;
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
   outline-offset: 0;
 }
 
