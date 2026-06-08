@@ -14,6 +14,7 @@ export type Provider =
   | "groq"
   | "openrouter"
   | "mistral"
+  | "xai"
   | "custom";
 
 interface ModelConfig {
@@ -94,6 +95,22 @@ export const MODELS: Record<string, ModelConfig> = {
     tier: "budget",
     contextWindow: 128000,
     costPer1kTokens: { input: 0.0002, output: 0.0006 },
+  },
+  "grok-3": {
+    name: "Grok 3 (xAI)",
+    provider: "xai",
+    apiModel: "grok-3",
+    tier: "premium",
+    contextWindow: 131072,
+    costPer1kTokens: { input: 0.003, output: 0.015 },
+  },
+  "grok-3-mini": {
+    name: "Grok 3 Mini (xAI)",
+    provider: "xai",
+    apiModel: "grok-3-mini",
+    tier: "standard",
+    contextWindow: 131072,
+    costPer1kTokens: { input: 0.0003, output: 0.0005 },
   },
   "qwen-2.5": {
     name: "Qwen 2.5",
@@ -244,6 +261,7 @@ class LLMGateway {
       qwen: "https://dashscope.aliyuncs.com/compatible-mode/v1",
       mistral: "https://api.mistral.ai/v1",
       minimax: "https://api.minimax.chat/v1",
+      xai: "https://api.x.ai/v1",
     };
 
     // "custom" has no default base URL — it must be provided. It lets users
@@ -258,6 +276,7 @@ class LLMGateway {
       "groq",
       "openrouter",
       "mistral",
+      "xai",
       "custom",
     ];
 

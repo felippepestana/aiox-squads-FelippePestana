@@ -65,7 +65,7 @@ presentes (`isConfigured()`), e degrada com mensagem clara quando nenhum está.
 |------|---------------------|
 | Budget | DeepSeek V3, Qwen 2.5, MiniMax 01, Mistral Small, Llama 3.1 8B (Groq), Gemma 2 9B (Groq) |
 | Standard | GPT-4o-mini, Gemini 2.0 Flash, Llama 3.3 70B (Groq), Kimi K2 |
-| Premium | GPT-4o, Gemini 2.0 Pro, DeepSeek R1, Mistral Large |
+| Premium | GPT-4o, Gemini 2.0 Pro, DeepSeek R1, Mistral Large, Grok 3 |
 
 ### Trocando de provedor LLM
 
@@ -80,6 +80,7 @@ a maioria; o modelo real pode ser ajustado com `<PROVIDER>_MODEL`.
 | **Groq** | `GROQ_API_KEY` | **gratuito**, rápido — Llama 3.3 70B / 3.1 8B, **Gemma 2 9B** |
 | **Google Gemini** | `GEMINI_API_KEY` | **gratuito** — Gemini 2.0 Flash / Pro |
 | **Mistral** | `MISTRAL_API_KEY` | Mistral Large / Small |
+| **xAI (Grok)** | `XAI_API_KEY` | Grok 3 / Grok 3 Mini |
 | **OpenRouter** | `OPENROUTER_API_KEY` | uma chave, centenas de modelos |
 | Qwen / Kimi / MiniMax | `QWEN_API_KEY` / `KIMI_API_KEY` / `MINIMAX_API_KEY` | Qwen 2.5 / Kimi K2 / MiniMax 01 |
 | **Custom** | `CUSTOM_API_KEY` + `CUSTOM_BASE_URL` + `CUSTOM_MODEL` | **qualquer** endpoint compatível (Together, Fireworks, Cerebras, Ollama, vLLM, LM Studio…) |
