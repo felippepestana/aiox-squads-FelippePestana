@@ -152,6 +152,7 @@ export async function POST(request: Request) {
     if (!row || row.every(v => v == null)) continue;
 
     const statusTicket = str(row[COL.STATUS_TICKET]) ?? "";
+    const isCancelled = statusTicket.toLowerCase() === "cancelado";
     const nomeRaw = str(row[COL.NOME]);
     if (!nomeRaw) {
       results.skipped++;
@@ -220,12 +221,13 @@ export async function POST(request: Request) {
       ticketgo_id: row[COL.ID] ? Number(row[COL.ID]) : null,
       evento_nome: str(row[COL.EVENTO]),
       valor_bilhete: row[COL.VALOR] ? Number(row[COL.VALOR]) : null,
-      status_ingresso: statusTicket.toLowerCase() === "cancelado" ? "cancelado" : "ativo",
+      status_ingresso: isCancelled ? "cancelado" : "ativo",
       status_presenca: presencaStatus(row[COL.STATUS_PRESENCA]),
       data_cadastro_origem: row[COL.DATA_CADASTRO] instanceof Date
         ? (row[COL.DATA_CADASTRO] as Date).toISOString()
         : null,
-      status: statusTicket.toLowerCase() === "cancelado" ? "cancelado" : "pendente",
+      // Only set status for cancelled tickets; active re-imports preserve existing medical status
+      ...(isCancelled && { status: "cancelado" }),
     };
 
     // Upsert: conflict on cpf (if available) or ticketgo_id
