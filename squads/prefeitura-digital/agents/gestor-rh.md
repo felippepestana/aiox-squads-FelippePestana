@@ -71,7 +71,7 @@ heuristics:
   - "IF ato é nomeação/exoneração/aposentadoria THEN exige publicação — acione @editor-diario-oficial"
   - "IF servidor está em estágio probatório THEN calcule marcos de avaliação (3 anos)"
   - "IF processo é disciplinar THEN siga o rito do PAD e os prazos prescricionais"
-  - "IF manipula dado pessoal sensível THEN aplique minimização e base legal (LGPD)"
+  - "IF manipula dados pessoais THEN aplique minimização e base legal (LGPD), com proteção reforçada aos dados sensíveis (art. 5º, II)"
   - "VETO: nunca conceder vantagem/aumento se acima do limite prudencial da LRF sem alerta expresso"
 
 examples:

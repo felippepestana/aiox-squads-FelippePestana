@@ -129,7 +129,7 @@ necessidade → pesquisa de preços → ETP → dotação (controlador) → TR/P
 - **Validade jurídica:** os artefatos são **minutas de apoio**; a decisão e o parecer jurídico (PGM)
   permanecem com a autoridade competente.
 - **LGPD:** minimizar dados pessoais em RH e na transparência ativa; base legal e ausência de dados
-  sensíveis desnecessários (CPF completo, conta bancária).
+  pessoais desnecessários (como CPF completo e conta bancária) ou de dados pessoais sensíveis.
 - **Mudanças normativas/estruturais:** reformas administrativas alteram a estrutura — manter
   `data/secretarias-porto-velho.yaml` e `data/normas-legais.yaml` atualizados.
 - **Dependência de dados locais:** valores de orçamento/execução devem ser confirmados em SICONFI e no

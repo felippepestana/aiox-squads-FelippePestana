@@ -22,6 +22,6 @@ publicados no **PNCP** (Lei 14.133/2021).
 ## Requisitos transversais
 - **Assinatura digital ICP-Brasil** (Lei 14.063/2020; MP 2.200-2/2001) para validade.
 - **Contagem de prazos** em regra a partir do dia seguinte ao da publicação.
-- **LGPD:** evitar dado pessoal sensível desnecessário (ex.: CPF completo, conta bancária).
+- **LGPD:** evitar a divulgação de dados pessoais desnecessários (ex.: CPF completo, conta bancária) ou de dados pessoais sensíveis (art. 5º, II).
 - **Biblioteca eletrônica:** arquivar com metadados (tipo, caderno, data, edição, hash) e busca pública
   por data e palavra-chave, com verificação de autenticidade — inspiração: SIGPub/AROM.

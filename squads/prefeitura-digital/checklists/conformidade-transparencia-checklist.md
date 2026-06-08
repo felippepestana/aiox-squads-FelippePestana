@@ -5,7 +5,7 @@ Usado por `arquiteto-transparencia` e `revisor-conformidade`. Ver data/criterios
 ## Transparência ativa
 - [ ] Receitas e despesas detalhadas, em tempo real (LC 131)
 - [ ] Licitações, contratos e convênios
-- [ ] Folha/remuneração nominal (sem dados sensíveis — LGPD)
+- [ ] Folha/remuneração nominal (sem dados pessoais excedentes — LGPD)
 - [ ] Diárias, obras públicas
 - [ ] RREO e RGF (LRF art. 48/48-A)
 - [ ] Estrutura institucional, competências e contatos

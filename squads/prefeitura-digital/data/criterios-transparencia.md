@@ -5,7 +5,7 @@ Para o agente `arquiteto-transparencia` e o checklist `conformidade-transparenci
 ## Transparência ativa obrigatória (LAI / LC 131 / LRF)
 - Receitas e despesas detalhadas (empenho, liquidação, pagamento) — tempo real (LC 131)
 - Licitações, contratos e convênios (datas, valores, partes)
-- Folha de pagamento / remuneração nominal (sem dados sensíveis — LGPD)
+- Folha de pagamento / remuneração nominal (sem dados pessoais excedentes — LGPD)
 - Diárias, passagens e obras públicas
 - RREO (bimestral) e RGF (quadrimestral) — LRF art. 48/48-A
 - Estrutura institucional, competências, horários e contatos

@@ -35,7 +35,7 @@
 ## Obrigação de publicação
 - Base: CF art. 37 (publicidade); Lei 14.133/2021 (licitações/contratos); norma municipal do DOM
 - Publicação adicional no **PNCP**: [ sim | não ]
-- Proteção de dados (LGPD): [confirmar ausência de dado pessoal sensível desnecessário]
+- Proteção de dados (LGPD): [confirmar ausência de dados pessoais desnecessários ou de dados pessoais sensíveis]
 
 ## Pendências
 - [PREENCHER: informações mínimas faltantes]

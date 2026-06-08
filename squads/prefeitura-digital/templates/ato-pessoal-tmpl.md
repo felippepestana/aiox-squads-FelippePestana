@@ -6,7 +6,7 @@
 
 **Tipo de ato:** [Nomeação | Posse | Exoneração | Concessão de férias | Licença | Designação de FG | Progressão | Aposentadoria | Outro]
 **Órgão:** [PREENCHER — em regra, Semad]
-**Servidor:** [PREENCHER — evitar dados sensíveis desnecessários: LGPD]
+**Servidor:** [PREENCHER — evitar dados pessoais desnecessários ou sensíveis: LGPD]
 **Cargo / vínculo:** [PREENCHER]
 **Processo SEI nº:** [PREENCHER]
 

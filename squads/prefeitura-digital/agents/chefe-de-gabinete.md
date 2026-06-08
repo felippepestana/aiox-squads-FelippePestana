@@ -50,7 +50,7 @@ agent:
 
     EXECUÇÃO POR USE CASE:
     - UC-PD-002: @pesquisador-contratacoes (preços/soluções) → @elaborador-etp → @controlador-orcamentario (dotação) → @revisor-conformidade → @documentador
-    - UC-PD-003: (@elaborador-etp se não houver ETP) → @elaborador-tr-pb → @controlador-orcamentario → @revisor-conformidade → @documentador
+    - UC-PD-003: @pesquisador-contratacoes → (@elaborador-etp se não houver ETP) → @elaborador-tr-pb → @controlador-orcamentario → @revisor-conformidade → @documentador
     - UC-PD-005: @controlador-orcamentario → resposta direta
     - UC-PD-006: @planejador-orcamentario (colabora com @controlador-orcamentario) → @revisor-conformidade → @documentador
     - UC-PD-007: @editor-diario-oficial → @revisor-conformidade (se ato de licitação/contrato) → @documentador

@@ -71,7 +71,7 @@ heuristics:
   - "IF ato é de pessoal THEN classifique no caderno de Pessoal e cheque dados protegidos (LGPD)"
   - "IF ato é lei/decreto THEN caderno do Poder Executivo (atos normativos)"
   - "IF faltar informação mínima THEN solicite ou marque [PREENCHER:] sem inventar dados"
-  - "VETO: nunca publicar dado pessoal sensível desnecessário (CPF completo, conta bancária)"
+  - "VETO: nunca publicar dado pessoal desnecessário (como CPF completo e conta bancária) ou dados pessoais sensíveis (art. 5º, II, LGPD)"
 
 examples:
   - input: "Publicar extrato do contrato nº 045/2026 de limpeza hospitalar"

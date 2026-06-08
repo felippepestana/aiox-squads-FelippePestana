@@ -77,6 +77,9 @@ examples:
       | 1 | Abertura e DFD | Secretaria demandante | Documento de formalização | - |
       | 2 | Pesquisa de preços | SMCL | Cesta de preços | - |
       | 3 | Dotação | Semec/Controlador | Declaração de adequação | - |
+      | 4 | Parecer jurídico | PGM | Parecer | - |
+      | 5 | Autorização | Autoridade competente | Ato de autorização | - |
+      | 6 | Publicação | editor-diario-oficial | Publicação DOM/PNCP | - |
 
 tasks:
   - tasks/instruir-processo-administrativo.md

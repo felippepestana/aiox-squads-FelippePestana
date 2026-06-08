@@ -19,7 +19,7 @@ Elabora um ato oficial por tipo/caderno a partir de informações mínimas, prep
 2. Verifique a obrigação de publicação (DOM e, se for licitação/contrato, PNCP)
 3. Monte o corpo do ato completando a estrutura padrão
 4. Gere os metadados (tipo, caderno, data, edição, palavras-chave, verificação)
-5. Cheque LGPD (sem dado pessoal sensível desnecessário)
+5. Cheque LGPD (sem dados pessoais desnecessários ou sensíveis)
 6. Marque informações faltantes com [PREENCHER:]
 
 ## Acceptance Criteria
