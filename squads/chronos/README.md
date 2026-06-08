@@ -90,7 +90,7 @@ Chronos é o sistema inteligente de controle de ponto e gestão de jornada da pl
 
 ---
 
-## Outputs Principales
+## Outputs Principais
 
 ### Espelho de Ponto
 - PDF oficial com resumo de ponto por colaborador

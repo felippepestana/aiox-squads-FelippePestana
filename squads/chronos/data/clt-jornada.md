@@ -34,18 +34,19 @@
 
 ### Art. 71 — Intervalo Intrajornada
 - **Refeição:** Mínimo 1 hora, máximo 2 horas (entre 11h e 14h, preferencialmente)
-- **Descanso:** Mínimo 20 minutos (jornadas > 6h)
+- **Descanso:** Mínimo 1 hora (jornadas > 6h)
 - **Exclusão da Jornada:** Estes intervalos NÃO são contados como trabalho
 - **Nota:** Se intervalo não é respeitado, empregador é responsável por compensação
 
-### Art. 219 — Mudança de Horário / Turno
-- **Aviso prévio:** 30 dias de antecedência para mudança de turno (especialmente para noturno)
-- **Sem aviso:** Pode caracterizar rescisão indireta (culpa do empregador)
+### Art. 468 — Mudança de Horário / Turno
+- **Consentimento:** Qualquer alteração no contrato requer consentimento mútuo (não pode prejudicar o empregado)
+- **Aviso prévio:** Recomendado 30 dias de antecedência para mudança de turno (especialmente para noturno)
+- **Sem consentimento:** Pode caracterizar rescisão indireta (culpa do empregador)
 - **Jurisprudência:** Aplicável também a mudanças de local de trabalho
 
 ### Art. 73 — Trabalho Noturno
 - **Horário noturno:** 22:00 às 05:00
-- **Duração:** 7 horas 20 minutos (reduzida vs. 8h diurna)
+- **Duração:** 7 horas (reduzida vs. 8h diurna; 1h noturna = 52min30seg)
 - **Adicional:** Mínimo 20% sobre o salário base
 - **Nota:** Cálculo de hora noturna = 52 min 30 seg (em vez de 60 min)
 

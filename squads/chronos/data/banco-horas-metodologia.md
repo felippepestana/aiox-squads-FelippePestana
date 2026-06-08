@@ -81,8 +81,8 @@ OU (segregado):
 
 ### 2. Horas Noturnas (Art. 73)
 - **Horário:** 22:00-05:00
-- **Duração reduzida:** 7h20 = 52min30seg por "hora"
-- **Cálculo:** 1h noturna = 1.15h de banco (se compensação em banco)
+- **Duração reduzida:** 7h = 52min30seg por "hora"
+- **Cálculo:** 1h noturna = 1.14h de banco (se compensação em banco)
 - **Adicional:** 20% sobre salário (se pago, não banco)
 
 ### 3. Férias (Art. 130)

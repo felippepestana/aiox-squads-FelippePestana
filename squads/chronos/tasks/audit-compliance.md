@@ -80,8 +80,8 @@ compliance_audit:
         status: "PASS"
         findings: "2 employees exceed 2h/dia média. Bank-manager flagged as passivos (right to compensation). No violation if compensation provided."
         
-      - article: "Art. 219"
-        rule: "Aviso prévio mudança turno (30 dias)"
+      - article: "Art. 468"
+        rule: "Mudança de turno requer consentimento mútuo (30 dias aviso)"
         status: "PASS"
         findings: "0 unscheduled turno changes in this period. N/A."
   
@@ -110,7 +110,7 @@ compliance_audit:
   anomaly_gate:
     high_risk_anomalies: 1
     - id: "ANM_002"
-      type: "fatiga_super_jornada"
+      type: "fadiga_super_jornada"
       employee: "EMP020"
       status: "FLAGGED"
       investigation_required: true

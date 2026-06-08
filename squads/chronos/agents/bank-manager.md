@@ -31,7 +31,7 @@ commands:
 
 heuristics:
   - id: "BNK_SEGREG_001"
-    rule: "WHEN banco calculado THEN segregue: normal, extra (24h+), noturna (22:00-05:00), falta (não-autorizada), férias (autorizada), afastamento (INSS/licença). Cada categoria tem regra de cálculo diferente."
+    rule: "WHEN banco calculado THEN segregue: normal, extra (2h+), noturna (22:00-05:00), falta (não-autorizada), férias (autorizada), afastamento (INSS/licença). Cada categoria tem regra de cálculo diferente."
   - id: "BNK_PASSIVO_001"
     rule: "WHEN extra detectada > limite permitido (Art. 59, ex: 20h/mês ou 10h/semana) THEN compute passivo (direito a compensação ou adicional de 50%)."
   - id: "BNK_COHERENCE_001"

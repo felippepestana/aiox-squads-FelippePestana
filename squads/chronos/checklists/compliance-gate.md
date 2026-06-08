@@ -27,7 +27,7 @@ Antes de executar o gate, verificar se todos os inputs estão disponíveis:
 
 - [ ] **Jornada diária:** Cada colaborador ≤ 8h/dia (ou contrato)?
   - [ ] Se não: listar violações, causas, contexto
-  - [ ] [ ] Documentar exceção (projeto, etc.)
+  - [ ] Documentar exceção (projeto, etc.)
 
 - [ ] **Jornada semanal:** Cada colaborador ≤ 44h/semana (ou contrato)?
   - [ ] Se não: listar violações

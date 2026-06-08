@@ -67,7 +67,7 @@ anomaly_report:
       hours_per_day: [10.5, 11.0, 10.8, 11.2, 10.5]
       total_super_jornada: 54h
       risk_level: "HIGH"
-      context: "Acumulado semanal: 54h (team median: 40h). Risco de burnout/fatiga."
+      context: "Acumulado semanal: 54h (team median: 40h). Risco de burnout/fadiga."
       recommendation: "Verifique com gestor: foi excepcional ou padrão? Se padrão, requerer rebalanceamento ou compensação."
       integration: "Passar para insights (predictive burnout/turnover)"
       
@@ -92,7 +92,7 @@ anomaly_report:
   
   summary_by_risk:
     high:
-      - "ANM_002: Fatiga super-jornada (EMP020, 54h/semana)"
+      - "ANM_002: Fadiga super-jornada (EMP020, 54h/semana)"
     medium:
       - "ANM_001: Padrão de entrada excessivamente regular (EMP010)"
       - "ANM_004: Falta não-autorizada (EMP015)"

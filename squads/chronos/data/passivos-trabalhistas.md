@@ -39,8 +39,8 @@ EMP002, Junho/2026:
   - Total extra: 60h (violação sistêmica)
   - Limite legal: 44h
   - Excesso: 16h
-  - Salário: R$ 3.000/mês (R$ 137.5/h)
-  → PASSIVO: 16h × R$ 137.5 × 1.5 = R$ 3.300
+  - Salário: R$ 3.000/mês (220h divisor CLT = R$ 13.64/h)
+  → PASSIVO: 16h × R$ 13.64 × 1.5 = R$ 327.36
 ```
 
 **Mitigação:**
@@ -102,7 +102,7 @@ Passivo: 1 dia salário + 50%
 Repouso_Semanal = 24h consecutivas (preferência: domingo)
 
 Se Violação:
-  Passivo = 1 dia salário × 2 (dobrado, Art. 67 § 2)
+  Passivo = 1 dia salário × 2 (dobrado, Art. 9 da Lei 605/1949)
   Por cada semana violada
 ```
 

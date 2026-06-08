@@ -23,7 +23,7 @@ Ask user:
 ## Execution Steps
 
 1. **Load Registration**: Use espelho de ponto from run-registration
-2. **Categorize Hours**: Segregate each registered hour into: normal | extra (24h+) | noturna (22:00-05:00) | falta (não-autorizada) | férias (autorizada) | afastamento (INSS/licença)
+2. **Categorize Hours**: Segregate each registered hour into: normal | extra (2h+) | noturna (22:00-05:00) | falta (não-autorizada) | férias (autorizada) | afastamento (INSS/licença)
 3. **Apply Contract Rules**: Deduct contracted hours from registered hours; remainder is crédito (extra) or débito (falta/banco)
 4. **Compute Bank Deltas**: Calculate net bank change: +X crédito (extras), -Y débito (faltas), -Z utilizado (banco pré-existente usado)
 5. **Identify Passivos**: Flag cases where: extra > legal limit (Art. 59), banco negativo, absence without authorization
@@ -43,7 +43,7 @@ bank_calculation:
     total_employees: 45
     total_hours_registered: 8760
     total_contracted: 7200
-    total_bank_change: +156  # +extra -failtas -utilisé
+    total_bank_change: +156  # +extra -faltas -utilizado
     
   by_employee:
     - employee_id: "EMP001"
@@ -105,7 +105,7 @@ bank_calculation:
 
 ## Veto Conditions
 
-- Coherence divergence > 20% → ALERT (block until reconciled with peopleops)
+- Coherence divergence > 5% → ALERT (block until reconciled with peopleops)
 - Calculation determinism violated → VETO (same input must yield same output)
 - Leave/absence setup missing for unexcused absence → ALERT (cannot compute passivo)
 
