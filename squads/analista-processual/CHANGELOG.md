@@ -17,6 +17,15 @@ All notable changes to this squad follow [Keep a Changelog](https://keepachangel
 **Quality Gate (1 new, 5 total):**
 - QG-AP-005: Peça processual salva via `Write` em `output/pecas/`, dados faltantes sinalizados com `[PREENCHER:]`
 
+**Task (1 new, 10 total):**
+- `elaborar-peca-processual` — Task de elaboração de peça processual ou documento jurídico (UC-AP-005), executada pelo `redator-juridico`
+
+**Template (1 new):**
+- `peca-processual-tmpl.md` — Template estrutural para peças processuais e documentos jurídicos elaborados
+
+**Output:**
+- `output/pecas/` — Diretório de destino das peças geradas pelo `redator-juridico` (via `Write`)
+
 ### Changed
 
 - `analista-chefe` — Algoritmo de classificação verifica UC-AP-005 antes de UC-AP-002, com desambiguação "analisar vs. elaborar"
