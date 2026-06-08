@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import SalvarArtefato from "@/components/SalvarArtefato";
 
 interface PrecoItem {
   descricao: string;
@@ -154,12 +155,22 @@ export default function ContratacoesPage() {
         <div className="mb-3 flex items-center justify-between">
           <h2 className="font-semibold">Documento gerado</h2>
           {doc && (
-            <button
-              onClick={() => navigator.clipboard.writeText(doc)}
-              className="rounded bg-gray-100 px-3 py-1 text-xs"
-            >
-              Copiar
-            </button>
+            <div className="flex items-center gap-2">
+              <SalvarArtefato
+                modulo="contratacoes"
+                tipo={tipo}
+                titulo={`${tipo} — ${objeto || "sem objeto"}`}
+                conteudo={doc}
+                degraded={degraded}
+                metadados={{ secretaria }}
+              />
+              <button
+                onClick={() => navigator.clipboard.writeText(doc)}
+                className="rounded bg-gray-100 px-3 py-1 text-xs"
+              >
+                Copiar
+              </button>
+            </div>
           )}
         </div>
         {erro && <p className="rounded bg-red-50 p-3 text-sm text-red-700">{erro}</p>}

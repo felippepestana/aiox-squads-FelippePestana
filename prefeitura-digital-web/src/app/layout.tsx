@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import AuthStatus from "@/components/AuthStatus";
 
 export const metadata: Metadata = {
   title: "Prefeitura Digital",
@@ -15,6 +16,7 @@ const nav = [
   { href: "/diario-oficial", label: "Diário Oficial" },
   { href: "/rh", label: "Recursos Humanos" },
   { href: "/transparencia", label: "Transparência" },
+  { href: "/artefatos", label: "Meus artefatos" },
 ];
 
 export default function RootLayout({
@@ -32,9 +34,12 @@ export default function RootLayout({
             <Link href="/" className="text-lg font-semibold">
               🏛️ Prefeitura Digital
             </Link>
-            <span className="text-sm opacity-90">
-              {municipio}/{uf}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-sm opacity-90">
+                {municipio}/{uf}
+              </span>
+              <AuthStatus />
+            </div>
           </div>
           <nav className="border-t border-white/15">
             <div className="mx-auto flex max-w-6xl gap-4 overflow-x-auto px-4 py-2 text-sm">

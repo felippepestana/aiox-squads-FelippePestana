@@ -14,6 +14,8 @@ integração às APIs públicas do governo.
 - **Orçamento (ativo):** consulta à **execução orçamentária (RREO)** no SICONFI por ente/exercício/bimestre.
 - **Transparência (ativo):** checklist de conformidade (LAI/LC131/SIAFIC/PNTP/EBT/WCAG).
 - **RH (vitrine):** página com a estrutura e o roadmap.
+- **Persistência e login (opcional):** com Supabase configurado, é possível **entrar** (magic link por
+  e-mail; gov.br OIDC no roadmap) e **salvar artefatos** em *Meus artefatos*, isolados por usuário (RLS).
 - **Integrações públicas (sem credencial):** PNCP, SICONFI (RREO do ente, ex.: Porto Velho 1100205) e IBGE.
 
 ## Stack
@@ -21,15 +23,24 @@ integração às APIs públicas do governo.
 - Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS
 - IA: API Anthropic (modelo padrão `claude-sonnet-4-6`, configurável). Sem chave, o app opera em
   **modo rascunho** (devolve o template para preenchimento).
+- Persistência/auth: Supabase (`@supabase/ssr`). **Opcional** — sem as variáveis, o app roda sem login
+  nem salvamento, e a geração de documentos continua funcionando.
 
 ## Rodando localmente
 
 ```bash
 cd prefeitura-digital-web
-cp .env.example .env.local      # opcional: defina ANTHROPIC_API_KEY para geração assistida
+cp .env.example .env.local      # opcional: ANTHROPIC_API_KEY (IA) e SUPABASE_* (persistência/login)
 npm install
 npm run dev                     # http://localhost:3000
 ```
+
+### Habilitando persistência e login (opcional)
+
+1. Crie um projeto no Supabase e defina `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` em `.env.local`.
+2. Aplique a migração `supabase/migrations/0001_artefatos.sql` (tabela `artefatos` + RLS por usuário).
+3. O login usa **magic link por e-mail** (Supabase Auth). O provedor **gov.br (OIDC)** entra como
+   provider externo no roadmap.
 
 ## Rotas de API
 
@@ -39,12 +50,16 @@ npm run dev                     # http://localhost:3000
 | POST | `/api/diario-oficial` | Gera ato oficial por tipo/caderno | Anthropic |
 | GET | `/api/precos?q=` | Pesquisa de preços | PNCP |
 | GET | `/api/orcamento?ente=&exercicio=&periodo=` | Execução orçamentária (RREO) | SICONFI |
+| GET/POST | `/api/artefatos` | Lista/salva artefatos do usuário | Supabase |
+| DELETE | `/api/artefatos/[id]` | Exclui artefato do usuário | Supabase |
 
 ## Limites e próximos passos
 
 - **Minutas de apoio:** os documentos gerados não substituem parecer jurídico (PGM) nem decisão da
   autoridade competente.
-- **Roadmap:** persistência (Supabase), autenticação **gov.br**, integração viva ao **SEI** (mod-wssei),
-  **Diário Oficial eletrônico** (assinatura ICP-Brasil + biblioteca), reconstrução do **Portal da
-  Transparência** (dados abertos/CKAN, dashboards), módulos de RH (eSocial/SIPREV) e dashboards de
-  orçamento (SICONFI/SIOPS/SIOPE) com alertas de mínimos e LRF.
+- **Feito nesta iteração:** editor do Diário Oficial, dashboard de orçamento (RREO), **persistência e
+  login** (Supabase + RLS, magic link).
+- **Roadmap:** login **gov.br (OIDC)**, integração viva ao **SEI** (mod-wssei), **Diário Oficial
+  eletrônico** (assinatura ICP-Brasil + biblioteca pesquisável), reconstrução do **Portal da
+  Transparência** (dados abertos/CKAN, dashboards), módulos de RH (eSocial/SIPREV) e cruzamento
+  SIOPS/SIOPE com alertas de mínimos e LRF.

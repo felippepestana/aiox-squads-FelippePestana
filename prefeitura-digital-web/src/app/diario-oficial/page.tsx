@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import SalvarArtefato from "@/components/SalvarArtefato";
 
 type TipoAtoDO =
   | "lei"
@@ -135,12 +136,22 @@ export default function DiarioOficialPage() {
           <div className="mb-3 flex items-center justify-between">
             <h2 className="font-semibold">Ato gerado</h2>
             {doc && (
-              <button
-                onClick={() => navigator.clipboard.writeText(doc)}
-                className="rounded bg-gray-100 px-3 py-1 text-xs"
-              >
-                Copiar
-              </button>
+              <div className="flex items-center gap-2">
+                <SalvarArtefato
+                  modulo="diario-oficial"
+                  tipo={meta.rotulo}
+                  titulo={`${meta.rotulo} — ${ementa || "sem ementa"}`}
+                  conteudo={doc}
+                  degraded={degraded}
+                  metadados={{ caderno: meta.caderno, pncp: meta.pncp }}
+                />
+                <button
+                  onClick={() => navigator.clipboard.writeText(doc)}
+                  className="rounded bg-gray-100 px-3 py-1 text-xs"
+                >
+                  Copiar
+                </button>
+              </div>
             )}
           </div>
           {erro && <p className="rounded bg-red-50 p-3 text-sm text-red-700">{erro}</p>}
