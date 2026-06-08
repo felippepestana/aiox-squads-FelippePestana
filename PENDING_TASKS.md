@@ -143,7 +143,7 @@ Já presente em `.github/workflows/docker-security.yml`:
 ## 🎯 Próximas Ações
 
 1. **Imediato:** Cloudflare e Docker Security já resolvidos ✅
-2. **Quando for usar landing pages:** remover Client IP Filtering do `CLOUDFLARE_API_TOKEN`
+2. **Quando for usar landing pages:** remover o **Client IP Address Filtering** do `CLOUDFLARE_API_TOKEN`
 3. **Curto prazo:** Obter ClickUp API token e configurar
 4. **Validação:** Testar todos os MCPs no ambiente completo
 
