@@ -2,7 +2,7 @@
 
 > Análise e elaboração de processos organizacionais, peças processuais e documentos jurídicos brasileiros — do mapeamento ao relatório estratégico e à minuta final.
 
-**Version:** 1.1.0 | **Created:** 2026-03-28 | **Updated:** 2026-05-15 | **Agents:** 9 | **Tasks:** 10 | **Workflows:** 2
+**Version:** 1.1.0 | **Created:** 2026-03-28 | **Updated:** 2026-05-15 | **Agents:** 9 | **Tasks:** 10 | **Workflows:** 3
 
 ---
 
@@ -129,7 +129,7 @@ squads/analista-processual/
 │   └── documentador-processual.md  (Tier Síntese)
 ├── tasks/                          (10 task files)
 │   └── elaborar-peca-processual.md ✨ NOVO
-├── workflows/                      (2 workflow files)
+├── workflows/                      (3 workflow files)
 ├── checklists/                     (2 checklist files)
 ├── templates/                      (2 templates)
 │   └── peca-processual-tmpl.md     ✨ NOVO
@@ -150,7 +150,7 @@ squads/analista-processual/
 | Agentes Tier Síntese | 1 |
 | Orchestrator | 1 |
 | Tasks | 10 |
-| Workflows | 2 |
+| Workflows | 3 |
 | Checklists | 2 |
 | Templates | 2 |
 | Data files | 1 |

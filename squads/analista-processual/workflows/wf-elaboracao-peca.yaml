@@ -1,0 +1,57 @@
+workflow:
+  id: wf-elaboracao-peca
+  name: "Elaboração de Peça Processual ou Documento Jurídico"
+  version: "1.0.0"
+  orchestrator: analista-chefe
+  description: |
+    Pipeline para elaboração de peças processuais (petição inicial, contestação,
+    recursos, embargos) e documentos jurídicos (contratos, notificações, procurações).
+    Ativa o redator-juridico (Tier 1); leitor-de-pecas e pesquisador-juridico são
+    opcionais — acionados apenas quando há peças existentes a ler ou fundamentos a
+    pesquisar. Modo ELABORACAO_PECA: a peça é salva pelo redator (QG-AP-005), sem
+    passar pelo documentador-processual.
+  use_case: UC-AP-005
+  estimated_duration: "10-30 min"
+  language: "pt-BR"
+
+constraints:
+  documentation_mode: ELABORACAO_PECA
+  documentador_skip: true
+
+phases:
+  PHASE-1:
+    name: "Classificação"
+    executor: analista-chefe
+    action: "Classificar demanda como UC-AP-005 (elaboração, não análise)"
+    quality_gate: QG-AP-001
+    on_fail: "Perguntar ao usuário: ANALISAR a peça existente ou ELABORAR uma nova?"
+
+  PHASE-2:
+    name: "Contexto Jurídico (opcional, paralelo)"
+    execution_mode: PARALLEL
+    optional: true
+    condition: "Ativar apenas quando houver peças existentes a ler e/ou fundamentos a pesquisar"
+    agents:
+      - leitor-de-pecas
+      - pesquisador-juridico
+    tasks:
+      - ap-ler-peca
+      - ap-pesquisar-jurisprudencia
+
+  PHASE-3:
+    name: "Elaboração da Peça"
+    executor: redator-juridico
+    action: "Redigir a peça/documento incorporando os fundamentos disponíveis e salvar via Write"
+    task: ap-elaborar-peca
+    quality_gate: QG-AP-005
+    depends_on: PHASE-2
+    on_fail: "Reexecutar redator; sinalizar dados faltantes com [PREENCHER:]"
+
+quality_checklist:
+  - "[ ] Demanda classificada como UC-AP-005 (elaboração, não análise)"
+  - "[ ] Tipo de documento identificado (ou perguntado ao usuário)"
+  - "[ ] Fundamentos do @pesquisador-juridico incorporados (quando aplicável)"
+  - "[ ] Peça completa salva via Write em output/pecas/ (QG-AP-005)"
+  - "[ ] Dados faltantes sinalizados com [PREENCHER:] (não inventados)"
+
+completion_signal: "<promise>COMPLETE: peca salva em [caminho]</promise>"
