@@ -31,9 +31,13 @@ model Analysis {
   court         String?
   processClass  String?
   status        AnalysisStatus @default(PENDING)
+  source        AnalysisSource @default(UPLOAD)
+  tribunalSigla String?
+  lastSyncedAt  DateTime?
   result        Json?
   documents     Document[]
   deadlines     Deadline[]
+  movements     ProcessMovement[]
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 
@@ -43,6 +47,32 @@ model Analysis {
   @@index([userId])
   @@index([status])
   @@map("analyses")
+}
+
+enum AnalysisSource {
+  UPLOAD
+  DATAJUD
+  DJEN
+  MNI
+  PDPJ
+  MCP
+}
+
+model ProcessMovement {
+  id          String   @id @default(uuid())
+  analysisId  String
+  code        Int?
+  description String
+  date        DateTime?
+  source      AnalysisSource @default(DATAJUD)
+  raw         Json?
+  createdAt   DateTime @default(now())
+
+  analysis Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+
+  @@index([analysisId])
+  @@index([date])
+  @@map("process_movements")
 }
 
 enum AnalysisStatus {
