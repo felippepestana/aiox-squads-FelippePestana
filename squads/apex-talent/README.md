@@ -22,6 +22,8 @@ A proposta de valor é cobrir o máximo de funcionalidades de uma suíte de RH m
 
 > 🟢 **Ativo** = fluxos completos construídos. 🟡 **Em desenvolvimento** = esqueleto disponível (apenas o agente Chief), pronto para desenhar e evoluir o módulo.
 
+> 🛠️ **Promover um módulo 🟡 → 🟢:** veja [`templates/module-activation-checklist.md`](./templates/module-activation-checklist.md). Passo-a-passo do design (Tier 0→3) ao wiring no orquestrador, baseado nos patterns de `talent-compass`, `profiler-dna` e `performa`.
+
 ## O ciclo de vida do colaborador
 
 Os módulos não são silos — eles formam uma cadeia:
