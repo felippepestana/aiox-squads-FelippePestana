@@ -146,17 +146,20 @@ Usuário pede squad
 
 ### Instalar o Pro
 
-Copie esta pasta para seu projeto:
+> ⚠️ **Não copie esta pasta** — ela contém apenas o pitch comercial. O conteúdo executável do Pro (agentes, tasks, workflows, config.yaml) vive em [`aiox-core`](https://github.com/SynkraAI/aiox-core) e deve ser obtido de lá.
+
+Para habilitar o modo Pro no seu projeto:
 
 ```bash
-cp -r squads/squad-creator-pro /seu-projeto/squads/squad-creator-pro
+# A partir do clone do aiox-core (repo de upgrade):
+cp -r aiox-core/squads/squad-creator-pro /seu-projeto/squads/squad-creator-pro
 ```
 
-O base **detecta automaticamente** a presença do Pro via `squads/squad-creator-pro/config.yaml`.
+O base **detecta automaticamente** a presença do Pro via `squads/squad-creator-pro/config.yaml` — arquivo que só existe na cópia vinda do `aiox-core`, não neste repositório.
 
 ### Desinstalar
 
-Remova a pasta. Volta para o modo base sem quebrar nada (degradação limpa).
+Remova a pasta `squads/squad-creator-pro/` do seu projeto. Volta para o modo base sem quebrar nada (degradação limpa).
 
 ```bash
 rm -rf squads/squad-creator-pro
