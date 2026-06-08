@@ -30,9 +30,12 @@ A **autenticação (Supabase) é opcional e com degradação graciosa**:
 Limitações conhecidas (modo demo):
 
 - **Extração de texto** cobre formatos textuais (`.txt`, `.md`, `.csv`, `.json`,
-  etc.), **PDF** (via `unpdf`) e **DOCX** (via `mammoth`). Formatos legados
-  (`.doc`) e imagens exigem OCR e não são extraídos (a análise informa quais
-  documentos não tiveram texto extraível).
+  etc.), **PDF com camada de texto** (via `unpdf`), **DOCX** (via `mammoth`),
+  **imagens** (`.png`, `.jpg`, `.jpeg`, `.webp`, `.tiff`, `.bmp`) e **PDFs
+  escaneados** via **OCR** (`tesseract.js` + rasterização com `@napi-rs/canvas`,
+  idiomas `por+eng`). Formatos legados (`.doc`) ainda não são extraídos (a
+  análise informa quais documentos não tiveram texto extraível, via
+  `metadata.extractionMethod` / `metadata.needsOcr`).
 - **Biblioteca de jurisprudência** ainda é placeholder.
 - O processamento é executado de forma síncrona na rota `/api/analyses/[id]/process`
   (sem fila/worker dedicado).
@@ -232,13 +235,14 @@ Veja o guia completo em [`../docs/deploy/vercel.md`](../docs/deploy/vercel.md), 
 - [x] Configuração de banco de dados (Prisma)
 - [x] LLM Gateway com seleção de modelo ciente do provedor
 - [x] Agentes implementados (Navegador, Extrator, Calculador, Mapeador, Chief)
-- [x] Upload de documentos + extração de texto (texto, PDF e DOCX)
+- [x] Upload de documentos + extração de texto (texto, PDF, DOCX)
+- [x] OCR para imagens e PDFs escaneados (tesseract.js + @napi-rs/canvas)
 - [x] Fluxo de análise ponta-a-ponta (criar → processar → visualizar)
 - [x] Dashboard e listagem com dados reais
 - [x] Smoke test E2E cross-platform (`npm run test:smoke`, macOS e Windows)
 - [x] Autenticação (Supabase) opcional com degradação graciosa — login/cadastro,
       proteção de rotas, atribuição/filtragem por usuário (fallback para modo demo)
-- [ ] OCR para `.doc` legado e imagens
+- [ ] OCR para `.doc` legado (requer conversão prévia)
 - [ ] Biblioteca de jurisprudência (busca semântica)
 - [ ] Fila/worker dedicado para processamento assíncrono
 
