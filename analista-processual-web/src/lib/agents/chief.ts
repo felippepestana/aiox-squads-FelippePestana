@@ -62,6 +62,8 @@ export class ChiefAgent {
       createdAt: new Date().toISOString(),
     };
 
+    const stepErrors: string[] = [];
+
     try {
       onProgress?.("Iniciando análise processual...", 5);
 
@@ -72,6 +74,8 @@ export class ChiefAgent {
       );
       if (navResult.success && navResult.data) {
         result.documentStructure = navResult.data;
+      } else if (navResult.error) {
+        stepErrors.push(navResult.error);
       }
       onProgress?.("✅ Navegação concluída", 25);
 
@@ -86,6 +90,8 @@ export class ChiefAgent {
       );
       if (extResult.success && extResult.data) {
         result.extractedData = extResult.data;
+      } else if (extResult.error) {
+        stepErrors.push(extResult.error);
       }
       onProgress?.("✅ Extração concluída", 50);
 
@@ -102,6 +108,8 @@ export class ChiefAgent {
       );
       if (calcResult.success && calcResult.data) {
         result.deadlines = calcResult.data;
+      } else if (calcResult.error) {
+        stepErrors.push(calcResult.error);
       }
       onProgress?.("✅ Prazos calculados", 70);
 
@@ -119,12 +127,42 @@ export class ChiefAgent {
       );
       if (riskResult.success && riskResult.data) {
         result.risks = riskResult.data;
+      } else if (riskResult.error) {
+        stepErrors.push(riskResult.error);
       }
       onProgress?.("✅ Riscos mapeados", 85);
 
       onProgress?.("📝 Gerando relatório final...", 90);
-      result.summary = await this.generateSummary(result, input);
+      let summaryOk = false;
+      try {
+        result.summary = await this.generateSummary(result, input);
+        summaryOk = true;
+      } catch (error) {
+        result.summary = "Resumo não disponível devido a erro na geração.";
+        stepErrors.push(this.formatError(error));
+      }
       onProgress?.("✅ Relatório gerado", 95);
+
+      // Honest status: if every LLM-backed step failed (e.g. provider quota /
+      // auth errors), the result has no real content — report FAILED instead of
+      // a misleading COMPLETED with empty data.
+      const anySuccess =
+        navResult.success ||
+        extResult.success ||
+        calcResult.success ||
+        riskResult.success ||
+        summaryOk;
+
+      if (!anySuccess) {
+        result.status = "failed";
+        result.error = `Todas as etapas de análise falharam. Causa provável: ${
+          stepErrors[0] ?? "erro desconhecido"
+        }`;
+        result.completedAt = new Date().toISOString();
+        onProgress?.("❌ Análise falhou", 100);
+        console.error("ChiefAgent: todas as etapas falharam:", result.error);
+        return result;
+      }
 
       result.status = "completed";
       result.completedAt = new Date().toISOString();
@@ -195,26 +233,23 @@ Gere um resumo executivo conciso (3-4 parágrafos) que:
 - Forneça próximas ações recomendadas
 - Seja profissional e objetivo`;
 
-    try {
-      const response = await llmGateway.complete({
-        model,
-        messages: [
-          {
-            role: "system",
-            content:
-              "Você é um assistente jurídico especializado em análise processual. Forneça resumos claros e objetivos.",
-          },
-          { role: "user", content: prompt },
-        ],
-        temperature: 0.5,
-        max_tokens: 1500,
-      });
+    // Errors propagate to the caller (execute) so the overall status can
+    // reflect a total failure honestly.
+    const response = await llmGateway.complete({
+      model,
+      messages: [
+        {
+          role: "system",
+          content:
+            "Você é um assistente jurídico especializado em análise processual. Forneça resumos claros e objetivos.",
+        },
+        { role: "user", content: prompt },
+      ],
+      temperature: 0.5,
+      max_tokens: 1500,
+    });
 
-      return response.content;
-    } catch (error) {
-      console.error("ChiefAgent: Erro ao gerar resumo:", error);
-      return "Resumo não disponível devido a erro na geração.";
-    }
+    return response.content;
   }
 }
 
