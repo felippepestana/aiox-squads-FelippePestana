@@ -29,13 +29,19 @@ SUPABASE_SERVICE_ROLE_KEY=<cole_aqui>
 `web/.env` está no `.gitignore` — não será commitado.
 
 ### Cloudflare Workers (deploy de produção)
+Apenas a `service_role` é segredo; a URL é uma variável comum.
 ```bash
-# na pasta web/
+# na pasta web/ — somente a service_role como SECRET:
 npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
-# e adicione SUPABASE_URL como var (não-secreta) no wrangler.toml ou via:
-npx wrangler secret put SUPABASE_URL
 ```
-Ou pelo dashboard: Workers & Pages → projeto → **Settings → Variables and Secrets** → adicione as duas (marque `SERVICE_ROLE` como *Secret*).
+A `SUPABASE_URL` (não-secreta) vai como `[vars]` no `wrangler.toml`:
+```toml
+[vars]
+SUPABASE_URL = "https://hlwdnwqcctslwjlzhfsz.supabase.co"
+```
+Ou pelo dashboard: Workers & Pages → projeto → **Settings → Variables and Secrets**:
+- `SUPABASE_URL` → tipo **Variable** (texto)
+- `SUPABASE_SERVICE_ROLE_KEY` → tipo **Secret** (use exatamente esse nome)
 
 ### Railway
 Project → **Variables** → `New Variable` para `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY`.
