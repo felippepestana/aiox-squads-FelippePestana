@@ -127,6 +127,15 @@ handoffs:
     receives_from: [analista-chefe]
     final: true
 
+# ──────────────────────────────────────────────────────────────────────────────
+# FONTE CANÔNICA: classificação de use cases e roteamento do pipeline.
+# Este bloco é a ÚNICA fonte de verdade para gatilhos, agentes acionados e modo
+# de documentação. Os arquivos abaixo apenas ESPELHAM este mapa e devem ser
+# mantidos em sincronia sempre que ele mudar:
+#   - agents/analista-chefe.md       (use_case_classification + algoritmo + saudação)
+#   - tasks/classificar-demanda.md   (algoritmo de classificação)
+#   - ARCHITECTURE.md                (tabela de Use Cases + algoritmo)
+# ──────────────────────────────────────────────────────────────────────────────
 pipeline:
   use_cases:
     UC-AP-001:
@@ -134,26 +143,31 @@ pipeline:
       trigger_patterns: ["mapear processo", "etapas", "fluxo", "BPMN", "workflow", "mapeamento"]
       tier_0_active: true
       tier_1_agents: []
+      documentation_mode: MODO_PROCESSUAL
     UC-AP-002:
       name: "Análise Jurídica Completa"
       trigger_patterns: ["processo judicial", "peças", "petição", "sentença", "recurso", "analisar processo"]
       tier_0_active: false
       tier_1_agents: [leitor-de-pecas, pesquisador-juridico, estrategista-processual, advogado-orientador]
+      documentation_mode: MODO_JURIDICO
     UC-AP-003:
       name: "Análise Estratégica"
       trigger_patterns: ["riscos", "cenários", "probabilidade", "sucumbência", "estratégia", "acordo"]
       tier_0_active: true
       tier_1_agents: [estrategista-processual, advogado-orientador]
+      documentation_mode: MODO_JURIDICO
     UC-AP-004:
       name: "Pesquisa Jurisprudencial"
       trigger_patterns: ["jurisprudência", "STJ", "STF", "súmula", "legislação", "precedente"]
       tier_0_active: false
       tier_1_agents: [pesquisador-juridico]
+      documentation_mode: RESPOSTA_DIRETA
     UC-AP-005:
       name: "Elaboração de Peça Processual ou Documento Jurídico"
       trigger_patterns: ["elaborar", "redigir", "minutar", "escrever", "draft", "petição inicial", "contestação", "apelação", "embargos", "recurso especial", "notificação extrajudicial", "contrato", "procuração", "memorial", "manifestação"]
       tier_0_active: false
       tier_1_agents: [leitor-de-pecas, pesquisador-juridico, redator-juridico]
+      documentation_mode: ELABORACAO_PECA
       notes: "leitor-de-pecas e pesquisador-juridico são opcionais — ativados quando há peças existentes ou fundamentos a pesquisar"
 
 quality_gates:

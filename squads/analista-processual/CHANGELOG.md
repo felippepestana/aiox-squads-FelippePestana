@@ -4,6 +4,40 @@ All notable changes to this squad follow [Keep a Changelog](https://keepachangel
 
 ---
 
+## [1.1.0] — 2026-05-15
+
+### Added
+
+**Agent (1 new, 9 total):**
+- `redator-juridico` (Tier 1) — Elaboração de peças processuais (petição inicial, contestação, recursos, embargos) e documentos jurídicos (contratos, notificações, procurações)
+
+**Use Case (1 new, 5 total):**
+- UC-AP-005 — Elaboração de Peça Processual ou Documento Jurídico (modo `ELABORACAO_PECA`); roteia para `redator-juridico`, com `leitor-de-pecas` e `pesquisador-juridico` opcionais
+
+**Quality Gate (1 new, 5 total):**
+- QG-AP-005: Peça processual salva via `Write` em `output/pecas/`, dados faltantes sinalizados com `[PREENCHER:]`
+
+**Task (1 new, 10 total):**
+- `elaborar-peca-processual` — Task de elaboração de peça processual ou documento jurídico (UC-AP-005), executada pelo `redator-juridico`
+
+**Template (1 new):**
+- `peca-processual-tmpl.md` — Template estrutural para peças processuais e documentos jurídicos elaborados
+
+**Output:**
+- `output/pecas/` — Diretório de destino das peças geradas pelo `redator-juridico` (via `Write`)
+
+### Changed
+
+- `analista-chefe` — Algoritmo de classificação verifica UC-AP-005 antes de UC-AP-002, com desambiguação "analisar vs. elaborar"
+- Centralização de fontes canônicas: `config.yaml > pipeline.use_cases` (classificação/roteamento) e `templates/relatorio-processual-tmpl.md` (estrutura de relatório); demais arquivos passam a espelhar essas fontes
+- `ARCHITECTURE.md` sincronizado com os 5 use cases, modos de documentação e quality gates
+
+### Removed
+
+- `templates/relatorio-juridico-tmpl.md` — consolidado no template dual-mode canônico `relatorio-processual-tmpl.md`, que absorveu as subseções de maior amplitude (Jurisprudência dos Tribunais Superiores, Jurisprudência de TJs/TRFs, Orientações Jurisprudenciais)
+
+---
+
 ## [1.0.0] — 2026-03-28
 
 ### Added

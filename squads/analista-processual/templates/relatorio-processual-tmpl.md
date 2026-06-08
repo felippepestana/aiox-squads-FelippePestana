@@ -1,3 +1,16 @@
+<!--
+  ╔════════════════════════════════════════════════════════════════════════════╗
+  ║ FONTE CANÔNICA da estrutura do relatório (seções obrigatórias por modo).     ║
+  ║ Este template é a ÚNICA fonte de verdade para o que cada modo                ║
+  ║ (MODO_PROCESSUAL / MODO_JURIDICO) deve conter. Os arquivos abaixo apenas      ║
+  ║ resumem/validam esta estrutura e devem ser mantidos em sincronia:            ║
+  ║   - agents/documentador-processual.md        (estrutura embutida por modo)   ║
+  ║   - tasks/gerar-relatorio-processual.md       (action items por modo)        ║
+  ║   - checklists/relatorio-completeness-checklist.md (itens obrigatórios)      ║
+  ║   - ARCHITECTURE.md                           (resumo do tier de síntese)    ║
+  ╚════════════════════════════════════════════════════════════════════════════╝
+-->
+
 # Relatório {{modo}} — {{titulo_demanda}}
 
 > **Gerado em:** {{data}} | **Squad:** Analista Processual v1.0 | **Modo:** {{modo}}
@@ -102,7 +115,12 @@
 | Dispositivo | Relevante Para |
 |------------|----------------|
 
-### Jurisprudência Relevante
+### Jurisprudência dos Tribunais Superiores
+
+| Tribunal | Número | Data | Tese/Ementa |
+|---------|--------|------|------------|
+
+### Jurisprudência de TJs/TRFs Relevantes
 
 | Tribunal | Número | Data | Tese/Ementa |
 |---------|--------|------|------------|
@@ -111,6 +129,11 @@
 
 | Tribunal | Súmula | Enunciado |
 |---------|--------|----------|
+
+### Orientações Jurisprudenciais (OJs)
+
+| Órgão | OJ | Enunciado |
+|------|----|-----------|
 
 ## Análise de Mérito
 

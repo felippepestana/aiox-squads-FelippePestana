@@ -4,6 +4,8 @@
 **Usado por:** `analista-chefe` antes de entregar o relatório ao usuário
 **Quality Gate:** QG-AP-004
 
+> **Fonte canônica das seções:** `templates/relatorio-processual-tmpl.md`. Este checklist valida a presença das seções definidas no template; ao alterar a estrutura do relatório, edite o template primeiro e sincronize os itens abaixo.
+
 ---
 
 ## MODO_PROCESSUAL
