@@ -86,7 +86,9 @@ phases:
   phase_5_anonymity_gate:
     name: "Anonymity & Ethics Gate"
     description: "Mandatory audit before publishing any cut: minimum group size + re-identification + anonymized quotes."
-    depends_on: ["phase_3_analysis"]
+    # Runs last: audits the complete report (analysis + action plan) before publishing.
+    # build-action-plan in phase_4 is non-conditional, so this hard dependency is safe.
+    depends_on: ["phase_4_signals_action"]
     agents: ["anonymity-gate"]
     execution: "audit"
     tasks:
