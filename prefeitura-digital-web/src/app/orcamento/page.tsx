@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import PainelPessoalLRF from "@/components/PainelPessoalLRF";
 
 interface RreoLinha {
   conta?: string;
@@ -137,9 +138,11 @@ export default function OrcamentoPage() {
         </div>
       )}
 
+      <PainelPessoalLRF ente={ente} exercicio={exercicio} />
+
       <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-        Roadmap: cruzamento automático com SIOPS (saúde) e SIOPE (educação) para apuração dos mínimos,
-        painel de limites da LRF (54% RCL) e alertas de risco fiscal.
+        Roadmap: apuração dos mínimos de saúde (15%) e educação (25% + FUNDEB) a partir dos anexos
+        específicos do RREO, quando publicados pelo ente, e cruzamento com SIOPS/SIOPE.
       </div>
     </div>
   );
