@@ -1,5 +1,7 @@
 # Squad Creator Pro
 
+> 📋 **Descrição de produto.** Este diretório contém apenas a especificação comercial do upgrade pack. A implementação dos agentes, tasks e workflows do Pro vive no [`aiox-core`](https://github.com/SynkraAI/aiox-core) (repositório privado de upgrade) e é ativada por instalação separada. Este README serve como folha de produto e referência de capacidades.
+
 **O upgrade pack que transforma o Squad Creator base em uma fábrica de squads de elite.**
 
 > O Squad Creator base já vem incluído no [AIOX](https://github.com/SynkraAI/aiox-core). O Pro é um upgrade pack que adiciona capacidades avançadas sem substituir o base.
