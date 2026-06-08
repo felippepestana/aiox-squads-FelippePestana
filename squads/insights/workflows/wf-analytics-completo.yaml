@@ -1,0 +1,277 @@
+name: "wf-analytics-completo"
+display_name: "Ciclo Completo de People Analytics"
+description: "Orquestra análise cross-módulo: intake da decisão → montagem de dataset → métricas + predição → gate de ética/privacidade → narrativa executiva. Nenhum insight sai sem PASS do ethics-gate."
+
+trigger: "user command (*dashboard | *predict-turnover | *diversity-audit) or scheduled (monthly review)"
+orchestrator: "insights-chief"
+
+entry_point: "Phase 1: INTAKE"
+
+inputs:
+  - name: "decision"
+    type: "string"
+    required: true
+    description: "A decisão que a análise informa (ex: onde concentrar retenção)"
+
+  - name: "window"
+    type: "string"
+    format: "YYYY-MM..YYYY-MM"
+    required: true
+    description: "Janela temporal da análise"
+
+  - name: "segments"
+    type: "array | string"
+    required: false
+    default: "all"
+    description: "Cortes desejados (área, função, filial) — respeitando n >= 5"
+
+  - name: "source_modules"
+    type: "array"
+    required: false
+    default: ["chronos", "performa", "pulse", "peopleops"]
+    description: "Módulos-fonte a cruzar"
+
+phases:
+  phase_1_intake:
+    name: "INTAKE"
+    display_name: "Framing da Decisão"
+    description: "Confirmar a decisão a informar, janela, segmentos e fontes. Análise sem decisão é abortada."
+
+    agents:
+      - "insights-chief"
+
+    execution: "sequential"
+
+    tasks: []  # Intake é conversacional
+
+    outputs:
+      - name: "analysis_framed"
+        type: "object"
+        schema:
+          decision: "string"
+          window: "YYYY-MM..YYYY-MM"
+          segments: "array"
+          source_modules: "array"
+
+    exit_condition:
+      - name: "decision_defined"
+        rule: "Decisão, janela, segmentos e fontes confirmados. Aborta se não houver decisão associada."
+        type: "HARD"
+
+  phase_2_data_assembly:
+    name: "DATA_ASSEMBLY"
+    display_name: "Montagem do Dataset Cross-Módulo"
+    description: "Cruzar sinais dos módulos-fonte num dataset unificado, validar joins, declarar frescor/cobertura, marcar grupos n < 5."
+
+    agents:
+      - "data-weaver"
+
+    execution: "sequential"
+
+    tasks:
+      - id: "assemble-dataset"
+        executor: "data-weaver"
+        elicit: "decision, window, segments, source_modules"
+        mode: "deterministic ingestion + join validation"
+        input_source: "output_phase_1_intake.analysis_framed"
+        output_format: "dataset_manifest.yaml"
+
+    outputs:
+      - name: "dataset_manifest"
+        type: "object"
+        schema:
+          sources: "array (module, freshness, coverage)"
+          join:
+            match_rate_pct: "float"
+            status: "PASS | ALERT | BLOCK"
+          suppressed_groups: "array (n < 5)"
+
+    exit_condition:
+      - name: "join_adequate"
+        rule: "Match >= 95% → PASS; 80–95% → ALERT (continua); < 80% → BLOCK."
+        type: "SOFT"
+      - name: "dataset_ready"
+        rule: "Fontes ingeridas, frescor/cobertura declarados, grupos n<5 marcados."
+        type: "HARD"
+
+  phase_3_analysis:
+    name: "ANALYSIS"
+    display_name: "Métricas & Modelagem de Risco"
+    description: "Computar KPIs determinísticos (dashboard) e modelar risco preditivo agregado de turnover/burnout."
+
+    agents:
+      - "metric-smith"
+      - "risk-modeler"
+
+    execution: "parallel"
+
+    tasks:
+      - id: "compute-metrics"
+        executor: "metric-smith"
+        elicit: "dataset_manifest, metrics, segments"
+        mode: "deterministic mathematical"
+        input_source: "output_phase_2_data_assembly.dataset_manifest"
+        output_format: "metrics_report.yaml"
+
+      - id: "model-risk"
+        executor: "risk-modeler"
+        elicit: "dataset_manifest, metrics_report, risk_type, cohort"
+        mode: "cross-signal predictive (aggregate)"
+        input_source: "output_phase_2_data_assembly.dataset_manifest"
+        output_format: "risk_model.yaml"
+
+    outputs:
+      - name: "metrics_report"
+        type: "object"
+        schema:
+          kpis: "array (name, value, formula, source)"
+          segments: "array (n, status)"
+      - name: "risk_model"
+        type: "object"
+        schema:
+          cohort_risk: "array (cohort, n, risk_level, confidence, drivers)"
+          protected_attributes_used: "boolean (must be false)"
+
+    exit_condition:
+      - name: "metrics_computed"
+        rule: "KPIs determinísticos com fórmula/fonte. Células n<5 suprimidas."
+        type: "HARD"
+      - name: "risk_modeled"
+        rule: "Risco agregado (>= 5) com confiança e drivers. Fonte única → ALERT. Individual/protegido → bloqueado no gate."
+        type: "SOFT"
+
+  phase_4_ethics_gate:
+    name: "ETHICS_GATE"
+    display_name: "Gate de Ética & Privacidade"
+    description: "Auditoria obrigatória: tamanho de grupo, atributo protegido, veredito individual, impacto desproporcional, LGPD, audit trail. VETO se achados duros."
+
+    agents:
+      - "ethics-gate"
+
+    execution: "sequential"
+
+    tasks:
+      - id: "audit-ethics"
+        executor: "ethics-gate"
+        elicit: "dataset_manifest, metrics_report, risk_model, intended_use"
+        mode: "deterministic compliance audit"
+        input_sources:
+          - "output_phase_2_data_assembly.dataset_manifest"
+          - "output_phase_3_analysis.metrics_report"
+          - "output_phase_3_analysis.risk_model"
+        output_format: "ethics_audit.yaml"
+
+    outputs:
+      - name: "ethics_verdict"
+        type: "object"
+        schema:
+          verdict: "PASS | VETO"
+          checks: "object (group_size, protected, individual, disparate_impact, lgpd, trail)"
+          if_veto:
+            reasons: "array"
+            remediation_steps: "array"
+          if_pass:
+            clearance_statement: "string"
+            next_action: "Handoff to narrative-author"
+
+    exit_condition:
+      - name: "ethics_audited"
+        rule: "Privacidade, atributos protegidos, impacto e LGPD validados. Retorna PASS ou VETO."
+        type: "HARD"
+      - name: "veto_blocks_exit"
+        rule: "Se VETO, workflow bloqueia. Remediação obrigatória e reapresentação. Se PASS, libera narrativa."
+        type: "HARD"
+
+  phase_5_narrative:
+    name: "NARRATIVE"
+    display_name: "Narrativa Executiva"
+    description: "Gerar leitura executiva decisão-primeiro, com correlação ≠ causa e limites declarados. Só após PASS."
+
+    agents:
+      - "narrative-author"
+
+    execution: "sequential"
+
+    tasks:
+      - id: "generate-narrative"
+        executor: "narrative-author"
+        elicit: "metrics_report, risk_model, ethics_verdict, audience"
+        mode: "data storytelling"
+        input_sources:
+          - "output_phase_3_analysis.metrics_report"
+          - "output_phase_3_analysis.risk_model"
+          - "output_phase_4_ethics_gate.ethics_verdict"
+        output_format: "executive_narrative.md"
+
+    outputs:
+      - name: "executive_narrative"
+        type: "object"
+        schema:
+          recommendation: "string"
+          confidence: "low | medium | high"
+          evidence: "array"
+          causality_labeled: "boolean"
+          limits: "array"
+
+    exit_condition:
+      - name: "narrative_ready"
+        rule: "Narrativa gerada apenas se ethics_verdict == PASS. Decisão-primeiro, limites e confiança declarados."
+        type: "HARD"
+
+handoffs:
+  - from: "ethics-gate"
+    to: "narrative-author"
+    when: "Phase 4 returns PASS"
+    data: "ethics_verdict + metrics_report + risk_model"
+    purpose: "Geração da narrativa executiva"
+
+  - from: "ethics-gate"
+    to: "insights-chief"
+    when: "Phase 4 returns VETO"
+    data: "ethics_verdict (reasons + remediation)"
+    purpose: "Bloqueio de liberação; remediação e reapresentação"
+
+  - from: "insights-chief"
+    to: "org-architect-chief"
+    when: "Driver de progressão estagnada identificado"
+    data: "risk_model (drivers de carreira)"
+    purpose: "Revisão de plano de carreira/faixa salarial"
+
+  - from: "insights-chief"
+    to: "apex-talent-chief"
+    when: "Narrativa cross-módulo pronta para a plataforma"
+    data: "executive_narrative"
+    purpose: "Consolidação no nível da plataforma"
+
+error_handling:
+  - phase: "phase_2_data_assembly"
+    error: "join_match < 80%"
+    action: "BLOCK — dataset não confiável para conclusão"
+    remediation: "Revisar chaves/fontes; reingerir"
+
+  - phase: "phase_3_analysis"
+    error: "single_source_model"
+    action: "ALERT — validade insuficiente"
+    remediation: "Adicionar segunda fonte-módulo antes de modelar"
+
+  - phase: "phase_4_ethics_gate"
+    error: "privacy_or_fairness_violation"
+    action: "VETO — não liberável"
+    remediation: "Agregar grupos, remover protegido/individual, reapresentar"
+
+audit_trail:
+  - action: "phase_initiated"
+    tracked_by: "insights-chief"
+    fields: ["timestamp", "user", "phase", "decision", "inputs"]
+
+  - action: "task_executed"
+    tracked_by: "executor_agent"
+    fields: ["timestamp", "user", "task", "sources", "confidence", "output", "status"]
+
+  - action: "phase_completed"
+    tracked_by: "orchestrator"
+    fields: ["timestamp", "phase", "exit_condition_met", "next_phase"]
+
+  - action: "workflow_completed"
+    tracked_by: "insights-chief"
+    fields: ["timestamp", "verdict", "narrative_released", "responsible_agent"]

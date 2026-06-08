@@ -1,9 +1,9 @@
 name: insights
 display_name: "Insights — People Analytics"
-version: "0.1.0"
+version: "1.0.0"
 domain: people-analytics
 entry_agent: insights-chief
-description: "People analytics que cruza todos os módulos: dashboards (headcount, turnover, absenteísmo, custo), turnover preditivo, risco de burnout, diversidade e narrativas executivas."
+description: "People analytics que cruza todos os módulos: dashboards determinísticos (headcount, turnover, absenteísmo, custo), turnover/burnout preditivo (cruzando jornada, desempenho e engajamento), auditoria de diversidade e narrativas executivas. Gate de ética/privacidade obrigatório (LGPD, tamanho mínimo de grupo, impacto desproporcional) antes de qualquer insight sair. Predição é alerta precoce para apoio — nunca veredito contra a pessoa."
 
 keywords:
   - people analytics
@@ -13,27 +13,93 @@ keywords:
   - diversidade
   - dashboard
   - rh preditivo
+  - narrativa executiva
+  - lgpd
+  - impacto desproporcional
 
 metadata:
   type: module
-  status: DEVELOPING
+  status: ACTIVE
   platform: apex-talent
+  privacy_model: lgpd
+  data_residency: br-only
+  min_group_size: 5
 
 tier_structure:
   tier_0:
-    role: "Module Orchestration"
+    role: "Orchestration & Decision Framing"
     agents: ["insights-chief"]
+  tier_1:
+    role: "Data & Metrics"
+    agents: ["data-weaver", "metric-smith"]
+  tier_2:
+    role: "Prediction & Narrative"
+    agents: ["risk-modeler", "narrative-author"]
+  tier_3:
+    role: "Ethics & Privacy Gate"
+    agents: ["ethics-gate"]
+
+scoring_system:
+  total: 100
+  categories:
+    data_completeness:
+      weight: 20
+      agent: data-weaver
+      checks: ["cross_module_coverage", "data_freshness", "join_integrity"]
+    metric_accuracy:
+      weight: 25
+      agent: metric-smith
+      checks: ["formula_correctness", "determinism", "benchmark_alignment"]
+    model_validity:
+      weight: 25
+      agent: risk-modeler
+      checks: ["cross_signal_combination", "confidence_stated", "no_individual_verdict"]
+    narrative_clarity:
+      weight: 15
+      agent: narrative-author
+      checks: ["correlation_causation_distinction", "actionability", "executive_readability"]
+    ethics_compliance:
+      weight: 15
+      agent: ethics-gate
+      checks: ["min_group_size_respected", "disparate_impact_audited", "lgpd_compliant", "audit_trail_complete"]
+  grade_scale:
+    - { min: 90, label: "Trustworthy & Actionable", color: "#ff6b00" }
+    - { min: 75, label: "Solid with Caveats", color: "#f59e0b" }
+    - { min: 60, label: "Requires Review", color: "#f59e0b" }
+    - { min: 0, label: "Not Releasable / Blocked", color: "#e5484d" }
 
 workflow:
-  primary: "module intake (skeleton)"
+  primary: "wf-analytics-completo"
   phases:
-    - "Phase 1: INTAKE - Understand the need within this module's domain"
-    - "Phase 2: SCOPE - Define the specialist flow to build next"
+    - name: "Phase 1: INTAKE"
+      description: "Frame the decision the analysis informs, scope, time window, segments"
+    - name: "Phase 2: DATA ASSEMBLY"
+      description: "Weave cross-module signals (chronos, performa, pulse, peopleops) into a unified, fresh dataset"
+    - name: "Phase 3: ANALYSIS"
+      description: "Compute deterministic metrics/dashboards + model predictive turnover/burnout risk"
+    - name: "Phase 4: ETHICS GATE"
+      description: "Audit privacy (LGPD, min group size), disparate impact and individual-verdict risk → PASS/VETO"
+    - name: "Phase 5: NARRATIVE"
+      description: "Generate executive narrative with correlation≠causation framing (only after PASS)"
 
 entry_points:
-  intake: "*dashboard"
+  dashboard: "*dashboard"
+  predict: "*predict-turnover"
+  diversity: "*diversity-audit"
+  narrative: "*narrative"
 
 workspace_integration:
-  level: none
-  rationale: >-
-    Modulo insights em desenvolvimento (esqueleto). O Chief faz intake e escopo; ainda nao consome nem produz artefatos no workspace/.
+  level: full
+  produces:
+    - "dashboard.yaml"
+    - "metrics_report.md"
+    - "risk_model.yaml"
+    - "ethics_audit.md"
+    - "executive_narrative.md"
+  consumes:
+    - "from chronos: jornada, horas extra, sinais de fadiga/super-jornada"
+    - "from performa: desempenho, 9-box, ciclos de avaliação"
+    - "from pulse: engajamento, eNPS, sinais de clima"
+    - "from peopleops: headcount, custo de pessoal, eventos de turnover, absenteísmo"
+    - "from onboard: progresso 30/60/90 do novo colaborador"
+  rationale: "Insights é o módulo capstone — não gera dado primário; cruza as fontes de verdade dos demais módulos (jornada, desempenho, clima, folha) em métricas, predição e narrativa para decisão. Por isso o gate de ética/privacidade é obrigatório: o cruzamento amplia poder analítico e risco de uso indevido na mesma medida."

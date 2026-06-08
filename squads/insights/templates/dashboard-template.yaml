@@ -1,0 +1,34 @@
+# Template: People Dashboard
+# Produced by: metric-smith | Consumed by: narrative-author, ethics-gate
+# Every KPI carries formula + source. Cells with n < 5 are suppressed.
+
+dashboard:
+  title: ""                      # ex: "Painel de Pessoas — 1º Semestre/2026"
+  window: ""                     # ex: "2026-01..2026-06"
+  generated_by: "metric-smith"
+  timestamp: ""                  # ISO 8601
+  determinism: "same inputs → same outputs"
+
+  headline_kpis:
+    - name: ""                   # ex: headcount_medio
+      value: null
+      unit: ""                   # ex: pessoas | % | BRL
+      formula: ""                # fórmula explícita
+      source: ""                 # módulo-fonte
+      trend_vs_previous: ""      # ex: "+2pp" | "−5" | "estável"
+
+  segments:
+    - segment: ""                # ex: "area=Engenharia"
+      n: null                    # se < 5 → status "suprimido (n<5)"
+      status: "ok"               # ok | "suprimido (n<5)"
+      kpis: {}                   # { turnover_pct: 19.0, enps: 21, ... }
+
+  diversity_snapshot:            # opcional — só com finalidade declarada (LGPD)
+    enabled: false
+    note: "Preencher só em auditoria de diversidade; respeitar n >= 5."
+
+  data_quality:
+    sources_count: null
+    min_freshness: ""            # data do dado mais antigo usado
+    join_match_pct: null
+    suppressed_groups: []        # grupos n<5 ocultados
