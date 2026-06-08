@@ -1,169 +1,188 @@
-# ClickUp MCP Integration Setup Guide
+# Guia de Configuração da Integração ClickUp MCP
 
-## Overview
+## Visão Geral
 
-This guide helps you set up ClickUp integration with Claude Code using the Model Context Protocol (MCP).
+Este guia ajuda você a configurar a integração do ClickUp com o Claude Code usando o
+Model Context Protocol (MCP).
 
-## Available ClickUp MCP Packages
+## Pacotes ClickUp MCP Disponíveis
 
-Several ClickUp MCP server implementations are available on npm. Here's a comparison:
+Existem várias implementações de servidor ClickUp MCP no npm. Comparação:
 
-| Package | Version | Features | Recommended For |
-|---------|---------|----------|-----------------|
-| `@taazkareem/clickup-mcp-server` | v0.14.4 | Full ClickUp API coverage, task/document/chat management | General use (recommended) |
-| `@chykalophia/clickup-mcp-server` | v5.0.0 | 177+ tools, AI-powered optimization, context-aware workflows | Advanced/AI-focused usage |
-| `@sjotie/clickup-mcp` | v1.8.6 | High-performance, optimized for AI integration | Performance-critical tasks |
-| `@pipeworx/mcp-clickup` | v0.1.0 | Lightweight wrapper around ClickUp REST API v2 | Minimal dependency setup |
-| `@antidrift/mcp-clickup` | v0.22.0 | Workspaces, spaces, tasks, comments | Comprehensive team collaboration |
+| Pacote | Versão | Recursos | Recomendado para |
+|--------|--------|----------|------------------|
+| `@taazkareem/clickup-mcp-server` | v0.14.4+ | Cobertura completa da API do ClickUp, gestão de tarefas/documentos/chat | Uso geral (recomendado) |
+| `@chykalophia/clickup-mcp-server` | v5.0.0 | 177+ ferramentas, otimização com IA, workflows com contexto | Uso avançado/focado em IA |
+| `@sjotie/clickup-mcp` | v1.8.6 | Alta performance, otimizado para integração com IA | Tarefas sensíveis a performance |
+| `@pipeworx/mcp-clickup` | v0.1.0 | Wrapper leve sobre a API REST v2 do ClickUp | Setup com dependências mínimas |
+| `@antidrift/mcp-clickup` | v0.22.0 | Workspaces, spaces, tarefas, comentários | Colaboração de equipe abrangente |
 
-## Recommended Setup: @taazkareem/clickup-mcp-server
+## Setup Recomendado: @taazkareem/clickup-mcp-server
 
-We recommend `@taazkareem/clickup-mcp-server` as it offers:
-- Recent updates (May 2026)
-- Full ClickUp API coverage
-- Support for tasks, documents, and chat management
-- Good community support
-- Clear integration with AI assistants
+Recomendamos o `@taazkareem/clickup-mcp-server` por oferecer:
+- Atualizações recentes
+- Cobertura completa da API do ClickUp
+- Suporte a tarefas, documentos e gestão de chat
+- Bom suporte da comunidade
+- Integração clara com assistentes de IA
 
-## Setup Steps
+> ⚠️ **Requisito de licença (modo local/stdio):** as versões atuais deste pacote exigem
+> **três** variáveis de ambiente para rodar localmente — `CLICKUP_API_KEY`,
+> `CLICKUP_TEAM_ID` (o **Workspace ID**) e `CLICKUP_MCP_LICENSE_KEY` (**chave de licença
+> paga**). Atenção: `CLICKUP_API_TOKEN` **não** é lida pelo servidor. Sem a license key o
+> MCP é registrado, mas não inicia. Se você não possui licença, considere um dos pacotes
+> alternativos listados acima (confirme as variáveis exigidas na documentação de cada um).
 
-### Step 1: Obtain ClickUp API Token
+## Passos de Configuração
 
-1. Go to https://app.clickup.com/settings/apps
-2. Look for "API Token" or "Developer" section
-3. Generate a new API token if you don't have one
-4. Copy the token (keep it secret!)
+### Passo 1: Obter a API Key do ClickUp e o Workspace ID
 
-### Step 2: Install the MCP Server
+1. Acesse https://app.clickup.com/settings/apps
+2. Procure a seção "API Token" ou "Developer"
+3. Gere uma nova API key, caso ainda não tenha
+4. Copie a chave (mantenha em segredo!)
+5. Anote também o seu **Workspace ID** (usado como `CLICKUP_TEAM_ID`)
+
+### Passo 2: Obter a License Key
+
+A versão atual do `@taazkareem/clickup-mcp-server` exige uma `CLICKUP_MCP_LICENSE_KEY`
+para o modo local/stdio. Obtenha-a com o mantenedor do pacote.
+
+### Passo 3: Adicionar o ClickUp MCP ao Claude Code
 
 ```bash
-npm install -g @taazkareem/clickup-mcp-server
-```
-
-### Step 3: Add ClickUp MCP to Claude Code
-
-```bash
-export CLICKUP_API_TOKEN="your_token_here"
+export CLICKUP_API_KEY="sua_api_key"
+export CLICKUP_TEAM_ID="seu_workspace_id"
+export CLICKUP_MCP_LICENSE_KEY="sua_license_key"
 claude mcp add ClickUp \
-  -e CLICKUP_API_TOKEN=$CLICKUP_API_TOKEN \
-  -- npx @taazkareem/clickup-mcp-server
+  -e CLICKUP_API_KEY=$CLICKUP_API_KEY \
+  -e CLICKUP_TEAM_ID=$CLICKUP_TEAM_ID \
+  -e CLICKUP_MCP_LICENSE_KEY=$CLICKUP_MCP_LICENSE_KEY \
+  -- npx -y @taazkareem/clickup-mcp-server
 ```
 
-### Step 4: Verify Installation
+> A flag `-y` evita que o `npx` peça confirmação interativa ao baixar o pacote — o Claude
+> Code executa os MCP servers sem TTY, então o prompt travaria a inicialização.
+
+### Passo 4: Verificar a Instalação
 
 ```bash
 claude mcp list
 ```
 
-You should see `ClickUp` in the list of available MCPs.
+Você deve ver `ClickUp` na lista de MCPs disponíveis.
 
-### Step 5: Test the Integration
+### Passo 5: Testar a Integração
 
-Try using ClickUp tasks from Claude Code. The MCP should enable:
-- List tasks and workspaces
-- Create and update tasks
-- Manage task comments
-- View task attachments
-- Access document management
+Experimente usar as tarefas do ClickUp a partir do Claude Code. O MCP deve permitir:
+- Listar tarefas e workspaces
+- Criar e atualizar tarefas
+- Gerenciar comentários de tarefas
+- Visualizar anexos de tarefas
+- Acessar a gestão de documentos
 
-## Alternative: Using Another Package
+## Alternativa: Usando Outro Pacote
 
-If you prefer a different package, simply replace the package name and command:
+Se preferir um pacote diferente, basta substituir o nome do pacote e o comando.
 
-### @chykalophia/clickup-mcp-server (Advanced)
+> **Atenção às variáveis de ambiente:** cada pacote pode ler variáveis diferentes
+> (e alguns não exigem license key). Confirme os nomes exatos na documentação do pacote
+> escolhido antes de configurar.
+
+### @chykalophia/clickup-mcp-server (Avançado)
 ```bash
-npm install -g @chykalophia/clickup-mcp-server
-export CLICKUP_API_TOKEN="your_token_here"
+export CLICKUP_API_KEY="sua_api_key"
 claude mcp add ClickUp \
-  -e CLICKUP_API_TOKEN=$CLICKUP_API_TOKEN \
-  -- npx @chykalophia/clickup-mcp-server
+  -e CLICKUP_API_KEY=$CLICKUP_API_KEY \
+  -- npx -y @chykalophia/clickup-mcp-server
 ```
 
-### @pipeworx/mcp-clickup (Lightweight)
+### @pipeworx/mcp-clickup (Leve)
 ```bash
-npm install -g @pipeworx/mcp-clickup
-export CLICKUP_API_TOKEN="your_token_here"
+export CLICKUP_API_KEY="sua_api_key"
 claude mcp add ClickUp \
-  -e CLICKUP_API_TOKEN=$CLICKUP_API_TOKEN \
-  -- npx @pipeworx/mcp-clickup
+  -e CLICKUP_API_KEY=$CLICKUP_API_KEY \
+  -- npx -y @pipeworx/mcp-clickup
 ```
 
-## Troubleshooting
+## Resolução de Problemas
 
-### Token Not Recognized
-- Verify the token at https://app.clickup.com/settings/apps
-- Ensure the token is set in the environment: `echo $CLICKUP_API_TOKEN`
-- Check that the token is passed correctly to the MCP server
+### Token Não Reconhecido
+- Verifique a API key em https://app.clickup.com/settings/apps
+- Confirme que as variáveis estão definidas no ambiente: `env | grep CLICKUP`
+- Verifique se as credenciais estão sendo passadas corretamente ao MCP server
 
-### MCP Connection Failed
+### Falha na Conexão do MCP
 ```bash
-# Run the diagnostic script
+# Rode o script de diagnóstico
 ./fix-mcp.sh
 
-# Check the token explicitly
+# Confira as variáveis explicitamente
 env | grep CLICKUP
 
-# Try to list ClickUp resources
+# Tente listar os recursos do ClickUp
 claude mcp list
 ```
 
-### Permissions Issues
-- In Claude Code, you may be prompted to approve MCP access
-- Click "Allow" or "Approve" when prompted
-- If denied, re-run the `claude mcp add` command
+### Problemas de Permissão
+- No Claude Code, você pode ser solicitado a aprovar o acesso do MCP
+- Clique em "Allow" ou "Approve" quando solicitado
+- Se negado, execute novamente o comando `claude mcp add`
 
-## Security Best Practices
+## Boas Práticas de Segurança
 
-⚠️ **Never commit your API token to git:**
+⚠️ **Nunca commite sua API key ou license key no git:**
 
-1. Add to `.gitignore`:
-   ```
+1. Adicione ao `.gitignore`:
+   ```text
    .env
    .env.local
    ```
 
-2. Store the token in environment variables:
+2. Armazene as credenciais em variáveis de ambiente:
    ```bash
-   # Add to ~/.bashrc, ~/.zshrc, or ~/.env
-   export CLICKUP_API_TOKEN="your_token_here"
+   # Adicione ao ~/.bashrc, ~/.zshrc ou ~/.env
+   export CLICKUP_API_KEY="sua_api_key"
+   export CLICKUP_TEAM_ID="seu_workspace_id"
+   export CLICKUP_MCP_LICENSE_KEY="sua_license_key"
    ```
 
-3. Or use a credentials manager:
+3. Ou use um gerenciador de credenciais:
    ```bash
-   # macOS Keychain
-   security add-generic-password -s "ClickUp API Token" -a "$USER" -w "your_token_here"
-   
-   # Then retrieve it
-   export CLICKUP_API_TOKEN=$(security find-generic-password -s "ClickUp API Token" -w)
+   # Keychain do macOS
+   security add-generic-password -s "ClickUp API Key" -a "$USER" -w "sua_api_key"
+
+   # E então recupere-a
+   export CLICKUP_API_KEY=$(security find-generic-password -s "ClickUp API Key" -w)
    ```
 
-## Updating the Package
+## Atualizando o Pacote
 
-To update to a newer version:
+Para atualizar para uma versão mais recente:
 
 ```bash
 npm install -g @taazkareem/clickup-mcp-server@latest
 ```
 
-Then verify with:
+Depois verifique com:
 ```bash
 claude mcp list
 ```
 
-## Removing ClickUp MCP
+## Removendo o ClickUp MCP
 
-If you need to remove the integration:
+Se precisar remover a integração:
 
 ```bash
 claude mcp remove ClickUp
 ```
 
-## Additional Resources
+## Recursos Adicionais
 
-- ClickUp API Documentation: https://clickup.com/api
-- MCP Documentation: https://modelcontextprotocol.io
-- ClickUp Settings: https://app.clickup.com/settings
+- Documentação da API do ClickUp: https://clickup.com/api
+- Documentação do MCP: https://modelcontextprotocol.io
+- Configurações do ClickUp: https://app.clickup.com/settings
 
 ---
 
-For more MCP setup information, see `CLAUDE.md` or `MCP_SETUP_PLAN.md`.
+Para mais informações sobre configuração de MCP, veja `CLAUDE.md` ou `MCP_SETUP_PLAN.md`.

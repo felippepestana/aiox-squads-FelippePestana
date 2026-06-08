@@ -22,12 +22,17 @@
 1. **MCP_DOCKER: Failed to connect**
    - Causa: Docker socket não disponível (`/var/run/docker.sock` não existe)
    - Contexto: Rodando em container sem acesso ao Docker do host
-   - Solução: Não aplicável em container, mas configuração está correta
+   - Diagnóstico correto: a **configuração é válida**, porém o servidor é
+     **não-funcional neste ambiente** — sem socket/daemon não há a quem se conectar.
+     Só passa a funcionar onde o socket do Docker está montado.
 
 2. **shell: Failed to connect**
-   - Causa: Provável problema com argumentos do shell MCP
-   - Contexto: `/bin/bash` sozinho pode não iniciar corretamente como stdio
-   - Solução: Reconfigurar com wrapper ou script de inicialização
+   - Causa real: **`/bin/bash` não é um servidor MCP.** Um MCP server precisa falar o
+     protocolo MCP (JSON-RPC 2.0 sobre stdio); o bash puro lê comandos do stdin e os
+     executa, mas **não implementa JSON-RPC**. Por isso registrar `/bin/bash` como MCP
+     **sempre** resulta em "Failed to connect" — não é problema de "argumentos especiais".
+   - Correção: usar um servidor MCP de shell **de verdade** (ver PASSO 3). Lembrando que
+     o Claude Code **já possui ferramenta Bash nativa**, então este MCP é complementar.
 
 3. **MCPs Configurados: 0**
    - Causa: Discrepância entre `.claude.json` (raiz) e config do projeto
@@ -48,53 +53,62 @@
 - [x] Configurar MCP_DOCKER via `claude mcp add`
 - [x] Configurar shell via `claude mcp add`
 
-### PASSO 3: Corrigir Configuração do Shell 🔧
-**Problema:** `/bin/bash` como stdio precisa de argumentos especiais
+### PASSO 3: Configurar o Shell com um Servidor MCP Real 🔧
+**Problema:** `/bin/bash` puro **não** é um servidor MCP (não fala JSON-RPC), portanto
+nunca conecta. A solução **não** é wrapper de bash — é usar um servidor que implemente
+o protocolo MCP e exponha execução de comandos como ferramenta.
 
-**Opção A - Wrapper Script (Recomendado):**
+**Solução — `mcp-server-commands` (servidor MCP real, stdio):**
 ```bash
-# Criar: ~/.claude/shell-wrapper.sh
-#!/bin/bash
-exec bash "$@"
+# Remove qualquer registro inválido anterior
+claude mcp remove shell || true
 
-# Adicionar ao Claude:
-claude mcp remove shell
-claude mcp add shell -- ~/.claude/shell-wrapper.sh
+# Servidor MCP real: expõe a ferramenta `run_process` via stdio
+# -y evita prompt interativo do npx ao baixar o pacote (Claude Code roda sem TTY)
+claude mcp add shell -- npx -y mcp-server-commands
 ```
 
-**Opção B - Usar npx com mcp-server-bash:**
-```bash
-# Se existir pacote, instalar e usar:
-npm install -g @modelcontextprotocol/server-bash
-claude mcp remove shell
-claude mcp add shell -- npx @modelcontextprotocol/server-bash
-```
+> **Nota de redundância:** o Claude Code já possui **ferramenta Bash nativa**. Este MCP só
+> é necessário se você quiser expor `run_process` explicitamente via MCP (ex.: para outro
+> cliente). Para uso comum, a ferramenta nativa já cobre a necessidade.
+>
+> **Nota de viabilidade:** `npx mcp-server-commands` baixa o pacote na primeira execução,
+> exigindo egress de rede. No devcontainer, o firewall usa **allowlist** — garanta que o
+> registry do npm está liberado, ou pré-instale o pacote.
 
-**Opção C - Simples (Atual):**
-```bash
-claude mcp add shell -- /bin/bash
-```
+⚠️ **Não usar** `@anthropic-ai/mcp-server-bash` nem `@modelcontextprotocol/server-bash`:
+**esses pacotes não existem no npm.**
 
-### PASSO 4: Documentação de Erro do Docker
-**Aviso:** Se rodando em container sem acesso a Docker socket:
-- MCP_DOCKER não funcionará até que Docker socket seja montado
-- Solução: `docker run -v /var/run/docker.sock:/var/run/docker.sock ...`
-- Para devcontainer: Já configurado ou requer `--dangerously-skip-permissions`
+### PASSO 4: Viabilidade do Docker MCP
+**Estado:** a configuração do `MCP_DOCKER` é **válida**, mas o servidor só é **funcional**
+onde existe um daemon acessível via socket. Resumo de viabilidade:
+- **Neste container (sem socket):** não-funcional → degrada graciosamente (N/A).
+- **Host/ambiente com Docker:** funcional montando o socket, por exemplo:
+  `docker run -v /var/run/docker.sock:/var/run/docker.sock ...`
+- **Devcontainer:** requer o socket montado; com `--dangerously-skip-permissions` o
+  workspace fica irrestrito, mas isso **não** cria o socket por si só.
 
 ### PASSO 5: ClickUp MCP (Opcional)
-Se credencial disponível:
+Pacote definido: **`@taazkareem/clickup-mcp-server`** (ver `CLICKUP_SETUP.md`, fonte única
+do procedimento).
+
+⚠️ **Requisito de licença:** as versões atuais deste pacote, no modo local/stdio, exigem
+**três** variáveis de ambiente — `CLICKUP_API_KEY`, `CLICKUP_TEAM_ID` (o **Workspace ID**)
+e `CLICKUP_MCP_LICENSE_KEY` (**chave de licença paga**). A variável `CLICKUP_API_TOKEN`
+**não** é lida pelo servidor. Sem a license key, o MCP é registrado, mas não inicia.
+
 ```bash
-# Obter token em: https://app.clickup.com/settings/apps
-export CLICKUP_API_TOKEN="pk_SEU_TOKEN_AQUI"
+# Obter API key em: https://app.clickup.com/settings/apps
+export CLICKUP_API_KEY="pk_SUA_API_KEY"
+export CLICKUP_TEAM_ID="SEU_WORKSPACE_ID"
+export CLICKUP_MCP_LICENSE_KEY="SUA_LICENSE_KEY"
 
-# Instalar (nome precisa ser verificado)
-npm install -g @clickup/mcp-server  # OU
-npm install -g @modelcontextprotocol/server-clickup
-
-# Adicionar
+# Adicionar (npx baixa o pacote sob demanda; -y evita prompt interativo)
 claude mcp add ClickUp \
-  -e CLICKUP_API_TOKEN=$CLICKUP_API_TOKEN \
-  -- npx @modelcontextprotocol/server-clickup
+  -e CLICKUP_API_KEY=$CLICKUP_API_KEY \
+  -e CLICKUP_TEAM_ID=$CLICKUP_TEAM_ID \
+  -e CLICKUP_MCP_LICENSE_KEY=$CLICKUP_MCP_LICENSE_KEY \
+  -- npx -y @taazkareem/clickup-mcp-server
 ```
 
 ### PASSO 6: Validação Final
@@ -131,8 +145,8 @@ Após todos os passos, `~/.claude.json` deve ter:
     },
     "shell": {
       "type": "stdio",
-      "command": "/bin/bash",
-      "args": [],
+      "command": "npx",
+      "args": ["-y", "mcp-server-commands"],
       "env": {}
     }
   }
@@ -154,11 +168,11 @@ npx -y docker-mcp --version 2>&1
 
 ### Teste 2: Shell MCP
 ```bash
-# Esperado: ✓ Conectado
+# Esperado: ✓ Conectado (servidor MCP real respondendo via stdio)
 claude mcp list | grep shell
 
-# Diagnosticar:
-/bin/bash --version
+# Diagnosticar (deve resolver/baixar o servidor MCP, não o bash):
+npx -y mcp-server-commands --help 2>&1 | head -n 5
 ```
 
 ### Teste 3: Arquivo de Config
@@ -183,12 +197,10 @@ echo "🔄 Removendo MCPs antigos..."
 claude mcp remove MCP_DOCKER || true
 claude mcp remove shell || true
 
-echo "📦 Reinstalando packages..."
-npm install -g docker-mcp
-
 echo "➕ Adicionando MCPs..."
-claude mcp add MCP_DOCKER -- npx -y docker-mcp
-claude mcp add shell -- /bin/bash
+# docker-mcp e mcp-server-commands são baixados via npx sob demanda
+claude mcp add MCP_DOCKER -- npx -y docker-mcp        # funcional só com socket do Docker
+claude mcp add shell -- npx -y mcp-server-commands    # servidor MCP de shell real (NÃO /bin/bash)
 
 echo "✅ Verificando..."
 claude mcp list
@@ -209,8 +221,11 @@ echo "✨ Concluído!"
 - **Diretório MCP Config:** `~/.claude.json` (global) e `.claude.json` (projeto)
 - **Documentação Claude:** https://claude.ai/docs (quando disponível)
 - **MCP Packages:** 
-  - `docker-mcp` - v1.0.0 (instalado ✅)
-  - `@anthropic-ai/mcp-server-bash` - ❌ não existe no npm
+  - `docker-mcp` - real, porém **funcional apenas com socket do Docker montado**
+  - `mcp-server-commands` - servidor MCP de shell real (`npx mcp-server-commands`,
+    ferramenta `run_process`) — substitui o `/bin/bash` puro
+  - `@anthropic-ai/mcp-server-bash` - ❌ **não existe no npm** (não usar)
+  - `@modelcontextprotocol/server-bash` - ❌ **não existe no npm** (não usar)
 
 ---
 
@@ -226,6 +241,21 @@ echo "✨ Concluído!"
 
 ---
 
+## 📐 MATRIZ DE VIABILIDADE
+
+Resumo honesto do que é alcançável, fechando o gap entre diagnóstico e finalidade:
+
+| Componente | Viabilidade | Caminho | Observação |
+|-----------|-------------|---------|------------|
+| **shell MCP** | ✅ Funcional | `npx mcp-server-commands` | Servidor MCP real (stdio, `run_process`). Requer egress de rede (allowlist do firewall). Redundante com a Bash nativa do Claude Code. |
+| **ClickUp MCP** | ⚠️ Funcional c/ licença | `@taazkareem/clickup-mcp-server` | Opcional; modo local exige `CLICKUP_API_KEY` + `CLICKUP_TEAM_ID` + `CLICKUP_MCP_LICENSE_KEY` (**licença paga**). Ver `CLICKUP_SETUP.md`. |
+| **MCP_DOCKER** | ⚠️ Degradado | `docker-mcp` (com socket) | Config válida, mas **não-funcional neste container** (sem `/var/run/docker.sock`). Funcional só onde o socket estiver montado. |
+| `/bin/bash` como MCP | ❌ Descartado | — | Bash puro não fala JSON-RPC; **nunca** conecta como MCP. Substituído pelo `mcp-server-commands`. |
+| `@anthropic-ai/mcp-server-bash` | ❌ Descartado | — | Pacote **não existe** no npm. |
+| `@modelcontextprotocol/server-bash` | ❌ Descartado | — | Pacote **não existe** no npm. |
+
+---
+
 ## 🎯 OBJETIVO FINAL
 
 ✅ **Estado Desejado:**
@@ -236,4 +266,4 @@ echo "✨ Concluído!"
 
 ---
 
-*Última atualização: 2026-05-05 13:00 UTC*
+*Última atualização: 2026-06-08 — diagnóstico corrigido e plano adequado à viabilidade real*

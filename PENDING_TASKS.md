@@ -13,29 +13,40 @@
 - ✅ Script support em `fix-mcp.sh`
 - ⏳ Awaiting configuration & testing
 
+> **Pacote definido:** `@taazkareem/clickup-mcp-server` (fonte única: `CLICKUP_SETUP.md`).
+> A incerteza de pacote foi resolvida — não usar `@clickup/mcp-server` nem
+> `@modelcontextprotocol/server-clickup` (este último não existe no npm).
+>
+> **Requisito de licença:** o modo local/stdio exige `CLICKUP_API_KEY` +
+> `CLICKUP_TEAM_ID` + `CLICKUP_MCP_LICENSE_KEY` (**licença paga**). `CLICKUP_API_TOKEN`
+> não é lida pelo servidor.
+
 ### Tasks
-- [ ] Obter ClickUp API token (https://app.clickup.com/settings/apps)
-- [ ] Testar disponibilidade do MCP package
-  - Verificar `@clickup/mcp-server` ou `@modelcontextprotocol/server-clickup`
-  - Determinar nome correto e versão no npm
+- [ ] Obter ClickUp API key (https://app.clickup.com/settings/apps) e Workspace ID
+- [ ] Adquirir a license key (`CLICKUP_MCP_LICENSE_KEY`) para uso local/stdio
 - [ ] Configurar no Claude Code local
   ```bash
-  npm install -g @clickup/mcp-server  # (ou package correto)
   claude mcp add ClickUp \
-    -e CLICKUP_API_TOKEN=pk_YOUR_TOKEN \
-    -- npx @modelcontextprotocol/server-clickup
+    -e CLICKUP_API_KEY=pk_SUA_API_KEY \
+    -e CLICKUP_TEAM_ID=SEU_WORKSPACE_ID \
+    -e CLICKUP_MCP_LICENSE_KEY=SUA_LICENSE_KEY \
+    -- npx -y @taazkareem/clickup-mcp-server
   ```
 - [ ] Testar conexão: `claude mcp list`
 - [ ] Atualizar documentação em `CLAUDE.md`
 
 ### Acceptance Criteria
 - [ ] ClickUp MCP conectado e funcional
-- [ ] Token seguramente armazenado (não commitado)
+- [ ] Credenciais (API key + license key) seguramente armazenadas (não commitadas)
 - [ ] Documentação completa
 - [ ] `claude mcp list` mostra ClickUp como connected
 
 ### Referência
-Ver `MCP_SETUP_PLAN.md` linhas 84-98 para detalhes completos
+Ver `MCP_SETUP_PLAN.md` (PASSO 5) e `CLICKUP_SETUP.md` para detalhes completos.
+
+> **Nota — shell MCP resolvido:** o antigo plano registrava `/bin/bash` como MCP, o que é
+> inviável (bash não fala JSON-RPC). Substituído pelo servidor MCP real
+> `mcp-server-commands` (`npx mcp-server-commands`). Ver `MCP_SETUP_PLAN.md` (PASSO 3).
 
 ---
 

@@ -83,22 +83,27 @@ MCPs são servidores que estendem as capacidades do Claude Code. Este projeto ut
   - Requer: Docker daemon rodando (acesso ao `/var/run/docker.sock`)
   - Instalação: `npm install -g docker-mcp`
 
-- **shell**: Executar comandos bash
-  - Comando: `/bin/bash`
-  - Sempre disponível no sistema
+- **shell**: Executar comandos via servidor MCP de shell
+  - Pacote: `mcp-server-commands` (`npx mcp-server-commands`), expõe a ferramenta `run_process`
+  - Nota: `/bin/bash` puro **não** é um servidor MCP (não fala JSON-RPC) — use o pacote acima
+  - Complementar à ferramenta Bash nativa do Claude Code
   - Requer aprovação explícita no Claude Code
 
 - **ClickUp** (opcional): Integração com ClickUp para gerenciamento de tarefas
-  - Pacote recomendado: `@taazkareem/clickup-mcp-server` (v0.14.4+)
-  - Requer: Token de API do ClickUp
-  - Obtenção do token: https://app.clickup.com/settings/apps
+  - Pacote recomendado: `@taazkareem/clickup-mcp-server`
+  - Requer (modo local/stdio): `CLICKUP_API_KEY`, `CLICKUP_TEAM_ID` (Workspace ID) e
+    `CLICKUP_MCP_LICENSE_KEY` (**licença paga**). `CLICKUP_API_TOKEN` não é lida.
+  - Obtenção da API key: https://app.clickup.com/settings/apps
   - Instalação:
     ```bash
-    npm install -g @taazkareem/clickup-mcp-server
-    export CLICKUP_API_TOKEN="seu_token_aqui"
+    export CLICKUP_API_KEY="sua_api_key"
+    export CLICKUP_TEAM_ID="seu_workspace_id"
+    export CLICKUP_MCP_LICENSE_KEY="sua_license_key"
     claude mcp add ClickUp \
-      -e CLICKUP_API_TOKEN=$CLICKUP_API_TOKEN \
-      -- npx @taazkareem/clickup-mcp-server
+      -e CLICKUP_API_KEY=$CLICKUP_API_KEY \
+      -e CLICKUP_TEAM_ID=$CLICKUP_TEAM_ID \
+      -e CLICKUP_MCP_LICENSE_KEY=$CLICKUP_MCP_LICENSE_KEY \
+      -- npx -y @taazkareem/clickup-mcp-server
     ```
 
 ### Diagnóstico e Resolução de MCPs
@@ -117,9 +122,8 @@ Caso encontre erros de conexão com MCPs:
 
 3. **Reinstalar MCPs:**
    ```bash
-   npm install -g docker-mcp
-   claude mcp add MCP_DOCKER -- npx -y docker-mcp
-   claude mcp add shell -- /bin/bash
+   claude mcp add MCP_DOCKER -- npx -y docker-mcp   # funcional só com socket do Docker montado
+   claude mcp add shell -- npx -y mcp-server-commands  # servidor MCP de shell real (NÃO /bin/bash)
    ```
 
 ### Documentação Detalhada

@@ -43,21 +43,32 @@ else
   err "npx não encontrado - instale Node.js"
 fi
 
+# Verifica dependências opcionais antes de usá-las (degrada graciosamente se ausentes)
+if command -v npm > /dev/null 2>&1; then HAS_NPM=1; else HAS_NPM=0; warn "npm não encontrado; checagem de MCPs globais será ignorada"; fi
+if command -v python3 > /dev/null 2>&1; then HAS_PYTHON=1; else HAS_PYTHON=0; warn "python3 não encontrado; validação de ~/.claude.json será limitada"; fi
+
 echo ""
 echo "4️⃣ MCPs Instalados Globalmente:"
-DOCKER_MCP=$(npm list -g docker-mcp 2>&1 | grep "docker-mcp@" | head -1 || echo "")
-BASH_MCP=$(npm list -g @anthropic-ai/mcp-server-bash 2>&1 | grep "mcp-server-bash" | head -1 || echo "")
+if [ "$HAS_NPM" -eq 1 ]; then
+  # --depth=0 limita a busca aos pacotes globais de topo (evita varrer a árvore inteira)
+  DOCKER_MCP=$(npm list -g docker-mcp --depth=0 2>&1 | grep "docker-mcp@" | head -1 || echo "")
+  # Servidor MCP de shell real (substitui o /bin/bash puro, que NÃO é um MCP server)
+  SHELL_MCP=$(npm list -g mcp-server-commands --depth=0 2>&1 | grep "mcp-server-commands@" | head -1 || echo "")
+else
+  DOCKER_MCP=""
+  SHELL_MCP=""
+fi
 
 if [ -n "$DOCKER_MCP" ]; then
   ok "docker-mcp: $(echo "$DOCKER_MCP" | cut -d'@' -f2)"
 else
-  warn "docker-mcp não instalado globalmente"
+  warn "docker-mcp não instalado globalmente (será baixado via npx sob demanda)"
 fi
 
-if [ -n "$BASH_MCP" ]; then
-  ok "@anthropic-ai/mcp-server-bash instalado"
+if [ -n "$SHELL_MCP" ]; then
+  ok "mcp-server-commands: $(echo "$SHELL_MCP" | cut -d'@' -f2)"
 else
-  warn "@anthropic-ai/mcp-server-bash não instalado"
+  warn "mcp-server-commands não instalado globalmente (será baixado via npx sob demanda)"
 fi
 
 echo ""
@@ -66,7 +77,9 @@ CONFIG="$HOME/.claude.json"
 if [ -f "$CONFIG" ]; then
   ok "Arquivo existe: $CONFIG"
 
-  if python3 -m json.tool < "$CONFIG" > /dev/null 2>&1; then
+  if [ "$HAS_PYTHON" -eq 0 ]; then
+    warn "python3 ausente; pulando validação detalhada do JSON"
+  elif python3 -m json.tool < "$CONFIG" > /dev/null 2>&1; then
     ok "JSON válido"
 
     MCP_COUNT=$(python3 -c "import json; data = json.load(open('$CONFIG')); print(len(data.get('mcpServers', {})))" 2>/dev/null || echo "0")
@@ -85,7 +98,7 @@ for name, config in mcps.items():
     err "JSON inválido no arquivo de config"
   fi
 else
-  err "Arquivo de config não encontrado: $CONFIG"
+  warn "Arquivo de config não encontrado: $CONFIG (será criado ao adicionar um MCP)"
 fi
 
 echo ""
@@ -116,12 +129,11 @@ echo ""
 echo "Se algum item falhou:"
 echo "  1. Docker: Abra Docker Desktop e verifique 'docker info'"
 echo "  2. MCPs: Execute 'claude mcp list' para status detalhado"
-echo "  3. Credenciais: Defina CLICKUP_API_TOKEN se usar ClickUp"
+echo "  3. Credenciais ClickUp: Defina CLICKUP_API_KEY + CLICKUP_TEAM_ID + CLICKUP_MCP_LICENSE_KEY"
 echo "  4. Config: Verifique ~/.claude.json manualmente"
 echo ""
 echo "Para reinstalar MCPs:"
-echo "  npm install -g docker-mcp"
-echo "  claude mcp add MCP_DOCKER -- npx -y docker-mcp"
-echo "  claude mcp add shell -- /bin/bash"
+echo "  claude mcp add MCP_DOCKER -- npx -y docker-mcp   # funcional só com socket do Docker"
+echo "  claude mcp add shell -- npx -y mcp-server-commands  # servidor MCP de shell real (NÃO /bin/bash)"
 echo ""
 step "FIM DO DIAGNÓSTICO"
