@@ -1,0 +1,37 @@
+# Template: Learning Quality Audit
+# Produced by: learning-gate
+# Mandatory gate before publishing. PASS or VETO — no "PASS with caveat" on content error.
+
+learning_audit:
+  audited_by: "learning-gate"
+  timestamp: ""
+  track_ref: ""
+
+  checks:
+    objectives_measurable:
+      all_have_criteria: null
+      passed: null
+    sme_verification:
+      critical_content_present: null
+      flags_resolved: null
+      passed: null
+    application_focus:
+      assessment_kirkpatrick_max: null
+      measures_only_completion: null
+      passed: null
+    accessibility:
+      alt_channels_present: null
+      readability_ok: null
+      passed: null
+    audit_trail:
+      complete: null
+      passed: null
+
+  verdict: ""                    # PASS | VETO
+  # se PASS:
+  clearance_statement: ""
+  next_action: ""
+  # se VETO:
+  reasons: []
+  remediation_steps: []
+  resubmit: ""
