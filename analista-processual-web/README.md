@@ -86,9 +86,13 @@ npm run dev
 > análise execute. Sem provedor configurado, a análise é marcada como `FAILED`
 > com uma mensagem explicativa (a aplicação não quebra).
 
-### Desenvolvimento local no macOS (passo a passo)
+### Desenvolvimento local (passo a passo)
 
-Pré-requisitos: Node 20+ e Docker Desktop.
+Pré-requisitos em qualquer sistema: **Node 20+** e **Docker Desktop** (para o
+Postgres local). Os passos são idênticos no macOS e no Windows — muda apenas a
+sintaxe de como você define as variáveis de ambiente no terminal.
+
+#### macOS / Linux (bash/zsh)
 
 ```bash
 # 1. Subir um Postgres local (Docker Desktop)
@@ -109,9 +113,71 @@ npm run db:seed
 npm run dev   # http://localhost:3000
 ```
 
-Teste o fluxo: **Dashboard → Nova Análise**, envie um `.txt`/`.pdf`/`.docx` e
-acompanhe o resultado (resumo, partes, prazos e riscos). Para encerrar o banco:
-`docker compose down` (use `-v` para apagar os dados).
+#### Windows (PowerShell — Alienware)
+
+```powershell
+# 1. Subir um Postgres local (Docker Desktop para Windows precisa estar aberto)
+docker compose up -d
+
+# 2. Variáveis de ambiente
+Copy-Item .env.example .env.local
+# Edite .env.local (ex.: notepad .env.local) e defina:
+#   DATABASE_URL="postgresql://analista:analista@localhost:5432/analista_processual"
+#   OPENAI_API_KEY="sk-..."
+
+# 3. Instalar e preparar o banco
+npm install
+npm run db:push
+npm run db:seed
+
+# 4. Rodar
+npm run dev   # http://localhost:3000
+```
+
+> No Windows, use o **PowerShell** (não o `cmd.exe`). Se preferir o WSL2, siga as
+> instruções de macOS/Linux dentro do WSL. O Docker Desktop precisa estar em
+> execução antes do `docker compose up -d`.
+
+Teste o fluxo manualmente: **Dashboard → Nova Análise**, envie um
+`.txt`/`.pdf`/`.docx` e acompanhe o resultado (resumo, partes, prazos e riscos).
+Para encerrar o banco: `docker compose down` (use `-v` para apagar os dados).
+
+### Smoke test ponta-a-ponta (macOS e Windows)
+
+Com o servidor rodando (`npm run dev`) em um terminal, execute em **outro
+terminal** — o comando é o mesmo nos dois sistemas:
+
+```bash
+npm run test:smoke
+```
+
+O script (`scripts/smoke-test.mjs`, Node puro, sem dependências) exercita o fluxo
+real contra `http://localhost:3000`:
+
+1. cria a análise (`POST /api/analyses`);
+2. envia um processo fictício de exemplo e extrai o texto
+   (`scripts/fixtures/processo-exemplo.txt`);
+3. roda o pipeline multiagente (`POST /api/analyses/:id/process`);
+4. lê o resultado persistido (`GET /api/analyses/:id`).
+
+Resultados possíveis:
+
+- **PASS** — o pipeline concluiu (`COMPLETED`); imprime resumo, partes, riscos e score.
+- **PASS (plumbing)** — criação/upload/extração/persistência OK, mas o pipeline
+  foi marcado `FAILED` por falta de `OPENAI_API_KEY`. Útil para validar a
+  infraestrutura sem consumir a API.
+- **FAIL** — servidor inacessível, erro HTTP ou falha inesperada do pipeline.
+
+Opções úteis:
+
+```bash
+npm run test:smoke -- --require-completed        # exige COMPLETED (requer chave LLM)
+npm run test:smoke -- --base-url=http://host:porta
+npm run test:smoke -- --file=./caminho/para/seu-processo.pdf
+```
+
+> No PowerShell o `--` extra do npm também funciona:
+> `npm run test:smoke -- --require-completed`.
 
 ## Deploy
 
@@ -142,6 +208,7 @@ Veja o guia completo em [`../docs/deploy/vercel.md`](../docs/deploy/vercel.md), 
 - [x] Upload de documentos + extração de texto (texto, PDF e DOCX)
 - [x] Fluxo de análise ponta-a-ponta (criar → processar → visualizar)
 - [x] Dashboard e listagem com dados reais
+- [x] Smoke test E2E cross-platform (`npm run test:smoke`, macOS e Windows)
 - [ ] Autenticação (Supabase) — substituir o perfil demo
 - [ ] OCR para `.doc` legado e imagens
 - [ ] Biblioteca de jurisprudência (busca semântica)
