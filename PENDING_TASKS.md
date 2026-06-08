@@ -84,30 +84,33 @@ Ver `MCP_SETUP_PLAN.md` (PASSO 5) e `CLICKUP_SETUP.md` para detalhes completos.
 ## 3. 📊 Docker Security Scan Failures
 
 ### Status
-- ❌ Trivy security scan falhando
+- ✅ **Resolvido** — o workflow `Docker Security Scan` passa na `main`
 - 📍 Pré-existente (não relacionado ao PR #25)
-- 🔍 Requer investigação
 
-### Contexto
-- Workflow: `.github/workflows/docker-security.yml`
-- Verifica: `chatbot/Dockerfile` e `web/Dockerfile`
-- Issue: Build de imagens falhando antes do scan
+### Causa Raiz (corrigida)
+A descrição anterior ("build de imagens falhando antes do scan") estava imprecisa.
+O log da última falha (run `26760409141`, 2026-06-01, branch `cursor/devenv-setup-f03a`)
+mostra que o **build das imagens não era o problema** — a falha era na resolução da action:
 
-### Investigação Necessária
-- [ ] Testar build das imagens localmente
-  ```bash
-  docker build -f chatbot/Dockerfile -t aiox-chatbot:test .
-  docker build -f web/Dockerfile -t aiox-web:test .
-  ```
-- [ ] Verificar dependências em `chatbot/package.json`
-- [ ] Verificar dependências em `web/package.json`
-- [ ] Checar se há secrets/env vars faltando
+```text
+##[error]Unable to resolve action `aquasecurity/setup-trivy@v0.2.1`, unable to find version `v0.2.1`
+```
 
-### Próximos Passos
-1. Reproduzir error localmente
-2. Identificar qual step está falhando
-3. Corrigir Dockerfile ou dependências
-4. Testar novo build
+O `aquasecurity/trivy-action@v0.28.0` referenciava internamente o `setup-trivy@v0.2.1`,
+tag **removida durante o incidente de supply-chain GHSA-69fq-xp46-6x23** (CVE-2026-33634,
+mar/2026).
+
+### Correção Aplicada
+Já presente em `.github/workflows/docker-security.yml`:
+- `aquasecurity/trivy-action` **pinado em v0.35.0 por SHA completo**
+  (`57a97c7e7821a5776cebc9bb87c984fa69cba8f1`), fora da janela do ataque
+- `permissions: security-events: write` adicionada (upload SARIF deixava de dar 403)
+- Self-trigger de paths do workflow removido do gatilho de PR (evita "Set up job" espúrio)
+
+### Evidência
+- Run `27112357907` (push `main`, 2026-06-08): todos os steps ✅ — build `chatbot`,
+  build `web`, Trivy nas duas imagens e upload SARIF (chatbot + web)
+- Histórico recente (5–8/jun) em `main` e branches: todos `success`
 
 ---
 
@@ -117,13 +120,13 @@ Ver `MCP_SETUP_PLAN.md` (PASSO 5) e `CLICKUP_SETUP.md` para detalhes completos.
 |--------|-----------|--------|------|
 | ClickUp MCP | 🟡 Média | Documentado | Feature |
 | Cloudflare Fix | 🔴 Alta | Investigação | Infrastructure |
-| Docker Security | 🟡 Média | Investigação | Infrastructure |
+| Docker Security | — | Resolvido | Infrastructure |
 
 ---
 
 ## 🎯 Próximas Ações
 
-1. **Imediato:** Investigar Cloudflare e Docker Security
+1. **Imediato:** Investigar Cloudflare (Docker Security já resolvido ✅)
 2. **Curto prazo:** Obter ClickUp API token e configurar
 3. **Validação:** Testar todos os MCPs no ambiente completo
 
