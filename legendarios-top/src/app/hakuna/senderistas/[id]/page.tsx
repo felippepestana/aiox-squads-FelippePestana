@@ -12,6 +12,16 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
+function Row({ label, value }: { label: string; value: React.ReactNode }) {
+  if (!value && value !== 0 && value !== false) return null;
+  return (
+    <p className="text-sm">
+      <strong className="text-muted-foreground font-medium">{label}:</strong>{" "}
+      <span>{value}</span>
+    </p>
+  );
+}
+
 export default async function SenderistaDetailPage({ params }: Props) {
   const { id } = await params;
   const supabase = await createClient();
@@ -69,47 +79,114 @@ export default async function SenderistaDetailPage({ params }: Props) {
         </Link>
       </div>
 
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between flex-wrap gap-2">
         <div>
           <h1 className="text-2xl font-bold">{s.nome}</h1>
           <p className="text-muted-foreground">{s.telefone}</p>
+          {s.email && <p className="text-muted-foreground text-sm">{s.email}</p>}
         </div>
-        <Badge variant={s.status as "aprovado" | "reprovado" | "pendente" | "exames_enviados"} className="text-sm">
-          {s.status}
-        </Badge>
+        <div className="flex flex-wrap gap-2">
+          <Badge variant={s.status as "aprovado" | "reprovado" | "pendente" | "exames_enviados"} className="text-sm">
+            {s.status}
+          </Badge>
+          {s.tipo_participante && s.tipo_participante !== "senderista" && (
+            <Badge variant="outline" className="text-sm capitalize">{s.tipo_participante}</Badge>
+          )}
+          {s.status_presenca && (
+            <Badge variant={s.status_presenca === "presente" ? "aprovado" : "outline"} className="text-sm capitalize">
+              {s.status_presenca === "presente" ? "✓ Presente" : s.status_presenca}
+            </Badge>
+          )}
+        </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
         {/* Dados pessoais */}
         <Card>
           <CardHeader><CardTitle className="text-base">Dados Pessoais</CardTitle></CardHeader>
-          <CardContent className="text-sm space-y-1">
-            <p><strong>Data nasc.:</strong> {s.data_nascimento}</p>
-            <p><strong>Tipo sanguíneo:</strong> {s.tipo_sanguineo ?? "Não informado"}</p>
-            <p><strong>Plano de saúde:</strong> {s.plano_saude ? `Sim — ${s.qual_plano ?? ""}` : "Não"}</p>
-            <p><strong>Peso:</strong> {s.peso_kg} kg | <strong>Altura:</strong> {s.altura_cm} cm | <strong>IMC:</strong> {s.imc}</p>
-            <p><strong>Comorbidades:</strong> {s.comorbidades?.join(", ") || "Nenhuma"}</p>
+          <CardContent className="space-y-1">
+            <Row label="CPF" value={s.cpf} />
+            <Row label="Data nasc." value={s.data_nascimento} />
+            <Row label="Profissão" value={s.profissao} />
+            <Row label="Estado/Cidade" value={[s.estado, s.cidade].filter(Boolean).join(" / ") || null} />
+            <Row label="Instagram" value={s.instagram} />
+            <Row label="Tipo sanguíneo" value={s.tipo_sanguineo} />
+            <Row label="Plano de saúde" value={s.plano_saude ? `Sim — ${s.qual_plano ?? ""}` : "Não"} />
+            <Row label="Peso / Altura / IMC" value={`${s.peso_kg ?? "—"} kg / ${s.altura_cm ?? "—"} cm / ${s.imc ?? "—"}`} />
+            <Row label="Comorbidades" value={s.comorbidades?.join(", ") || "Nenhuma"} />
           </CardContent>
         </Card>
 
         {/* Triagem */}
         <Card>
           <CardHeader><CardTitle className="text-base">Triagem</CardTitle></CardHeader>
-          <CardContent className="text-sm space-y-2">
+          <CardContent className="space-y-2">
             <div>
-              <p className="text-muted-foreground">Risco</p>
+              <p className="text-muted-foreground text-sm">Risco</p>
               <Badge variant={s.classificacao_risco as RiskLevel}>
                 {RISK_LABELS[s.classificacao_risco as RiskLevel]}
               </Badge>
             </div>
             <div>
-              <p className="text-muted-foreground mb-1">Exames exigidos</p>
+              <p className="text-muted-foreground text-sm mb-1">Exames exigidos</p>
               {s.exames_exigidos?.map((e: string) => (
                 <p key={e} className="text-sm">• {EXAM_LABELS[e as ExamType] ?? e}</p>
               ))}
             </div>
+            {s.cond_fisica_autorelatada && (
+              <Row label="Cond. física (1-5)" value={s.cond_fisica_autorelatada} />
+            )}
+            <Row label="Restrição alimentar" value={s.restricao_alimentar ? "Sim" : null} />
           </CardContent>
         </Card>
+
+        {/* Saúde detalhada */}
+        {(s.cond_medica_detalhada || s.uso_medicamento || s.medicamentos) && (
+          <Card>
+            <CardHeader><CardTitle className="text-base">Saúde Detalhada</CardTitle></CardHeader>
+            <CardContent className="space-y-1">
+              <Row label="Condição médica" value={s.cond_medica_detalhada} />
+              <Row label="Usa medicamento" value={s.uso_medicamento ? "Sim" : null} />
+              <Row label="Medicamentos" value={s.medicamentos} />
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Família / Contatos */}
+        <Card>
+          <CardHeader><CardTitle className="text-base">Família &amp; Contatos</CardTitle></CardHeader>
+          <CardContent className="space-y-1">
+            <Row label="Igreja" value={s.igreja} />
+            <Row label="Família" value={s.familia} />
+            <Row label="Vai acompanhado" value={s.vai_acompanhado ? "Sim" : null} />
+            <Row label="Nome cônjuge/contato" value={s.nome_conjuge} />
+            <Row label="WhatsApp cônjuge" value={s.whatsapp_conjuge} />
+            <Row label="E-mail cônjuge" value={s.email_conjuge} />
+            <Row label="Nome acompanhante" value={s.nome_acompanhante} />
+          </CardContent>
+        </Card>
+
+        {/* Evento / Ingresso */}
+        {(s.evento_nome || s.codigo_ingresso || s.ticketgo_id) && (
+          <Card>
+            <CardHeader><CardTitle className="text-base">Evento &amp; Ingresso</CardTitle></CardHeader>
+            <CardContent className="space-y-1">
+              <Row label="Evento" value={s.evento_nome} />
+              <Row label="Data do evento" value={s.evento_data} />
+              <Row label="Código ingresso" value={s.codigo_ingresso} />
+              <Row label="ID TicketGo" value={s.ticketgo_id} />
+              <Row label="Valor bilhete" value={s.valor_bilhete ? `R$ ${Number(s.valor_bilhete).toFixed(2)}` : null} />
+              <Row label="Status ingresso" value={s.status_ingresso} />
+              <Row label="Tamanho camisa" value={s.tamanho_camisa} />
+              {s.data_cadastro_origem && (
+                <Row label="Cadastro origem" value={new Date(s.data_cadastro_origem).toLocaleDateString("pt-BR")} />
+              )}
+              {s.termo_aceito && (
+                <Row label="Termo aceito" value={s.termo_aceito_em ? new Date(s.termo_aceito_em).toLocaleString("pt-BR") : "Sim"} />
+              )}
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       {/* Exames enviados */}
@@ -195,3 +272,4 @@ export default async function SenderistaDetailPage({ params }: Props) {
     </div>
   );
 }
+
