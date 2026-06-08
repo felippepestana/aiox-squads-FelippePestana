@@ -104,7 +104,7 @@
   font-weight: 600;
   border: 1px solid var(--ds-border);
 }
-.ds-badge--success { color: var(--ds-accent); border-color: var(--ds-accent); }
+.ds-badge--success { color: var(--ds-success); border-color: var(--ds-success); }
 .ds-badge--progress { color: var(--ds-progress); border-color: var(--ds-progress); }
 .ds-badge--warn { color: var(--ds-warn); border-color: var(--ds-warn); }
 .ds-badge--info { color: var(--ds-info); border-color: var(--ds-info); }
@@ -122,7 +122,7 @@
   font-size: var(--ds-fs-sm);
 }
 .ds-step--active { color: var(--ds-text); border-color: var(--ds-accent); }
-.ds-step--done { color: var(--ds-accent); }
+.ds-step--done { color: var(--ds-success); }
 .ds-step__num {
   width: 20px; height: 20px; border-radius: 999px;
   display: inline-flex; align-items: center; justify-content: center;

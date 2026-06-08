@@ -68,7 +68,7 @@
 
 .pericia-step-dot.done {
   border-color: var(--accent-dim);
-  background: rgba(245, 158, 11, 0.18);
+  background: var(--accent-dim-soft);
   color: var(--accent-dim);
 }
 
@@ -309,7 +309,7 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.2rem 0.55rem;
-  border-radius: 8px;
+  border-radius: 14px;
   border: 1px solid var(--accent);
   background: transparent;
   color: var(--accent-dim);

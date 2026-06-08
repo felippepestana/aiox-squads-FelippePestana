@@ -9,6 +9,7 @@
   --accent: #ff6b00;        /* Laranja Elétrico — ação */
   --accent-dim: #f59e0b;    /* Âmbar de Transição — hover/progresso */
   --accent-soft: rgba(255, 107, 0, 0.15);
+  --accent-dim-soft: rgba(245, 158, 11, 0.18);
   --danger: #e5484d;
   --font-display: "Space Grotesk", "Outfit", "Inter", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
