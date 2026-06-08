@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 import {
   ArrowLeft,
   FileText,
@@ -162,28 +163,80 @@ function getPriorityBadge(priority: string) {
 
 export default function AnaliseDetailPage() {
   const params = useParams();
+  const { toast } = useToast();
   const [analysis, setAnalysis] = useState<AnalysisDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function fetchAnalysis() {
-      try {
-        const response = await fetch(`/api/analyses/${params.id}`);
-        if (!response.ok) {
-          throw new Error("Análise não encontrada");
-        }
-        const { data } = await response.json();
-        setAnalysis(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Erro desconhecido");
-      } finally {
-        setLoading(false);
+  const fetchAnalysis = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/analyses/${params.id}`);
+      if (!response.ok) {
+        throw new Error("Análise não encontrada");
       }
+      const { data } = await response.json();
+      setAnalysis(data);
+      setError(null);
+      return data as AnalysisDetail;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro desconhecido");
+      return null;
+    } finally {
+      setLoading(false);
     }
-
-    fetchAnalysis();
   }, [params.id]);
+
+  useEffect(() => {
+    fetchAnalysis();
+  }, [fetchAnalysis]);
+
+  // Poll while the analysis is still being processed.
+  useEffect(() => {
+    if (!analysis) return;
+    if (analysis.status !== "PENDING" && analysis.status !== "PROCESSING") {
+      return;
+    }
+    const interval = setInterval(() => {
+      fetchAnalysis();
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [analysis, fetchAnalysis]);
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await fetchAnalysis();
+    setRefreshing(false);
+  }, [fetchAnalysis]);
+
+  const handleExport = useCallback(() => {
+    if (!analysis) return;
+    const blob = new Blob([JSON.stringify(analysis, null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `analise-${analysis.id}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [analysis]);
+
+  const handleShare = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copiado",
+        description: "O link da análise foi copiado para a área de transferência.",
+      });
+    } catch {
+      toast({
+        title: "Não foi possível copiar",
+        description: "Copie o endereço da página manualmente.",
+        variant: "destructive",
+      });
+    }
+  }, [toast]);
 
   if (loading) {
     return (
@@ -236,20 +289,35 @@ export default function AnaliseDetailPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
-            <RefreshCw className="mr-2 h-4 w-4" />
+          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing}>
+            <RefreshCw className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={handleShare}>
             <Share className="mr-2 h-4 w-4" />
             Compartilhar
           </Button>
-          <Button size="sm">
+          <Button size="sm" onClick={handleExport} disabled={!isComplete}>
             <Download className="mr-2 h-4 w-4" />
             Exportar
           </Button>
         </div>
       </div>
+
+      {analysis.status === "FAILED" && (
+        <Card className="border-danger/50">
+          <CardContent className="flex items-start gap-3 py-4">
+            <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0 text-danger" />
+            <div>
+              <p className="font-medium">A análise falhou</p>
+              <p className="text-sm text-muted-foreground">
+                {(result?.error as string) ||
+                  "Ocorreu um erro durante o processamento. Tente novamente."}
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {isComplete && result && (
         <div className="grid gap-4 md:grid-cols-4">

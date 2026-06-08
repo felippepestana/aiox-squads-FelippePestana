@@ -122,33 +122,62 @@ class LLMGateway {
   }
 
   private initializeClients() {
-    const apiKeys = {
-      openai: process.env.OPENAI_API_KEY,
-      anthropic: process.env.ANTHROPIC_API_KEY,
-      deepseek: process.env.DEEPSEEK_API_KEY,
-      qwen: process.env.QWEN_API_KEY,
-      kimi: process.env.KIMI_API_KEY,
-      minimax: process.env.MINIMAX_API_KEY,
-      gemini: process.env.GEMINI_API_KEY,
-    };
-
-    if (apiKeys.openai) {
-      this.clients.set("openai", new OpenAI({ apiKey: apiKeys.openai }));
+    // OpenAI is the default provider. The remaining providers expose
+    // OpenAI-compatible APIs and are only initialized when both an API key and
+    // a base URL are configured, so we never select a model we cannot call.
+    const openaiKey = process.env.OPENAI_API_KEY;
+    if (openaiKey) {
+      this.clients.set("openai", new OpenAI({ apiKey: openaiKey }));
     }
+
+    const compatibleProviders: Array<{
+      provider: string;
+      key?: string;
+      baseURL?: string;
+    }> = [
+      { provider: "deepseek", key: process.env.DEEPSEEK_API_KEY, baseURL: process.env.DEEPSEEK_BASE_URL },
+      { provider: "qwen", key: process.env.QWEN_API_KEY, baseURL: process.env.QWEN_BASE_URL },
+      { provider: "kimi", key: process.env.KIMI_API_KEY, baseURL: process.env.KIMI_BASE_URL },
+      { provider: "minimax", key: process.env.MINIMAX_API_KEY, baseURL: process.env.MINIMAX_BASE_URL },
+    ];
+
+    for (const { provider, key, baseURL } of compatibleProviders) {
+      if (key && baseURL) {
+        this.clients.set(provider, new OpenAI({ apiKey: key, baseURL }));
+      }
+    }
+  }
+
+  /** True when at least one LLM provider client is available. */
+  isConfigured(): boolean {
+    return this.clients.size > 0;
+  }
+
+  private isModelAvailable(modelId: string): boolean {
+    const provider = MODELS[modelId]?.provider;
+    return provider ? this.clients.has(provider) : false;
   }
 
   selectModel(taskComplexity: TaskComplexity, preferredTier?: ModelTier): string {
     const tier = preferredTier || COMPLEXITY_RULES[taskComplexity];
-    
-    const modelsInTier = Object.entries(MODELS)
-      .filter(([_, config]) => config.tier === tier)
-      .map(([id, _]) => id);
 
-    if (modelsInTier.length === 0) {
-      return "gpt-4o-mini";
+    // Prefer an available model in the requested tier, then any available
+    // model, falling back to gpt-4o-mini (callers guard with isConfigured()).
+    const inTier = Object.keys(MODELS).filter(
+      (id) => MODELS[id].tier === tier && this.isModelAvailable(id)
+    );
+    if (inTier.length > 0) {
+      return inTier[Math.floor(Math.random() * inTier.length)];
     }
 
-    return modelsInTier[Math.floor(Math.random() * modelsInTier.length)];
+    const anyAvailable = Object.keys(MODELS).filter((id) =>
+      this.isModelAvailable(id)
+    );
+    if (anyAvailable.length > 0) {
+      return anyAvailable[Math.floor(Math.random() * anyAvailable.length)];
+    }
+
+    return "gpt-4o-mini";
   }
 
   estimateCost(model: string, tokens: number): number {
@@ -243,16 +272,11 @@ class LLMGateway {
   }
 
   private getFallbackModel(model: string): string | null {
-    const config = MODELS[model];
-    if (!config) return null;
-
-    if (config.tier === "premium") {
-      return "gpt-4o-mini";
-    }
-    if (config.tier === "standard") {
-      return "deepseek-v3";
-    }
-    return null;
+    // Fall back to a different available model, if any.
+    const candidate = Object.keys(MODELS).find(
+      (id) => id !== model && this.isModelAvailable(id)
+    );
+    return candidate ?? null;
   }
 
   private trackCost(model: string, usage: LLMResponse["usage"]) {

@@ -5,10 +5,29 @@ Plataforma web de análise processual jurídica brasileira potenciada por multia
 ## Stack
 
 - **Frontend:** Next.js 15 (App Router), React 19, TypeScript 5
-- **Styling:** Tailwind CSS 4, Shadcn/UI
+- **Styling:** Tailwind CSS 3, componentes estilo shadcn/ui (Radix)
 - **State:** Zustand, TanStack Query
-- **Database:** Supabase (PostgreSQL)
-- **LLM Gateway:** Multi-provider (OpenAI, Anthropic, DeepSeek, Qwen, Kimi, MiniMax, Gemini)
+- **Database:** PostgreSQL via Prisma (compatível com Supabase)
+- **LLM Gateway:** OpenAI por padrão; provedores compatíveis com OpenAI
+  (DeepSeek, Qwen, Kimi, MiniMax) habilitáveis via `*_API_KEY` + `*_BASE_URL`
+
+## Estado atual (modo demo)
+
+A plataforma funciona ponta-a-ponta para o fluxo principal: **criar análise →
+enviar documentos → pipeline multiagente → visualizar resultado** (resumo,
+partes, cronologia, pedidos, prazos e riscos).
+
+Limitações conhecidas (modo demo):
+
+- **Autenticação ainda não habilitada** — as análises são atribuídas a um perfil
+  demo (`demo@analista-processual.local`), criado automaticamente.
+- **Extração de texto** cobre formatos textuais (`.txt`, `.md`, `.csv`, `.json`,
+  etc.), **PDF** (via `unpdf`) e **DOCX** (via `mammoth`). Formatos legados
+  (`.doc`) e imagens exigem OCR e não são extraídos (a análise informa quais
+  documentos não tiveram texto extraível).
+- **Biblioteca de jurisprudência** ainda é placeholder.
+- O processamento é executado de forma síncrona na rota `/api/analyses/[id]/process`
+  (sem fila/worker dedicado).
 
 ## Arquitetura
 
@@ -54,6 +73,7 @@ cp .env.example .env.local
 ```bash
 npx prisma generate
 npx prisma db push
+npm run db:seed   # cria o perfil demo
 ```
 
 ### 4. Execute
@@ -61,6 +81,103 @@ npx prisma db push
 ```bash
 npm run dev
 ```
+
+> Defina ao menos `OPENAI_API_KEY` no `.env.local` para que o pipeline de
+> análise execute. Sem provedor configurado, a análise é marcada como `FAILED`
+> com uma mensagem explicativa (a aplicação não quebra).
+
+### Desenvolvimento local (passo a passo)
+
+Pré-requisitos em qualquer sistema: **Node 20+** e **Docker Desktop** (para o
+Postgres local). Os passos são idênticos no macOS e no Windows — muda apenas a
+sintaxe de como você define as variáveis de ambiente no terminal.
+
+#### macOS / Linux (bash/zsh)
+
+```bash
+# 1. Subir um Postgres local (Docker Desktop)
+docker compose up -d
+
+# 2. Variáveis de ambiente
+cp .env.example .env.local
+# Em .env.local, defina:
+#   DATABASE_URL="postgresql://analista:analista@localhost:5432/analista_processual"
+#   OPENAI_API_KEY="sk-..."
+
+# 3. Instalar e preparar o banco
+npm install
+npm run db:push
+npm run db:seed
+
+# 4. Rodar
+npm run dev   # http://localhost:3000
+```
+
+#### Windows (PowerShell — Alienware)
+
+```powershell
+# 1. Subir um Postgres local (Docker Desktop para Windows precisa estar aberto)
+docker compose up -d
+
+# 2. Variáveis de ambiente
+Copy-Item .env.example .env.local
+# Edite .env.local (ex.: notepad .env.local) e defina:
+#   DATABASE_URL="postgresql://analista:analista@localhost:5432/analista_processual"
+#   OPENAI_API_KEY="sk-..."
+
+# 3. Instalar e preparar o banco
+npm install
+npm run db:push
+npm run db:seed
+
+# 4. Rodar
+npm run dev   # http://localhost:3000
+```
+
+> No Windows, use o **PowerShell** (não o `cmd.exe`). Se preferir o WSL2, siga as
+> instruções de macOS/Linux dentro do WSL. O Docker Desktop precisa estar em
+> execução antes do `docker compose up -d`.
+
+Teste o fluxo manualmente: **Dashboard → Nova Análise**, envie um
+`.txt`/`.pdf`/`.docx` e acompanhe o resultado (resumo, partes, prazos e riscos).
+Para encerrar o banco: `docker compose down` (use `-v` para apagar os dados).
+
+### Smoke test ponta-a-ponta (macOS e Windows)
+
+Com o servidor rodando (`npm run dev`) em um terminal, execute em **outro
+terminal** — o comando é o mesmo nos dois sistemas:
+
+```bash
+npm run test:smoke
+```
+
+O script (`scripts/smoke-test.mjs`, Node puro, sem dependências) exercita o fluxo
+real contra `http://localhost:3000`:
+
+1. cria a análise (`POST /api/analyses`);
+2. envia um processo fictício de exemplo e extrai o texto
+   (`scripts/fixtures/processo-exemplo.txt`);
+3. roda o pipeline multiagente (`POST /api/analyses/:id/process`);
+4. lê o resultado persistido (`GET /api/analyses/:id`).
+
+Resultados possíveis:
+
+- **PASS** — o pipeline concluiu (`COMPLETED`); imprime resumo, partes, riscos e score.
+- **PASS (plumbing)** — criação/upload/extração/persistência OK, mas o pipeline
+  foi marcado `FAILED` por falta de `OPENAI_API_KEY`. Útil para validar a
+  infraestrutura sem consumir a API.
+- **FAIL** — servidor inacessível, erro HTTP ou falha inesperada do pipeline.
+
+Opções úteis:
+
+```bash
+npm run test:smoke -- --require-completed        # exige COMPLETED (requer chave LLM)
+npm run test:smoke -- --base-url=http://host:porta
+npm run test:smoke -- --file=./caminho/para/seu-processo.pdf
+```
+
+> No PowerShell o `--` extra do npm também funciona:
+> `npm run test:smoke -- --require-completed`.
 
 ## Deploy
 
@@ -85,14 +202,17 @@ Veja o guia completo em [`../docs/deploy/vercel.md`](../docs/deploy/vercel.md), 
 ## Roadmap
 
 - [x] Setup do projeto
-- [x] Configuração de banco de dados
-- [x] LLM Gateway com seleção inteligente
-- [x] Agente Navegador implementado
-- [ ] Agentes restantes (Extrator, Calculador, Mapeador)
-- [ ] Upload de documentos
-- [ ] Interface de análise
-- [ ] Biblioteca de jurisprudência
-- [ ] Deploy em produção
+- [x] Configuração de banco de dados (Prisma)
+- [x] LLM Gateway com seleção de modelo ciente do provedor
+- [x] Agentes implementados (Navegador, Extrator, Calculador, Mapeador, Chief)
+- [x] Upload de documentos + extração de texto (texto, PDF e DOCX)
+- [x] Fluxo de análise ponta-a-ponta (criar → processar → visualizar)
+- [x] Dashboard e listagem com dados reais
+- [x] Smoke test E2E cross-platform (`npm run test:smoke`, macOS e Windows)
+- [ ] Autenticação (Supabase) — substituir o perfil demo
+- [ ] OCR para `.doc` legado e imagens
+- [ ] Biblioteca de jurisprudência (busca semântica)
+- [ ] Fila/worker dedicado para processamento assíncrono
 
 ## Licença
 

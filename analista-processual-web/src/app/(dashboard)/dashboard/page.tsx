@@ -1,135 +1,99 @@
 "use client";
 
-import { FileText, Clock, AlertTriangle, TrendingUp, Plus, ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import {
+  FileText,
+  Clock,
+  AlertTriangle,
+  CheckCircle2,
+  Plus,
+  ArrowRight,
+  Loader2,
+} from "lucide-react";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 
-const stats = [
-  {
-    title: "Total de Análises",
-    value: "127",
-    change: "+12%",
-    trend: "up",
-    icon: FileText,
-  },
-  {
-    title: "Prazos em Aberto",
-    value: "23",
-    change: "+5",
-    trend: "down",
-    icon: Clock,
-  },
-  {
-    title: "Riscos Identificados",
-    value: "8",
-    change: "-3",
-    trend: "up",
-    icon: AlertTriangle,
-  },
-  {
-    title: "Taxa de Sucesso",
-    value: "94%",
-    change: "+2%",
-    trend: "up",
-    icon: TrendingUp,
-  },
-];
+interface AnalysisItem {
+  id: string;
+  processNumber: string | null;
+  court: string | null;
+  processClass: string | null;
+  status: string;
+  createdAt: string;
+  _count?: { deadlines: number };
+}
 
-const recentAnalyses = [
-  {
-    id: "1",
-    title: "Réu: João Silva - Ação de Cobrança",
-    status: "completed",
-    date: "2024-01-15",
-    score: 92,
-    type: "Análise Completa",
-  },
-  {
-    id: "2",
-    title: "Empresa ABC - Recurso de Apelação",
-    status: "in_progress",
-    date: "2024-01-14",
-    progress: 65,
-    type: "Análise de Recurso",
-  },
-  {
-    id: "3",
-    title: "Partes: Maria Santos vs. Banco XYZ",
-    status: "completed",
-    date: "2024-01-13",
-    score: 78,
-    type: "Análise de Contrato",
-  },
-  {
-    id: "4",
-    title: "Inventário - Família Oliveira",
-    status: "pending",
-    date: "2024-01-12",
-    type: "Análise de Inventário",
-  },
-];
-
-const upcomingDeadlines = [
-  {
-    id: "1",
-    title: "Contestação - Processo 1234/2024",
-    deadline: "2024-01-20",
-    daysLeft: 5,
-    priority: "high",
-  },
-  {
-    id: "2",
-    title: "Recurso - Processo 5678/2023",
-    deadline: "2024-01-25",
-    daysLeft: 10,
-    priority: "medium",
-  },
-  {
-    id: "3",
-    title: "Alegações Finais - Processo 9012/2024",
-    deadline: "2024-02-01",
-    daysLeft: 17,
-    priority: "low",
-  },
-];
+interface DeadlineItem {
+  id: string;
+  description: string;
+  dueDate: string;
+  urgency: string;
+}
 
 function getStatusBadge(status: string) {
   switch (status) {
-    case "completed":
+    case "COMPLETED":
       return <Badge className="bg-success text-success-foreground">Concluída</Badge>;
-    case "in_progress":
-      return <Badge className="bg-warning text-warning-foreground">Em Andamento</Badge>;
-    case "pending":
+    case "PROCESSING":
+      return (
+        <Badge className="bg-warning text-warning-foreground">
+          <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+          Processando
+        </Badge>
+      );
+    case "FAILED":
+      return <Badge className="bg-danger text-danger-foreground">Falhou</Badge>;
+    default:
       return <Badge variant="secondary">Pendente</Badge>;
-    default:
-      return <Badge variant="secondary">{status}</Badge>;
-  }
-}
-
-function getPriorityBadge(priority: string) {
-  switch (priority) {
-    case "high":
-      return <Badge className="bg-danger text-danger-foreground">Alta</Badge>;
-    case "medium":
-      return <Badge className="bg-warning text-warning-foreground">Média</Badge>;
-    case "low":
-      return <Badge variant="secondary">Baixa</Badge>;
-    default:
-      return <Badge variant="secondary">{priority}</Badge>;
   }
 }
 
 export default function DashboardPage() {
+  const [analyses, setAnalyses] = useState<AnalysisItem[]>([]);
+  const [deadlines, setDeadlines] = useState<DeadlineItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const [analysesRes, deadlinesRes] = await Promise.all([
+          fetch("/api/analyses?limit=5"),
+          fetch("/api/deadlines?upcoming=true"),
+        ]);
+        const analysesJson = await analysesRes.json();
+        const deadlinesJson = await deadlinesRes.json();
+        setAnalyses(analysesJson.data ?? []);
+        setDeadlines(deadlinesJson.data ?? []);
+      } catch (error) {
+        console.error("Error loading dashboard:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
+  const completed = analyses.filter((a) => a.status === "COMPLETED").length;
+  const processing = analyses.filter(
+    (a) => a.status === "PROCESSING" || a.status === "PENDING"
+  ).length;
+
+  const stats = [
+    { title: "Análises (recentes)", value: analyses.length, icon: FileText },
+    { title: "Prazos pendentes", value: deadlines.length, icon: Clock },
+    { title: "Concluídas", value: completed, icon: CheckCircle2 },
+    { title: "Em processamento", value: processing, icon: Loader2 },
+  ];
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Bem-vindo de volta!</h2>
           <p className="text-muted-foreground">
-            Aqui está um resumo das suas atividades recentes.
+            Resumo das suas análises processuais.
           </p>
         </div>
         <Button asChild>
@@ -150,17 +114,9 @@ export default function DashboardPage() {
                 <Icon className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-muted-foreground">
-                  <span
-                    className={
-                      stat.trend === "up" ? "text-success" : "text-danger"
-                    }
-                  >
-                    {stat.change}
-                  </span>{" "}
-                  vs último mês
-                </p>
+                <div className="text-2xl font-bold">
+                  {loading ? "—" : stat.value}
+                </div>
               </CardContent>
             </Card>
           );
@@ -173,9 +129,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle>Análises Recentes</CardTitle>
-                <CardDescription>
-                  Suas últimas análises processuais
-                </CardDescription>
+                <CardDescription>Suas últimas análises processuais</CardDescription>
               </div>
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/dashboard/analises">
@@ -186,41 +140,45 @@ export default function DashboardPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {recentAnalyses.map((analysis) => (
-                <Link
-                  key={analysis.id}
-                  href={`/dashboard/analises/${analysis.id}`}
-                  className="block"
-                >
-                  <div className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/50">
-                    <div className="space-y-1">
-                      <p className="text-sm font-medium leading-none">
-                        {analysis.title}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {analysis.type} • {analysis.date}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      {"progress" in analysis && (
-                        <div className="w-16">
-                          <Progress value={analysis.progress} className="h-2" />
-                        </div>
-                      )}
-                      {"score" in analysis && (
-                        <div className="flex items-center">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-success/10 text-sm font-medium text-success">
-                            {analysis.score}
-                          </div>
-                        </div>
-                      )}
+            {loading ? (
+              <div className="flex h-[160px] items-center justify-center">
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              </div>
+            ) : analyses.length > 0 ? (
+              <div className="space-y-4">
+                {analyses.map((analysis) => (
+                  <Link
+                    key={analysis.id}
+                    href={`/dashboard/analises/${analysis.id}`}
+                    className="block"
+                  >
+                    <div className="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/50">
+                      <div className="space-y-1">
+                        <p className="text-sm font-medium leading-none">
+                          {analysis.processNumber || "Análise sem número"}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {[analysis.court, analysis.processClass]
+                            .filter(Boolean)
+                            .join(" • ") || "Sem metadados"}
+                        </p>
+                      </div>
                       {getStatusBadge(analysis.status)}
                     </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="flex h-[160px] flex-col items-center justify-center text-center">
+                <FileText className="h-10 w-10 text-muted-foreground/50" />
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Nenhuma análise ainda.
+                </p>
+                <Button className="mt-3" size="sm" asChild>
+                  <Link href="/dashboard/nova-analise">Criar primeira análise</Link>
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -229,9 +187,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle>Prazos Próximos</CardTitle>
-                <CardDescription>
-                  Próximos prazos a vencer
-                </CardDescription>
+                <CardDescription>Próximos prazos a vencer</CardDescription>
               </div>
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/dashboard/prazos">
@@ -242,80 +198,77 @@ export default function DashboardPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {upcomingDeadlines.map((deadline) => (
-                <div
-                  key={deadline.id}
-                  className="flex items-center justify-between rounded-lg border p-3"
-                >
-                  <div className="space-y-1">
-                    <p className="text-sm font-medium leading-none">
-                      {deadline.title}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      Vence em {new Date(deadline.deadline).toLocaleDateString("pt-BR")}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={`text-sm font-medium ${
-                        deadline.daysLeft <= 5
-                          ? "text-danger"
-                          : deadline.daysLeft <= 10
-                          ? "text-warning"
-                          : "text-muted-foreground"
-                      }`}
+            {loading ? (
+              <div className="flex h-[160px] items-center justify-center">
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              </div>
+            ) : deadlines.length > 0 ? (
+              <div className="space-y-4">
+                {deadlines.slice(0, 5).map((deadline) => {
+                  const daysLeft = Math.ceil(
+                    (new Date(deadline.dueDate).getTime() - Date.now()) /
+                      (1000 * 60 * 60 * 24)
+                  );
+                  return (
+                    <div
+                      key={deadline.id}
+                      className="flex items-center justify-between rounded-lg border p-3"
                     >
-                      {deadline.daysLeft} dias
-                    </span>
-                    {getPriorityBadge(deadline.priority)}
-                  </div>
-                </div>
-              ))}
-            </div>
+                      <div className="space-y-1">
+                        <p className="text-sm font-medium leading-none">
+                          {deadline.description}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Vence em{" "}
+                          {new Date(deadline.dueDate).toLocaleDateString("pt-BR")}
+                        </p>
+                      </div>
+                      <span
+                        className={`text-sm font-medium ${
+                          daysLeft <= 5 ? "text-danger" : "text-muted-foreground"
+                        }`}
+                      >
+                        {daysLeft} dia(s)
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="flex h-[160px] flex-col items-center justify-center text-center">
+                <Clock className="h-10 w-10 text-muted-foreground/50" />
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Nenhum prazo pendente.
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Modelos LLM Ativos</CardTitle>
+          <CardTitle>Como funciona</CardTitle>
           <CardDescription>
-            Configuração atual do gateway de inteligência artificial
+            Pipeline multiagente de análise processual
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="rounded-lg border p-4">
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-success" />
-                <span className="text-sm font-medium">DeepSeek V3</span>
+          <div className="grid gap-4 md:grid-cols-4">
+            {[
+              { n: "1", t: "Navegador", d: "Indexa e organiza os documentos" },
+              { n: "2", t: "Extrator", d: "Extrai partes, pedidos e cronologia" },
+              { n: "3", t: "Calculador", d: "Calcula prazos processuais (CPC)" },
+              { n: "4", t: "Mapeador", d: "Identifica riscos e recomendações" },
+            ].map((step) => (
+              <div key={step.n} className="rounded-lg border p-4">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+                  {step.n}
+                </div>
+                <p className="mt-2 text-sm font-medium">{step.t}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{step.d}</p>
               </div>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Tarefas simples (resumos, extrações básicas)
-              </p>
-              <p className="mt-2 text-lg font-semibold">$0.001/1K tokens</p>
-            </div>
-            <div className="rounded-lg border p-4">
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-success" />
-                <span className="text-sm font-medium">Qwen 2.5 72B</span>
-              </div>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Tarefas padrão (análises, mapeamentos)
-              </p>
-              <p className="mt-2 text-lg font-semibold">$0.003/1K tokens</p>
-            </div>
-            <div className="rounded-lg border p-4">
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-warning" />
-                <span className="text-sm font-medium">Claude 3.5 Sonnet</span>
-              </div>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Tarefas complexas (decisões, síntese)
-              </p>
-              <p className="mt-2 text-lg font-semibold">$0.015/1K tokens</p>
-            </div>
+            ))}
           </div>
         </CardContent>
       </Card>
