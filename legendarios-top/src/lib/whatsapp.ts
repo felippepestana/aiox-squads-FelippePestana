@@ -7,7 +7,7 @@ const BASE_URL = process.env.EVOLUTION_API_URL?.replace(/\/$/, "") ?? "";
 const API_KEY = process.env.EVOLUTION_API_KEY ?? "";
 const INSTANCE = process.env.EVOLUTION_INSTANCE ?? "legendarios";
 
-function isConfigured(): boolean {
+export function isWhatsAppConfigured(): boolean {
   return Boolean(BASE_URL && API_KEY);
 }
 
@@ -20,7 +20,7 @@ function normalizePhone(raw: string): string {
 }
 
 async function sendText(phone: string, message: string): Promise<boolean> {
-  if (!isConfigured()) {
+  if (!isWhatsAppConfigured()) {
     console.warn("[WhatsApp] Evolution API not configured — skipping message");
     return false;
   }

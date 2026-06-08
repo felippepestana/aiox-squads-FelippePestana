@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
-import { sendMensagensLink, sendBatchMensagensLinks } from "@/lib/whatsapp";
+import { sendMensagensLink, sendBatchMensagensLinks, isWhatsAppConfigured } from "@/lib/whatsapp";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "";
 
@@ -26,6 +26,13 @@ export async function POST(request: Request) {
 
   const { data: hakuna } = await supabase.from("hakunas").select("id").eq("email", user.email!).single();
   if (!hakuna) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+
+  if (!isWhatsAppConfigured()) {
+    return NextResponse.json(
+      { error: "WhatsApp não configurado — defina EVOLUTION_API_URL e EVOLUTION_API_KEY" },
+      { status: 503 }
+    );
+  }
 
   const body = await request.json();
   const parsed = schema.safeParse(body);
