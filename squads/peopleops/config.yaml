@@ -1,9 +1,9 @@
 name: peopleops
 display_name: "PeopleOps — Departamento Pessoal & Folha"
-version: "0.1.0"
+version: "1.0.0"
 domain: personnel-payroll
 entry_agent: peopleops-chief
-description: "Departamento pessoal e folha: admissão digital, gestão de documentos, folha de pagamento, eSocial, férias, afastamentos e rescisão."
+description: "Departamento pessoal e folha de pagamento ponta a ponta: admissão digital com coleta de documentos, preparação e explicação de folha (proventos/descontos), mapeamento de eventos eSocial e prazos, gestão de férias, afastamentos e rescisão, encerrando num gate de auditoria de folha (anomalias + privacidade) com poder de veto antes do fechamento. A IA é suporte à decisão e à conformidade — transmissões oficiais e decisões trabalhistas ficam com profissionais habilitados. Dados pessoais e financeiros são tratados como sensíveis (LGPD)."
 
 keywords:
   - departamento pessoal
@@ -11,29 +11,64 @@ keywords:
   - esocial
   - admissão digital
   - férias
+  - afastamento
   - rescisão
   - clt
+  - inss
+  - irrf
+  - fgts
+  - lgpd
 
 metadata:
   type: module
-  status: DEVELOPING
+  status: ACTIVE
   platform: apex-talent
 
 tier_structure:
   tier_0:
-    role: "Module Orchestration"
+    role: "Orchestration & Compliance Routing"
     agents: ["peopleops-chief"]
+  tier_1:
+    role: "Core Specialists"
+    agents: ["admission-officer", "payroll-analyst"]
+  tier_2:
+    role: "Compliance & Lifecycle"
+    agents: ["esocial-compliance", "leave-manager"]
+  tier_3:
+    role: "Payroll Close Gate"
+    agents: ["payroll-auditor"]
+
+# PeopleOps is advisory and compliance-oriented. AI never transmits official
+# filings (eSocial, FGTS, GFIP) or makes termination decisions on its own —
+# a licensed professional signs off. Personal/financial data is sensitive (LGPD):
+# minimize exposure, never log secrets or full documents.
+compliance_model:
+  legal_basis: ["CLT", "eSocial", "LGPD"]
+  human_sign_off_required: ["official_filings", "terminations", "legal_interpretation"]
+  advisory_only: true
+  payroll_close_gate: true
+  sensitive_data: minimized
 
 workflow:
-  primary: "module intake (skeleton)"
+  primary: "wf-personnel-lifecycle.yaml"
   phases:
-    - "Phase 1: INTAKE - Understand the need within this module's domain"
-    - "Phase 2: SCOPE - Define the specialist flow to build next"
+    - "Phase 1: INTAKE - Need, employee/event context and the part of the lifecycle in play"
+    - "Phase 2: ADMISSION - Digital admission, document collection and contract setup"
+    - "Phase 3: PAYROLL - Payroll preparation, verbas and plain-language payslip"
+    - "Phase 4: COMPLIANCE & LIFECYCLE - eSocial events/deadlines, vacations, leaves and terminations"
+    - "Phase 5: PAYROLL CLOSE GATE - Anomaly + privacy audit (veto) before closing"
 
 entry_points:
-  intake: "*digital-admission"
+  digital_admission: "*digital-admission"
+  run_payroll: "*run-payroll"
+  check_esocial: "*check-esocial"
+  manage_leave: "*manage-leave"
+  audit_payroll: "*audit-payroll"
 
 workspace_integration:
   level: none
   rationale: >-
-    Modulo peopleops em desenvolvimento (esqueleto). O Chief faz intake e escopo; ainda nao consome nem produz artefatos no workspace/.
+    O peopleops e self-contained: recebe contexto de admissao, folha e eventos na
+    conversa e devolve dossie de admissao, calculo/explicacao de folha, mapa de
+    eventos eSocial e auditoria de fechamento, sem ler nem escrever no workspace/
+    do repositorio. Dados sensiveis nao sao persistidos.

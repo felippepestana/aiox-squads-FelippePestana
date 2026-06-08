@@ -1,0 +1,26 @@
+# Payroll Run Template
+# Owner: payroll-analyst. Every number maps to a verba and a base. FGTS is an employer
+# deposit, not a desconto. Status is never "closed" here — close goes through the gate.
+
+payroll_run:
+  competencia: ""             # reference month/period
+  population_count: 0
+
+  lines:
+    - employee_ref: ""
+      proventos:
+        - { verba: "salário-base", base: "", value: "" }
+        # - { verba: "horas extras", base: "", value: "" }
+        # - { verba: "DSR", base: "", value: "" }
+      descontos:
+        - { verba: "INSS", base: "base de contribuição", value: "" }
+        - { verba: "IRRF", base: "base após INSS e dependentes", value: "" }
+      fgts: ""                # employer deposit (8%); does not reduce líquido
+      liquido: ""
+
+  assumptions:
+    tables: ""                # INSS/IRRF/salário-mínimo tables used
+    competencia: ""
+    confirm_before_close: true
+
+  status: "prepared"          # prepared | (close happens after PASS + human sign-off)

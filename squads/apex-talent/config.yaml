@@ -25,7 +25,7 @@ metadata:
     - { squad: "profiler-dna", area: "Inteligência Comportamental", status: ACTIVE }
     - { squad: "performa", area: "Gestão de Desempenho", status: ACTIVE }
     - { squad: "pulse", area: "Clima & Engajamento", status: DEVELOPING }
-    - { squad: "peopleops", area: "Departamento Pessoal & Folha", status: DEVELOPING }
+    - { squad: "peopleops", area: "Departamento Pessoal & Folha", status: ACTIVE }
     - { squad: "chronos", area: "Controle de Ponto", status: DEVELOPING }
     - { squad: "onboard", area: "Onboarding & Integração", status: ACTIVE }
     - { squad: "academy", area: "Treinamento & Desenvolvimento", status: DEVELOPING }
