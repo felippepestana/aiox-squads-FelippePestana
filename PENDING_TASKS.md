@@ -120,7 +120,7 @@ Já presente em `.github/workflows/docker-security.yml`:
 |--------|-----------|--------|------|
 | ClickUp MCP | 🟡 Média | Documentado | Feature |
 | Cloudflare Fix | 🔴 Alta | Investigação | Infrastructure |
-| Docker Security | ✅ — | Resolvido | Infrastructure |
+| Docker Security | — | Resolvido | Infrastructure |
 
 ---
 
