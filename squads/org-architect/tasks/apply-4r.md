@@ -10,7 +10,7 @@
 
 ### Inputs Required
 ```text
-gap: the capability/skill that is missing
+capability_gap: the capability/skill that is missing (matches workflow input `capability_gap`)
 by_when: the deadline to close it
 internal: skills/people that already exist nearby
 constraints: budget, time, flight-risk notes

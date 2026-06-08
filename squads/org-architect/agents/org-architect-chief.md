@@ -89,6 +89,8 @@ handoff_to:
     when: "Leveling/competencies feed performance, calibration or career growth"
   - agent: "peopleops-chief"
     when: "Payroll setup, comp filings or contract changes are required"
+  - agent: "apex-talent-chief"
+    when: "The need falls outside this module's domain — route back via the platform orchestrator"
 
 output_examples:
   - input: "*write-jd for a mid-level data analyst"

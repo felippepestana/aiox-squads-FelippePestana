@@ -10,7 +10,7 @@
 
 ### Inputs Required
 ```text
-bands: the bands/leveling under review (from comp-strategist)
+salary_band: the bands/leveling under review (from comp-strategist's salary-band.yaml, root key `salary_band`)
 population: the roles/people in the comparable set
 inputs_used: how placements were decided (level, skills, prior salary, etc.)
 jurisdiction: applicable pay law, if any

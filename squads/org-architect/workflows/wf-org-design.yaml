@@ -63,9 +63,13 @@ phases:
     description: "Model org structure (spans & layers); for capability gaps, run 4R before defaulting to recruiting."
     depends_on: "phase_1_intake"
     agents: ["org-modeler", "fourr-advisor"]
+    # NOTE: This is the full end-to-end flow — both tasks elicit and run in sequence.
+    # If a need is only structure OR only a 4R decision, invoke the single task standalone
+    # via the chief (*model-org or *4r) instead of running the whole workflow, to avoid
+    # irrelevant elicitation. apply-4r runs only when a capability_gap is in scope.
     tasks:
       - { agent: "org-modeler", task: "model-org.md", output: "org-model.yaml" }
-      - { agent: "fourr-advisor", task: "apply-4r.md", output: "fourr-decision.yaml" }
+      - { agent: "fourr-advisor", task: "apply-4r.md", output: "fourr-decision.yaml", when: "capability_gap is in scope" }
     checkpoint:
       name: "Structure & Capability Framed"
       veto_conditions:

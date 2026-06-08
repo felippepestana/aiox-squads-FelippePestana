@@ -10,7 +10,7 @@
 
 ### Inputs Required
 ```text
-role: role/level to band (from role-designer)
+job_description: role/level to band (from role-designer's job-description.yaml, root key `job_description`)
 level: IC/management level of work
 market: geography + market reference (e.g., P50 tech SP)
 posture: lead | match | lag
