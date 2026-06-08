@@ -13,17 +13,18 @@
 - ✅ Script support em `fix-mcp.sh`
 - ⏳ Awaiting configuration & testing
 
+> **Pacote definido:** `@taazkareem/clickup-mcp-server` (fonte única: `CLICKUP_SETUP.md`).
+> A incerteza de pacote foi resolvida — não usar `@clickup/mcp-server` nem
+> `@modelcontextprotocol/server-clickup` (este último não existe no npm).
+
 ### Tasks
 - [ ] Obter ClickUp API token (https://app.clickup.com/settings/apps)
-- [ ] Testar disponibilidade do MCP package
-  - Verificar `@clickup/mcp-server` ou `@modelcontextprotocol/server-clickup`
-  - Determinar nome correto e versão no npm
 - [ ] Configurar no Claude Code local
   ```bash
-  npm install -g @clickup/mcp-server  # (ou package correto)
+  npm install -g @taazkareem/clickup-mcp-server
   claude mcp add ClickUp \
     -e CLICKUP_API_TOKEN=pk_YOUR_TOKEN \
-    -- npx @modelcontextprotocol/server-clickup
+    -- npx @taazkareem/clickup-mcp-server
   ```
 - [ ] Testar conexão: `claude mcp list`
 - [ ] Atualizar documentação em `CLAUDE.md`
@@ -35,7 +36,11 @@
 - [ ] `claude mcp list` mostra ClickUp como connected
 
 ### Referência
-Ver `MCP_SETUP_PLAN.md` linhas 84-98 para detalhes completos
+Ver `MCP_SETUP_PLAN.md` (PASSO 5) e `CLICKUP_SETUP.md` para detalhes completos.
+
+> **Nota — shell MCP resolvido:** o antigo plano registrava `/bin/bash` como MCP, o que é
+> inviável (bash não fala JSON-RPC). Substituído pelo servidor MCP real
+> `mcp-server-commands` (`npx mcp-server-commands`). Ver `MCP_SETUP_PLAN.md` (PASSO 3).
 
 ---
 

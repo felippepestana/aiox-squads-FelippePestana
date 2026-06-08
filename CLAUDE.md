@@ -83,9 +83,10 @@ MCPs são servidores que estendem as capacidades do Claude Code. Este projeto ut
   - Requer: Docker daemon rodando (acesso ao `/var/run/docker.sock`)
   - Instalação: `npm install -g docker-mcp`
 
-- **shell**: Executar comandos bash
-  - Comando: `/bin/bash`
-  - Sempre disponível no sistema
+- **shell**: Executar comandos via servidor MCP de shell
+  - Pacote: `mcp-server-commands` (`npx mcp-server-commands`), expõe a ferramenta `run_process`
+  - Nota: `/bin/bash` puro **não** é um servidor MCP (não fala JSON-RPC) — use o pacote acima
+  - Complementar à ferramenta Bash nativa do Claude Code
   - Requer aprovação explícita no Claude Code
 
 - **ClickUp** (opcional): Integração com ClickUp para gerenciamento de tarefas
@@ -117,9 +118,8 @@ Caso encontre erros de conexão com MCPs:
 
 3. **Reinstalar MCPs:**
    ```bash
-   npm install -g docker-mcp
-   claude mcp add MCP_DOCKER -- npx -y docker-mcp
-   claude mcp add shell -- /bin/bash
+   claude mcp add MCP_DOCKER -- npx -y docker-mcp   # funcional só com socket do Docker montado
+   claude mcp add shell -- npx mcp-server-commands  # servidor MCP de shell real (NÃO /bin/bash)
    ```
 
 ### Documentação Detalhada
