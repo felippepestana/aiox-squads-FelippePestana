@@ -1,0 +1,32 @@
+# Template: Assessment & Certification
+# Produced by: assessment-master | Consumed by: learning-gate
+# Items aligned to Bloom level. Application prioritized (Kirkpatrick 3+). Rubric required.
+
+assessment:
+  track_ref: ""
+  built_by: "assessment-master"
+  timestamp: ""
+
+  items:
+    - id: ""                     # ex: ASS_001
+      competency: ""
+      bloom_level: ""            # deve >= nível do objetivo
+      kirkpatrick_level: null    # 1=reação 2=aprendizado 3=aplicação 4=resultado
+      type: ""                   # aplicação no trabalho | cenário | quiz
+      prompt: ""
+      rubric:
+        - level: ""              # ex: "proficiente (4)"
+          descriptor: ""
+
+  kirkpatrick_distribution:
+    level_1_reaction: 0
+    level_2_learning: 0
+    level_3_application: 0
+    level_4_results: 0
+
+  certification:
+    enabled: null
+    criteria: ""                 # critério observável
+    threshold: ""                # limiar de aprovação explícito
+    validity: ""
+    note: "Certificação por aplicação observada, não por conclusão."

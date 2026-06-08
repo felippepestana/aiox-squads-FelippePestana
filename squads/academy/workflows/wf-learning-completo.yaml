@@ -1,0 +1,264 @@
+name: "wf-learning-completo"
+display_name: "Ciclo Completo de Aprendizagem (do Gap à Trilha Publicada)"
+description: "Orquestra desenvolvimento: intake do gap → mapeamento de competências → design 70-20-10 + conteúdo → avaliação/certificação → gate pedagógico. Nada é publicado sem PASS do learning-gate."
+
+trigger: "user command (*recommend-track | *build-course) or push from performa/insights (gap identificado)"
+orchestrator: "academy-chief"
+
+entry_point: "Phase 1: INTAKE"
+
+inputs:
+  - name: "gap_source"
+    type: "string"
+    required: true
+    description: "Origem do gap (performa | org-architect | insights | onboard)"
+
+  - name: "audience"
+    type: "object"
+    required: true
+    description: "Público-alvo (cargo, coorte, n pessoas)"
+
+  - name: "business_goal"
+    type: "string"
+    required: true
+    description: "Objetivo de negócio que o fechamento do gap serve"
+
+  - name: "time_budget"
+    type: "object"
+    required: false
+    description: "Tempo disponível (horas/semana, semanas)"
+
+phases:
+  phase_1_intake:
+    name: "INTAKE"
+    display_name: "Framing do Gap"
+    description: "Confirmar o gap, público e objetivo de negócio. Aborta se não houver gap concreto."
+
+    agents:
+      - "academy-chief"
+
+    execution: "sequential"
+
+    tasks: []  # Intake é conversacional
+
+    outputs:
+      - name: "gap_framed"
+        type: "object"
+        schema:
+          gap_source: "string"
+          audience: "object"
+          business_goal: "string"
+
+    exit_condition:
+      - name: "gap_defined"
+        rule: "Gap, público e objetivo confirmados. Aborta se gap difuso/sem fonte."
+        type: "HARD"
+
+  phase_2_skill_mapping:
+    name: "SKILL_MAPPING"
+    display_name: "Mapeamento de Competências"
+    description: "Traduzir o gap em matriz de competências observáveis com objetivos mensuráveis."
+
+    agents:
+      - "skill-mapper"
+
+    execution: "sequential"
+
+    tasks:
+      - id: "map-skill-gap"
+        executor: "skill-mapper"
+        elicit: "gap_source, audience, current_level, target_level"
+        mode: "deterministic mapping"
+        input_source: "output_phase_1_intake.gap_framed"
+        output_format: "skills_matrix.yaml"
+
+    outputs:
+      - name: "skills_matrix"
+        type: "object"
+        schema:
+          competencies: "array (observable, current/target level, source, objective, bloom)"
+          summary: "object (all_observable, all_sourced, all_measurable)"
+
+    exit_condition:
+      - name: "competencies_measurable"
+        rule: "Competências observáveis, com níveis e objetivos mensuráveis e fonte rastreada."
+        type: "HARD"
+
+  phase_3_design:
+    name: "DESIGN"
+    display_name: "Design da Trilha & Conteúdo"
+    description: "Desenhar a trilha 70-20-10 e forjar o conteúdo (paralelo após a sequência base)."
+
+    agents:
+      - "track-designer"
+      - "content-forge"
+
+    execution: "sequential"   # track-designer define a estrutura; content-forge preenche
+
+    tasks:
+      - id: "design-track"
+        executor: "track-designer"
+        elicit: "skills_matrix, time_budget, social_resources"
+        mode: "deterministic sequencing + 70-20-10"
+        input_source: "output_phase_2_skill_mapping.skills_matrix"
+        output_format: "learning_track.yaml"
+
+      - id: "build-content"
+        executor: "content-forge"
+        elicit: "learning_track, module, domain_criticality"
+        mode: "microlearning generation + SME flagging"
+        input_source: "output_phase_3_design.learning_track"
+        output_format: "course_content.md"
+
+    outputs:
+      - name: "learning_track"
+        type: "object"
+        schema:
+          blend_summary: "object (70/20/10)"
+          modules: "array (components, application_point)"
+      - name: "course_content"
+        type: "object"
+        schema:
+          microblocks: "integer"
+          sme_flags: "array"
+
+    exit_condition:
+      - name: "track_balanced"
+        rule: "70-20-10 explícito; ponto de aplicação por competência. Trilha 100% formal → ALERT."
+        type: "SOFT"
+      - name: "content_flagged"
+        rule: "Conteúdo crítico marcado requer_SME. Microlearning estruturado."
+        type: "HARD"
+
+  phase_4_assessment:
+    name: "ASSESSMENT"
+    display_name: "Avaliação & Certificação"
+    description: "Construir avaliação focada em aplicação (Kirkpatrick 3+) e critérios de certificação."
+
+    agents:
+      - "assessment-master"
+
+    execution: "sequential"
+
+    tasks:
+      - id: "assess-learning"
+        executor: "assessment-master"
+        elicit: "skills_matrix, learning_track, content_meta"
+        mode: "Bloom-aligned, application-focused"
+        input_sources:
+          - "output_phase_2_skill_mapping.skills_matrix"
+          - "output_phase_3_design.learning_track"
+        output_format: "assessment.yaml"
+
+    outputs:
+      - name: "assessment"
+        type: "object"
+        schema:
+          items: "array (bloom_level, kirkpatrick_level, rubric)"
+          certification: "object (criteria, threshold)"
+
+    exit_condition:
+      - name: "assessment_valid"
+        rule: "Itens no nível de Bloom; aplicação priorizada (Kirkpatrick 3+); certificação com critério+limiar."
+        type: "HARD"
+
+  phase_5_learning_gate:
+    name: "LEARNING_GATE"
+    display_name: "Gate Pedagógico & de Efetividade"
+    description: "Auditoria obrigatória: objetivos mensuráveis, SME verificado, foco em aplicação, acessibilidade, trilha. VETO se achados duros."
+
+    agents:
+      - "learning-gate"
+
+    execution: "sequential"
+
+    tasks:
+      - id: "audit-learning"
+        executor: "learning-gate"
+        elicit: "skills_matrix, learning_track, content_meta, assessment, sme_status"
+        mode: "deterministic pedagogical audit"
+        input_sources:
+          - "output_phase_2_skill_mapping.skills_matrix"
+          - "output_phase_3_design.learning_track"
+          - "output_phase_3_design.course_content"
+          - "output_phase_4_assessment.assessment"
+        output_format: "learning_audit.yaml"
+
+    outputs:
+      - name: "learning_verdict"
+        type: "object"
+        schema:
+          verdict: "PASS | VETO"
+          checks: "object (objectives, sme, application, accessibility, trail)"
+          if_veto:
+            reasons: "array"
+            remediation_steps: "array"
+          if_pass:
+            clearance_statement: "string"
+            next_action: "Publish track"
+
+    exit_condition:
+      - name: "learning_audited"
+        rule: "Objetivos, SME, aplicação, acessibilidade e trilha validados. Retorna PASS ou VETO."
+        type: "HARD"
+      - name: "veto_blocks_publish"
+        rule: "Se VETO, publicação bloqueada. Remediação e reapresentação. Se PASS, publica."
+        type: "HARD"
+
+handoffs:
+  - from: "learning-gate"
+    to: "academy-chief"
+    when: "Phase 5 returns PASS"
+    data: "learning_verdict + learning_track"
+    purpose: "Publicação da trilha"
+
+  - from: "learning-gate"
+    to: "academy-chief"
+    when: "Phase 5 returns VETO"
+    data: "learning_verdict (reasons + remediation)"
+    purpose: "Bloqueio de publicação; remediação e reapresentação"
+
+  - from: "academy-chief"
+    to: "performa-chief"
+    when: "Trilha publicada e vinculada a um PDI"
+    data: "learning_track + assessment (certification)"
+    purpose: "Conectar desenvolvimento ao ciclo de desempenho/PDI"
+
+  - from: "academy-chief"
+    to: "insights-chief"
+    when: "Trilha concluída (medir resultado — Kirkpatrick 4)"
+    data: "assessment results + application evidence"
+    purpose: "Medir impacto no negócio (turnover, performance) ao longo do tempo"
+
+error_handling:
+  - phase: "phase_2_skill_mapping"
+    error: "gap_not_validated"
+    action: "ALERT — gap sem fonte rastreável"
+    remediation: "Validar gap com performa/org-architect antes de mapear"
+
+  - phase: "phase_3_design"
+    error: "track_all_formal"
+    action: "ALERT — viola 70-20-10"
+    remediation: "Adicionar componentes experiencial (70) e social (20)"
+
+  - phase: "phase_5_learning_gate"
+    error: "sme_or_objective_or_accessibility_violation"
+    action: "VETO — não publicável"
+    remediation: "Verificar SME, tornar objetivos mensuráveis, corrigir acessibilidade"
+
+audit_trail:
+  - action: "phase_initiated"
+    tracked_by: "academy-chief"
+    fields: ["timestamp", "user", "phase", "gap_source", "inputs"]
+
+  - action: "task_executed"
+    tracked_by: "executor_agent"
+    fields: ["timestamp", "user", "task", "sme_flags", "kirkpatrick", "output", "status"]
+
+  - action: "phase_completed"
+    tracked_by: "orchestrator"
+    fields: ["timestamp", "phase", "exit_condition_met", "next_phase"]
+
+  - action: "workflow_completed"
+    tracked_by: "academy-chief"
+    fields: ["timestamp", "verdict", "track_published", "responsible_agent"]

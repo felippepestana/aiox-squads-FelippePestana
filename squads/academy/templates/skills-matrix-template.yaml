@@ -1,0 +1,29 @@
+# Template: Skills Matrix
+# Produced by: skill-mapper | Consumed by: track-designer, assessment-master
+# Every competency is observable, sourced, and tied to a measurable objective.
+
+skills_matrix:
+  gap_source: ""                 # performa | org-architect | insights + evidência
+  audience:
+    role: ""
+    cohort_size: null
+  business_goal: ""
+  mapped_by: "skill-mapper"
+  timestamp: ""
+  proficiency_scale: "1=ciente · 2=iniciante · 3=competente · 4=proficiente · 5=expert"
+
+  competencies:
+    - id: ""                     # ex: COMP_001
+      name: ""
+      observable: ""             # comportamento observável no trabalho
+      current_level: null        # 1–5
+      target_level: null         # 1–5
+      source: ""                 # módulo + evidência do gap
+      objective: ""              # verbo + condição + critério (mensurável)
+      bloom_level: ""            # lembrar|entender|aplicar|analisar|avaliar|criar
+
+  summary:
+    competencies_count: null
+    all_observable: null
+    all_sourced: null
+    all_measurable: null

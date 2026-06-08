@@ -1,0 +1,34 @@
+# Template: Learning Track
+# Produced by: track-designer | Consumed by: content-forge, assessment-master
+# 70-20-10 blend explicit. Every competency has a work application point.
+
+learning_track:
+  title: ""
+  skills_matrix_ref: ""          # ids das competências cobertas
+  designed_by: "track-designer"
+  timestamp: ""
+  duration:
+    weeks: null
+    formal_hours_per_week: null
+    total_formal_hours: null
+
+  blend_summary:
+    experiential_pct: 70
+    social_pct: 20
+    formal_pct: 10
+
+  modules:
+    - id: ""                     # ex: MOD_001
+      competency: ""             # ref à competência
+      sequence: null
+      prerequisites: []
+      components:
+        formal: ""               # ~10% — curso/microcurso
+        social: ""               # ~20% — mentoria/peer/shadowing
+        experiential: ""         # ~70% — prática no trabalho
+      application_point: ""      # onde/quando aplicar + evidência observável
+      spaced: ""                 # distribuição temporal (anti-cramming)
+
+  realism_check:
+    fits_work_week: null
+    note: ""

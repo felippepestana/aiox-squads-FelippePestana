@@ -1,9 +1,9 @@
 name: academy
 display_name: "Academy — Treinamento & Desenvolvimento"
-version: "0.1.0"
+version: "1.0.0"
 domain: learning-development
 entry_agent: academy-chief
-description: "Aprendizagem e desenvolvimento (LMS): trilhas por gap de competência, cursos, avaliações, certificados e matriz de competências."
+description: "Aprendizagem e desenvolvimento (LMS) orientado a gap de competência: mapeia lacunas (cruzando performa/org-architect), desenha trilhas no modelo 70-20-10, gera conteúdo e avaliações, e emite certificações. Gate pedagógico obrigatório (precisão verificada por SME, objetivos mensuráveis, foco em aplicação, acessibilidade) antes de publicar qualquer trilha. Mede aplicação no trabalho, não vaidade de conclusão."
 
 keywords:
   - treinamento
@@ -12,27 +12,91 @@ keywords:
   - matriz de competências
   - certificação
   - desenvolvimento
+  - 70-20-10
+  - gap de competência
+  - aprendizagem corporativa
 
 metadata:
   type: module
-  status: DEVELOPING
+  status: ACTIVE
   platform: apex-talent
+  pedagogy_model: 70-20-10
+  data_residency: br-only
 
 tier_structure:
   tier_0:
-    role: "Module Orchestration"
+    role: "Orchestration & Development Strategy"
     agents: ["academy-chief"]
+  tier_1:
+    role: "Learning Design"
+    agents: ["skill-mapper", "track-designer"]
+  tier_2:
+    role: "Content & Assessment"
+    agents: ["content-forge", "assessment-master"]
+  tier_3:
+    role: "Pedagogical Quality Gate"
+    agents: ["learning-gate"]
+
+scoring_system:
+  total: 100
+  categories:
+    gap_relevance:
+      weight: 20
+      agent: skill-mapper
+      checks: ["tied_to_competency_gap", "proficiency_level_defined", "source_traced"]
+    track_design:
+      weight: 20
+      agent: track-designer
+      checks: ["702010_blend", "logical_sequence", "time_realistic"]
+    content_quality:
+      weight: 25
+      agent: content-forge
+      checks: ["sme_verification_flagged", "accuracy", "microlearning_structure"]
+    assessment_validity:
+      weight: 20
+      agent: assessment-master
+      checks: ["measures_application", "bloom_aligned", "certification_criteria_clear"]
+    learning_effectiveness:
+      weight: 15
+      agent: learning-gate
+      checks: ["kirkpatrick_mapped", "accessible", "audit_trail_complete"]
+  grade_scale:
+    - { min: 90, label: "Ready to Publish", color: "#ff6b00" }
+    - { min: 75, label: "Solid with Revisions", color: "#f59e0b" }
+    - { min: 60, label: "Needs Redesign", color: "#f59e0b" }
+    - { min: 0, label: "Not Pedagogically Sound", color: "#e5484d" }
 
 workflow:
-  primary: "module intake (skeleton)"
+  primary: "wf-learning-completo"
   phases:
-    - "Phase 1: INTAKE - Understand the need within this module's domain"
-    - "Phase 2: SCOPE - Define the specialist flow to build next"
+    - name: "Phase 1: INTAKE"
+      description: "Frame the competency gap, target audience, business goal"
+    - name: "Phase 2: SKILL MAPPING"
+      description: "Map the gap to a skills matrix and measurable learning objectives"
+    - name: "Phase 3: DESIGN"
+      description: "Design the 70-20-10 track and forge the content (parallel)"
+    - name: "Phase 4: ASSESSMENT"
+      description: "Build application-focused assessment and certification criteria"
+    - name: "Phase 5: LEARNING GATE"
+      description: "Audit pedagogy, accuracy, accessibility and effectiveness → PASS/VETO"
 
 entry_points:
-  intake: "*recommend-track"
+  recommend: "*recommend-track"
+  build: "*build-course"
+  skills: "*map-skills"
+  tutor: "*tutor"
 
 workspace_integration:
-  level: none
-  rationale: >-
-    Modulo academy em desenvolvimento (esqueleto). O Chief faz intake e escopo; ainda nao consome nem produz artefatos no workspace/.
+  level: full
+  produces:
+    - "skills_matrix.yaml"
+    - "learning_track.yaml"
+    - "course_content.md"
+    - "assessment.yaml"
+    - "learning_audit.md"
+  consumes:
+    - "from performa: gaps de competência por ciclo/9-box e PDI"
+    - "from org-architect: matriz de competências por cargo e job architecture"
+    - "from insights: gaps agregados por coorte (driver de progressão estagnada)"
+    - "from onboard: trilhas de integração 30/60/90"
+  rationale: "Academy fecha o ciclo de desenvolvimento: recebe o gap (de performa/org-architect/insights) e devolve a trilha que o fecha, medindo aplicação no trabalho. Aprendizagem desconectada do gap é catálogo; aqui ela é resposta a uma lacuna concreta."
