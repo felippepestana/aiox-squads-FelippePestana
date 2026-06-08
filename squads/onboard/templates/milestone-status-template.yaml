@@ -1,0 +1,17 @@
+# milestone-status-template — output of track-30-60-90 (milestone-tracker)
+# Risk = a prompt for support, never a verdict. Personality is not a risk factor.
+milestone_status:
+  new_hire: "{name}"
+  day: 0                       # current day in the journey
+  phase: "{30|60|90}"
+
+  on_track:
+    - "{milestone met}"
+  slipping:
+    - { milestone: "{...}", why: "{context}" }
+  risk_signals:
+    - "{engagement/progress signal — NOT personality}"
+
+  suggested_next_step: "{e.g., manager 1:1 to unblock X / confirm belonging}"
+  framing: "support, not a verdict"
+  due_check_ins: ["{30|60|90 review or 1:1 due}"]

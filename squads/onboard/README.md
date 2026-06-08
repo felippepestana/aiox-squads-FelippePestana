@@ -1,24 +1,27 @@
 # Onboard — Onboarding & Integração
 
-> 🟡 **Em desenvolvimento (esqueleto).** Este módulo da plataforma [Apex-Talent](../apex-talent/) disponibiliza hoje apenas o agente **Chief** (`onboard-chief`), que faz o intake da área e escopa o fluxo de especialistas a ser construído. Os agentes especialistas, tarefas e modelos serão adicionados nas próximas iterações.
+> 🟢 **Módulo ativo** da plataforma [Apex-Talent](../apex-talent/). Transforma uma boa contratação em um(a) bom(a) contribuinte nos **primeiros 90 dias**.
 
-## Área
+Onboard cria uma **jornada 30/60/90 personalizada** por cargo e perfil comportamental, coordena **checklists dinâmicos, documentos e contrato**, oferece um **buddy/IA** de dúvidas e faz **acompanhamento proativo** dos marcos. Carrega o contexto da contratação (`talent-compass`) e o perfil (`profiler-dna`, **peso 0**).
 
-**Onboarding & Integração** — parte da suíte de RH AI-native Apex-Talent.
+**Princípios:** personaliza por cargo + contexto (personalidade é **peso 0**, orienta e não julga); **aumenta o gestor — não o substitui**; acompanha proativamente (onboarding falha em silêncio); consentimento, acessibilidade e inclusão com **gate de veto**.
 
-Jornada de integração do novo colaborador: trilhas personalizadas, checklists dinâmicos, coleta de documentos, assinatura de contrato e acompanhamento 30/60/90.
+## Cadeia de comando (tiers)
 
-## Funcionalidades-alvo
+| Tier | Agente | Papel |
+|------|--------|-------|
+| 0 | `onboard-chief` | Orquestra a jornada de integração |
+| 1 | `journey-architect` | Jornada 30/60/90 personalizada |
+| 1 | `checklist-runner` | Checklists dinâmicos, documentos e contrato |
+| 2 | `buddy-ai` | Buddy/IA de dúvidas (augmenta o gestor) |
+| 2 | `milestone-tracker` | Acompanhamento 30/60/90 + risco proativo |
+| 3 | `inclusion-gate` | Gate de consentimento/acessibilidade/inclusão — **veto** |
 
-- Jornada do novo colaborador (30/60/90)
-- Trilhas de integração e checklists dinâmicos
-- Coleta de documentos e assinatura de contrato
-- Acompanhamento 30 / 60 / 90 dias
-- Buddy/IA de dúvidas
+## Fluxo (workflow `wf-onboarding-journey`)
 
-## Diferencial de IA
-
-Veja o [mapa de oportunidades de IA](../apex-talent/data/ai-opportunity-map.md) para o detalhe da abordagem AI-native desta área.
+```text
+INTAKE ─▶ JORNADA 30/60/90 ─▶ CHECKLIST/DOCS ─▶ INCLUSÃO (veto) ─▶ RODAR (buddy + acompanhamento)
+```
 
 ## Como usar
 
@@ -26,19 +29,26 @@ Selecione `onboard:onboard-chief` no chatbot ou na web.
 
 Comandos do Chief:
 
-- `*build-journey — Personalized 30/60/90 journey`
-- `*checklist — Dynamic onboarding checklist`
-- `*track-30-60-90 — Track milestones and risks`
-- `*buddy — Answer new-hire questions`
-- `*help` — lista os comandos
-- `*exit` — encerra o agente
+- `*build-journey` — jornada 30/60/90 personalizada
+- `*checklist` — checklist dinâmico + documentos + contrato
+- `*buddy` — responder dúvida do novo colaborador
+- `*track-30-60-90` — acompanhar marcos e riscos
+- `*inclusion-review` — gate de inclusão/consentimento
+- `*help` / `*exit`
 
-## Roteiro
+## Conexão com outros módulos
 
-1. **Agora:** Chief (intake + escopo do fluxo). ✅
-2. **Próximo:** agentes especialistas (Tier 1/2), tarefas e modelos da área.
-3. **Depois:** workflow `wf-*` e integração de dados com os demais módulos.
+- **talent-compass:** fornece o relatório do candidato (forças + gaps de ramp).
+- **profiler-dna:** fornece contexto comportamental (peso 0) para personalizar a jornada.
+- **peopleops:** recebe a admissão digital / eSocial / folha (handoff).
+- **benefits-hub:** elegibilidade/adesão de benefícios.
+- **performa:** aos 90 dias, transição para o ciclo de desempenho.
 
-## Referência
+## Minutas
 
-Baseado em: *The First 90 Days (Michael Watkins) + structured onboarding*.
+[`templates/welcome-letter.md`](templates/welcome-letter.md) — carta de boas-vindas (pré-boarding).
+
+## Referências
+
+- Michael Watkins — *The First 90 Days* (ver [`data/first-90-days-methodology.md`](data/first-90-days-methodology.md))
+- Boas práticas de onboarding e acessibilidade/inclusão ([`data/accessibility-inclusion.md`](data/accessibility-inclusion.md))

@@ -1,0 +1,25 @@
+# onboarding-checklist-template — output of checklist (checklist-runner)
+# Tailored to role/location/modality. Minimal, private, consent-based.
+# Admission filings/payroll/eSocial are handed off to peopleops.
+checklist:
+  role: "{role}"
+  location: "{location}"
+  modality: "{presencial|remoto|hibrido}"
+  start_date: "{YYYY-MM-DD}"
+
+  pre_start:
+    - { item: "{e.g., equipment shipped}", owner: "{IT}", due: "{date}", status: "{todo|done|blocked}" }
+  day_1:
+    - { item: "{access verified / welcome / buddy intro}", owner: "{...}", due: "{date}", status: "{...}" }
+  week_1:
+    - { item: "{dev env / first task}", owner: "{...}", due: "{date}", status: "{...}" }
+
+  documents:
+    - { doc: "{e.g., contrato assinado}", status: "{pending|received}", consent: true }
+    # collect only what's needed; treat as sensitive (LGPD)
+
+  blockers:
+    - { item: "{blocking item}", owner: "{who}", due: "{date}" }
+
+  admission_handoff: "peopleops"   # admissão digital / eSocial / folha
+  benefits_handoff: "benefits-hub" # elegibilidade/adesão (se aplicável)

@@ -1,0 +1,99 @@
+name: wf-onboarding-journey
+display_name: "Onboarding Journey: Intake → Journey → Checklist → Inclusion Gate → Run (Buddy + 30/60/90)"
+version: "1.0.0"
+description: "End-to-end onboarding. Carries hiring context (talent-compass) and behavioral profile (profiler-dna, weight 0) into a personalized 30/60/90 journey, coordinates a dynamic checklist + documents + contract, passes a mandatory inclusion/consent/accessibility gate, then runs with a buddy and proactive milestone tracking. Augments the manager — never replaces them. Admission/payroll/eSocial are handed to peopleops."
+
+trigger: "*build-journey"
+orchestrator: "onboard-chief"
+
+inputs:
+  - name: "new_hire"
+    description: "New hire name + role + team"
+    required: true
+    elicit: true
+  - name: "role_objectives"
+    description: "Performance objectives for the role"
+    required: false
+  - name: "candidate_report"
+    description: "From talent-compass — strengths and ramp gaps"
+    required: false
+  - name: "behavioral_context"
+    description: "From profiler-dna — weight 0, consent-based"
+    required: false
+  - name: "modality"
+    description: "presencial | remoto | hibrido"
+    required: false
+
+phases:
+  phase_1_intake:
+    name: "Intake & Context"
+    description: "Gather the new hire, role objectives, hiring context (candidate report) and consent."
+    agents: ["onboard-chief"]
+    execution: "interactive"
+    checkpoint:
+      name: "Context Gathered"
+      veto_conditions:
+        - "No role/objectives → keep scoping"
+
+  phase_2_journey:
+    name: "Personalized 30/60/90 Journey"
+    description: "Design the journey from role objectives + behavioral context (weight 0) + candidate report."
+    depends_on: "phase_1_intake"
+    agents: ["journey-architect"]
+    tasks:
+      - { agent: "journey-architect", task: "build-journey.md", output: "journey-30-60-90.yaml" }
+    checkpoint:
+      name: "Journey Drafted"
+      veto_conditions:
+        - "One-size-fits-all journey → personalize"
+        - "Personality used to judge the hire → reset to weight 0"
+
+  phase_3_checklist:
+    name: "Checklist, Documents & Contract"
+    description: "Dynamic checklist tailored to role/location/modality; documents + contract (minimal, consent-based)."
+    depends_on: "phase_1_intake"
+    agents: ["checklist-runner"]
+    tasks:
+      - { agent: "checklist-runner", task: "checklist.md", output: "onboarding-checklist.yaml" }
+    checkpoint:
+      name: "Checklist Ready"
+      veto_conditions:
+        - "Admission/payroll/eSocial attempted here → hand off to peopleops"
+        - "Sensitive documents exposed or collected beyond need → fix"
+
+  phase_4_inclusion_gate:
+    name: "Inclusion, Consent & Accessibility Gate"
+    description: "Mandatory gate before the journey runs: consent + weight-0, accessibility, inclusion, augment-the-manager."
+    depends_on: ["phase_2_journey", "phase_3_checklist"]
+    agents: ["inclusion-gate"]
+    execution: "audit"
+    tasks:
+      - { agent: "inclusion-gate", task: "inclusion-review.md", output: "inclusion-audit.yaml" }
+    checkpoint:
+      name: "Inclusion Verdict"
+      veto_conditions:
+        - "No consent / weight-0 framing → HALT"
+        - "Accessibility needs unmet → HALT"
+        - "Buddy framed as replacing the manager → reframe"
+
+  phase_5_run:
+    name: "Run (Buddy + 30/60/90 Tracking)"
+    description: "Run the journey: buddy answers questions, milestone-tracker watches 30/60/90 and surfaces risk proactively (support framing)."
+    depends_on: "phase_4_inclusion_gate"
+    agents: ["buddy-ai", "milestone-tracker", "onboard-chief"]
+    execution: "ongoing"
+    tasks:
+      - { agent: "buddy-ai", task: "buddy.md", output: "buddy-answer.md" }
+      - { agent: "milestone-tracker", task: "track-30-60-90.md", output: "milestone-status.yaml" }
+    checkpoint:
+      name: "Journey Running"
+      veto_conditions:
+        - "Milestone slipping silently → proactive follow-up"
+        - "Risk flag treated as a verdict → reframe as support"
+
+outputs:
+  - "journey-30-60-90.yaml — Personalized onboarding journey (context weight 0)"
+  - "onboarding-checklist.yaml — Dynamic checklist + documents + contract"
+  - "inclusion-audit.yaml — Inclusion/consent/accessibility verdict (PASS/VETO)"
+  - "buddy-answer.md — Buddy responses to new-hire questions"
+  - "milestone-status.yaml — 30/60/90 progress + early risk (support framing)"

@@ -105,7 +105,7 @@ output_examples:
       | pulse | Clima & Engajamento | 🟡 Em desenvolvimento |
       | peopleops | Departamento Pessoal & Folha | 🟡 Em desenvolvimento |
       | chronos | Controle de Ponto | 🟡 Em desenvolvimento |
-      | onboard | Onboarding & Integração | 🟡 Em desenvolvimento |
+      | onboard | Onboarding & Integração | 🟢 Ativo |
       | academy | Treinamento & Desenvolvimento | 🟡 Em desenvolvimento |
       | insights | People Analytics | 🟡 Em desenvolvimento |
       | org-architect | Cargos, Salários & Org Design | 🟡 Em desenvolvimento |
