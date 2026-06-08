@@ -1,0 +1,22 @@
+# eNPS Report Template
+# Owner: sentiment-analyst. The score is the symptom; the driver themes are the cause.
+# Only report cuts at/above the minimum group size.
+
+enps_report:
+  period: ""
+  overall:
+    score: 0                # promoters_pct - detractors_pct
+    promoters_pct: 0        # responded 9-10
+    passives_pct: 0         # responded 7-8
+    detractors_pct: 0       # responded 0-6
+    n: 0
+
+  by_segment:               # only segments >= min_group_size
+    - { segment: "", score: 0, n: 0 }
+
+  drivers_behind:
+    promoters: []           # themes promoters cite
+    detractors: []          # themes detractors cite
+
+  headline: ""              # what the number means + what's behind it
+  min_group_size: 5

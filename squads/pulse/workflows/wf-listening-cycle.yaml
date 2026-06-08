@@ -1,0 +1,108 @@
+name: wf-listening-cycle
+display_name: "Listening Cycle: Intake → Survey Design → Analysis → Signals & Action → Anonymity Gate"
+version: "1.0.0"
+description: "End-to-end continuous listening. Frames a need as survey design, analysis, signals, action or an audit; designs a short bias-free instrument with anonymity by design; analyzes themes/sentiment/eNPS; surfaces early disengagement signals; turns results into a small set of prioritized, owned actions; then passes a mandatory anonymity gate (min group size + re-identification) before any cut is published. Output is advisory — leaders own the action. Behavioral/personality data is context only, never a filter."
+
+trigger: "*design-survey"
+orchestrator: "pulse-chief"
+
+inputs:
+  - name: "need"
+    description: "The listening need to address"
+    required: true
+    elicit: true
+  - name: "audience"
+    description: "Who is surveyed and the segments that matter"
+    required: false
+  - name: "min_group_size"
+    description: "Minimum group size for any reported cut (anonymity by design)"
+    required: false
+  - name: "responses"
+    description: "Collected responses when analyzing an existing survey (aggregated)"
+    required: false
+
+phases:
+  phase_1_intake:
+    name: "Intake & Framing"
+    description: "Frame the need as survey design, analysis, signals, action or an audit."
+    agents: ["pulse-chief"]
+    execution: "interactive"
+    checkpoint:
+      name: "Need Framed"
+      veto_conditions:
+        - "Need spans another module → route via apex-talent-chief"
+
+  phase_2_survey_design:
+    name: "Survey Design"
+    description: "Design a short, bias-free instrument (climate/eNPS/pulse) with anonymity by design."
+    depends_on: "phase_1_intake"
+    agents: ["survey-designer"]
+    # Runs when a new/!revised instrument is needed. To analyze an existing survey,
+    # invoke phase_3 standalone via the chief (*analyze-results) instead.
+    tasks:
+      - { agent: "survey-designer", task: "design-survey.md", output: "survey-design.yaml", when: "an instrument is being created/revised" }
+    checkpoint:
+      name: "Instrument Ready"
+      veto_conditions:
+        - "Leading/double-barreled items → rewrite"
+        - "Allowed cuts that re-identify respondents → remove"
+        - "No minimum group size set → fix"
+
+  phase_3_analysis:
+    name: "Themes, Sentiment & eNPS"
+    description: "Analyze responses into themes, sentiment and an interpreted eNPS."
+    # Hard dependency stays on phase_1_intake so an existing-survey analysis can run
+    # without designing a new instrument. Soft input: consumes survey-design.yaml when
+    # phase_2 produced one; the orchestrator sequences design first in that case.
+    depends_on: "phase_1_intake"
+    agents: ["sentiment-analyst"]
+    tasks:
+      - { agent: "sentiment-analyst", task: "analyze-results.md", output: "results-analysis.yaml" }
+    checkpoint:
+      name: "Analysis Done"
+      veto_conditions:
+        - "Identifying quote → anonymize/summarize"
+        - "Segment cut below minimum group size → drop/re-aggregate"
+        - "Average reported with no themes → add the story"
+
+  phase_4_signals_action:
+    name: "Signals & Action"
+    description: "Surface early disengagement signals and turn results into prioritized, owned actions."
+    depends_on: "phase_3_analysis"
+    agents: ["signal-scout", "action-planner"]
+    # Both consume results-analysis.yaml. detect-signals runs when history/trend matters;
+    # build-action-plan is the closing step of any full cycle. For a single need, invoke
+    # the one task standalone via the chief (*detect-signals or *action-plan).
+    tasks:
+      - { agent: "signal-scout", task: "detect-signals.md", output: "signals.yaml", when: "trend/early-warning is in scope" }
+      - { agent: "action-planner", task: "build-action-plan.md", output: "action-plan.yaml" }
+    checkpoint:
+      name: "Actions Owned"
+      veto_conditions:
+        - "Signal on a sub-minimum segment → drop"
+        - "Long unownable wishlist → cut to 2-3 owned actions"
+        - "No close-the-loop step → add it"
+
+  phase_5_anonymity_gate:
+    name: "Anonymity & Ethics Gate"
+    description: "Mandatory audit before publishing any cut: minimum group size + re-identification + anonymized quotes."
+    # Runs last: audits the complete report (analysis + action plan) before publishing.
+    # build-action-plan in phase_4 is non-conditional, so this hard dependency is safe.
+    depends_on: ["phase_4_signals_action"]
+    agents: ["anonymity-gate"]
+    execution: "audit"
+    tasks:
+      - { agent: "anonymity-gate", task: "anonymity-audit.md", output: "anonymity-audit.yaml" }
+    checkpoint:
+      name: "Anonymity Verdict"
+      veto_conditions:
+        - "Reported segment below minimum group size → VETO + re-aggregate"
+        - "Re-identifying cross-cut or small cell → VETO + coarser aggregation"
+        - "Identifying quote → VETO + summarize"
+
+outputs:
+  - "survey-design.yaml — Bias-free instrument + anonymity-by-design reporting plan"
+  - "results-analysis.yaml — Themes, sentiment and interpreted eNPS (safe cuts only)"
+  - "signals.yaml — Prioritized early disengagement signals by segment"
+  - "action-plan.yaml — 2-3 prioritized, owned, dated actions + close-the-loop"
+  - "anonymity-audit.yaml — Anonymity verdict (PASS/VETO) before any cut is published"

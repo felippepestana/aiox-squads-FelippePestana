@@ -1,0 +1,16 @@
+# Sentiment Analysis Template
+# Owner: sentiment-analyst. Themes over averages; quotes illustrate, never expose.
+
+results_analysis:
+  enps: { score: 0, promoters_pct: 0, passives_pct: 0, detractors_pct: 0 }
+
+  themes:
+    - theme: ""             # e.g., "Reconhecimento"
+      sentiment: ""         # positive | mixed | negative
+      weight: ""            # share of mentions / salience
+      quote: ""             # anonymized; summarize if not anonymizable
+
+  segments: []              # only cuts >= min_group_size
+
+  headline: ""              # the story, not just the average
+  min_group_size: 5

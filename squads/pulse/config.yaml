@@ -1,9 +1,9 @@
 name: pulse
 display_name: "Pulse — Clima & Engajamento"
-version: "0.1.0"
+version: "1.0.0"
 domain: climate-engagement
 entry_agent: pulse-chief
-description: "Escuta organizacional contínua: pesquisa de clima, eNPS, pulses, ouvidoria anônima, gamificação, reconhecimento e planos de ação a partir dos dados."
+description: "Escuta organizacional contínua ponta a ponta: desenho de pesquisas de clima/eNPS/pulse sem viés, análise de temas e sentimento (incluindo eNPS), detecção precoce de sinais de desengajamento por segmento e planos de ação priorizados e com dono — encerrando num gate de anonimato obrigatório (tamanho mínimo de grupo + risco de reidentificação) antes de publicar qualquer corte. A IA é suporte à decisão; a ação e a accountability ficam com a liderança. Personalidade/comportamento é apenas contexto, nunca filtro."
 
 keywords:
   - clima organizacional
@@ -12,27 +12,62 @@ keywords:
   - pesquisa de pulso
   - ouvidoria
   - reconhecimento
+  - sentimento
+  - plano de ação
+  - escuta contínua
+  - anonimato
 
 metadata:
   type: module
-  status: DEVELOPING
+  status: ACTIVE
   platform: apex-talent
 
 tier_structure:
   tier_0:
-    role: "Module Orchestration"
+    role: "Orchestration & Listening Strategy"
     agents: ["pulse-chief"]
+  tier_1:
+    role: "Core Specialists"
+    agents: ["survey-designer", "sentiment-analyst"]
+  tier_2:
+    role: "Signals & Action"
+    agents: ["signal-scout", "action-planner"]
+  tier_3:
+    role: "Anonymity & Ethics Gate"
+    agents: ["anonymity-gate"]
+
+# Listening protects the people who speak up. No cut is reported below a minimum
+# group size, individuals are never re-identified, and a survey without action
+# erodes trust. AI is advisory; leaders own the action. Behavioral/personality
+# data is context only, never a filter.
+ethics_model:
+  anonymity_protected: true
+  min_group_size_gate: true
+  advisory_only: true
+  action_owned_by: leadership
+  behavior_as_context_only: true
 
 workflow:
-  primary: "module intake (skeleton)"
+  primary: "wf-listening-cycle.yaml"
   phases:
-    - "Phase 1: INTAKE - Understand the need within this module's domain"
-    - "Phase 2: SCOPE - Define the specialist flow to build next"
+    - "Phase 1: INTAKE - Listening need, audience and the part of the cycle in play"
+    - "Phase 2: SURVEY DESIGN - Bias-free climate/eNPS/pulse instrument"
+    - "Phase 3: ANALYSIS - Themes, sentiment and eNPS from responses"
+    - "Phase 4: SIGNALS & ACTION - Early disengagement signals and prioritized owned actions"
+    - "Phase 5: ANONYMITY GATE - Min group size + re-identification audit before publishing any cut"
 
 entry_points:
-  intake: "*design-survey"
+  design_survey: "*design-survey"
+  analyze_results: "*analyze-results"
+  detect_signals: "*detect-signals"
+  action_plan: "*action-plan"
+  enps: "*enps"
+  anonymity_audit: "*anonymity-audit"
 
 workspace_integration:
   level: none
   rationale: >-
-    Modulo pulse em desenvolvimento (esqueleto). O Chief faz intake e escopo; ainda nao consome nem produz artefatos no workspace/.
+    O pulse e self-contained: recebe o contexto de escuta (audiencia, respostas) na
+    conversa e devolve instrumento de pesquisa, analise de temas/sentimento/eNPS,
+    sinais, plano de acao e auditoria de anonimato, sem ler nem escrever no workspace/
+    do repositorio. Respostas individuais nao sao persistidas nem reidentificadas.

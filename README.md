@@ -181,7 +181,8 @@ Squads publicados pela comunidade neste repositório.
 - 🟢 **Onboarding construído:** [`onboard`](squads/onboard/) (jornada 30/60/90, checklists, buddy/IA, acompanhamento) — 6 agentes (T0→T3), tasks, templates, checklist e workflow, com gate de inclusão/consentimento e princípio de augmentar o gestor.
 - 🟢 **Cargos & salários construído:** [`org-architect`](squads/org-architect/) (cargos skills-based, faixas salariais, organograma, 4R) — 6 agentes (T0→T3), tasks, templates, checklist e workflow, com gate de equidade salarial e princípio de pay mapeado a cargo/skills/impacto.
 - 🟢 **DP & Folha construído:** [`peopleops`](squads/peopleops/) (admissão digital, folha, eSocial, férias, afastamentos, rescisão) — 6 agentes (T0→T3), tasks, templates, checklist e workflow, com gate de fechamento de folha (anomalias + privacidade) e princípio de conformidade-primeiro (CLT/eSocial/LGPD).
-- 🟡 **Esqueletos (Chief-only):** `pulse`, `chronos`, `academy`, `insights`, `benefits-hub`.
+- 🟢 **Clima & engajamento construído:** [`pulse`](squads/pulse/) (clima, eNPS, pulses, sentimento, sinais, planos de ação) — 6 agentes (T0→T3), tasks, templates, checklist e workflow, com gate de anonimato (tamanho mínimo de grupo) e princípio de survey-to-action.
+- 🟡 **Esqueletos (Chief-only):** `chronos`, `academy`, `insights`, `benefits-hub`.
 
 Veja o [blueprint por área](squads/apex-talent/data/platform-blueprint.md) e o [mapa de oportunidades de IA](squads/apex-talent/data/ai-opportunity-map.md).
 

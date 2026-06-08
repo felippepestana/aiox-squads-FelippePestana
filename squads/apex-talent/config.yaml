@@ -24,7 +24,7 @@ metadata:
     - { squad: "talent-compass", area: "Recrutamento & Seleção + Entrevistas", status: ACTIVE }
     - { squad: "profiler-dna", area: "Inteligência Comportamental", status: ACTIVE }
     - { squad: "performa", area: "Gestão de Desempenho", status: ACTIVE }
-    - { squad: "pulse", area: "Clima & Engajamento", status: DEVELOPING }
+    - { squad: "pulse", area: "Clima & Engajamento", status: ACTIVE }
     - { squad: "peopleops", area: "Departamento Pessoal & Folha", status: ACTIVE }
     - { squad: "chronos", area: "Controle de Ponto", status: DEVELOPING }
     - { squad: "onboard", area: "Onboarding & Integração", status: ACTIVE }

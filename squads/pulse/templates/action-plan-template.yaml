@@ -1,0 +1,18 @@
+# Action Plan Template
+# Owner: action-planner. Few, owned, dated — and always close the loop.
+
+action_plan:
+  source: ""                # which analysis/signals this acts on
+
+  actions:                  # 2-3 max
+    - action: ""
+      driver: ""            # the engagement driver it should move
+      owner: ""             # named human (leader)
+      due: ""               # target date
+
+  close_the_loop:
+    message: ""             # what respondents are told
+    owner: ""
+    by: ""
+
+  measure_next_cycle: []    # drivers to re-check next pulse

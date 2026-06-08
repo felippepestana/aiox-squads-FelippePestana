@@ -11,7 +11,7 @@ A proposta de valor é cobrir o máximo de funcionalidades de uma suíte de RH m
 | [`talent-compass`](../talent-compass/) | Recrutamento & Seleção + Entrevistas | 🟢 Ativo (flagship) |
 | [`profiler-dna`](../profiler-dna/) | Inteligência Comportamental | 🟢 Ativo |
 | [`performa`](../performa/) | Gestão de Desempenho | 🟢 Ativo |
-| [`pulse`](../pulse/) | Clima & Engajamento | 🟡 Em desenvolvimento |
+| [`pulse`](../pulse/) | Clima & Engajamento | 🟢 Ativo |
 | [`peopleops`](../peopleops/) | Departamento Pessoal & Folha | 🟢 Ativo |
 | [`chronos`](../chronos/) | Controle de Ponto | 🟡 Em desenvolvimento |
 | [`onboard`](../onboard/) | Onboarding & Integração | 🟢 Ativo |
