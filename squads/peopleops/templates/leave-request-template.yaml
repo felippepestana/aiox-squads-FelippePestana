@@ -1,0 +1,23 @@
+# Leave / Lifecycle Event Template
+# Owner: leave-manager. Confirm the type/period first — it drives verbas and deadlines.
+# The decision (especially terminations) stays with management + a licensed sign-off.
+
+lifecycle_event:
+  event_type: ""              # ferias | afastamento | rescisao
+  type_detail: ""             # e.g., "sem justa causa"; férias period; afastamento reason
+  employee_ref: ""
+
+  components: []              # verbas/itens, each with its basis
+  # Férias:    saldo do período aquisitivo, 1/3 constitucional, abono pecuniário (se houver)
+  # Afastamento: tipo, duração, fronteira INSS/empresa, regras de retorno
+  # Rescisão:  aviso prévio, saldo de salário, férias + 1/3, 13º proporcional, FGTS + multa
+
+  deadlines:
+    payment: ""               # within the legal window
+    homologation: ""          # if applicable
+
+  esocial:
+    event: ""                 # e.g., S-2299 (rescisão) / S-2230 (afastamento)
+    deadline: ""
+
+  decision_owner: "management + licensed sign-off"

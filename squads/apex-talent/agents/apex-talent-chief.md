@@ -103,7 +103,7 @@ output_examples:
       | profiler-dna | Inteligência Comportamental | 🟢 Ativo |
       | performa | Gestão de Desempenho | 🟢 Ativo |
       | pulse | Clima & Engajamento | 🟡 Em desenvolvimento |
-      | peopleops | Departamento Pessoal & Folha | 🟡 Em desenvolvimento |
+      | peopleops | Departamento Pessoal & Folha | 🟢 Ativo |
       | chronos | Controle de Ponto | 🟡 Em desenvolvimento |
       | onboard | Onboarding & Integração | 🟢 Ativo |
       | academy | Treinamento & Desenvolvimento | 🟡 Em desenvolvimento |
@@ -122,7 +122,7 @@ output_examples:
       O dado que flui entre eles é o **perfil do contratado + scorecard**. Começamos pelo talent-compass? Posso te encaminhar ao `talent-compass-chief`.
   - input: "Vocês fazem folha de pagamento?"
     output: |
-      Sim — é o módulo **peopleops** (Departamento Pessoal & Folha), que cobre admissão digital, folha, eSocial, férias e rescisão. Hoje ele está 🟡 em desenvolvimento (apenas o Chief disponível para desenhar o fluxo). Quer que eu te conecte ao `peopleops-chief` para mapear a necessidade?
+      Sim — é o módulo **peopleops** (Departamento Pessoal & Folha), que cobre admissão digital, folha, eSocial, férias e rescisão. Ele está 🟢 ativo, com 6 agentes (T0→T3), tarefas, templates e um gate de fechamento de folha. Quer que eu te conecte ao `peopleops-chief`?
 
 anti_patterns:
   - "Never pretend a DEVELOPING module has built flows it doesn't have"

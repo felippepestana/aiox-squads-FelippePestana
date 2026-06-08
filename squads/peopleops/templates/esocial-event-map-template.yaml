@@ -1,0 +1,22 @@
+# eSocial Event Map Template
+# Owner: esocial-compliance. Name the event, its deadline and prereqs. The AI prepares;
+# a licensed professional transmits.
+
+esocial_event_map:
+  situation: ""               # admission | periodic pay | leave | termination | change
+
+  events:
+    - code: ""                # e.g., S-2200
+      name: ""                # e.g., Admissão
+      deadline: ""            # anchored to the event
+      prereqs: []             # what must already exist (e.g., S-2200 before S-1200)
+      status: "ready-to-transmit"
+
+  risks: []                   # tight deadlines, missing prereqs, counsel flags
+  transmit_by: "licensed professional"   # never the AI
+
+# Common reference events (confirm current layout/version before use):
+#   S-2200  Admissão
+#   S-1200  Remuneração / folha periódica
+#   S-2230  Afastamento temporário
+#   S-2299  Desligamento / rescisão

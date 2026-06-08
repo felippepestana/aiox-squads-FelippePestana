@@ -1,0 +1,103 @@
+name: wf-personnel-lifecycle
+display_name: "Personnel Lifecycle: Intake → Admission → Payroll → Compliance & Lifecycle → Payroll Close Gate"
+version: "1.0.0"
+description: "End-to-end Departamento Pessoal & Folha. Frames a need as admission, payroll, eSocial/compliance, leave or termination; runs digital admission (S-2200 ready before day one); prepares a defensible, traceable payroll; maps eSocial events and CLT deadlines; processes férias/afastamentos/rescisão; then passes a mandatory payroll-close gate (anomaly + privacy/LGPD audit) before anything closes. Output is advisory and compliance-oriented — official filings and termination decisions stay with accountable humans. Feeds back to apex-talent for cross-module needs."
+
+trigger: "*digital-admission"
+orchestrator: "peopleops-chief"
+
+inputs:
+  - name: "need"
+    description: "The personnel/payroll need to address"
+    required: true
+    elicit: true
+  - name: "employee_context"
+    description: "Employee/event references and data available so far"
+    required: false
+  - name: "competencia"
+    description: "Reference period for a payroll run"
+    required: false
+  - name: "event_type"
+    description: "Lifecycle event when applicable: ferias | afastamento | rescisao"
+    required: false
+
+phases:
+  phase_1_intake:
+    name: "Intake & Framing"
+    description: "Frame the need as admission, payroll, compliance, leave or termination."
+    agents: ["peopleops-chief"]
+    execution: "interactive"
+    checkpoint:
+      name: "Need Framed"
+      veto_conditions:
+        - "Need spans another module → route via apex-talent-chief"
+
+  phase_2_admission:
+    name: "Digital Admission"
+    description: "Run digital admission: documents, contract data, and the S-2200 (ready before activities start)."
+    depends_on: "phase_1_intake"
+    agents: ["admission-officer"]
+    # Runs only when the need involves a new hire. For a pure payroll or leave
+    # need, invoke the relevant phase standalone via the chief instead.
+    tasks:
+      - { agent: "admission-officer", task: "run-admission.md", output: "admission-dossier.yaml", when: "a new hire is in scope" }
+    checkpoint:
+      name: "Admission Ready"
+      veto_conditions:
+        - "Start date before S-2200 is ready → HALT"
+        - "Full documents/sensitive data being stored → stop (LGPD)"
+
+  phase_3_payroll:
+    name: "Payroll Preparation"
+    description: "Assemble a defensible, traceable payroll run (proventos, descontos, FGTS) with assumptions flagged."
+    depends_on: "phase_1_intake"
+    agents: ["payroll-analyst"]
+    tasks:
+      - { agent: "payroll-analyst", task: "run-payroll.md", output: "payroll-run.yaml" }
+    checkpoint:
+      name: "Run Prepared"
+      veto_conditions:
+        - "Totals without component verbas/bases → fix"
+        - "Tax table asserted as current without confirmation flag → fix"
+        - "Run marked 'closed' here → not allowed; close goes through the gate"
+
+  phase_4_compliance_lifecycle:
+    name: "Compliance & Lifecycle"
+    description: "Map eSocial events/deadlines; process férias, afastamentos or rescisão when applicable."
+    depends_on: "phase_1_intake"
+    agents: ["esocial-compliance", "leave-manager"]
+    # Both tasks elicit; check-esocial runs whenever events are in play, manage-leave
+    # only when an event_type (ferias/afastamento/rescisao) is in scope. For a single
+    # need, invoke the one task standalone via the chief (*check-esocial or *manage-leave).
+    tasks:
+      - { agent: "esocial-compliance", task: "check-esocial.md", output: "esocial-event-map.yaml" }
+      - { agent: "leave-manager", task: "manage-leave.md", output: "lifecycle-event.yaml", when: "event_type is in scope" }
+    checkpoint:
+      name: "Compliance & Lifecycle Framed"
+      veto_conditions:
+        - "Deadline stated without anchoring to its eSocial event → fix"
+        - "Termination presented as the AI's decision → reframe (human decides)"
+        - "Implying the AI transmits an event → not allowed"
+
+  phase_5_payroll_close_gate:
+    name: "Payroll Close Gate"
+    description: "Mandatory audit before close: anomalies (deltas, duplicates, missing, negative net) + privacy (LGPD)."
+    depends_on: ["phase_3_payroll"]
+    agents: ["payroll-auditor"]
+    execution: "audit"
+    tasks:
+      - { agent: "payroll-auditor", task: "audit-payroll.md", output: "payroll-audit.yaml" }
+    checkpoint:
+      name: "Close Verdict"
+      veto_conditions:
+        - "Unexplained material delta between competências → VETO + investigate"
+        - "Duplicate payment / negative líquido / missing record → VETO + correct"
+        - "Secrets or full documents exposed → VETO + remove"
+        - "No accountable human sign-off identified → HALT"
+
+outputs:
+  - "admission-dossier.yaml — Compliant digital admission + S-2200 readiness"
+  - "payroll-run.yaml — Traceable payroll run (proventos/descontos/FGTS), prepared (not closed)"
+  - "esocial-event-map.yaml — eSocial events, deadlines and prereqs (transmit by a licensed human)"
+  - "lifecycle-event.yaml — Férias/afastamento/rescisão package with deadlines"
+  - "payroll-audit.yaml — Close-gate verdict (PASS/VETO) before any payroll closes"

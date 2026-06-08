@@ -1,0 +1,33 @@
+# Admission Checklist Template (digital admission)
+# Owner: admission-officer. Collect only what admission/eSocial needs (LGPD). Never store full document images.
+
+admission_dossier:
+  employee_ref: ""            # internal reference, not full sensitive data
+  role: ""
+  start_date: ""
+
+  contract:
+    type: ""                  # CLT, etc.
+    salary: ""                # from the role/band definition
+    journey: ""               # weekly hours / schedule
+    probation: ""             # if applicable
+
+  documents:
+    required:
+      - { name: "CPF", status: "pending" }
+      - { name: "CTPS digital", status: "pending" }
+      - { name: "RG / identidade", status: "pending" }
+      - { name: "Comprovante de residência", status: "pending" }
+      - { name: "Dados bancários", status: "pending" }
+    conditional:
+      - { name: "ASO (exame admissional)", status: "pending" }
+      - { name: "Documentos de dependentes", status: "pending" }
+
+  dependents:
+    - { ref: "", pay_effect: "" }   # IRRF deduction / salário-família
+
+  esocial:
+    event: "S-2200"
+    deadline: "before activities start"
+    prereqs: []
+    status: "ready-to-register"     # never auto-transmitted
