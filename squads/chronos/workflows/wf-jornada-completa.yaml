@@ -1,0 +1,281 @@
+name: "wf-jornada-completa"
+display_name: "Ciclo Completo de Jornada & Ponto"
+description: "Orquestra período completo: intake → registro → escalas → cálculo banco → detecção anomalias → auditoria de conformidade → liberação para folha"
+
+trigger: "user command (*register-ponto) or scheduled (monthly, 5º dia útil)"
+orchestrator: "chronos-chief"
+
+entry_point: "Phase 1: INTAKE"
+
+inputs:
+  - name: "period"
+    type: "string"
+    format: "MM/YYYY"
+    required: true
+    description: "Período de fechamento (ex: 06/2026)"
+
+  - name: "filial"
+    type: "string"
+    required: true
+    description: "Código de filial (ex: SP)"
+
+  - name: "employee_scope"
+    type: "array | string"
+    required: false
+    default: "all"
+    description: "Lista de colaboradores ou 'all' para toda filial"
+
+  - name: "data_sources"
+    type: "array"
+    required: false
+    default: ["biometric", "geo", "mobile"]
+    description: "Fontes de ponto a consolidar"
+
+phases:
+  phase_1_intake:
+    name: "INTAKE"
+    display_name: "Framing do Período"
+    description: "Confirmar período, filial, escopo, dados. Preparar contexto (setup de férias, afastamentos, contratos)."
+
+    agents:
+      - "chronos-chief"
+
+    execution: "sequential"
+
+    tasks: []  # Intake é conversacional; não há task formal
+
+    outputs:
+      - name: "period_framed"
+        type: "object"
+        schema:
+          period: "MM/YYYY"
+          filial: "string"
+          employee_scope: "array"
+          data_sources: "array"
+          context: "object (férias, afastamentos, setup CLT)"
+
+    exit_condition:
+      - name: "context_complete"
+        rule: "Período, filial, escopo e context confirmados. Pronto para registro."
+        type: "HARD"
+
+  phase_2_registration:
+    name: "REGISTRATION"
+    display_name: "Consolidação de Ponto"
+    description: "Consolidar registros de múltiplas fontes, validar cobertura e gerar espelho de ponto."
+
+    agents:
+      - "time-tracker"
+
+    execution: "sequential"
+
+    tasks:
+      - id: "run-registration"
+        executor: "time-tracker"
+        elicit: "period, employee_scope, data_sources"
+        mode: "deterministic"
+        input_source: "output_phase_1_intake.period_framed"
+        output_format: "registration_report.yaml"
+
+    outputs:
+      - name: "registration_report"
+        type: "object"
+        schema:
+          period: "MM/YYYY"
+          summary:
+            total_punches: "integer"
+            coverage_pct: "float"
+            status: "PASS | ALERT"
+          anomalies: "array"
+          espelho_path: "string (PDF path)"
+
+    exit_condition:
+      - name: "coverage_adequate"
+        rule: "Coverage >= 60%. Se < 60%, ALERT (mas continua)."
+        type: "SOFT"
+      - name: "consolidation_complete"
+        rule: "Todas as fontes consolidadas e espelho gerado."
+        type: "HARD"
+
+  phase_3_scheduling:
+    name: "SCHEDULING"
+    display_name: "Validação de Escalas"
+    description: "Revisar/atualizar escalas, detectar conflitos, garantir conformidade com contratos."
+
+    agents:
+      - "shift-officer"
+
+    execution: "sequential"
+
+    tasks:
+      - id: "manage-shifts"
+        executor: "shift-officer"
+        elicit: "period, shift_definitions, contract_basis"
+        mode: "deterministic validation"
+        input_source: "output_phase_1_intake.context"
+        output_format: "shift_schedule.yaml"
+
+    outputs:
+      - name: "shift_schedule"
+        type: "object"
+        schema:
+          summary:
+            conflicts_detected: "integer"
+            compliance_status: "PASS | ALERT"
+          conflicts: "array"
+          rebalancing_suggestions: "array"
+
+    exit_condition:
+      - name: "schedule_validated"
+        rule: "Escalas validadas contra contratos. Se conflitos, ALERT + suggestions."
+        type: "SOFT"
+
+  phase_4_analysis:
+    name: "ANALYSIS"
+    display_name: "Cálculo de Banco & Detecção de Anomalias"
+    description: "Calcular banco de horas, identificar passivos, detectar padrões anormais."
+
+    agents:
+      - "bank-manager"
+      - "alert-warden"
+
+    execution: "parallel"
+
+    tasks:
+      - id: "calculate-hours"
+        executor: "bank-manager"
+        elicit: "registration_data, contract_basis, leave_setup"
+        mode: "deterministic mathematical"
+        input_source: "output_phase_2_registration.registration_report"
+        output_format: "bank_calculation.yaml"
+
+      - id: "detect-anomalies"
+        executor: "alert-warden"
+        elicit: "registration_data, team_context"
+        mode: "pattern recognition"
+        input_source: "output_phase_2_registration.registration_report"
+        output_format: "anomaly_report.yaml"
+
+    outputs:
+      - name: "bank_report"
+        type: "object"
+        schema:
+          summary:
+            net_bank_change: "float"
+            passivos_count: "integer"
+          passivos: "array"
+          coherence_status: "OK | ALERT"
+
+      - name: "anomaly_report"
+        type: "object"
+        schema:
+          summary:
+            total_anomalies: "integer"
+            by_risk:
+              high: "integer"
+              medium: "integer"
+              low: "integer"
+          anomalies: "array"
+
+    exit_condition:
+      - name: "bank_calculated"
+        rule: "Banco determinístico calculado. Se divergência com payroll > 5%, ALERT."
+        type: "SOFT"
+      - name: "anomalies_detected"
+        rule: "Anomalias classificadas por risco. HIGH-risk passadas para gate."
+        type: "SOFT"
+
+  phase_5_compliance_gate:
+    name: "COMPLIANCE_GATE"
+    display_name: "Auditoria CLT + eSocial"
+    description: "Auditoria final: CLT compliance, eSocial mappability, audit trail, coerência, anomalias. VETO se achados críticos."
+
+    agents:
+      - "compliance-gate"
+
+    execution: "sequential"
+
+    tasks:
+      - id: "audit-compliance"
+        executor: "compliance-gate"
+        elicit: "all_prior_reports (registration, shifts, bank, anomalies), esocial_setup"
+        mode: "deterministic audit"
+        input_sources:
+          - "output_phase_2_registration.registration_report"
+          - "output_phase_3_scheduling.shift_schedule"
+          - "output_phase_4_analysis.bank_report"
+          - "output_phase_4_analysis.anomaly_report"
+        output_format: "compliance_audit.yaml"
+
+    outputs:
+      - name: "compliance_verdict"
+        type: "object"
+        schema:
+          verdict: "PASS | VETO"
+          reasons: "array"
+          if_veto:
+            remediation_steps: "array"
+            resubmit_timeline: "string"
+          if_pass:
+            clearance_statement: "string"
+            next_action: "Transfer to peopleops"
+
+    exit_condition:
+      - name: "compliance_audited"
+        rule: "CLT, eSocial, audit trail, coerência validados. Retorna PASS ou VETO."
+        type: "HARD"
+      - name: "veto_blocks_exit"
+        rule: "Se VETO, workflow bloqueia. Remediation required, resubmit. Se PASS, libera para folha."
+        type: "HARD"
+
+handoffs:
+  - from: "chronos-chief"
+    to: "peopleops-chief"
+    when: "Phase 5 returns PASS"
+    data: "compliance_verdict + bank_report + espelho de ponto"
+    purpose: "Processamento de folha + transmissão eSocial"
+
+  - from: "compliance-gate"
+    to: "chronos-chief"
+    when: "Phase 5 returns VETO"
+    data: "compliance_verdict (reasons + remediation)"
+    purpose: "Bloqueio de período; resubmissão após remediação"
+
+  - from: "alert-warden"
+    to: "insights-chief"
+    when: "HIGH-risk anomalies detected (fatigue, pattern)"
+    data: "anomaly_report (HIGH-risk items)"
+    purpose: "Input para modelos preditivos (turnover, burnout)"
+
+error_handling:
+  - phase: "phase_2_registration"
+    error: "data_source_unavailable"
+    action: "VETO — cannot consolidate without data"
+    remediation: "Check data source connectivity; retry"
+
+  - phase: "phase_4_analysis"
+    error: "coherence_divergence > 20%"
+    action: "ALERT — sync with peopleops before gate"
+    remediation: "Contact peopleops; reconcile setup"
+
+  - phase: "phase_5_compliance_gate"
+    error: "clt_violation_unresolved"
+    action: "VETO — critical legal issue"
+    remediation: "Resolve violation; resubmit audit"
+
+audit_trail:
+  - action: "phase_initiated"
+    tracked_by: "chronos-chief"
+    fields: ["timestamp", "user", "phase", "inputs"]
+
+  - action: "task_executed"
+    tracked_by: "executor_agent"
+    fields: ["timestamp", "user", "task", "output", "status"]
+
+  - action: "phase_completed"
+    tracked_by: "orchestrator"
+    fields: ["timestamp", "phase", "exit_condition_met", "next_phase"]
+
+  - action: "workflow_completed"
+    tracked_by: "chronos-chief"
+    fields: ["timestamp", "verdict", "clearance_time", "responsible_agent"]

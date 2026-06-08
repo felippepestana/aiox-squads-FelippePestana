@@ -1,0 +1,50 @@
+# Shift Schedule Template — chronos
+
+shift_schedule:
+  metadata:
+    period: "MM/YYYY"          # e.g., 06/2026
+    filial: "BR_STATE"          # e.g., SP (São Paulo)
+    created_at: "ISO_8601_TIMESTAMP"
+    created_by: "shift-officer"
+
+  summary:
+    total_employees: 0
+    total_shifts: 0
+    conflicts_detected: 0
+    compliance_status: "PASS"   # or ALERT/VETO
+
+  shifts:
+    - employee_id: "EMP001"
+      date: "YYYY-MM-DD"
+      start_time: "HH:MM"       # 24-hour format
+      end_time: "HH:MM"
+      duration_hours: 0.0
+      contract_hours: 0.0       # Employee's contracted hours per day
+      match_contract: true      # true if duration == contract_hours
+      location: "onsite|remote|hybrid"
+      notes: ""
+
+  conflict_log:
+    - conflict_id: "unique_id"
+      type: "overlap|interjornada_violation|super_jornada|contract_mismatch"
+      employee_id: "EMP_ID"
+      date_or_date_range: "YYYY-MM-DD or [YYYY-MM-DD, YYYY-MM-DD]"
+      severity: "LOW|MEDIUM|HIGH"
+      detail: "Description of conflict"
+      resolution_suggested: "Proposed fix"
+      resolution_applied: false
+      resolution_notes: ""
+
+  validation:
+    overlap_count: 0
+    interjornada_violation_count: 0
+    contract_mismatch_count: 0
+    super_jornada_count: 0
+    total_issues: 0
+
+  audit_trail:
+    - timestamp: "ISO_8601"
+      user: "USERNAME"
+      action: "created|updated|validated|resolved_conflict"
+      change_summary: "What was changed or validated"
+      reason: "Why this action was taken"
