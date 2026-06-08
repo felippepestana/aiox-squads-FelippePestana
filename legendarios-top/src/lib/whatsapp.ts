@@ -101,19 +101,29 @@ Que Deus abençoe sua jornada! 🏃‍♂️
   return sendText(opts.phoneSenderista, msg);
 }
 
-// Sends import notification to spouse for all newly imported participants
+// Max messages per serverless invocation (Netlify: 26s limit, 1s/msg → 15 is safe margin)
+const MAX_BATCH_PER_CALL = 15;
+
+// Sends import notification to spouse for a chunk of participants.
+// Pass offset/limit to paginate across multiple calls when list > MAX_BATCH_PER_CALL.
 export async function sendBatchMensagensLinks(
   participants: Array<{
     nome: string;
     whatsapp_conjuge: string | null;
     mensagens_token: string;
   }>,
-  appUrl: string
-): Promise<{ sent: number; failed: number }> {
+  appUrl: string,
+  opts: { offset?: number; limit?: number } = {}
+): Promise<{ sent: number; failed: number; nextOffset: number | null }> {
+  const offset = opts.offset ?? 0;
+  const limit = Math.min(opts.limit ?? MAX_BATCH_PER_CALL, MAX_BATCH_PER_CALL);
+  const chunk = participants.slice(offset, offset + limit);
+  const nextOffset = offset + limit < participants.length ? offset + limit : null;
+
   let sent = 0;
   let failed = 0;
 
-  for (const p of participants) {
+  for (const p of chunk) {
     if (!p.whatsapp_conjuge) continue;
     const ok = await sendMensagensLink({
       phoneConjuge: p.whatsapp_conjuge,
@@ -126,5 +136,5 @@ export async function sendBatchMensagensLinks(
     await new Promise(r => setTimeout(r, 1000));
   }
 
-  return { sent, failed };
+  return { sent, failed, nextOffset };
 }

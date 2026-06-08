@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import * as XLSX from "xlsx";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { classificarRisco, calcularIdade } from "@/lib/triage";
 
 // TICKETGO column index map (1-based, matches the export format)
@@ -120,7 +121,7 @@ export async function POST(request: Request) {
 
   const formData = await request.formData();
   const file = formData.get("file") as File | null;
-  if (!file) {
+  if (!file || !(file instanceof Blob)) {
     return NextResponse.json({ error: "Arquivo não enviado" }, { status: 400 });
   }
 
@@ -142,6 +143,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Planilha vazia" }, { status: 400 });
   }
 
+  const admin = createAdminClient();
   const results = { imported: 0, updated: 0, skipped: 0, errors: [] as string[] };
 
   // Skip header row (index 0)
@@ -228,7 +230,7 @@ export async function POST(request: Request) {
 
     // Upsert: conflict on cpf (if available) or ticketgo_id
     if (cpf) {
-      const { error, data } = await supabase
+      const { error, data } = await admin
         .from("senderistas")
         .upsert(record, { onConflict: "cpf", ignoreDuplicates: false })
         .select("id")
@@ -241,7 +243,7 @@ export async function POST(request: Request) {
         results.imported++;
       }
     } else if (record.ticketgo_id) {
-      const { error } = await supabase
+      const { error } = await admin
         .from("senderistas")
         .upsert(record, { onConflict: "ticketgo_id", ignoreDuplicates: false });
 
@@ -253,7 +255,7 @@ export async function POST(request: Request) {
       }
     } else {
       // No dedup key — plain insert
-      const { error } = await supabase.from("senderistas").insert(record);
+      const { error } = await admin.from("senderistas").insert(record);
       if (error) {
         results.errors.push(`Linha ${i + 1} (${nomeRaw}): ${error.message}`);
         results.skipped++;

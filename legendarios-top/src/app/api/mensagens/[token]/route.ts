@@ -96,7 +96,7 @@ export async function POST(
     if (!parsed.success) {
       return NextResponse.json({ error: "Dados inválidos", details: parsed.error.errors }, { status: 400 });
     }
-    const { error } = await supabase.from("mensagens_apoio").insert({
+    const { error } = await admin.from("mensagens_apoio").insert({
       senderista_id: senderista.id,
       tipo: "carta",
       enviado_por: parsed.data.enviado_por,
@@ -114,7 +114,7 @@ export async function POST(
     const enviadoPor = String(formData.get("enviado_por") ?? "").trim();
     const tipo = String(formData.get("tipo") ?? "").trim() as "foto" | "video" | "audio";
 
-    if (!file) return NextResponse.json({ error: "Arquivo não enviado" }, { status: 400 });
+    if (!file || !(file instanceof Blob)) return NextResponse.json({ error: "Arquivo não enviado" }, { status: 400 });
     if (!enviadoPor || enviadoPor.length < 2) return NextResponse.json({ error: "Nome do remetente obrigatório" }, { status: 400 });
     if (!["foto", "video", "audio"].includes(tipo)) return NextResponse.json({ error: "Tipo inválido" }, { status: 400 });
     if (file.size > MAX_FILE_SIZE) return NextResponse.json({ error: "Arquivo muito grande (máx 50 MB)" }, { status: 413 });
@@ -136,7 +136,7 @@ export async function POST(
       return NextResponse.json({ error: "Falha ao enviar arquivo" }, { status: 500 });
     }
 
-    const { error: insertErr } = await supabase.from("mensagens_apoio").insert({
+    const { error: insertErr } = await admin.from("mensagens_apoio").insert({
       senderista_id: senderista.id,
       tipo,
       enviado_por: enviadoPor,

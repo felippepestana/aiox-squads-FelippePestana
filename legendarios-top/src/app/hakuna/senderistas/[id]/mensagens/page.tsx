@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { MarcaLidaEffect } from "./MarcaLidaEffect";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Heart, FileText, Image, Video, Mic, ChevronLeft, Play } from "lucide-react";
@@ -47,17 +48,13 @@ export default async function MensagensHakunaPage({
 
   const portalLink = `${process.env.NEXT_PUBLIC_APP_URL ?? ""}/mensagens/${senderista.mensagens_token}`;
 
-  // Mark all unread as visualized
+  // Collect unread IDs — marking happens client-side via Server Action to avoid
+  // side effects during Server Component render (which can be cached/pre-rendered)
   const unreadIds = (mensagens ?? []).filter(m => !m.visualizado).map(m => m.id);
-  if (unreadIds.length > 0) {
-    await supabase
-      .from("mensagens_apoio")
-      .update({ visualizado: true, visualizado_em: new Date().toISOString() })
-      .in("id", unreadIds);
-  }
 
   return (
     <div className="space-y-6 py-4 max-w-2xl">
+      <MarcaLidaEffect ids={unreadIds} />
       <div className="flex items-center gap-3">
         <Link href={`/hakuna/senderistas/${id}`} className="text-muted-foreground hover:text-foreground">
           <ChevronLeft className="w-5 h-5" />

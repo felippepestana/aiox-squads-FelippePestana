@@ -71,15 +71,17 @@ export async function GET(request: Request) {
     return NextResponse.json({ results: [] });
   }
 
-  // Search by name OR CPF (normalized)
+  // Strip chars that would break PostgREST filter syntax in .or()
+  const safeQ = q.replace(/[,()."'`]/g, "").trim();
+  // Search by name OR CPF (normalized digits only — already safe)
   const cpfQuery = q.replace(/\D/g, "");
   const { data } = await supabase
     .from("senderistas")
     .select("id, nome, cpf, telefone, classificacao_risco, status, status_presenca, status_ingresso, tipo_participante, igreja, cidade, tamanho_camisa, codigo_ingresso, mensagens_token")
     .or(
       cpfQuery.length >= 3
-        ? `nome.ilike.%${q}%,cpf.ilike.%${cpfQuery}%`
-        : `nome.ilike.%${q}%`
+        ? `nome.ilike.%${safeQ}%,cpf.ilike.%${cpfQuery}%`
+        : `nome.ilike.%${safeQ}%`
     )
     .order("nome")
     .limit(10);

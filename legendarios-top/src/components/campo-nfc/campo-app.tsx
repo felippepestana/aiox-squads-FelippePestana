@@ -88,10 +88,9 @@ export default function CampoApp() {
           formData.append("prontuario_id", p.id);
           formData.append("senderista_id", p.senderista_id);
           const res = await fetch("/api/prontuarios/foto", { method: "POST", body: formData });
-          if (res.ok) {
-            const { url } = await res.json();
-            fotos_urls.push(url);
-          }
+          if (!res.ok) throw new Error(`Falha no upload de foto (${res.status})`);
+          const { url } = await res.json();
+          fotos_urls.push(url);
         }
 
         const res = await fetch("/api/prontuarios", {

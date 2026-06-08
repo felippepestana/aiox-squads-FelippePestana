@@ -40,7 +40,7 @@ export async function POST(request: Request, { params }: Params) {
   const file = formData.get("file") as File | null;
   const tipo = formData.get("tipo") as string | null;
 
-  if (!file || !tipo) {
+  if (!file || !(file instanceof Blob) || !tipo) {
     return NextResponse.json({ error: "Arquivo e tipo são obrigatórios" }, { status: 400 });
   }
 
@@ -80,7 +80,7 @@ export async function POST(request: Request, { params }: Params) {
     return NextResponse.json({ error: "Erro ao armazenar arquivo" }, { status: 500 });
   }
 
-  const { error: dbError } = await supabase.from("exames").insert({
+  const { error: dbError } = await admin.from("exames").insert({
     senderista_id: senderista.id,
     tipo,
     arquivo_url: path,

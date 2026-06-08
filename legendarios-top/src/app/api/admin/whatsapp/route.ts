@@ -15,6 +15,7 @@ const schema = z.discriminatedUnion("action", [
     action: z.literal("batch_mensagens_links"),
     // Send to all participants that have whatsapp_conjuge but haven't been notified
     evento_nome: z.string().optional(),
+    offset: z.number().int().min(0).optional(),
   }),
 ]);
 
@@ -69,7 +70,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ sent: 0, failed: 0, message: "Nenhum participante com WhatsApp de cônjuge" });
     }
 
-    const result = await sendBatchMensagensLinks(participants, APP_URL);
+    const result = await sendBatchMensagensLinks(participants, APP_URL, {
+      offset: parsed.data.offset ?? 0,
+    });
     return NextResponse.json({ ...result, total: participants.length });
   }
 }

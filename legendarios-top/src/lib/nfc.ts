@@ -61,11 +61,16 @@ export async function readNFCTag(signal?: AbortSignal): Promise<NFCTagData> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const ndef = new (window as any).NDEFReader();
 
-    signal?.addEventListener("abort", () => reject(new Error("Cancelado")));
+    const onAbort = () => reject(new Error("Cancelado"));
+    signal?.addEventListener("abort", onAbort);
+    const cleanup = () => signal?.removeEventListener("abort", onAbort);
 
     // Pass signal so Chrome cancels the scan when aborted
     ndef.scan({ signal }).then(() => {
-      ndef.onreadingerror = () => reject(new Error("Erro ao ler a TAG NFC."));
+      ndef.onreadingerror = () => {
+        cleanup();
+        reject(new Error("Erro ao ler a TAG NFC."));
+      };
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ndef.onreading = (event: any) => {
         try {
@@ -73,11 +78,17 @@ export async function readNFCTag(signal?: AbortSignal): Promise<NFCTagData> {
           // record.lang is a BCP-47 tag (e.g. "pt-BR"), not a charset — always decode as UTF-8
           const text = new TextDecoder("utf-8").decode(record.data);
           const parsed = NFCTagSchema.parse(JSON.parse(text));
+          cleanup();
           resolve(parsed);
         } catch {
+          cleanup();
           reject(new Error("Formato de dados inválido na TAG."));
         }
       };
-    }).catch(reject);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    }).catch((err: any) => {
+      cleanup();
+      reject(err);
+    });
   });
 }

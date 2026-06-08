@@ -17,7 +17,7 @@ export async function POST(request: Request) {
   const prontuarioId = formData.get("prontuario_id") as string;
   const senderista_id = formData.get("senderista_id") as string;
 
-  if (!file || !prontuarioId || !senderista_id) {
+  if (!file || !(file instanceof Blob) || !prontuarioId || !senderista_id) {
     return NextResponse.json({ error: "Parâmetros ausentes" }, { status: 400 });
   }
 
