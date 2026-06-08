@@ -53,31 +53,47 @@ Ver `MCP_SETUP_PLAN.md` (PASSO 5) e `CLICKUP_SETUP.md` para detalhes completos.
 ## 2. 🔧 Cloudflare Workers Deployment Failures
 
 ### Status
-- ❌ Múltiplas falhas de build
+- ✅ **Falha contínua resolvida** — workflow redundante `deploy.yml` removido
+- ⚠️ **Pendência residual (sua):** o `CLOUDFLARE_API_TOKEN` tem restrição de IP
 - 📍 Pré-existente (não relacionado ao PR #25)
-- 🔍 Requer investigação
 
-### Serviços Afetados
-1. `aiox-squads-felippepestana-cf` - Build failures
-2. `aiox-squads-felippepestana` - Build failures
+### Causa Raiz
+O workflow `deploy.yml` ("Deploy AIOX Web App") rodava `npx wrangler deploy` em
+todo push para `main` e falhava **30/30 vezes**. O build (vite) passava; a falha
+era na API da Cloudflare:
 
-### Investigação Necessária
-- [ ] Verificar logs de build do Cloudflare Dashboard
-- [ ] Revisar wrangler.toml configuration
-- [ ] Checar dependências e versões
-- [ ] Verificar quotas/restrições da conta
-- [ ] Testar build localmente com `wrangler publish --dry-run`
+```text
+✘ [ERROR] A request to the Cloudflare API (/accounts) failed.
+  Cannot use the access token from location: 52.161.82.97 [code: 9109]
+```
 
-### Próximos Passos
-1. Acessar: https://dash.cloudflare.com/
-2. Navegar até Workers services
-3. Revisar últimas build failures e logs de erro
-4. Verificar se há mudanças recentes em wrangler/dependencies
+O erro **9109** indica que o secret `CLOUDFLARE_API_TOKEN` tem **Client IP
+Filtering**, que bloqueia os IPs dinâmicos dos runners do GitHub Actions.
 
-### Impacto
-- Bloqueia deployments automáticos
-- Não bloqueia desenvolvimento local
-- Não bloqueia merge de PRs (Railway deploy funciona)
+### Redundância (motivo da remoção)
+- A **Cloudflare Git integration** já deploya o worker `aiox-squads-felippepestana`
+  com sucesso (confirmado via API: existe **apenas 1 worker**, atualizado a cada push).
+- O `deploy.yml` tentava criar um worker `aiox-squads-web` (nome do `web/wrangler.toml`)
+  que **nunca chegou a existir**, pois o deploy sempre falhava.
+- O build/smoke do `web` já é coberto pelo workflow `web.yml` ("Portal web"),
+  em push **e** pull_request.
+
+Por isso o `deploy.yml` foi **removido**: caminho de deploy quebrado, redundante
+com a Git integration e sem cobertura de CI exclusiva.
+
+### Pendência residual (ação sua)
+O mesmo `CLOUDFLARE_API_TOKEN` ainda é usado por `deploy-landing-pages.yml`
+(via `cloudflare/wrangler-action`). Esse workflow só dispara em mudanças de
+`landing-pages/alternative-*/**`, então raramente roda — mas falharia pelo mesmo
+erro 9109. Para habilitá-lo:
+1. Cloudflare Dashboard → My Profile → API Tokens → editar o token
+2. Remover o **Client IP Address Filtering** (ou ajustar para liberar os runners)
+3. Atualizar o secret `CLOUDFLARE_API_TOKEN` no GitHub, se o token for recriado
+
+### Impacto (atual)
+- Site web continua publicado normalmente (Cloudflare Git integration)
+- Push para `main` deixa de gerar falhas de deploy
+- Auto-deploy das landing pages permanece dependente do fix do token (residual)
 
 ---
 
@@ -119,16 +135,17 @@ Já presente em `.github/workflows/docker-security.yml`:
 | Tarefa | Prioridade | Status | Tipo |
 |--------|-----------|--------|------|
 | ClickUp MCP | 🟡 Média | Documentado | Feature |
-| Cloudflare Fix | 🔴 Alta | Investigação | Infrastructure |
+| Cloudflare Fix | 🟡 Média | Resolvido (resíduo: token) | Infrastructure |
 | Docker Security | — | Resolvido | Infrastructure |
 
 ---
 
 ## 🎯 Próximas Ações
 
-1. **Imediato:** Investigar Cloudflare (Docker Security já resolvido ✅)
-2. **Curto prazo:** Obter ClickUp API token e configurar
-3. **Validação:** Testar todos os MCPs no ambiente completo
+1. **Imediato:** Cloudflare e Docker Security já resolvidos ✅
+2. **Quando for usar landing pages:** remover Client IP Filtering do `CLOUDFLARE_API_TOKEN`
+3. **Curto prazo:** Obter ClickUp API token e configurar
+4. **Validação:** Testar todos os MCPs no ambiente completo
 
 ---
 
