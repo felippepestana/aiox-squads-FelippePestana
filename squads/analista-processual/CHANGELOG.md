@@ -4,6 +4,15 @@ All notable changes to this squad follow [Keep a Changelog](https://keepachangel
 
 ---
 
+## [Unreleased]
+
+### Added
+
+**Workflow (1 new, 3 total):**
+- `wf-elaboracao-peca` — Workflow do UC-AP-005 (elaboração de peça/documento): classificação → contexto jurídico opcional (leitor + pesquisador em paralelo) → redação pelo `redator-juridico` (QG-AP-005, modo `ELABORACAO_PECA`, sem documentador). Completa a feature UC-AP-005 introduzida na 1.1.0.
+
+---
+
 ## [1.1.0] — 2026-05-15
 
 ### Added

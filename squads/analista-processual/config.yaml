@@ -230,7 +230,7 @@ quality_standards:
 stats:
   total_agents: 9
   total_tasks: 10
-  total_workflows: 2
+  total_workflows: 3
   total_checklists: 2
   total_templates: 2
   total_data_files: 1
