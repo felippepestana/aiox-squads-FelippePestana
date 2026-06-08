@@ -1,5 +1,7 @@
 # Squad Creator Pro
 
+> 🟡 **Em desenvolvimento (esqueleto).** Feature de customização que será disponibilizada ao usuário final pela própria aplicação AIOX — permite que cada usuário crie squads e agentes adaptados à sua necessidade, complementando os squads nativos do produto. Este README descreve as **capacidades-alvo**; a implementação (agentes especialistas, tasks, workflows) será adicionada de forma incremental neste repositório. Não é um produto de outro repo, nem um marketplace de compartilhamento entre usuários.
+
 **O upgrade pack que transforma o Squad Creator base em uma fábrica de squads de elite.**
 
 > O Squad Creator base já vem incluído no [AIOX](https://github.com/SynkraAI/aiox-core). O Pro é um upgrade pack que adiciona capacidades avançadas sem substituir o base.
@@ -144,17 +146,11 @@ Usuário pede squad
 
 ### Instalar o Pro
 
-Copie esta pasta para seu projeto:
-
-```bash
-cp -r squads/squad-creator-pro /seu-projeto/squads/squad-creator-pro
-```
-
-O base **detecta automaticamente** a presença do Pro via `squads/squad-creator-pro/config.yaml`.
+> 🟡 **Ainda não disponível para instalação manual.** Esta seção descreve o mecanismo previsto: quando o Pro estiver implementado, sua ativação será feita pela própria aplicação AIOX (do lado do usuário), não por cópia manual de pastas. O base detectará automaticamente a presença do Pro via `squads/squad-creator-pro/config.yaml` — arquivo que ainda não existe neste repositório justamente porque a implementação do Pro está pendente. Veja o status atual no banner no topo deste documento.
 
 ### Desinstalar
 
-Remova a pasta. Volta para o modo base sem quebrar nada (degradação limpa).
+Quando o Pro estiver disponível e instalado, removê-lo deve restaurar o modo base sem quebrar nada (degradação limpa).
 
 ```bash
 rm -rf squads/squad-creator-pro
