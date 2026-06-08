@@ -187,7 +187,7 @@ async function main() {
     warn("nenhum texto extraível neste documento");
   }
 
-  // ── 3. run pipeline ────────────────────────────────────────────────────────
+  // ── 3. run pipeline (sync) or enqueue (async) ──────────────────────────────
   stepLog("Executando o pipeline multiagente (pode levar até alguns minutos)…");
   const process_ = await request("POST", `/api/analyses/${analysisId}/process`, {
     headers: { "content-type": "application/json" },
@@ -201,8 +201,34 @@ async function main() {
       )}`
     );
   }
-  const status = process_.json?.status;
-  const message = process_.json?.message;
+  let status = process_.json?.status;
+  let message = process_.json?.message;
+
+  // Async mode: the route enqueues and returns QUEUED — poll until terminal.
+  if (process_.json?.queued || status === "QUEUED" || status === "PROCESSING") {
+    ok("análise enfileirada (modo assíncrono) — aguardando o worker…");
+    const deadline = Date.now() + TIMEOUT;
+    let polls = 0;
+    while (Date.now() < deadline) {
+      await new Promise((r) => setTimeout(r, 2000));
+      polls += 1;
+      const poll = await request("GET", `/api/analyses/${analysisId}`);
+      const cur = (poll.json?.data ?? poll.json)?.status;
+      if (cur === "COMPLETED" || cur === "FAILED") {
+        status = cur;
+        const res = (poll.json?.data ?? poll.json)?.result;
+        message = res?.error ?? message;
+        break;
+      }
+      if (polls % 5 === 0) {
+        console.log(dim(`  …ainda processando (status atual: ${cur})`));
+      }
+    }
+    if (status === "QUEUED" || status === "PROCESSING") {
+      bail("tempo esgotado aguardando o worker concluir a análise");
+    }
+  }
+
   ok(`pipeline retornou status: ${status}`);
 
   // ── 4. fetch persisted result ──────────────────────────────────────────────

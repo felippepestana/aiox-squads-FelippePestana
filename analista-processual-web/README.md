@@ -37,8 +37,9 @@ Limitações conhecidas (modo demo):
   análise informa quais documentos não tiveram texto extraível, via
   `metadata.extractionMethod` / `metadata.needsOcr`).
 - **Biblioteca de jurisprudência** ainda é placeholder.
-- O processamento é executado de forma síncrona na rota `/api/analyses/[id]/process`
-  (sem fila/worker dedicado).
+- O processamento pode ser **síncrono** (inline na rota, padrão sem Redis) ou
+  **assíncrono** via fila (BullMQ + Redis) com um worker dedicado — veja
+  "Processamento assíncrono" abaixo.
 
 ## Arquitetura
 
@@ -209,6 +210,37 @@ O perfil é sincronizado automaticamente na tabela `profiles` no primeiro acesso
 (o `id` do perfil espelha o `id` do usuário no Supabase). Sem essas variáveis, o
 app volta ao modo demo sem nenhuma mudança de código.
 
+### Processamento assíncrono (fila + worker)
+
+Por padrão, a análise roda **inline** na rota `/api/analyses/[id]/process`
+(simples, sem dependências). Para desacoplar o processamento da request — útil
+para PDFs escaneados grandes (OCR) e análises longas — defina `REDIS_URL` e rode
+um worker dedicado:
+
+```bash
+# 1. Redis local (Docker)
+docker run -d --name redis -p 6379:6379 redis:7-alpine
+# ou: brew services start redis (macOS) / serviço do Redis no Windows/WSL
+
+# 2. No .env.local
+#   REDIS_URL=redis://localhost:6379
+
+# 3. Em um terminal: o servidor web
+npm run dev
+
+# 4. Em outro terminal: o worker
+npm run worker
+```
+
+Com `REDIS_URL` definido, a rota `/process` **enfileira** o trabalho e responde
+`{ status: "QUEUED", queued: true }` imediatamente; o worker processa e grava o
+resultado (a página de detalhe faz polling do status). **Sem `REDIS_URL`**, tudo
+roda inline como antes (degradação graciosa). Configure a concorrência com
+`WORKER_CONCURRENCY` (padrão 2).
+
+O `npm run test:smoke` detecta o modo assíncrono automaticamente (faz polling até
+o estado terminal).
+
 ## Deploy
 
 ### Hostinger VPS
@@ -244,7 +276,7 @@ Veja o guia completo em [`../docs/deploy/vercel.md`](../docs/deploy/vercel.md), 
       proteção de rotas, atribuição/filtragem por usuário (fallback para modo demo)
 - [ ] OCR para `.doc` legado (requer conversão prévia)
 - [ ] Biblioteca de jurisprudência (busca semântica)
-- [ ] Fila/worker dedicado para processamento assíncrono
+- [x] Fila/worker dedicado para processamento assíncrono (BullMQ + Redis, opcional)
 
 ## Licença
 
