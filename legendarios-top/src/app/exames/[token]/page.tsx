@@ -1,6 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { notFound } from "next/navigation";
 import ExameUpload from "@/components/exam-upload";
+import { isExameUploadOpen } from "@/lib/token-expiry";
 
 export const metadata = {
   title: "Envio de Exames — Legendários TOP",
@@ -22,22 +23,17 @@ export default async function ExamesPage({ params }: Props) {
 
   if (!senderista) return notFound();
 
-  if (senderista.evento_data) {
-    const deadline = new Date(senderista.evento_data);
-    deadline.setUTCDate(deadline.getUTCDate() - 3);
-    deadline.setUTCHours(23, 59, 59, 999);
-    if (new Date() > deadline) {
-      return (
-        <main className="min-h-screen bg-gradient-to-br from-blue-50 to-sky-100 py-8 px-4">
-          <div className="max-w-lg mx-auto text-center space-y-2">
-            <h1 className="text-2xl font-bold text-blue-900">Prazo Encerrado</h1>
-            <p className="text-blue-600">
-              O prazo para envio de exames foi encerrado. Entre em contato com a equipe Hakuna.
-            </p>
-          </div>
-        </main>
-      );
-    }
+  if (!isExameUploadOpen(senderista.evento_data)) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-blue-50 to-sky-100 py-8 px-4">
+        <div className="max-w-lg mx-auto text-center space-y-2">
+          <h1 className="text-2xl font-bold text-blue-900">Prazo Encerrado</h1>
+          <p className="text-blue-600">
+            O prazo para envio de exames foi encerrado. Entre em contato com a equipe Hakuna.
+          </p>
+        </div>
+      </main>
+    );
   }
 
   return (

@@ -46,6 +46,15 @@ export default async function MensagensHakunaPage({
 
   if (!senderista) notFound();
 
+  // Batch sign all file URLs in a single storage call
+  const filePaths = (mensagens ?? []).map(m => m.arquivo_url).filter(Boolean) as string[];
+  const { data: signedFiles } = filePaths.length
+    ? await supabase.storage.from("mensagens").createSignedUrls(filePaths, 3600)
+    : { data: [] };
+  const signedUrlMap = Object.fromEntries(
+    (signedFiles ?? []).map(s => [s.path, s.signedUrl])
+  );
+
   const portalLink = `${process.env.NEXT_PUBLIC_APP_URL ?? ""}/mensagens/${senderista.mensagens_token}`;
 
   // Collect unread IDs — marking happens client-side via Server Action to avoid
@@ -125,7 +134,7 @@ export default async function MensagensHakunaPage({
                   </p>
                 )}
                 {(m.tipo === "foto" || m.tipo === "video" || m.tipo === "audio") && m.arquivo_url && (
-                  <FileViewer tipo={m.tipo} path={m.arquivo_url} />
+                  <FileViewer tipo={m.tipo} signedUrl={signedUrlMap[m.arquivo_url] ?? null} />
                 )}
               </CardContent>
             </Card>
@@ -136,32 +145,25 @@ export default async function MensagensHakunaPage({
   );
 }
 
-// Server component: generates signed URL for private bucket file
-async function FileViewer({ tipo, path }: { tipo: string; path: string }) {
-  const supabase = await createClient();
-  const { data } = await supabase.storage
-    .from("mensagens")
-    .createSignedUrl(path, 3600);
-
-  if (!data?.signedUrl) {
+function FileViewer({ tipo, signedUrl }: { tipo: string; signedUrl: string | null }) {
+  if (!signedUrl) {
     return <p className="text-sm text-muted-foreground italic">Arquivo não disponível</p>;
   }
-
   if (tipo === "foto") {
     // eslint-disable-next-line @next/next/no-img-element
-    return <img src={data.signedUrl} alt="Foto" className="rounded-lg max-h-80 object-contain" />;
+    return <img src={signedUrl} alt="Foto" className="rounded-lg max-h-80 object-contain" />;
   }
   if (tipo === "video") {
     return (
       <video controls className="rounded-lg max-h-80 w-full">
-        <source src={data.signedUrl} />
+        <source src={signedUrl} />
       </video>
     );
   }
   if (tipo === "audio") {
     return (
       <audio controls className="w-full">
-        <source src={data.signedUrl} />
+        <source src={signedUrl} />
       </audio>
     );
   }

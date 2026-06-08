@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { isMensagemPortalOpen } from "@/lib/token-expiry";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 const ALLOWED_MIME: Record<string, string> = {
@@ -44,13 +45,8 @@ export async function GET(
     return NextResponse.json({ error: "Link inválido ou expirado" }, { status: 404 });
   }
 
-  if (senderista.evento_data) {
-    const deadline = new Date(senderista.evento_data);
-    deadline.setUTCDate(deadline.getUTCDate() + 1);
-    deadline.setUTCHours(23, 59, 59, 999);
-    if (new Date() > deadline) {
-      return NextResponse.json({ error: "Link expirado" }, { status: 410 });
-    }
+  if (!isMensagemPortalOpen(senderista.evento_data)) {
+    return NextResponse.json({ error: "Link expirado" }, { status: 410 });
   }
 
   return NextResponse.json({
@@ -78,13 +74,8 @@ export async function POST(
     return NextResponse.json({ error: "Link inválido" }, { status: 404 });
   }
 
-  if (senderista.evento_data) {
-    const deadline = new Date(senderista.evento_data);
-    deadline.setUTCDate(deadline.getUTCDate() + 1);
-    deadline.setUTCHours(23, 59, 59, 999);
-    if (new Date() > deadline) {
-      return NextResponse.json({ error: "Prazo para envio de mensagens encerrado" }, { status: 410 });
-    }
+  if (!isMensagemPortalOpen(senderista.evento_data)) {
+    return NextResponse.json({ error: "Prazo para envio de mensagens encerrado" }, { status: 410 });
   }
 
   const contentType = request.headers.get("content-type") ?? "";

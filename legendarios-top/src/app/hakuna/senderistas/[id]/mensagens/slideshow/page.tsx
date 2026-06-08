@@ -29,18 +29,19 @@ export default async function SlideshowPage({ params }: { params: Promise<{ id: 
 
   if (!senderista) notFound();
 
-  // Generate signed URLs for file-based messages
-  const mensagens: Message[] = await Promise.all(
-    (rawMensagens ?? []).map(async (m) => {
-      if (m.arquivo_url) {
-        const { data } = await supabase.storage
-          .from("mensagens")
-          .createSignedUrl(m.arquivo_url, 7200); // 2h for slideshow session
-        return { ...m, signedUrl: data?.signedUrl ?? undefined };
-      }
-      return { ...m, signedUrl: undefined };
-    })
+  // Batch-sign all file URLs in one storage call (2h for slideshow session)
+  const filePaths = (rawMensagens ?? []).map(m => m.arquivo_url).filter(Boolean) as string[];
+  const { data: signedFiles } = filePaths.length
+    ? await supabase.storage.from("mensagens").createSignedUrls(filePaths, 7200)
+    : { data: [] };
+  const signedUrlMap = Object.fromEntries(
+    (signedFiles ?? []).map(s => [s.path, s.signedUrl])
   );
+
+  const mensagens: Message[] = (rawMensagens ?? []).map(m => ({
+    ...m,
+    signedUrl: m.arquivo_url ? (signedUrlMap[m.arquivo_url] ?? undefined) : undefined,
+  }));
 
   // Mark all as visualized
   const unread = mensagens.filter(m => !m.visualizado).map(m => m.id);

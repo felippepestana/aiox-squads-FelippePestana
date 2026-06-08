@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { isExameUploadOpen } from "@/lib/token-expiry";
 
 const ALLOWED_TIPOS = ["atestado_cg", "atestado_cardio", "teste_esteira"] as const;
 type TipoExame = typeof ALLOWED_TIPOS[number];
@@ -27,13 +28,8 @@ export async function POST(request: Request, { params }: Params) {
     return NextResponse.json({ error: "Token inválido" }, { status: 404 });
   }
 
-  if (senderista.evento_data) {
-    const deadline = new Date(senderista.evento_data);
-    deadline.setUTCDate(deadline.getUTCDate() - 3);
-    deadline.setUTCHours(23, 59, 59, 999);
-    if (new Date() > deadline) {
-      return NextResponse.json({ error: "Prazo de envio de exames encerrado" }, { status: 410 });
-    }
+  if (!isExameUploadOpen(senderista.evento_data)) {
+    return NextResponse.json({ error: "Prazo de envio de exames encerrado" }, { status: 410 });
   }
 
   const formData = await request.formData();
