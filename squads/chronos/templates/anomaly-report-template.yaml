@@ -1,0 +1,79 @@
+# Anomaly Report Template — chronos
+
+anomaly_report:
+  metadata:
+    period: "MM/YYYY"
+    filial: "BR_STATE"
+    detected_at: "ISO_8601_TIMESTAMP"
+    detected_by: "alert-warden"
+
+  summary:
+    total_employees: 0
+    employees_with_anomalies: 0
+    total_anomalies: 0
+    by_risk:
+      high: 0
+      medium: 0
+      low: 0
+
+  anomalies:
+    - id: "ANM_XXX"
+      type: "pattern_time|fatigue_super_jornada|inconsistency_geo|falta_isolada|other"
+      employee_id: "EMP_ID"
+
+      detection_params:
+        date_or_range: "YYYY-MM-DD or [start, end]"
+        timestamps: ["ISO_8601", ...]  # For time-pattern anomalies
+        frequency: "daily|weekly|monthly|isolated"
+        occurrences: 0
+
+      description: "Human-readable summary of anomaly"
+
+      quantitative_data:
+        value: 0.0                # e.g., hours worked, frequency
+        unit: "hours|count|percentage"
+        threshold: 0.0            # e.g., legal limit
+        excess_or_deficit: 0.0
+
+      risk_assessment:
+        risk_level: "LOW|MEDIUM|HIGH"
+        implications:
+          - "Legal: [potential CLT violation or passivo]"
+          - "Health: [burnout, fatigue signal, etc.]"
+          - "Fraud: [pattern suggests possible manipulation, or ruled out]"
+
+      context:
+        team_baseline: "e.g., team median 40h/week; this employee 54h"
+        historical_pattern: "e.g., first time (isolated) or recurring (systematic)"
+        known_explanations: "e.g., vacation, emergency project, illness"
+
+      recommendation: "Suggested action (investigate, monitor, contact, escalate)"
+
+      notes: "Additional context or interpretation"
+
+  summary_by_risk:
+    high:
+      - "ANM_XXX: [description] (Employee, date)"
+      - "[more HIGH-risk anomalies]"
+
+    medium:
+      - "ANM_YYY: [description]"
+
+    low:
+      - "ANM_ZZZ: [description]"
+
+  aggregates:
+    employees_flagged_for_fatigue: 0
+    employees_with_time_pattern_anomalies: 0
+    employees_with_absence_anomalies: 0
+
+  integration:
+    insights_input: "HIGH/MEDIUM anomalies passed to insights for burnout/turnover correlation"
+    peopleops_input: "Unauthorized absences flagged for payroll/HR action"
+    manager_review_required: ["EMP_ID_1", "EMP_ID_2"]  # For HIGH-risk items
+
+  audit_trail:
+    - timestamp: "ISO_8601"
+      user: "USERNAME"
+      action: "detected|classified|risk_assessed|recommendation_added"
+      detail: "What was evaluated"

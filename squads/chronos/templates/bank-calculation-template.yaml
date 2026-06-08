@@ -1,0 +1,77 @@
+# Bank of Hours Calculation Template — chronos
+
+bank_calculation:
+  metadata:
+    period: "MM/YYYY"
+    filial: "BR_STATE"
+    calculated_at: "ISO_8601_TIMESTAMP"
+    calculated_by: "bank-manager"
+
+  summary:
+    total_employees: 0
+    total_hours_registered: 0.0
+    total_contracted: 0.0
+    net_bank_change: 0.0          # +credits -debits
+
+  by_employee:
+    - employee_id: "EMP001"
+      contract_type: "clt|pj|temp"
+      contracted_hours: 0.0       # Per period (e.g., 160 = 8h × 20 days)
+
+      hours_breakdown:
+        registered: 0.0
+        normal: 0.0               # Within contract
+        extra: 0.0                # Overtime (24h+)
+        noturna: 0.0              # Night shift (22:00-05:00)
+        falta_nao_autorizada: 0.0  # Unauthorized absence
+        ferias: 0.0               # Authorized vacation
+        afastamento: 0.0          # Authorized leave (INSS, maternity, etc.)
+
+      bank_computation:
+        previous_balance: 0.0
+        credits: 0.0              # +extra
+        debits: 0.0               # -faltas -utilisé
+        new_balance: 0.0
+
+      passivos:
+        - type: "extra_over_limit|banco_negativo|unauthorized_absence"
+          hours: 0.0
+          legal_consequence: "Right to 50% adicional overtime or banco compensation"
+          recommendation: "Action required"
+
+      notes: ""
+
+  aggregates:
+    total_extra_hours: 0.0
+    total_falta_hours: 0.0
+    total_utilizacao_banco: 0.0
+
+  passivos_summary:
+    by_type:
+      extra_over_legal_limit:
+        count: 0
+        total_excess: 0.0
+        affected_employees: []
+
+      unauthorized_absence:
+        count: 0
+        total_hours: 0.0
+        affected_employees: []
+
+      banco_negativo:
+        count: 0
+        affected_employees: []
+
+  coherence_validation:
+    calculated_bank_net: 0.0
+    expected_from_payroll: 0.0
+    difference: 0.0
+    difference_pct: 0.0           # Must be < 5%
+    status: "OK|ALERT"
+    notes: "If divergence, list potential mismatches (férias, afastamentos, setup)"
+
+  audit_trail:
+    - timestamp: "ISO_8601"
+      user: "USERNAME"
+      action: "calculated|validated|coherence_checked"
+      detail: "What was processed"

@@ -1,9 +1,9 @@
 name: chronos
-display_name: "Chronos — Controle de Ponto"
-version: "0.1.0"
+display_name: "Chronos — Controle de Ponto & Jornada"
+version: "1.0.0"
 domain: time-attendance
 entry_agent: chronos-chief
-description: "Controle de ponto e jornada: registro (biometria/geo/mobile), banco de horas, escalas, alertas de jornada e espelho de ponto."
+description: "Controle de ponto e jornada inteligente: registro multimodal (biometria/geo/mobile), escalas dinâmicas, banco de horas com cálculo de passivos, detecção de anomalias de jornada (excesso/inconsistência) e alertas preventivos. Gate de conformidade CLT/eSocial obrigatório antes de qualquer fechamento de período. Toda decisão de jornada é rastreável e auditável."
 
 keywords:
   - controle de ponto
@@ -12,27 +12,88 @@ keywords:
   - escalas
   - espelho de ponto
   - passivo trabalhista
+  - anomalia de jornada
+  - conformidade clt
+  - eSocial
 
 metadata:
   type: module
-  status: DEVELOPING
+  status: ACTIVE
   platform: apex-talent
+  compliance_model: clt-esocial
+  data_residency: br-only
+  min_group_size: 1
 
 tier_structure:
   tier_0:
-    role: "Module Orchestration"
+    role: "Orchestration & Period Closure"
     agents: ["chronos-chief"]
+  tier_1:
+    role: "Core Operations"
+    agents: ["shift-officer", "time-tracker"]
+  tier_2:
+    role: "Analysis & Alerts"
+    agents: ["bank-manager", "alert-warden"]
+  tier_3:
+    role: "Compliance Gate"
+    agents: ["compliance-gate"]
+
+scoring_system:
+  total: 100
+  categories:
+    registration_quality:
+      weight: 20
+      agent: time-tracker
+      checks: ["biometric_coverage", "geo_consistency", "timestamp_validity"]
+    shift_adherence:
+      weight: 20
+      agent: shift-officer
+      checks: ["schedule_compliance", "schedule_conflict_detection"]
+    hour_accuracy:
+      weight: 30
+      agent: bank-manager
+      checks: ["calculation_correctness", "passivo_computation", "integration_with_performa"]
+    anomaly_detection:
+      weight: 20
+      agent: alert-warden
+      checks: ["pattern_flagged", "risk_level_identified", "context_provided"]
+    compliance:
+      weight: 10
+      agent: compliance-gate
+      checks: ["clt_aligned", "esocial_mappable", "audit_trail_complete"]
+  grade_scale:
+    - { min: 90, label: "Compliant & Clean", color: "#ff6b00" }
+    - { min: 75, label: "Acceptable with Alerts", color: "#f59e0b" }
+    - { min: 60, label: "Requires Review", color: "#f59e0b" }
+    - { min: 0, label: "Non-Compliant / Blocked", color: "#e5484d" }
 
 workflow:
-  primary: "module intake (skeleton)"
+  primary: "wf-jornada-completa"
   phases:
-    - "Phase 1: INTAKE - Understand the need within this module's domain"
-    - "Phase 2: SCOPE - Define the specialist flow to build next"
+    - name: "Phase 1: INTAKE"
+      description: "Frame the period, employee roster, expected scales"
+    - name: "Phase 2: REGISTRATION"
+      description: "Consolidate point records (biometric/geo/mobile) → espelho de ponto"
+    - name: "Phase 3: SCHEDULING"
+      description: "Define/update escalas, detect conflicts, sync with HR/performa"
+    - name: "Phase 4: ANALYSIS"
+      description: "Calculate banco de horas, detect anomalies, flag risks"
+    - name: "Phase 5: COMPLIANCE GATE"
+      description: "Audit period → CLT compliance → eSocial mapping → PASS/VETO"
 
 entry_points:
-  intake: "*register-time"
+  register: "*register-ponto"
+  anomaly: "*detect-anomalies"
+  compliance_check: "*audit-compliance"
 
 workspace_integration:
-  level: none
-  rationale: >-
-    Modulo chronos em desenvolvimento (esqueleto). O Chief faz intake e escopo; ainda nao consome nem produz artefatos no workspace/.
+  level: full
+  produces:
+    - "espelho_de_ponto.pdf"
+    - "banco_de_horas.yaml"
+    - "anomaly_report.md"
+    - "compliance_audit.md"
+  consumes:
+    - "from performa: attendance/punctuality data"
+    - "from pulse: indirect signals of fatigue/pressure"
+  rationale: "Chronos is a foundational HR data source — jornada is the ground truth for payroll (peopleops), compensation (org-architect), performance context (performa), and employee wellbeing (pulse/insights)."

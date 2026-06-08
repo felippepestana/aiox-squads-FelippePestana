@@ -1,0 +1,68 @@
+# Registration Report Template — chronos
+
+registration_report:
+  metadata:
+    period: "MM/YYYY"
+    filial: "BR_STATE"
+    data_sources: ["biometric", "geo", "mobile"]  # Which sources included
+    consolidation_timestamp: "ISO_8601_TIMESTAMP"
+    consolidated_by: "time-tracker"
+
+  summary:
+    total_employees: 0
+    total_punches_consolidated: 0
+    total_duplicates_removed: 0
+    coverage_pct: 0.0             # Across all employees
+    status: "PASS"                # or ALERT
+
+  consolidation_stats:
+    punches_by_source:
+      biometric: 0
+      geo: 0
+      mobile: 0
+      total: 0
+    duplicates_removed: 0
+    out_of_order_fixed: 0
+
+  coverage_by_employee:
+    - employee_id: "EMP001"
+      total_punches: 0
+      working_days_in_period: 0
+      days_covered: 0
+      coverage_pct: 0.0
+      status: "OK|ALERT"
+      notes: "e.g., 2 days vacation excluded"
+
+  validation_results:
+    monotonicity_violations: 0    # Timestamps out of order
+    geo_anomalies: 0              # Outside geofence
+    coverage_alerts: 0            # Employees < 80% coverage
+
+  anomalies_detected:
+    - type: "geo_anomaly|coverage_gap|timestamp_inconsistency"
+      employee_id: "EMP_ID"
+      date_or_timestamp: "YYYY-MM-DD or ISO_8601"
+      detail: "Description of anomaly"
+      severity: "LOW|MEDIUM|HIGH"
+      recommendation: "Suggested action"
+
+  espelho_de_ponto:
+    format: "PDF"
+    path: "workspace/registrations/espelho_[FILIAL]_[PERIOD].pdf"
+    status: "generated|pending"
+
+  data_export:
+    format: "JSON"
+    path: "workspace/registrations/punches_[FILIAL]_[PERIOD].json"
+    schema:
+      - employee_id: "string"
+      - timestamp: "ISO_8601"
+      - punch_type: "clock_in|clock_out"
+      - source: "biometric|geo|mobile"
+      - location: "geolocation_or_device_id"
+
+  audit_trail:
+    - timestamp: "ISO_8601"
+      user: "USERNAME"
+      action: "consolidated|validated|exported"
+      detail: "What was done"

@@ -1,0 +1,114 @@
+# Compliance Checklist Template — chronos
+
+compliance_audit:
+  metadata:
+    period: "MM/YYYY"
+    filial: "BR_STATE"
+    audited_at: "ISO_8601_TIMESTAMP"
+    audited_by: "compliance-gate"
+
+  clt_audit:
+    checks:
+      - article: "Art. 5"
+        rule: "Jornada diária <= 8h (ou contrato), semanal <= 44h (ou contrato)"
+        status: "PASS|ALERT|VETO"
+        findings: "Number of violations, list of affected employees, details"
+        remediation_required: false
+
+      - article: "Art. 66"
+        rule: "Interjornada >= 11h entre turnos do mesmo colaborador"
+        status: "PASS|ALERT|VETO"
+        findings: ""
+        remediation_required: false
+
+      - article: "Art. 67"
+        rule: "Repouso semanal 24h consecutivas (mínimo 1 domingo/mês)"
+        status: "PASS|ALERT|VETO"
+        findings: ""
+        remediation_required: false
+
+      - article: "Art. 59"
+        rule: "Horas extras <= 2h/dia (ou compensadas com banco autorizado)"
+        status: "PASS|ALERT|VETO"
+        findings: ""
+        remediation_required: false
+
+      - article: "Art. 219"
+        rule: "Aviso prévio 30 dias para mudança de turno"
+        status: "PASS|ALERT|VETO"
+        findings: ""
+        remediation_required: false
+
+    overall_status: "PASS|ALERT|VETO"
+    summary: "Overall CLT compliance assessment"
+
+  esocial_audit:
+    s2200_check:
+      field: "Jornada Base (S-2200)"
+      status: "PASS|ALERT|VETO"
+      findings: "S-2200 fields populated and coherent with registration"
+      missing_fields: []
+
+    s2240_check:
+      field: "Eventos de Jornada (S-2240)"
+      status: "PASS|ALERT|VETO"
+      findings: "Events mappable to bank/anomaly data"
+      unmappable_events: []  # Events that can't be transmitted as-is
+
+    overall_status: "PASS|ALERT|VETO"
+    eSocial_ready: true      # true if ready for transmission (5º dia útil)
+    transmission_deadline: "YYYY-MM-DD"  # 5th working day of next month
+
+  audit_trail_check:
+    status: "PASS|ALERT|VETO"
+    findings: "Audit trail completeness check (100% required)"
+    coverage_pct: 0.0
+    missing_entries: []  # Entries without user/timestamp/reason
+
+  coherence_check:
+    bank_calculated: 0.0     # From bank-calculation task
+    payroll_expected: 0.0    # From peopleops setup
+    difference: 0.0
+    difference_pct: 0.0      # Must be < 5%
+    status: "PASS|ALERT|VETO"
+    notes: "List potential mismatches if divergence"
+    remediation_instructions: "If ALERT/VETO, steps to reconcile with peopleops"
+
+  anomaly_gate:
+    total_high_risk_anomalies: 0
+    resolved: 0
+    unresolved: 0
+    unresolved_anomalies: []  # List of unresolved HIGH-risk items
+
+    status: "PASS|ALERT|VETO"
+    notes: "HIGH-risk anomalies must be resolved (documented or investigated) before gate PASS"
+
+  verdict:
+    outcome: "PASS|VETO"
+    reasons:
+      - "Listed reason 1"
+      - "Listed reason 2"
+      - "..."
+
+    if_veto:
+      remediation_steps:
+        - "Step 1: Action required"
+        - "Step 2: Responsible party"
+        - "Step 3: Timeline"
+      resubmit_timeline: "YYYY-MM-DD or 'as soon as remediation complete'"
+
+    if_pass:
+      clearance_statement: "Period is compliant with CLT, eSocial-ready, and approved for payroll processing."
+      next_action: "Transfer to peopleops for folha + eSocial transmission"
+      escalation_risk: "LOW|MEDIUM|HIGH"
+
+  approvals:
+    compliance_gate_signature: "compliance-gate"
+    timestamp: "ISO_8601_TIMESTAMP"
+    reviewed_by_senior: false  # Optional: second opinion for HIGH-risk cases
+
+  audit_trail:
+    - timestamp: "ISO_8601"
+      user: "USERNAME"
+      action: "audited|validated|verdict_issued"
+      detail: "What was checked or decided"
