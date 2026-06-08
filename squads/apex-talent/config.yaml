@@ -30,7 +30,7 @@ metadata:
     - { squad: "onboard", area: "Onboarding & Integração", status: ACTIVE }
     - { squad: "academy", area: "Treinamento & Desenvolvimento", status: DEVELOPING }
     - { squad: "insights", area: "People Analytics", status: DEVELOPING }
-    - { squad: "org-architect", area: "Cargos, Salários & Org Design", status: DEVELOPING }
+    - { squad: "org-architect", area: "Cargos, Salários & Org Design", status: ACTIVE }
     - { squad: "benefits-hub", area: "Benefícios", status: DEVELOPING }
 
 tier_structure:
