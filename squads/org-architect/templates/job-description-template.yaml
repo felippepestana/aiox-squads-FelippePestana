@@ -1,0 +1,29 @@
+# Job Description Template (skills-based / success profile)
+# Owner: role-designer. Outcomes first, skills second, title last.
+
+job_description:
+  role: ""              # title the work earns, not the other way around
+  family: ""            # role family it belongs to
+  level: ""             # IC1..IC5 / M1..M4 — level of work
+  purpose: ""           # one line: the outcome this role owns
+
+  outcomes_12mo:        # what success looks like in 6–12 months
+    - ""
+
+  core_skills:          # must-have skills with the level needed
+    - skill: ""
+      level: ""         # e.g., proficient / advanced
+      must_have: true
+
+  nice_to_have:         # skills that help but don't gate the pool
+    - ""
+
+  scope_of_work:
+    owns: ""            # what it owns end to end
+    escalates: ""       # where it escalates / its boundaries
+
+  # Guardrails
+  no_proxy_requirements: true   # no degree/tenure standing in for a skill
+  inclusive_language_checked: true
+
+  next: "route to comp-strategist for band; equity-gate before publish"

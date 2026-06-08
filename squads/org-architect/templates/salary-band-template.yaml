@@ -1,0 +1,30 @@
+# Salary Band Template
+# Owner: comp-strategist. Every number maps to role, skills, impact — and a market reference.
+
+salary_band:
+  role: ""
+  level: ""
+  currency: ""          # e.g., BRL/month
+
+  market_reference:
+    percentile: ""      # e.g., P50
+    posture: ""         # lead | match | lag
+    source: ""          # benchmark source / date
+
+  min: 0
+  midpoint: 0           # ties to the market reference for the level
+  max: 0
+  range_spread: ""      # ±% around midpoint
+
+  placement:            # compa-ratio guidance within the band
+    new_in_level: ""    # ~0.85–0.90
+    proficient: ""      # ~1.00 (midpoint)
+    top_of_level: ""    # ~1.10–1.15
+
+  compression_check: "" # overlap vs. adjacent levels — flag or none
+
+  # Guardrails
+  no_prior_salary_anchor: true   # placement anchors on level + skills, not history
+  rationale: ""                  # explainable line by line
+
+  next: "route to equity-gate before communicate/publish"

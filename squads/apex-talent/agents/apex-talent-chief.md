@@ -108,7 +108,7 @@ output_examples:
       | onboard | Onboarding & Integração | 🟢 Ativo |
       | academy | Treinamento & Desenvolvimento | 🟡 Em desenvolvimento |
       | insights | People Analytics | 🟡 Em desenvolvimento |
-      | org-architect | Cargos, Salários & Org Design | 🟡 Em desenvolvimento |
+      | org-architect | Cargos, Salários & Org Design | 🟢 Ativo |
       | benefits-hub | Benefícios | 🟡 Em desenvolvimento |
 
       Qual desses resolve o seu desafio agora?

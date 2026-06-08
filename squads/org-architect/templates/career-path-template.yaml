@@ -1,0 +1,21 @@
+# Career Path / Ladder Template
+# Owner: role-designer. Progression by demonstrated skills and scope, not tenure.
+
+career_path:
+  family: ""            # role family (e.g., Data Analytics)
+  tracks:
+    individual_contributor:
+      - level: ""        # IC1..IC5
+        scope: ""        # level of work / autonomy
+        core_skills: []  # skills that define this level
+        progression_to_next: ""   # what must be demonstrated to advance
+    management:
+      - level: ""        # M1..M4
+        scope: ""
+        core_skills: []
+        progression_to_next: ""
+
+  # Guardrails
+  progression_by: ["demonstrated skills", "scope of impact"]
+  not_by: ["tenure alone", "title legacy", "protected attributes"]
+  dual_track: true       # IC and management are parallel, equally valued

@@ -1,0 +1,27 @@
+# Org Chart / Structure Template
+# Owner: org-modeler. Structure follows strategy; role-level, never named cuts.
+
+org_model:
+  scope: ""             # the unit being modeled
+  strategy: ""          # the outcomes the structure must enable
+
+  current:
+    layers: 0           # count from front line to top
+    nodes:
+      - role: ""
+        reports_to: ""
+        span: 0         # direct reports
+
+  diagnosis:
+    narrow_spans: []    # roles with too few reports (overhead)
+    wide_spans: []      # roles with too many reports (no support)
+    excess_layers: false
+    split_ownership: [] # outcomes with more than one owner
+
+  options:              # advisory — humans decide
+    - name: ""
+      change: ""        # what moves (role-level)
+      trade_off: ""
+      serves: ""        # link back to strategy
+
+  note: "role-level model; reorg and individual impact are human decisions"

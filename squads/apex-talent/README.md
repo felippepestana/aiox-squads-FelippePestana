@@ -17,7 +17,7 @@ A proposta de valor é cobrir o máximo de funcionalidades de uma suíte de RH m
 | [`onboard`](../onboard/) | Onboarding & Integração | 🟢 Ativo |
 | [`academy`](../academy/) | Treinamento & Desenvolvimento | 🟡 Em desenvolvimento |
 | [`insights`](../insights/) | People Analytics | 🟡 Em desenvolvimento |
-| [`org-architect`](../org-architect/) | Cargos, Salários & Org Design | 🟡 Em desenvolvimento |
+| [`org-architect`](../org-architect/) | Cargos, Salários & Org Design | 🟢 Ativo |
 | [`benefits-hub`](../benefits-hub/) | Benefícios | 🟡 Em desenvolvimento |
 
 > 🟢 **Ativo** = fluxos completos construídos. 🟡 **Em desenvolvimento** = esqueleto disponível (apenas o agente Chief), pronto para desenhar e evoluir o módulo.

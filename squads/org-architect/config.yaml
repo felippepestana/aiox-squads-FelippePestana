@@ -1,39 +1,70 @@
 name: org-architect
 display_name: "Org-Architect — Cargos, Salários & Org Design"
-version: "0.1.0"
+version: "1.0.0"
 domain: org-design
 entry_agent: org-architect-chief
-description: "Arquitetura organizacional: descrições de cargo, plano de carreira, faixas salariais, organograma, job architecture skills-based (4R) e equidade salarial."
+description: "Arquitetura organizacional ponta a ponta: descrições de cargo skills-based, plano de carreira, faixas salariais com benchmarking, organograma (spans & layers), decisão 4R (Redesign→Reskill→Retain→Recruit) para gaps de capacidade e auditoria de equidade salarial com poder de veto. Alimenta talent-compass (definição de vaga) e performa (competências). Remuneração mapeia cargo, skills e impacto — nunca atributos protegidos. A IA é suporte à decisão; decisões de pessoas e pay ficam com humanos responsáveis."
 
 keywords:
   - cargos e salários
   - job architecture
+  - skills-based
   - faixa salarial
+  - benchmarking salarial
   - organograma
+  - spans and layers
   - plano de carreira
   - equidade salarial
   - 4r
+  - org design
 
 metadata:
   type: module
-  status: DEVELOPING
+  status: ACTIVE
   platform: apex-talent
 
 tier_structure:
   tier_0:
-    role: "Module Orchestration"
+    role: "Orchestration & Architecture"
     agents: ["org-architect-chief"]
+  tier_1:
+    role: "Core Specialists"
+    agents: ["role-designer", "comp-strategist"]
+  tier_2:
+    role: "Structure & Capability"
+    agents: ["org-modeler", "fourr-advisor"]
+  tier_3:
+    role: "Pay Equity & Fairness Gate"
+    agents: ["equity-gate"]
+
+# Org design maps pay and leveling to role, skills and impact only.
+# Protected attributes are never inputs. AI is advisory; pay/leveling
+# decisions stay with accountable humans.
+fairness_model:
+  pay_maps_to: ["role", "skills", "impact"]
+  protected_attributes: excluded
+  advisory_only: true
+  equity_gate: true
 
 workflow:
-  primary: "module intake (skeleton)"
+  primary: "wf-org-design.yaml"
   phases:
-    - "Phase 1: INTAKE - Understand the need within this module's domain"
-    - "Phase 2: SCOPE - Define the specialist flow to build next"
+    - "Phase 1: INTAKE - Need, scope and the part of the architecture in play"
+    - "Phase 2: ROLE DESIGN - Skills-based job description + career path"
+    - "Phase 3: LEVELING & BANDS - Salary bands, leveling and benchmarking"
+    - "Phase 4: STRUCTURE & 4R - Org model (spans/layers) and 4R for capability gaps"
+    - "Phase 5: PAY EQUITY GATE - Fairness audit (veto) before publishing"
 
 entry_points:
-  intake: "*write-jd"
+  write_jd: "*write-jd"
+  set_bands: "*set-bands"
+  model_org: "*model-org"
+  apply_4r: "*4r"
+  pay_equity: "*pay-equity"
 
 workspace_integration:
   level: none
   rationale: >-
-    Modulo org-architect em desenvolvimento (esqueleto). O Chief faz intake e escopo; ainda nao consome nem produz artefatos no workspace/.
+    O org-architect e self-contained: recebe contexto de cargo/estrutura na conversa
+    e devolve descritivos, faixas, organograma e auditorias de equidade, sem ler nem
+    escrever no workspace/ do repositorio.

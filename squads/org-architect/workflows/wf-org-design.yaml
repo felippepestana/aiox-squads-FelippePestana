@@ -1,0 +1,99 @@
+name: wf-org-design
+display_name: "Org Design: Intake → Role Design → Leveling & Bands → Structure/4R → Pay Equity Gate → Publish"
+version: "1.0.0"
+description: "End-to-end org architecture. Frames a need as role design, leveling/bands, structure or a 4R capability decision; designs roles skills-first; sets explainable bands; models structure (spans & layers) and runs 4R for gaps; then passes a mandatory pay-equity/fairness gate before anything is published. Output is advisory — pay and leveling decisions stay with accountable humans. Feeds talent-compass (vacancy/competencies) and performa (leveling)."
+
+trigger: "*write-jd"
+orchestrator: "org-architect-chief"
+
+inputs:
+  - name: "need"
+    description: "The org/role/pay/structure need to address"
+    required: true
+    elicit: true
+  - name: "strategy"
+    description: "The outcomes the structure/role must serve"
+    required: false
+  - name: "market"
+    description: "Geography + market reference for banding"
+    required: false
+  - name: "capability_gap"
+    description: "A skills gap to run through 4R (if applicable)"
+    required: false
+
+phases:
+  phase_1_intake:
+    name: "Intake & Framing"
+    description: "Frame the need as role design, leveling/bands, structure, or a 4R capability decision."
+    agents: ["org-architect-chief"]
+    execution: "interactive"
+    checkpoint:
+      name: "Need Framed"
+      veto_conditions:
+        - "Need spans another module → route via apex-talent-chief"
+
+  phase_2_role_design:
+    name: "Skills-Based Role Design"
+    description: "Design the role skills-first: outcomes, core skills, level of work, career path."
+    depends_on: "phase_1_intake"
+    agents: ["role-designer"]
+    tasks:
+      - { agent: "role-designer", task: "write-jd.md", output: "job-description.yaml" }
+    checkpoint:
+      name: "Role Designed"
+      veto_conditions:
+        - "Title-first or task-dump description → redesign skills-first"
+        - "Degree/tenure used as a skill proxy → fix"
+
+  phase_3_leveling_bands:
+    name: "Leveling & Salary Bands"
+    description: "Set leveling and explainable salary bands benchmarked to market."
+    depends_on: "phase_2_role_design"
+    agents: ["comp-strategist"]
+    tasks:
+      - { agent: "comp-strategist", task: "set-bands.md", output: "salary-band.yaml" }
+    checkpoint:
+      name: "Bands Drafted"
+      veto_conditions:
+        - "Band without a stated market reference → add it"
+        - "Placement anchored on prior salary → re-anchor on level/skills"
+
+  phase_4_structure_4r:
+    name: "Structure & 4R"
+    description: "Model org structure (spans & layers); for capability gaps, run 4R before defaulting to recruiting."
+    depends_on: "phase_1_intake"
+    agents: ["org-modeler", "fourr-advisor"]
+    # NOTE: This is the full end-to-end flow — both tasks elicit and run in sequence.
+    # If a need is only structure OR only a 4R decision, invoke the single task standalone
+    # via the chief (*model-org or *4r) instead of running the whole workflow, to avoid
+    # irrelevant elicitation. apply-4r runs only when a capability_gap is in scope.
+    tasks:
+      - { agent: "org-modeler", task: "model-org.md", output: "org-model.yaml" }
+      - { agent: "fourr-advisor", task: "apply-4r.md", output: "fourr-decision.yaml", when: "capability_gap is in scope" }
+    checkpoint:
+      name: "Structure & Capability Framed"
+      veto_conditions:
+        - "Reorg presented as a decision → reframe as options + trade-offs"
+        - "Capability gap jumps to Recruit → run Redesign/Reskill/Retain first"
+
+  phase_5_equity_gate:
+    name: "Pay Equity & Fairness Gate"
+    description: "Mandatory audit before publishing bands/leveling: explained variance + no protected-attribute proxies."
+    depends_on: ["phase_3_leveling_bands"]
+    agents: ["equity-gate"]
+    execution: "audit"
+    tasks:
+      - { agent: "equity-gate", task: "pay-equity-audit.md", output: "pay-equity-audit.yaml" }
+    checkpoint:
+      name: "Equity Verdict"
+      veto_conditions:
+        - "Unexplained gap between comparable roles → VETO + remediate"
+        - "Protected-attribute proxy in pay logic → VETO + remove"
+        - "Pay-equity law applies and legal review is missing → HALT"
+
+outputs:
+  - "job-description.yaml — Skills-based role + success profile"
+  - "salary-band.yaml — Explainable, benchmarked band + leveling"
+  - "org-model.yaml — Structure (spans & layers) + options (advisory)"
+  - "fourr-decision.yaml — 4R capability decision (recruit = residual)"
+  - "pay-equity-audit.yaml — Pay-equity verdict (PASS/VETO) before publish"

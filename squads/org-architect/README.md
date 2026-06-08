@@ -1,45 +1,69 @@
 # Org-Architect — Cargos, Salários & Org Design
 
-> 🟡 **Em desenvolvimento (esqueleto).** Este módulo da plataforma [Apex-Talent](../apex-talent/) disponibiliza hoje apenas o agente **Chief** (`org-architect-chief`), que faz o intake da área e escopa o fluxo de especialistas a ser construído. Os agentes especialistas, tarefas e modelos serão adicionados nas próximas iterações.
+> 🟢 **Ativo.** Módulo construído da plataforma [Apex-Talent](../apex-talent/). É a **espinha dorsal** da arquitetura de pessoas: define cargos skills-based, faixas salariais explicáveis, estrutura organizacional e a decisão 4R — com um **gate de equidade salarial** obrigatório antes de qualquer publicação. Alimenta o `talent-compass` (definição de vaga) e o `performa` (níveis e competências).
 
 ## Área
 
 **Cargos, Salários & Org Design** — parte da suíte de RH AI-native Apex-Talent.
 
-Arquitetura organizacional: descrições de cargo, plano de carreira, faixas salariais, organograma, job architecture skills-based (4R) e equidade salarial.
+Arquitetura organizacional ponta a ponta: descrições de cargo skills-based, plano de carreira, faixas salariais com benchmarking, organograma (spans & layers), decisão 4R (Redesign → Reskill → Retain → Recruit) para gaps de capacidade e auditoria de equidade salarial.
 
-## Funcionalidades-alvo
+## Princípio central
 
-- Descrições de cargo e plano de carreira
-- Faixas salariais
-- Organograma
-- Job architecture skills-based (4R)
-- Equidade salarial
+**Remuneração mapeia cargo, skills e impacto — nunca atributos protegidos.** A IA é suporte à decisão; decisões individuais de pay e nível ficam com humanos responsáveis, e questões legais de remuneração passam por revisão jurídica. Nada de bandas ou níveis é publicado sem passar pelo `equity-gate`.
 
-## Diferencial de IA
+## Agentes
 
-Veja o [mapa de oportunidades de IA](../apex-talent/data/ai-opportunity-map.md) para o detalhe da abordagem AI-native desta área.
+| Agente | Tier | Papel |
+|--------|------|-------|
+| `org-architect-chief` | T0 | Orquestra o fluxo; enquadra a necessidade; impõe o gate de equidade |
+| `role-designer` | T1 | Descrição de cargo skills-based, success profile e plano de carreira |
+| `comp-strategist` | T1 | Faixas salariais, leveling e benchmarking (explicáveis linha a linha) |
+| `org-modeler` | T2 | Organograma, spans & layers, diagnóstico de estrutura |
+| `fourr-advisor` | T2 | Decisão 4R — recrutar é o resíduo, não o reflexo |
+| `equity-gate` | T3 | **Gate de equidade salarial** (auditoria com poder de veto) |
+
+## Fluxo (workflow `wf-org-design`)
+
+```text
+INTAKE ─▶ ROLE DESIGN ─▶ LEVELING & BANDS ─▶ STRUCTURE / 4R ─▶ PAY EQUITY GATE ─▶ PUBLISH
+chief      role-designer    comp-strategist     org-modeler /      equity-gate (veto)
+                                                 fourr-advisor
+```
 
 ## Como usar
 
-Selecione `org-architect:org-architect-chief` no chatbot ou na web.
+Selecione `org-architect:org-architect-chief` no chatbot ou na web e descreva a necessidade.
 
 Comandos do Chief:
 
-- `*write-jd — Write a job description`
-- `*set-bands — Define/benchmark salary bands`
-- `*org-chart — Model the org structure`
-- `*pay-equity — Detect pay inequities`
-- `*4r — Apply the 4R framework to a role`
+- `*write-jd` — descrição de cargo skills-based + success profile
+- `*set-bands` — define/benchmark faixas salariais + leveling
+- `*model-org` — modela a estrutura (spans & layers)
+- `*4r` — aplica o framework 4R a um gap de capacidade
+- `*pay-equity` — roda a auditoria de equidade salarial
 - `*help` — lista os comandos
 - `*exit` — encerra o agente
 
-## Roteiro
+## Conexões com a plataforma
 
-1. **Agora:** Chief (intake + escopo do fluxo). ✅
-2. **Próximo:** agentes especialistas (Tier 1/2), tarefas e modelos da área.
-3. **Depois:** workflow `wf-*` e integração de dados com os demais módulos.
+- **→ `talent-compass`** — um cargo definido vira vaga + roteiro de entrevista.
+- **→ `performa`** — níveis e competências alimentam mérito, promoção e calibração.
+- **→ `academy`** — a trilha de **reskill** do 4R vira plano de aprendizagem.
+- **→ `pulse` / `performa`** — o **retain** do 4R conecta engajamento e crescimento.
+- **→ `peopleops`** — mudanças de contrato/folha decorrentes de enquadramento.
+
+## Documentação de referência
+
+- [`data/skills-based-job-architecture.md`](data/skills-based-job-architecture.md) — job architecture skills-based.
+- [`data/4r-framework.md`](data/4r-framework.md) — o framework 4R (Bersin).
+- [`data/compensation-benchmarking.md`](data/compensation-benchmarking.md) — bandas, midpoint, spread, compa-ratio.
+- [`data/pay-equity-methodology.md`](data/pay-equity-methodology.md) — método de auditoria de equidade.
+
+## Minutas / impressos
+
+- [`templates/role-leveling-letter.md`](templates/role-leveling-letter.md) — carta de enquadramento / movimentação de cargo (imprimível).
 
 ## Referência
 
-Baseado em: *Josh Bersin 4R (Redesign, Reskill, Retain, Recruit) + skills-based job architecture*.
+Baseado em: *Josh Bersin 4R (Redesign, Reskill, Retain, Recruit) + skills-based job architecture*, design de remuneração (leveling, benchmarking, compa-ratio) e metodologia de equidade salarial.
