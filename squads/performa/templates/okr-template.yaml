@@ -1,0 +1,18 @@
+# okr-template — output of draft-okr (okr-architect)
+# Objectives inspire; Key Results measure outcomes (baseline -> target). Not tasks.
+okrs:
+  scope: "{team|person}"
+  cycle: "{e.g., Q3 2026}"
+  aligns_to: "{higher-level objective}"
+
+  objective: "{qualitative, inspiring, time-bound}"
+  key_results:
+    - kr: "{measurable outcome}"
+      baseline: "{current value}"
+      target: "{ambitious-but-credible value}"
+      metric_source: "{where the number comes from}"
+    # ... 3-5 key results
+
+  cadence: "{weekly|biweekly}"
+  scoring: "0.0-1.0 per KR at cycle end (learning signal, not a verdict)"
+  note: "Advisory — not tied directly to compensation."

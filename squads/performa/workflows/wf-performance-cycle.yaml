@@ -1,0 +1,88 @@
+name: wf-performance-cycle
+display_name: "Performance Cycle: Setup → Review → 9-Box → Calibrate → Develop"
+version: "1.0.0"
+description: "Evidence-based performance cycle. Sets competencies/goals, runs 90/180/360 reviews anchored in evidence, positions on the 9-box, passes a mandatory calibration/fairness gate, then turns results into PDIs, OKRs and 1:1 cadence. Personality (profiler-dna) is development context with weight 0; promotions/pay stay with accountable humans."
+
+trigger: "*run-cycle"
+orchestrator: "performa-chief"
+
+inputs:
+  - name: "scope"
+    description: "Person or team in the cycle"
+    required: true
+    elicit: true
+  - name: "review_type"
+    description: "90 | 180 | 360"
+    required: true
+    elicit: true
+  - name: "competencies"
+    description: "Competencies/expectations from the role (org-architect)"
+    required: false
+
+phases:
+  phase_1_setup:
+    name: "Setup"
+    description: "Confirm competencies, expectations and goals for the cycle."
+    agents: ["performa-chief"]
+    execution: "interactive"
+    checkpoint:
+      name: "Cycle Scoped"
+      veto_conditions:
+        - "No competencies/expectations defined → keep scoping"
+
+  phase_2_review:
+    name: "Evidence-Based Review"
+    description: "90/180/360 review; each rating anchored to a recent example."
+    depends_on: "phase_1_setup"
+    agents: ["review-runner"]
+    tasks:
+      - { agent: "review-runner", task: "run-review.md", output: "review.yaml" }
+    checkpoint:
+      name: "Review Captured"
+      veto_conditions:
+        - "Any rating without a recent example → mark insufficient evidence"
+
+  phase_3_ninebox:
+    name: "9-Box Positioning"
+    description: "Position on performance x potential, each axis on its own evidence."
+    depends_on: "phase_2_review"
+    agents: ["ninebox-plotter"]
+    tasks:
+      - { agent: "ninebox-plotter", task: "plot-9box.md", output: "ninebox.yaml" }
+    checkpoint:
+      name: "9-Box Plotted"
+      veto_conditions:
+        - "Potential derived from performance or personality → re-justify"
+
+  phase_4_calibrate:
+    name: "Calibration & Fairness Gate"
+    description: "Mandatory gate before sharing: rater leniency/severity, disparate impact, evidence sufficiency, personality weight-0."
+    depends_on: "phase_3_ninebox"
+    agents: ["calibration-gate"]
+    execution: "audit"
+    tasks:
+      - { agent: "calibration-gate", task: "calibrate.md", output: "calibration.yaml" }
+    checkpoint:
+      name: "Calibration Verdict"
+      veto_conditions:
+        - "Unresolved bias or evidence gap → HALT, nothing shared"
+        - "Personality leaked into a rating/axis → HALT"
+
+  phase_5_develop:
+    name: "Develop (PDI + OKRs + 1:1)"
+    description: "Turn calibrated results into a development plan, goals and a 1:1 cadence. Behavioral context (weight 0) tailors delivery."
+    depends_on: "phase_4_calibrate"
+    agents: ["pdi-builder", "okr-architect", "performa-chief"]
+    execution: "sequential"
+    tasks:
+      - { agent: "pdi-builder", task: "build-pdi.md", output: "pdi.md" }
+      - { agent: "okr-architect", task: "draft-okr.md", output: "okrs.yaml" }
+      - { agent: "performa-chief", task: "prep-1on1.md", output: "oneonone-agenda.md" }
+
+outputs:
+  - "review.yaml — Evidence-based 90/180/360 review"
+  - "ninebox.yaml — Performance x potential placement with rationale"
+  - "calibration.yaml — Calibration/fairness verdict (PASS/VETO)"
+  - "pdi.md — Individual development plan (context weight 0)"
+  - "okrs.yaml — Outcome-based OKRs"
+  - "oneonone-agenda.md — 1:1 agenda from recent signals"
