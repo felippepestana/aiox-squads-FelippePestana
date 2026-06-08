@@ -24,7 +24,7 @@
   npm install -g @taazkareem/clickup-mcp-server
   claude mcp add ClickUp \
     -e CLICKUP_API_TOKEN=pk_YOUR_TOKEN \
-    -- npx @taazkareem/clickup-mcp-server
+    -- npx -y @taazkareem/clickup-mcp-server
   ```
 - [ ] Testar conexão: `claude mcp list`
 - [ ] Atualizar documentação em `CLAUDE.md`

@@ -46,7 +46,7 @@ npm install -g @taazkareem/clickup-mcp-server
 export CLICKUP_API_TOKEN="your_token_here"
 claude mcp add ClickUp \
   -e CLICKUP_API_TOKEN=$CLICKUP_API_TOKEN \
-  -- npx @taazkareem/clickup-mcp-server
+  -- npx -y @taazkareem/clickup-mcp-server
 ```
 
 ### Step 4: Verify Installation
@@ -76,7 +76,7 @@ npm install -g @chykalophia/clickup-mcp-server
 export CLICKUP_API_TOKEN="your_token_here"
 claude mcp add ClickUp \
   -e CLICKUP_API_TOKEN=$CLICKUP_API_TOKEN \
-  -- npx @chykalophia/clickup-mcp-server
+  -- npx -y @chykalophia/clickup-mcp-server
 ```
 
 ### @pipeworx/mcp-clickup (Lightweight)
@@ -85,7 +85,7 @@ npm install -g @pipeworx/mcp-clickup
 export CLICKUP_API_TOKEN="your_token_here"
 claude mcp add ClickUp \
   -e CLICKUP_API_TOKEN=$CLICKUP_API_TOKEN \
-  -- npx @pipeworx/mcp-clickup
+  -- npx -y @pipeworx/mcp-clickup
 ```
 
 ## Troubleshooting

@@ -64,7 +64,8 @@ o protocolo MCP e exponha execução de comandos como ferramenta.
 claude mcp remove shell || true
 
 # Servidor MCP real: expõe a ferramenta `run_process` via stdio
-claude mcp add shell -- npx mcp-server-commands
+# -y evita prompt interativo do npx ao baixar o pacote (Claude Code roda sem TTY)
+claude mcp add shell -- npx -y mcp-server-commands
 ```
 
 > **Nota de redundância:** o Claude Code já possui **ferramenta Bash nativa**. Este MCP só
@@ -100,7 +101,7 @@ npm install -g @taazkareem/clickup-mcp-server
 # Adicionar
 claude mcp add ClickUp \
   -e CLICKUP_API_TOKEN=$CLICKUP_API_TOKEN \
-  -- npx @taazkareem/clickup-mcp-server
+  -- npx -y @taazkareem/clickup-mcp-server
 ```
 
 ### PASSO 6: Validação Final
@@ -138,7 +139,7 @@ Após todos os passos, `~/.claude.json` deve ter:
     "shell": {
       "type": "stdio",
       "command": "npx",
-      "args": ["mcp-server-commands"],
+      "args": ["-y", "mcp-server-commands"],
       "env": {}
     }
   }
@@ -192,7 +193,7 @@ claude mcp remove shell || true
 echo "➕ Adicionando MCPs..."
 # docker-mcp e mcp-server-commands são baixados via npx sob demanda
 claude mcp add MCP_DOCKER -- npx -y docker-mcp        # funcional só com socket do Docker
-claude mcp add shell -- npx mcp-server-commands       # servidor MCP de shell real (NÃO /bin/bash)
+claude mcp add shell -- npx -y mcp-server-commands    # servidor MCP de shell real (NÃO /bin/bash)
 
 echo "✅ Verificando..."
 claude mcp list

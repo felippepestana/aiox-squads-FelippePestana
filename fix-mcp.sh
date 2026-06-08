@@ -45,9 +45,10 @@ fi
 
 echo ""
 echo "4️⃣ MCPs Instalados Globalmente:"
-DOCKER_MCP=$(npm list -g docker-mcp 2>&1 | grep "docker-mcp@" | head -1 || echo "")
+# --depth=0 limita a busca aos pacotes globais de topo (evita varrer a árvore inteira)
+DOCKER_MCP=$(npm list -g docker-mcp --depth=0 2>&1 | grep "docker-mcp@" | head -1 || echo "")
 # Servidor MCP de shell real (substitui o /bin/bash puro, que NÃO é um MCP server)
-SHELL_MCP=$(npm list -g mcp-server-commands 2>&1 | grep "mcp-server-commands@" | head -1 || echo "")
+SHELL_MCP=$(npm list -g mcp-server-commands --depth=0 2>&1 | grep "mcp-server-commands@" | head -1 || echo "")
 
 if [ -n "$DOCKER_MCP" ]; then
   ok "docker-mcp: $(echo "$DOCKER_MCP" | cut -d'@' -f2)"
@@ -122,6 +123,6 @@ echo "  4. Config: Verifique ~/.claude.json manualmente"
 echo ""
 echo "Para reinstalar MCPs:"
 echo "  claude mcp add MCP_DOCKER -- npx -y docker-mcp   # funcional só com socket do Docker"
-echo "  claude mcp add shell -- npx mcp-server-commands  # servidor MCP de shell real (NÃO /bin/bash)"
+echo "  claude mcp add shell -- npx -y mcp-server-commands  # servidor MCP de shell real (NÃO /bin/bash)"
 echo ""
 step "FIM DO DIAGNÓSTICO"

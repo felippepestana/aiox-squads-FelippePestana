@@ -99,7 +99,7 @@ MCPs são servidores que estendem as capacidades do Claude Code. Este projeto ut
     export CLICKUP_API_TOKEN="seu_token_aqui"
     claude mcp add ClickUp \
       -e CLICKUP_API_TOKEN=$CLICKUP_API_TOKEN \
-      -- npx @taazkareem/clickup-mcp-server
+      -- npx -y @taazkareem/clickup-mcp-server
     ```
 
 ### Diagnóstico e Resolução de MCPs
@@ -119,7 +119,7 @@ Caso encontre erros de conexão com MCPs:
 3. **Reinstalar MCPs:**
    ```bash
    claude mcp add MCP_DOCKER -- npx -y docker-mcp   # funcional só com socket do Docker montado
-   claude mcp add shell -- npx mcp-server-commands  # servidor MCP de shell real (NÃO /bin/bash)
+   claude mcp add shell -- npx -y mcp-server-commands  # servidor MCP de shell real (NÃO /bin/bash)
    ```
 
 ### Documentação Detalhada
