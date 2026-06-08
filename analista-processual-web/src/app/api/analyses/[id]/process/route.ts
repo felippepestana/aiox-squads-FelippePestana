@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
 import { runAnalysisPipeline } from "@/lib/analysis-runner";
+import { loadAnalysisForRequest } from "@/lib/auth";
 
 // The multi-agent pipeline can take a while; allow up to 5 minutes and never
 // statically optimize this route.
@@ -14,11 +14,12 @@ export async function POST(
   try {
     const { id } = await params;
 
-    const analysis = await prisma.analysis.findUnique({ where: { id } });
-    if (!analysis) {
+    const access = await loadAnalysisForRequest(id);
+    if (!access.ok) {
+      const messages = { 401: "Não autenticado", 403: "Acesso negado", 404: "Análise não encontrada" } as const;
       return NextResponse.json(
-        { error: "Análise não encontrada" },
-        { status: 404 }
+        { error: messages[access.status] },
+        { status: access.status }
       );
     }
 

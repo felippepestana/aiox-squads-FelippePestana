@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { authRequired, getSessionUser, loadAnalysisForRequest } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,6 +17,15 @@ export async function GET(request: NextRequest) {
 
     if (status) {
       where.status = status;
+    }
+
+    // In auth mode, only return deadlines from the current user's analyses.
+    if (authRequired()) {
+      const user = await getSessionUser();
+      if (!user) {
+        return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
+      }
+      where.analysis = { userId: user.id };
     }
 
     if (upcoming) {
@@ -64,14 +74,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const analysis = await prisma.analysis.findUnique({
-      where: { id: analysisId },
-    });
-
-    if (!analysis) {
+    const access = await loadAnalysisForRequest(analysisId);
+    if (!access.ok) {
+      const messages = { 401: "Não autenticado", 403: "Acesso negado", 404: "Análise não encontrada" } as const;
       return NextResponse.json(
-        { error: "Análise não encontrada" },
-        { status: 404 }
+        { error: messages[access.status] },
+        { status: access.status }
       );
     }
 

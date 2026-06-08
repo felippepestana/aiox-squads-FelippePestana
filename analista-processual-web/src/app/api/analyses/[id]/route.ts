@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { loadAnalysisForRequest } from "@/lib/auth";
+
+const ACCESS_ERRORS: Record<401 | 403 | 404, string> = {
+  401: "Não autenticado",
+  403: "Acesso negado",
+  404: "Análise não encontrada",
+};
 
 export async function GET(
   request: NextRequest,
@@ -7,6 +14,14 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+
+    const access = await loadAnalysisForRequest(id);
+    if (!access.ok) {
+      return NextResponse.json(
+        { error: ACCESS_ERRORS[access.status] },
+        { status: access.status }
+      );
+    }
 
     const analysis = await prisma.analysis.findUnique({
       where: { id },
@@ -51,6 +66,13 @@ export async function PUT(
     const body = await request.json();
     const { status, result, processNumber, court, processClass } = body;
 
+    const access = await loadAnalysisForRequest(id);
+    if (!access.ok) {
+      return NextResponse.json(
+        { error: ACCESS_ERRORS[access.status] },
+        { status: access.status }
+      );
+    }
     const existing = await prisma.analysis.findUnique({ where: { id } });
     if (!existing) {
       return NextResponse.json(
@@ -102,11 +124,11 @@ export async function DELETE(
   try {
     const { id } = await params;
 
-    const existing = await prisma.analysis.findUnique({ where: { id } });
-    if (!existing) {
+    const access = await loadAnalysisForRequest(id);
+    if (!access.ok) {
       return NextResponse.json(
-        { error: "Análise não encontrada" },
-        { status: 404 }
+        { error: ACCESS_ERRORS[access.status] },
+        { status: access.status }
       );
     }
 

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { resolveUserId } from "@/lib/demo-user";
+import { authRequired, getSessionUser, resolveOwnerId } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,9 +10,18 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get("offset") || "0");
 
     const where: Record<string, unknown> = {};
-    
+
     if (status) {
       where.status = status;
+    }
+
+    // In auth mode, scope the list to the current user. In demo mode, list all.
+    if (authRequired()) {
+      const user = await getSessionUser();
+      if (!user) {
+        return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
+      }
+      where.userId = user.id;
     }
 
     const [analyses, total] = await Promise.all([
@@ -68,9 +77,12 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { processNumber, court, processClass, userId } = body;
 
-    // Until auth is wired, attribute analyses to the demo profile when no
-    // valid userId is provided. Avoids foreign-key violations.
-    const ownerId = await resolveUserId(userId);
+    // Auth mode: attribute to the authenticated user (401 if none).
+    // Demo mode: attribute to the demo profile (honoring a provided id).
+    const ownerId = await resolveOwnerId(userId);
+    if (!ownerId) {
+      return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
+    }
 
     const analysis = await prisma.analysis.create({
       data: {

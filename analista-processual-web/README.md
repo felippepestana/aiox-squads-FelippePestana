@@ -17,10 +17,18 @@ A plataforma funciona ponta-a-ponta para o fluxo principal: **criar análise →
 enviar documentos → pipeline multiagente → visualizar resultado** (resumo,
 partes, cronologia, pedidos, prazos e riscos).
 
+A **autenticação (Supabase) é opcional e com degradação graciosa**:
+
+- **Sem Supabase configurado → modo demo:** sem login; as análises são
+  atribuídas a um perfil demo (`demo@analista-processual.local`), criado
+  automaticamente. Ideal para desenvolvimento local e para o smoke test.
+- **Com `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY` → auth real:**
+  o middleware protege as rotas `/dashboard`, as rotas de API exigem sessão
+  (401 sem login) e as análises/prazos são atribuídos e filtrados pelo usuário
+  autenticado. O login/cadastro fica em `/login`.
+
 Limitações conhecidas (modo demo):
 
-- **Autenticação ainda não habilitada** — as análises são atribuídas a um perfil
-  demo (`demo@analista-processual.local`), criado automaticamente.
 - **Extração de texto** cobre formatos textuais (`.txt`, `.md`, `.csv`, `.json`,
   etc.), **PDF** (via `unpdf`) e **DOCX** (via `mammoth`). Formatos legados
   (`.doc`) e imagens exigem OCR e não são extraídos (a análise informa quais
@@ -179,6 +187,25 @@ npm run test:smoke -- --file=./caminho/para/seu-processo.pdf
 > No PowerShell o `--` extra do npm também funciona:
 > `npm run test:smoke -- --require-completed`.
 
+### Habilitando autenticação (Supabase)
+
+Por padrão o app roda em modo demo. Para habilitar login real:
+
+1. Crie um projeto no [Supabase](https://supabase.com) e habilite o provedor
+   **Email/Password** em *Authentication → Providers*.
+2. No `.env.local`, defina:
+   - `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` (em *Project
+     Settings → API*);
+   - `DATABASE_URL` apontando para o Postgres do Supabase (ou seu Postgres local).
+3. Reinicie o `npm run dev`. A partir daí:
+   - rotas `/dashboard/*` exigem sessão (redirecionam para `/login`);
+   - as rotas de API respondem `401` sem sessão;
+   - cada usuário vê apenas as próprias análises e prazos.
+
+O perfil é sincronizado automaticamente na tabela `profiles` no primeiro acesso
+(o `id` do perfil espelha o `id` do usuário no Supabase). Sem essas variáveis, o
+app volta ao modo demo sem nenhuma mudança de código.
+
 ## Deploy
 
 ### Hostinger VPS
@@ -209,7 +236,8 @@ Veja o guia completo em [`../docs/deploy/vercel.md`](../docs/deploy/vercel.md), 
 - [x] Fluxo de análise ponta-a-ponta (criar → processar → visualizar)
 - [x] Dashboard e listagem com dados reais
 - [x] Smoke test E2E cross-platform (`npm run test:smoke`, macOS e Windows)
-- [ ] Autenticação (Supabase) — substituir o perfil demo
+- [x] Autenticação (Supabase) opcional com degradação graciosa — login/cadastro,
+      proteção de rotas, atribuição/filtragem por usuário (fallback para modo demo)
 - [ ] OCR para `.doc` legado e imagens
 - [ ] Biblioteca de jurisprudência (busca semântica)
 - [ ] Fila/worker dedicado para processamento assíncrono
