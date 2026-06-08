@@ -1,0 +1,30 @@
+# journey-30-60-90-template — output of build-journey (journey-architect)
+# Personalized to role objectives + behavioral context (weight 0). Augments the manager.
+journey:
+  new_hire: "{name}"
+  role: "{role}"
+  team: "{team}"
+  modality: "{presencial|remoto|hibrido}"
+  start_date: "{YYYY-MM-DD}"
+
+  phase_30:
+    theme: "Learn & connect"
+    goals: ["{...}"]
+    early_win: "{concrete, visible win ~day 25}"
+    learning: ["{product/customers/systems/culture}"]
+    relationships: ["{buddy}", "{team}", "{key stakeholders}"]
+    first_tasks: ["{small, supported}"]
+  phase_60:
+    theme: "Contribute"
+    goals: ["{...}"]
+    first_ownership: "{recurring deliverable}"
+    ramp_gaps_closing: ["{from candidate report}"]
+  phase_90:
+    theme: "Own"
+    goals: ["{independent on core scope}"]
+    review: "30/60/90 review + two-way feedback"
+
+  manager_1on1s: "{cadence}"
+  buddy: "{assigned buddy}"
+  behavioral_context: "{weight 0 — pace/communication tailoring, not judgment}"
+  inclusion_status: "{PENDING|PASS|VETO}"   # must be PASS before the journey runs

@@ -178,7 +178,8 @@ Squads publicados pela comunidade neste repositório.
 - 🟢 **Flagship construído:** [`talent-compass`](squads/talent-compass/) (R&S + entrevistas) — 8 agentes (T0→T3), tasks, templates, checklists, workflow, **feature web dedicada** (`web/`) e **minutas** imprimíveis, com persistência opcional em **Supabase**.
 - 🟢 **Motor comportamental construído:** [`profiler-dna`](squads/profiler-dna/) (DISC + Big Five + Eneagrama) — 6 agentes (T0→T3), tasks, templates, checklist e workflow, com gate de ética/consentimento e princípio de contexto peso 0.
 - 🟢 **Gestão de desempenho construída:** [`performa`](squads/performa/) (avaliações 90/180/360, 9-Box, OKRs, PDI, 1:1) — 6 agentes (T0→T3), tasks, templates, checklist e workflow, com gate de calibração/viés e personalidade como contexto peso 0.
-- 🟡 **Esqueletos (Chief-only):** `pulse`, `peopleops`, `chronos`, `onboard`, `academy`, `insights`, `org-architect`, `benefits-hub`.
+- 🟢 **Onboarding construído:** [`onboard`](squads/onboard/) (jornada 30/60/90, checklists, buddy/IA, acompanhamento) — 6 agentes (T0→T3), tasks, templates, checklist e workflow, com gate de inclusão/consentimento e princípio de augmentar o gestor.
+- 🟡 **Esqueletos (Chief-only):** `pulse`, `peopleops`, `chronos`, `academy`, `insights`, `org-architect`, `benefits-hub`.
 
 Veja o [blueprint por área](squads/apex-talent/data/platform-blueprint.md) e o [mapa de oportunidades de IA](squads/apex-talent/data/ai-opportunity-map.md).
 

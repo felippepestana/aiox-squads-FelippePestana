@@ -1,9 +1,9 @@
 name: onboard
 display_name: "Onboard — Onboarding & Integração"
-version: "0.1.0"
+version: "1.0.0"
 domain: onboarding
 entry_agent: onboard-chief
-description: "Jornada de integração do novo colaborador: trilhas personalizadas, checklists dinâmicos, coleta de documentos, assinatura de contrato e acompanhamento 30/60/90."
+description: "Integração do novo colaborador ponta a ponta: jornada 30/60/90 personalizada por cargo e perfil comportamental, checklists dinâmicos, coleta de documentos e contrato, buddy/IA de dúvidas e acompanhamento proativo de marcos. Carrega o contexto da contratação (talent-compass) e o perfil (profiler-dna, peso 0). Aumenta a relação com o gestor — não a substitui."
 
 keywords:
   - onboarding
@@ -12,27 +12,53 @@ keywords:
   - checklist
   - novo colaborador
   - buddy
+  - experiência do colaborador
+  - primeiros 90 dias
 
 metadata:
   type: module
-  status: DEVELOPING
+  status: ACTIVE
   platform: apex-talent
 
 tier_structure:
   tier_0:
-    role: "Module Orchestration"
+    role: "Orchestration & Journey"
     agents: ["onboard-chief"]
+  tier_1:
+    role: "Core Specialists"
+    agents: ["journey-architect", "checklist-runner"]
+  tier_2:
+    role: "Engagement & Tracking"
+    agents: ["buddy-ai", "milestone-tracker"]
+  tier_3:
+    role: "Experience & Inclusion Gate"
+    agents: ["inclusion-gate"]
+
+# Onboarding personalizes by role + behavioral context. Personality (profiler-dna)
+# is context with weight 0 — it tailors the journey, never gates the person.
+personalization_model:
+  by: ["role objectives", "behavioral context (weight 0)", "team"]
+  personality_weight: 0
+  augments_manager: true   # never replaces the human manager relationship
 
 workflow:
-  primary: "module intake (skeleton)"
+  primary: "wf-onboarding-journey.yaml"
   phases:
-    - "Phase 1: INTAKE - Understand the need within this module's domain"
-    - "Phase 2: SCOPE - Define the specialist flow to build next"
+    - "Phase 1: INTAKE - New hire, role and hiring context (from talent-compass)"
+    - "Phase 2: JOURNEY - Personalized 30/60/90 plan"
+    - "Phase 3: CHECKLIST - Dynamic checklist, documents, contract"
+    - "Phase 4: INCLUSION GATE - Consent, accessibility, weight-0 (veto)"
+    - "Phase 5: RUN - Buddy support + proactive 30/60/90 tracking"
 
 entry_points:
-  intake: "*build-journey"
+  full_journey: "*build-journey"
+  checklist: "*checklist"
+  buddy: "*buddy"
+  track: "*track-30-60-90"
 
 workspace_integration:
   level: none
   rationale: >-
-    Modulo onboard em desenvolvimento (esqueleto). O Chief faz intake e escopo; ainda nao consome nem produz artefatos no workspace/.
+    O onboard e self-contained: consome o contexto da contratacao e dados do novo
+    colaborador, e devolve a jornada/checklists/acompanhamento na conversa, sem ler
+    nem escrever no workspace/ do repositorio.

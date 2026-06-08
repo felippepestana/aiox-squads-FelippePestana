@@ -14,7 +14,7 @@ A proposta de valor é cobrir o máximo de funcionalidades de uma suíte de RH m
 | [`pulse`](../pulse/) | Clima & Engajamento | 🟡 Em desenvolvimento |
 | [`peopleops`](../peopleops/) | Departamento Pessoal & Folha | 🟡 Em desenvolvimento |
 | [`chronos`](../chronos/) | Controle de Ponto | 🟡 Em desenvolvimento |
-| [`onboard`](../onboard/) | Onboarding & Integração | 🟡 Em desenvolvimento |
+| [`onboard`](../onboard/) | Onboarding & Integração | 🟢 Ativo |
 | [`academy`](../academy/) | Treinamento & Desenvolvimento | 🟡 Em desenvolvimento |
 | [`insights`](../insights/) | People Analytics | 🟡 Em desenvolvimento |
 | [`org-architect`](../org-architect/) | Cargos, Salários & Org Design | 🟡 Em desenvolvimento |

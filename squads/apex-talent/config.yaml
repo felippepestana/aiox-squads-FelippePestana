@@ -27,7 +27,7 @@ metadata:
     - { squad: "pulse", area: "Clima & Engajamento", status: DEVELOPING }
     - { squad: "peopleops", area: "Departamento Pessoal & Folha", status: DEVELOPING }
     - { squad: "chronos", area: "Controle de Ponto", status: DEVELOPING }
-    - { squad: "onboard", area: "Onboarding & Integração", status: DEVELOPING }
+    - { squad: "onboard", area: "Onboarding & Integração", status: ACTIVE }
     - { squad: "academy", area: "Treinamento & Desenvolvimento", status: DEVELOPING }
     - { squad: "insights", area: "People Analytics", status: DEVELOPING }
     - { squad: "org-architect", area: "Cargos, Salários & Org Design", status: DEVELOPING }
