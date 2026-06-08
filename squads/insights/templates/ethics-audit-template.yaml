@@ -1,0 +1,41 @@
+# Template: Ethics & Privacy Audit
+# Produced by: ethics-gate
+# Mandatory gate before any insight is released. PASS or VETO — no "PASS with caveat".
+
+ethics_audit:
+  audited_by: "ethics-gate"
+  timestamp: ""
+  intended_use: ""              # decisão de negócio que o insight informa
+
+  checks:
+    min_group_size:
+      threshold: 5
+      smallest_displayed_group: null
+      passed: null
+    protected_as_predictor:
+      used: null
+      passed: null
+    individual_verdict:
+      nominal_prediction_present: null
+      passed: null
+    disparate_impact:
+      applicable: null          # true se afeta seleção/promoção/desligamento
+      four_fifths_ratio: null   # taxa grupo protegido / maior taxa (>= 0.80)
+      passed: null
+    lgpd:
+      purpose_declared: null
+      minimization_applied: null
+      sensitive_data_basis: ""  # base legal (Art. 7/11) ou "n/a"
+      passed: null
+    audit_trail:
+      complete: null
+      passed: null
+
+  verdict: ""                   # PASS | VETO
+  # se PASS:
+  clearance_statement: ""
+  next_action: ""               # ex: "Handoff to narrative-author"
+  # se VETO:
+  reasons: []
+  remediation_steps: []
+  resubmit: ""

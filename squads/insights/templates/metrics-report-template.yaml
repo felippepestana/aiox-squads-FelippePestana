@@ -1,0 +1,30 @@
+# Template: Metrics Report
+# Produced by: metric-smith
+# Each KPI is deterministic and traceable: formula + source + window.
+
+metrics_report:
+  window: ""
+  computed_by: "metric-smith"
+  timestamp: ""
+  determinism: "same inputs → same outputs"
+
+  kpis:
+    - name: ""                   # ex: turnover_anualizado
+      value: null
+      unit: ""                   # % | pessoas | BRL | pontos
+      breakdown: {}              # ex: { voluntario_pct: 10.0, involuntario_pct: 4.0 }
+      formula: ""                # fórmula exata usada (do glossário)
+      source: ""                 # módulo-fonte
+      note: ""                   # ex: "janela parcial anualizada (×2)"
+
+  segments:
+    - segment: ""
+      n: null
+      status: "ok"               # ok | "suprimido (n<5)"
+      values: {}
+
+  benchmark:
+    reference: ""                # ex: "semestre anterior"
+    deltas: {}                   # ex: { turnover_delta_pp: 2.0, enps_delta: -5 }
+    base_comparable: true        # mesma definição/janela?
+    note: ""

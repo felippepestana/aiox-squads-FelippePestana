@@ -1,0 +1,29 @@
+# Template: Predictive Risk Model
+# Produced by: risk-modeler
+# Aggregate-only. Protected attributes are NEVER predictors. Confidence is mandatory.
+
+risk_model:
+  risk_type: ""                  # turnover | burnout | turnover+burnout
+  horizon: ""                    # ex: "90 dias"
+  modeled_by: "risk-modeler"
+  timestamp: ""
+  framing: "Sinal agregado de apoio — NÃO é veredito individual"
+
+  features_used:
+    - feature: ""                # ex: super_jornada_freq
+      source: ""                 # módulo-fonte
+      weight: null               # peso relativo (0..1)
+  protected_attributes_used: false
+  protected_note: "Atributos protegidos excluídos como preditores."
+
+  cohort_risk:
+    - cohort: ""                 # ex: "area=Comercial" — n >= 5 obrigatório
+      n: null
+      risk_level: ""             # LOW | MEDIUM | HIGH
+      confidence: ""             # low | medium | high
+      drivers: []                # drivers acionáveis (não rótulos)
+      recommendation: ""         # ação de apoio (nunca corte por predição)
+
+  limits:
+    - ""                         # ex: "correlação, não causa"
+    - ""                         # ex: "confiança média — validar com gestores"
