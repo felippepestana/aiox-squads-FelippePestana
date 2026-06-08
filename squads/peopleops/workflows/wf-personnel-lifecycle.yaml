@@ -50,6 +50,10 @@ phases:
   phase_3_payroll:
     name: "Payroll Preparation"
     description: "Assemble a defensible, traceable payroll run (proventos, descontos, FGTS) with assumptions flagged."
+    # Hard dependency stays on phase_1_intake so a routine monthly run needs nothing else.
+    # Soft (conditional) input: a rescisão/lifecycle payroll consumes phase_4's
+    # lifecycle-event.yaml (termination/leave verbas). When an event_type is in scope,
+    # run phase_4 first and feed its output here; routine runs skip that link.
     depends_on: "phase_1_intake"
     agents: ["payroll-analyst"]
     tasks:
@@ -64,6 +68,10 @@ phases:
   phase_4_compliance_lifecycle:
     name: "Compliance & Lifecycle"
     description: "Map eSocial events/deadlines; process férias, afastamentos or rescisão when applicable."
+    # Hard dependency stays on phase_1_intake so non-hire paths (termination-only,
+    # routine pay) are not blocked. Soft (conditional) input: when a new hire is in
+    # scope, phase_2's admission-dossier.yaml (S-2200) feeds the eSocial mapping —
+    # run phase_2 first in that case; otherwise phase_4 proceeds without it.
     depends_on: "phase_1_intake"
     agents: ["esocial-compliance", "leave-manager"]
     # Both tasks elicit; check-esocial runs whenever events are in play, manage-leave
