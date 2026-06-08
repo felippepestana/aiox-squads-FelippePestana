@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# CodeRabbit disabled at the repository level.
+# Automatic PR reviews and status checks are turned off. A review can still be
+# triggered manually by commenting "@coderabbitai review" on a pull request.
+reviews:
+  auto_review:
+    enabled: false
+  review_status: false
+  high_level_summary: false
+  poem: false
+  walkthrough: false
