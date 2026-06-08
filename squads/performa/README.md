@@ -1,26 +1,31 @@
 # Performa — Gestão de Desempenho
 
-> 🟡 **Em desenvolvimento (esqueleto).** Este módulo da plataforma [Apex-Talent](../apex-talent/) disponibiliza hoje apenas o agente **Chief** (`performa-chief`), que faz o intake da área e escopa o fluxo de especialistas a ser construído. Os agentes especialistas, tarefas e modelos serão adicionados nas próximas iterações.
+> 🟢 **Módulo ativo** da plataforma [Apex-Talent](../apex-talent/). Gestão de desempenho **por evidência**, com calibração de viés.
 
-## Área
+Performa transforma "como essa pessoa está indo?" em respostas **ancoradas em evidência, calibradas e acionáveis**: avaliações 90/180/360, matriz 9-Box explicável, OKRs por resultado, PDI personalizado e 1:1.
 
-**Gestão de Desempenho** — parte da suíte de RH AI-native Apex-Talent.
+**Princípios:** competência/evidência decide; **personalidade (via `profiler-dna`) é contexto, peso 0**; toda nota passa por um **gate de calibração/viés**; promoções e remuneração permanecem **decisões humanas**.
 
-Gestão de desempenho ponta a ponta: avaliações 90/180/360, matriz 9-Box, PDI, OKRs, feedback contínuo, 1:1, ciclos e calibração.
+## Cadeia de comando (tiers)
 
-## Funcionalidades-alvo
+| Tier | Agente | Papel |
+|------|--------|-------|
+| 0 | `performa-chief` | Orquestra o ciclo de desempenho |
+| 1 | `review-runner` | Avaliações 90/180/360 por evidência |
+| 1 | `ninebox-plotter` | Matriz 9-Box (desempenho × potencial) |
+| 2 | `okr-architect` | OKRs por resultado (não tarefas) |
+| 2 | `pdi-builder` | PDI personalizado (consome `profiler-dna`) |
+| 3 | `calibration-gate` | Gate de calibração/viés — **veto** |
 
-- Avaliação 90° / 180° / 360°
-- Matriz 9-Box
-- PDI (Plano de Desenvolvimento Individual)
-- OKR / metas e acompanhamento
-- Feedback contínuo e 1:1
-- Ciclos e calibração
-- Planejamento de sucessão
+## Escala de avaliação
 
-## Diferencial de IA
+`1 — below` · `2 — developing` · `3 — meets` · `4 — exceeds` · `5 — outstanding` — **toda nota ancorada em evidência recente** (ver [`data/rating-anchors.md`](data/rating-anchors.md)). Sem exemplo → "evidência insuficiente", não um 3.
 
-Veja o [mapa de oportunidades de IA](../apex-talent/data/ai-opportunity-map.md) para o detalhe da abordagem AI-native desta área.
+## Fluxo (workflow `wf-performance-cycle`)
+
+```text
+SETUP ─▶ REVIEW (evidência) ─▶ 9-BOX ─▶ CALIBRAR (veto) ─▶ DESENVOLVER (PDI + OKRs + 1:1)
+```
 
 ## Como usar
 
@@ -28,20 +33,25 @@ Selecione `performa:performa-chief` no chatbot ou na web.
 
 Comandos do Chief:
 
-- `*run-review — Conduct a 90/180/360 review`
-- `*plot-9box — Position on the 9-box with rationale`
-- `*build-pdi — Generate a development plan`
-- `*draft-okr — Draft and audit OKRs`
-- `*prep-1on1 — Build a 1:1 agenda`
-- `*help` — lista os comandos
-- `*exit` — encerra o agente
+- `*run-cycle` — ciclo completo
+- `*run-review` — avaliação 90/180/360
+- `*plot-9box` — posicionamento na matriz 9-Box
+- `*draft-okr` — OKRs por resultado
+- `*build-pdi` — plano de desenvolvimento
+- `*prep-1on1` — pauta de 1:1
+- `*calibrate` — gate de calibração/viés
+- `*help` / `*exit`
 
-## Roteiro
+## Conexão com outros módulos
 
-1. **Agora:** Chief (intake + escopo do fluxo). ✅
-2. **Próximo:** agentes especialistas (Tier 1/2), tarefas e modelos da área.
-3. **Depois:** workflow `wf-*` e integração de dados com os demais módulos.
+- **profiler-dna:** fornece contexto comportamental (peso 0) para PDI e 1:1.
+- **org-architect:** competências e expectativas por cargo alimentam as avaliações.
+- **academy:** gaps do PDI viram trilhas de aprendizagem.
+- **talent-compass:** continuidade do scorecard de contratação → desenvolvimento.
 
-## Referência
+## Referências
 
-Baseado em: *Feedz/Lattice practices + 9-Box + OKR (John Doerr — Measure What Matters)*.
+- John Doerr — *Measure What Matters* (OKRs)
+- Matriz 9-Box (desempenho × potencial)
+- Feedback **SBI** (ver [`data/feedback-sbi.md`](data/feedback-sbi.md))
+- Práticas de feedback contínuo (Feedz/Lattice)

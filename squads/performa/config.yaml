@@ -1,39 +1,68 @@
 name: performa
 display_name: "Performa — Gestão de Desempenho"
-version: "0.1.0"
+version: "1.0.0"
 domain: performance-management
 entry_agent: performa-chief
-description: "Gestão de desempenho ponta a ponta: avaliações 90/180/360, matriz 9-Box, PDI, OKRs, feedback contínuo, 1:1, ciclos e calibração."
+description: "Gestão de desempenho por evidência: avaliações 90/180/360, matriz 9-Box explicável, OKRs por resultado, PDI personalizado, feedback contínuo e 1:1. Toda nota é ancorada em evidência e passa por um gate de calibração/viés. Personalidade (via profiler-dna) é contexto — peso 0; promoções e remuneração permanecem decisões humanas."
 
 keywords:
   - avaliação de desempenho
   - 9-box
   - okr
   - pdi
-  - feedback
+  - feedback contínuo
   - 1:1
   - calibração
+  - sucessão
+  - gestão de desempenho
 
 metadata:
   type: module
-  status: DEVELOPING
+  status: ACTIVE
   platform: apex-talent
 
 tier_structure:
   tier_0:
-    role: "Module Orchestration"
+    role: "Orchestration & Cycle Management"
     agents: ["performa-chief"]
+  tier_1:
+    role: "Core Specialists"
+    agents: ["review-runner", "ninebox-plotter"]
+  tier_2:
+    role: "Development & Goals"
+    agents: ["okr-architect", "pdi-builder"]
+  tier_3:
+    role: "Calibration Gate"
+    agents: ["calibration-gate"]
+
+# Performance ratings are anchored in evidence and calibrated. They are decision
+# SUPPORT — promotions/pay stay with accountable humans. Personality is context (weight 0).
+rating_model:
+  scale: ["1 — below", "2 — developing", "3 — meets", "4 — exceeds", "5 — outstanding"]
+  anchored: true   # every rating requires behavioral evidence
+  calibration_required: true
+  personality_weight: 0
 
 workflow:
-  primary: "module intake (skeleton)"
+  primary: "wf-performance-cycle.yaml"
   phases:
-    - "Phase 1: INTAKE - Understand the need within this module's domain"
-    - "Phase 2: SCOPE - Define the specialist flow to build next"
+    - "Phase 1: SETUP - Cycle scope, competencies and goals"
+    - "Phase 2: REVIEW - 90/180/360 evidence-based evaluation"
+    - "Phase 3: NINE-BOX - Performance x potential positioning"
+    - "Phase 4: CALIBRATE - Fairness/calibration gate (veto)"
+    - "Phase 5: DEVELOP - PDI + OKRs + 1:1 cadence"
 
 entry_points:
-  intake: "*run-review"
+  full_cycle: "*run-cycle"
+  review: "*run-review"
+  ninebox: "*plot-9box"
+  pdi: "*build-pdi"
+  okr: "*draft-okr"
+  calibrate: "*calibrate"
 
 workspace_integration:
   level: none
   rationale: >-
-    Modulo performa em desenvolvimento (esqueleto). O Chief faz intake e escopo; ainda nao consome nem produz artefatos no workspace/.
+    O performa e self-contained: consome insumos do usuario (metas, evidencias,
+    feedbacks) e devolve avaliacoes, 9-box, PDI e OKRs na conversa, sem ler nem
+    escrever no workspace/ do repositorio.

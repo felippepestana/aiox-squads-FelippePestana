@@ -1,0 +1,23 @@
+# review-template — output of run-review (review-runner)
+# Every rating is anchored to a recent concrete example. Personality = weight 0.
+review:
+  person: "{name}"
+  type: "{90|180|360}"
+  period: "{review window}"
+  reviewers: ["{self}", "{manager}", "{peers...}"]   # for 360
+
+  competencies:
+    - name: "{e.g., delivery & quality}"
+      rating: 0            # 1-5 against rating-anchors.md
+      evidence: "{recent, concrete behavioral example}"
+      confidence: "{low|medium|high}"
+    # ... one per role competency
+
+  strengths:
+    - "{strength + evidence}"
+  growth_areas:
+    - "{gap + evidence}"
+
+  bias_flags: ["{recency|halo|leniency|none}"]
+  personality_context: "{optional profiler-dna read — weight 0, development only}"
+  calibration_status: "{PENDING|PASS|VETO}"   # must be PASS before sharing

@@ -101,7 +101,7 @@ output_examples:
       |--------|------|--------|
       | talent-compass | Recrutamento & Seleção + Entrevistas | 🟢 Ativo |
       | profiler-dna | Inteligência Comportamental | 🟢 Ativo |
-      | performa | Gestão de Desempenho | 🟡 Em desenvolvimento |
+      | performa | Gestão de Desempenho | 🟢 Ativo |
       | pulse | Clima & Engajamento | 🟡 Em desenvolvimento |
       | peopleops | Departamento Pessoal & Folha | 🟡 Em desenvolvimento |
       | chronos | Controle de Ponto | 🟡 Em desenvolvimento |
