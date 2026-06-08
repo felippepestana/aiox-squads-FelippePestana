@@ -115,7 +115,12 @@
 | Dispositivo | Relevante Para |
 |------------|----------------|
 
-### Jurisprudência Relevante
+### Jurisprudência dos Tribunais Superiores
+
+| Tribunal | Número | Data | Tese/Ementa |
+|---------|--------|------|------------|
+
+### Jurisprudência de TJs/TRFs Relevantes
 
 | Tribunal | Número | Data | Tese/Ementa |
 |---------|--------|------|------------|
@@ -124,6 +129,11 @@
 
 | Tribunal | Súmula | Enunciado |
 |---------|--------|----------|
+
+### Orientações Jurisprudenciais (OJs)
+
+| Órgão | OJ | Enunciado |
+|------|----|-----------|
 
 ## Análise de Mérito
 

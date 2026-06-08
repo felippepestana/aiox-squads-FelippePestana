@@ -23,6 +23,10 @@ All notable changes to this squad follow [Keep a Changelog](https://keepachangel
 - Centralização de fontes canônicas: `config.yaml > pipeline.use_cases` (classificação/roteamento) e `templates/relatorio-processual-tmpl.md` (estrutura de relatório); demais arquivos passam a espelhar essas fontes
 - `ARCHITECTURE.md` sincronizado com os 5 use cases, modos de documentação e quality gates
 
+### Removed
+
+- `templates/relatorio-juridico-tmpl.md` — consolidado no template dual-mode canônico `relatorio-processual-tmpl.md`, que absorveu as subseções de maior amplitude (Jurisprudência dos Tribunais Superiores, Jurisprudência de TJs/TRFs, Orientações Jurisprudenciais)
+
 ---
 
 ## [1.0.0] — 2026-03-28
