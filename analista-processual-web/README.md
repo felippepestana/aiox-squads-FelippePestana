@@ -121,6 +121,36 @@ por tier (complexidade da tarefa) e usa **fallback** automático se um falhar.
 Reinicie o `npm run dev` (e o `npm run worker`, se estiver usando) após alterar
 as variáveis.
 
+### Consulta por número de processo (DATAJUD)
+
+Além do upload manual, é possível criar uma análise **a partir do número CNJ**,
+buscando os metadados oficiais na **API Pública do DATAJUD** (CNJ). Defina a
+chave pública gratuita (de [datajud-wiki.cnj.jus.br](https://datajud-wiki.cnj.jus.br/api-publica/acesso)):
+
+```bash
+DATAJUD_API_KEY=...
+```
+
+```bash
+curl -X POST http://localhost:3000/api/analyses/from-process-number \
+  -H "Content-Type: application/json" \
+  -d '{"processNumber":"1001509-02.2021.8.26.0005"}'
+```
+
+O endpoint do tribunal é **derivado automaticamente do próprio número** (campos
+`J`/`TR` da numeração única, Res. CNJ 65/2008), cobrindo **todos os segmentos**:
+Justiça Estadual (`tj*`), Federal (`trf1..6`), do Trabalho (`trt1..24`),
+Eleitoral (`tre-*`), Militar (`stm`, `tjm*`) e tribunais superiores
+(`stf`/`stj`/`tst`/`tse`). A análise é criada com `source = DATAJUD`, os
+metadados viram um documento sintético e o pipeline multiagente roda normalmente
+via `POST /api/analyses/:id/process`. Sem `DATAJUD_API_KEY`, a rota responde
+`503` e o fluxo de upload continua funcionando.
+
+> Cobertura: `npm run test:tribunais` valida a resolução de tribunais para todos
+> os segmentos (offline, sem rede). O DATAJUD fornece **metadados** (capa +
+> movimentações), **não** peças — veja o roadmap em
+> [`docs/integracao-cnj-planejamento.md`](docs/integracao-cnj-planejamento.md).
+
 ## Getting Started
 
 ### 1. Clone e Instale

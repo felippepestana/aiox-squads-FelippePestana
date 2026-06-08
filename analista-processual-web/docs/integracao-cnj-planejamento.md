@@ -241,16 +241,17 @@ Mudanças sugeridas (incrementais, retrocompatíveis):
 
 Faseamento por **razão risco/valor** (não por tempo): cada fase entrega valor isolado e desbloqueia a seguinte.
 
-### Fase 0 — Fundação de integração (pré-requisito)
-- Criar `src/lib/integrations/court-data-gateway.ts` (interface comum + seleção por env, espelhando o LLM gateway).
-- Migração Prisma: `source`, `tribunalSigla`, `lastSyncedAt`, `ProcessMovement`.
-- Camada de credenciais cifradas (reuso de `ApiKey`/`IntegrationCredential`).
-- **Risco:** baixo. **Dependência:** nenhuma credencial externa.
+### Fase 0 — Fundação de integração (pré-requisito) ✅ implementada
+- `src/lib/integrations/court-data-gateway.ts` (interface `CourtDataProvider` + seleção por configuração, espelhando o LLM gateway).
+- `src/lib/integrations/tribunais.ts` — parsing da numeração única (Res. 65/2008) e resolução do alias DATAJUD para **todos os segmentos** (cobertura ampla).
+- Migração Prisma: `Analysis.source`/`tribunalSigla`/`lastSyncedAt` + modelo `ProcessMovement`.
+- **Status:** entregue e testado (`npm run test:tribunais`, offline).
 
-### Fase 1 — DATAJUD (enriquecimento) ⭐ início recomendado
-- Provedor `datajud` (REST + ES DSL); busca por nº CNJ; mapear `movimentos` (TPU) → `ProcessMovement`.
-- Rota `POST /api/analyses/from-process-number` (cria `Analysis` enriquecida, sem upload).
-- **Valor:** elimina parte do upload manual; **Risco:** baixo (API Key pública); **Limite:** lag 30d, sem peças.
+### Fase 1 — DATAJUD (enriquecimento) ✅ implementada
+- Provedor `datajud` (`src/lib/integrations/datajud.ts`, REST + ES DSL); busca por nº CNJ; mapeia `movimentos` (TPU) → `ProcessMovement`.
+- Rota `POST /api/analyses/from-process-number` (cria `Analysis` enriquecida sem upload; metadados viram documento sintético consumido pelo pipeline).
+- **Validado ao vivo** contra a API Pública do DATAJUD (TJSP), com `COMPLETED` ponta a ponta via pipeline + fila.
+- **Limite conhecido:** lag de atualização (~30d) e ausência de peças/partes (suprimidas por privacidade) — endereçado nas Fases 3/4.
 
 ### Fase 2 — DJEN/Comunica (monitoramento de prazos) ⭐ maior valor de produto
 - Provedor `djen` (consulta por OAB/parte/processo); modelo `Publication`.

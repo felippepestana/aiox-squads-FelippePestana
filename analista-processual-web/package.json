@@ -11,6 +11,7 @@
     "test": "jest",
     "test:e2e": "playwright test",
     "test:smoke": "node scripts/smoke-test.mjs",
+    "test:tribunais": "tsx scripts/test-tribunais.ts",
     "worker": "tsx src/worker.ts",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
