@@ -1,11 +1,37 @@
 import OpenAI from "openai";
+import {
+  generateHeuristicResponse,
+  HEURISTIC_MODEL_ID,
+  isHeuristicFallbackEnabled,
+} from "./heuristic-llm";
 
 export type ModelTier = "budget" | "standard" | "premium";
 export type TaskComplexity = "simple" | "moderate" | "complex" | "expert";
 
+export type Provider =
+  | "openai"
+  | "anthropic"
+  | "deepseek"
+  | "qwen"
+  | "kimi"
+  | "minimax"
+  | "gemini"
+  | "groq"
+  | "openrouter"
+  | "mistral"
+  | "xai"
+  | "custom"
+  | "heuristic";
+
 interface ModelConfig {
   name: string;
-  provider: "openai" | "anthropic" | "deepseek" | "qwen" | "kimi" | "minimax" | "gemini";
+  provider: Provider;
+  /**
+   * The model id sent to the provider API. Differs from the internal key for
+   * non-OpenAI providers (e.g. "deepseek-chat", not "deepseek-v3"). Can be
+   * overridden at runtime via `<PROVIDER>_MODEL` (e.g. DEEPSEEK_MODEL).
+   */
+  apiModel: string;
   tier: ModelTier;
   contextWindow: number;
   costPer1kTokens: { input: number; output: number };
@@ -15,6 +41,7 @@ export const MODELS: Record<string, ModelConfig> = {
   "gpt-4o": {
     name: "GPT-4o",
     provider: "openai",
+    apiModel: "gpt-4o",
     tier: "premium",
     contextWindow: 128000,
     costPer1kTokens: { input: 0.005, output: 0.015 },
@@ -22,6 +49,7 @@ export const MODELS: Record<string, ModelConfig> = {
   "gpt-4o-mini": {
     name: "GPT-4o-mini",
     provider: "openai",
+    apiModel: "gpt-4o-mini",
     tier: "standard",
     contextWindow: 128000,
     costPer1kTokens: { input: 0.00015, output: 0.0006 },
@@ -29,6 +57,7 @@ export const MODELS: Record<string, ModelConfig> = {
   "claude-3-5-sonnet": {
     name: "Claude 3.5 Sonnet",
     provider: "anthropic",
+    apiModel: "claude-3-5-sonnet-latest",
     tier: "premium",
     contextWindow: 200000,
     costPer1kTokens: { input: 0.003, output: 0.015 },
@@ -36,6 +65,7 @@ export const MODELS: Record<string, ModelConfig> = {
   "claude-3-5-haiku": {
     name: "Claude 3.5 Haiku",
     provider: "anthropic",
+    apiModel: "claude-3-5-haiku-latest",
     tier: "standard",
     contextWindow: 200000,
     costPer1kTokens: { input: 0.0008, output: 0.004 },
@@ -43,13 +73,55 @@ export const MODELS: Record<string, ModelConfig> = {
   "deepseek-v3": {
     name: "DeepSeek V3",
     provider: "deepseek",
+    apiModel: "deepseek-chat",
     tier: "budget",
     contextWindow: 64000,
     costPer1kTokens: { input: 0.00007, output: 0.00027 },
   },
+  "deepseek-r1": {
+    name: "DeepSeek R1 (reasoner)",
+    provider: "deepseek",
+    apiModel: "deepseek-reasoner",
+    tier: "premium",
+    contextWindow: 64000,
+    costPer1kTokens: { input: 0.00055, output: 0.00219 },
+  },
+  "mistral-large": {
+    name: "Mistral Large",
+    provider: "mistral",
+    apiModel: "mistral-large-latest",
+    tier: "premium",
+    contextWindow: 128000,
+    costPer1kTokens: { input: 0.002, output: 0.006 },
+  },
+  "mistral-small": {
+    name: "Mistral Small",
+    provider: "mistral",
+    apiModel: "mistral-small-latest",
+    tier: "budget",
+    contextWindow: 128000,
+    costPer1kTokens: { input: 0.0002, output: 0.0006 },
+  },
+  "grok-3": {
+    name: "Grok 3 (xAI)",
+    provider: "xai",
+    apiModel: "grok-3",
+    tier: "premium",
+    contextWindow: 131072,
+    costPer1kTokens: { input: 0.003, output: 0.015 },
+  },
+  "grok-3-mini": {
+    name: "Grok 3 Mini (xAI)",
+    provider: "xai",
+    apiModel: "grok-3-mini",
+    tier: "standard",
+    contextWindow: 131072,
+    costPer1kTokens: { input: 0.0003, output: 0.0005 },
+  },
   "qwen-2.5": {
     name: "Qwen 2.5",
     provider: "qwen",
+    apiModel: "qwen-plus",
     tier: "budget",
     contextWindow: 32000,
     costPer1kTokens: { input: 0.0005, output: 0.0015 },
@@ -57,6 +129,7 @@ export const MODELS: Record<string, ModelConfig> = {
   "kimi-k2": {
     name: "Kimi K2",
     provider: "kimi",
+    apiModel: "moonshot-v1-128k",
     tier: "standard",
     contextWindow: 128000,
     costPer1kTokens: { input: 0.001, output: 0.004 },
@@ -64,16 +137,77 @@ export const MODELS: Record<string, ModelConfig> = {
   "minimax-01": {
     name: "MiniMax 01",
     provider: "minimax",
+    apiModel: "MiniMax-Text-01",
     tier: "budget",
     contextWindow: 1000000,
     costPer1kTokens: { input: 0.0001, output: 0.0005 },
   },
+  "gemini-2.0-flash": {
+    name: "Gemini 2.0 Flash",
+    provider: "gemini",
+    apiModel: "gemini-2.0-flash",
+    tier: "standard",
+    contextWindow: 1000000,
+    costPer1kTokens: { input: 0.0001, output: 0.0004 },
+  },
   "gemini-2.0-pro": {
     name: "Gemini 2.0 Pro",
     provider: "gemini",
+    apiModel: "gemini-2.0-pro-exp",
     tier: "premium",
     contextWindow: 1000000,
     costPer1kTokens: { input: 0.00125, output: 0.005 },
+  },
+  "groq-llama-3.3-70b": {
+    name: "Llama 3.3 70B (Groq)",
+    provider: "groq",
+    apiModel: "llama-3.3-70b-versatile",
+    tier: "standard",
+    contextWindow: 128000,
+    costPer1kTokens: { input: 0.00059, output: 0.00079 },
+  },
+  "groq-llama-3.1-8b": {
+    name: "Llama 3.1 8B (Groq)",
+    provider: "groq",
+    apiModel: "llama-3.1-8b-instant",
+    tier: "budget",
+    contextWindow: 128000,
+    costPer1kTokens: { input: 0.00005, output: 0.00008 },
+  },
+  "groq-gemma2-9b": {
+    name: "Gemma 2 9B (Groq)",
+    provider: "groq",
+    apiModel: "gemma2-9b-it",
+    tier: "budget",
+    contextWindow: 8192,
+    costPer1kTokens: { input: 0.0002, output: 0.0002 },
+  },
+  "openrouter-auto": {
+    name: "OpenRouter (configurável)",
+    provider: "openrouter",
+    apiModel: "meta-llama/llama-3.3-70b-instruct",
+    tier: "standard",
+    contextWindow: 128000,
+    costPer1kTokens: { input: 0.0001, output: 0.0003 },
+  },
+  // Generic OpenAI-compatible provider. Point CUSTOM_BASE_URL + CUSTOM_API_KEY
+  // at ANY compatible endpoint (Together, Fireworks, Cerebras, Ollama, vLLM,
+  // LM Studio, ...) and set the model via CUSTOM_MODEL. Tier via CUSTOM_TIER.
+  custom: {
+    name: "Custom (OpenAI-compatible)",
+    provider: "custom",
+    apiModel: "",
+    tier: "standard",
+    contextWindow: 128000,
+    costPer1kTokens: { input: 0, output: 0 },
+  },
+  [HEURISTIC_MODEL_ID]: {
+    name: "Heuristic Local (sem API)",
+    provider: "heuristic",
+    apiModel: HEURISTIC_MODEL_ID,
+    tier: "budget",
+    contextWindow: 128000,
+    costPer1kTokens: { input: 0, output: 0 },
   },
 };
 
@@ -123,58 +257,126 @@ class LLMGateway {
 
   private initializeClients() {
     // OpenAI is the default provider. The remaining providers expose
-    // OpenAI-compatible APIs and are only initialized when both an API key and
-    // a base URL are configured, so we never select a model we cannot call.
+    // OpenAI-compatible APIs and are only initialized when an API key (and a
+    // base URL, when not built-in) is configured, so we never select a model we
+    // cannot call. To switch providers, just set the corresponding API key.
     const openaiKey = process.env.OPENAI_API_KEY;
     if (openaiKey) {
       this.clients.set("openai", new OpenAI({ apiKey: openaiKey }));
     }
 
-    const compatibleProviders: Array<{
-      provider: string;
-      key?: string;
-      baseURL?: string;
-    }> = [
-      { provider: "deepseek", key: process.env.DEEPSEEK_API_KEY, baseURL: process.env.DEEPSEEK_BASE_URL },
-      { provider: "qwen", key: process.env.QWEN_API_KEY, baseURL: process.env.QWEN_BASE_URL },
-      { provider: "kimi", key: process.env.KIMI_API_KEY, baseURL: process.env.KIMI_BASE_URL },
-      { provider: "minimax", key: process.env.MINIMAX_API_KEY, baseURL: process.env.MINIMAX_BASE_URL },
+    // Providers with a well-known default base URL (overridable via *_BASE_URL).
+    const knownBaseURLs: Partial<Record<Provider, string>> = {
+      deepseek: "https://api.deepseek.com",
+      groq: "https://api.groq.com/openai/v1",
+      openrouter: "https://openrouter.ai/api/v1",
+      gemini: "https://generativelanguage.googleapis.com/v1beta/openai/",
+      kimi: "https://api.moonshot.cn/v1",
+      qwen: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      mistral: "https://api.mistral.ai/v1",
+      minimax: "https://api.minimax.chat/v1",
+      xai: "https://api.x.ai/v1",
+    };
+
+    // "custom" has no default base URL — it must be provided. It lets users
+    // plug ANY OpenAI-compatible endpoint (Together, Fireworks, Cerebras,
+    // Ollama, vLLM, ...) without code changes.
+    const compatibleProviders: Provider[] = [
+      "deepseek",
+      "qwen",
+      "kimi",
+      "minimax",
+      "gemini",
+      "groq",
+      "openrouter",
+      "mistral",
+      "xai",
+      "custom",
     ];
 
-    for (const { provider, key, baseURL } of compatibleProviders) {
+    for (const provider of compatibleProviders) {
+      const upper = provider.toUpperCase();
+      const key = process.env[`${upper}_API_KEY`];
+      const baseURL = process.env[`${upper}_BASE_URL`] || knownBaseURLs[provider];
       if (key && baseURL) {
         this.clients.set(provider, new OpenAI({ apiKey: key, baseURL }));
       }
     }
   }
 
-  /** True when at least one LLM provider client is available. */
+  /**
+   * Resolves the model id to send to the provider API. Honors a per-provider
+   * env override (`<PROVIDER>_MODEL`), then the config's `apiModel`, then the
+   * internal id as a last resort.
+   */
+  private resolveApiModel(modelId: string): string {
+    const provider = MODELS[modelId]?.provider;
+    if (provider) {
+      const override = process.env[`${provider.toUpperCase()}_MODEL`];
+      if (override) return override;
+    }
+    return MODELS[modelId]?.apiModel ?? modelId;
+  }
+
+  /** True when an API provider or the local heuristic fallback is available. */
   isConfigured(): boolean {
-    return this.clients.size > 0;
+    return this.clients.size > 0 || isHeuristicFallbackEnabled();
+  }
+
+  /** Whether the local heuristic engine should be used (no API key required). */
+  isHeuristicEnabled(): boolean {
+    return isHeuristicFallbackEnabled();
   }
 
   private isModelAvailable(modelId: string): boolean {
     const provider = MODELS[modelId]?.provider;
+    if (provider === "heuristic") return isHeuristicFallbackEnabled();
     return provider ? this.clients.has(provider) : false;
   }
 
+  private shouldPreferHeuristic(): boolean {
+    const mode = (process.env.LLM_FALLBACK ?? "auto").toLowerCase();
+    if (mode === "heuristic") return true;
+    return mode === "auto" && this.clients.size === 0;
+  }
+
+  /** Effective tier for a model (the custom provider honors CUSTOM_TIER). */
+  private modelTier(modelId: string): ModelTier {
+    if (MODELS[modelId]?.provider === "custom") {
+      const t = process.env.CUSTOM_TIER;
+      if (t === "budget" || t === "standard" || t === "premium") return t;
+    }
+    return MODELS[modelId]?.tier ?? "standard";
+  }
+
   selectModel(taskComplexity: TaskComplexity, preferredTier?: ModelTier): string {
+    if (this.shouldPreferHeuristic()) {
+      return HEURISTIC_MODEL_ID;
+    }
+
     const tier = preferredTier || COMPLEXITY_RULES[taskComplexity];
 
     // Prefer an available model in the requested tier, then any available
-    // model, falling back to gpt-4o-mini (callers guard with isConfigured()).
+    // model, falling back to heuristic or gpt-4o-mini.
     const inTier = Object.keys(MODELS).filter(
-      (id) => MODELS[id].tier === tier && this.isModelAvailable(id)
+      (id) =>
+        MODELS[id]?.provider !== "heuristic" &&
+        this.modelTier(id) === tier &&
+        this.isModelAvailable(id)
     );
     if (inTier.length > 0) {
       return inTier[Math.floor(Math.random() * inTier.length)];
     }
 
-    const anyAvailable = Object.keys(MODELS).filter((id) =>
-      this.isModelAvailable(id)
+    const anyAvailable = Object.keys(MODELS).filter(
+      (id) => MODELS[id]?.provider !== "heuristic" && this.isModelAvailable(id)
     );
     if (anyAvailable.length > 0) {
       return anyAvailable[Math.floor(Math.random() * anyAvailable.length)];
+    }
+
+    if (isHeuristicFallbackEnabled()) {
+      return HEURISTIC_MODEL_ID;
     }
 
     return "gpt-4o-mini";
@@ -195,12 +397,20 @@ class LLMGateway {
     }
   ): Promise<LLMResponse> {
     const { fallbackEnabled = true, maxRetries = 3 } = options || {};
+
+    if (
+      request.model === HEURISTIC_MODEL_ID ||
+      (this.shouldPreferHeuristic() && isHeuristicFallbackEnabled())
+    ) {
+      return this.executeHeuristicRequest(request);
+    }
+
     let lastError: Error | null = null;
 
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         const response = await this.executeRequest(request, options?.onStream);
-        
+
         this.trackCost(request.model, response.usage);
 
         return response;
@@ -217,7 +427,37 @@ class LLMGateway {
       }
     }
 
+    // Last resort: local heuristic when APIs fail (quota, auth, network).
+    if (fallbackEnabled && isHeuristicFallbackEnabled()) {
+      console.warn(
+        "LLMGateway: API providers failed, falling back to heuristic local engine:",
+        lastError?.message
+      );
+      return this.executeHeuristicRequest({ ...request, model: HEURISTIC_MODEL_ID });
+    }
+
     throw lastError || new Error("LLM request failed after all retries");
+  }
+
+  private executeHeuristicRequest(request: LLMRequest): LLMResponse {
+    const messages = request.messages.map((m) => ({
+      role: m.role,
+      content: typeof m.content === "string" ? m.content : JSON.stringify(m.content),
+    }));
+
+    const { content, promptTokens, completionTokens } =
+      generateHeuristicResponse(messages);
+
+    return {
+      content,
+      model: HEURISTIC_MODEL_ID,
+      usage: {
+        prompt_tokens: promptTokens,
+        completion_tokens: completionTokens,
+        total_tokens: promptTokens + completionTokens,
+      },
+      cost: 0,
+    };
   }
 
   private async executeRequest(
@@ -231,7 +471,7 @@ class LLMGateway {
     }
 
     const response = await client.chat.completions.create({
-      model: request.model,
+      model: this.resolveApiModel(request.model),
       messages: request.messages,
       temperature: request.temperature ?? 0.7,
       max_tokens: request.max_tokens ?? 4096,
@@ -272,11 +512,19 @@ class LLMGateway {
   }
 
   private getFallbackModel(model: string): string | null {
-    // Fall back to a different available model, if any.
     const candidate = Object.keys(MODELS).find(
-      (id) => id !== model && this.isModelAvailable(id)
+      (id) =>
+        id !== model &&
+        MODELS[id]?.provider !== "heuristic" &&
+        this.isModelAvailable(id)
     );
-    return candidate ?? null;
+    if (candidate) return candidate;
+
+    if (isHeuristicFallbackEnabled() && model !== HEURISTIC_MODEL_ID) {
+      return HEURISTIC_MODEL_ID;
+    }
+
+    return null;
   }
 
   private trackCost(model: string, usage: LLMResponse["usage"]) {

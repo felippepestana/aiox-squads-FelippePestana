@@ -8,8 +8,9 @@ Plataforma web de análise processual jurídica brasileira potenciada por multia
 - **Styling:** Tailwind CSS 3, componentes estilo shadcn/ui (Radix)
 - **State:** Zustand, TanStack Query
 - **Database:** PostgreSQL via Prisma (compatível com Supabase)
-- **LLM Gateway:** OpenAI por padrão; provedores compatíveis com OpenAI
-  (DeepSeek, Qwen, Kimi, MiniMax) habilitáveis via `*_API_KEY` + `*_BASE_URL`
+- **LLM Gateway:** multi-provedor compatível com OpenAI — OpenAI, DeepSeek,
+  Groq, Google Gemini, OpenRouter, Qwen, Kimi, MiniMax. Basta definir a chave do
+  provedor desejado (veja "Trocando de provedor LLM")
 
 ## Estado atual (modo demo)
 
@@ -55,13 +56,70 @@ Limitações conhecidas (modo demo):
 
 ### LLM Gateway
 
-Sistema inteligente de seleção de modelos baseado em complexidade:
+Sistema multi-provedor (todos compatíveis com a API OpenAI) com seleção de
+modelo por complexidade da tarefa e **fallback automático** entre os provedores
+configurados. Quando nenhuma chave de API está disponível (ou após falha de
+quota/auth), o gateway usa um **motor heurístico local** (`LLM_FALLBACK=auto`,
+padrão) que extrai partes, prazos e riscos por regras — ideal para demo e
+desenvolvimento offline.
 
-| Tier | Modelos | Uso |
-|------|---------|-----|
-| Budget | DeepSeek V3, Qwen, MiniMax | Tarefas simples |
-| Standard | Kimi, GPT-4o-mini | Análise padrão |
-| Premium | Claude 3.5, GPT-4o, Gemini 2.0 | Análise complexa |
+| Tier | Exemplos de modelos |
+|------|---------------------|
+| Budget | DeepSeek V3, Qwen 2.5, MiniMax 01, Mistral Small, Llama 3.1 8B (Groq), Gemma 2 9B (Groq), **Heuristic Local** |
+| Standard | GPT-4o-mini, Gemini 2.0 Flash, Llama 3.3 70B (Groq), Kimi K2 |
+| Premium | GPT-4o, Gemini 2.0 Pro, DeepSeek R1, Mistral Large, Grok 3 |
+
+### Trocando de provedor LLM
+
+Não precisa de OpenAI: defina a chave de **qualquer** provedor suportado e o
+gateway passa a usá-lo automaticamente. A `*_BASE_URL` tem padrão embutido para
+a maioria; o modelo real pode ser ajustado com `<PROVIDER>_MODEL`.
+
+| Provedor | Variável | Modelos / Observação |
+|----------|----------|----------------------|
+| OpenAI | `OPENAI_API_KEY` | GPT-4o, GPT-4o-mini (padrão) |
+| **DeepSeek** | `DEEPSEEK_API_KEY` | DeepSeek V3 e **R1 (reasoner)** — barato |
+| **Groq** | `GROQ_API_KEY` | **gratuito**, rápido — Llama 3.3 70B / 3.1 8B, **Gemma 2 9B** |
+| **Google Gemini** | `GEMINI_API_KEY` | **gratuito** — Gemini 2.0 Flash / Pro |
+| **Mistral** | `MISTRAL_API_KEY` | Mistral Large / Small |
+| **xAI (Grok)** | `XAI_API_KEY` | Grok 3 / Grok 3 Mini |
+| **OpenRouter** | `OPENROUTER_API_KEY` | uma chave, centenas de modelos |
+| Qwen / Kimi / MiniMax | `QWEN_API_KEY` / `KIMI_API_KEY` / `MINIMAX_API_KEY` | Qwen 2.5 / Kimi K2 / MiniMax 01 |
+| **Custom** | `CUSTOM_API_KEY` + `CUSTOM_BASE_URL` + `CUSTOM_MODEL` | **qualquer** endpoint compatível (Together, Fireworks, Cerebras, Ollama, vLLM, LM Studio…) |
+| **Heuristic** | `LLM_FALLBACK=auto` (padrão) | **sem API** — extração local por regex/regras (demo/offline) |
+
+Controle do fallback local com `LLM_FALLBACK`:
+- `auto` (padrão) — heurística quando não há chave, ou após falha de API
+- `heuristic` — sempre heurística (ignora chaves de API)
+- `none` — exige provedor de API configurado
+
+Ajuste o modelo real de qualquer provedor com `<PROVIDER>_MODEL` (ex.:
+`DEEPSEEK_MODEL`, `GROQ_MODEL`, `MISTRAL_MODEL`).
+
+Exemplos (`.env.local`):
+
+```bash
+# Usar Groq (gratuito) em vez de OpenAI
+GROQ_API_KEY=gsk_...
+
+# Ou DeepSeek
+DEEPSEEK_API_KEY=sk-...
+# DEEPSEEK_MODEL=deepseek-chat   # opcional: trocar o modelo
+
+# Ou OpenRouter com um modelo específico
+OPENROUTER_API_KEY=sk-or-...
+OPENROUTER_MODEL=anthropic/claude-3.5-sonnet
+
+# Ou um modelo local (Ollama) via provedor custom
+CUSTOM_API_KEY=ollama
+CUSTOM_BASE_URL=http://localhost:11434/v1
+CUSTOM_MODEL=llama3.1
+```
+
+É possível configurar **vários** provedores ao mesmo tempo — o gateway escolhe
+por tier (complexidade da tarefa) e usa **fallback** automático se um falhar.
+Reinicie o `npm run dev` (e o `npm run worker`, se estiver usando) após alterar
+as variáveis.
 
 ## Getting Started
 
@@ -94,9 +152,9 @@ npm run db:seed   # cria o perfil demo
 npm run dev
 ```
 
-> Defina ao menos `OPENAI_API_KEY` no `.env.local` para que o pipeline de
-> análise execute. Sem provedor configurado, a análise é marcada como `FAILED`
-> com uma mensagem explicativa (a aplicação não quebra).
+> Por padrão (`LLM_FALLBACK=auto`), o pipeline **funciona sem chave de API**
+> usando o motor heurístico local — útil para demo e smoke tests. Para análise
+> com LLM real, defina ao menos uma chave (ex.: `GROQ_API_KEY` gratuito).
 
 ### Desenvolvimento local (passo a passo)
 
@@ -176,14 +234,15 @@ Resultados possíveis:
 
 - **PASS** — o pipeline concluiu (`COMPLETED`); imprime resumo, partes, riscos e score.
 - **PASS (plumbing)** — criação/upload/extração/persistência OK, mas o pipeline
-  foi marcado `FAILED` por falta de `OPENAI_API_KEY`. Útil para validar a
-  infraestrutura sem consumir a API.
+  falhou por configuração (`LLM_FALLBACK=none` sem chave de API). Com o padrão
+  `LLM_FALLBACK=auto`, o smoke test normalmente retorna **PASS** com COMPLETED
+  via motor heurístico local.
 - **FAIL** — servidor inacessível, erro HTTP ou falha inesperada do pipeline.
 
 Opções úteis:
 
 ```bash
-npm run test:smoke -- --require-completed        # exige COMPLETED (requer chave LLM)
+npm run test:smoke -- --require-completed        # exige COMPLETED (heurística ou LLM)
 npm run test:smoke -- --base-url=http://host:porta
 npm run test:smoke -- --file=./caminho/para/seu-processo.pdf
 ```
