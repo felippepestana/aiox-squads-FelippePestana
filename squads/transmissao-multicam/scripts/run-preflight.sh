@@ -34,14 +34,17 @@ WARN_COUNT=0
 
 # ─── Sub-check 1: USB cameras + SuperSpeed ───────────────
 section "1/3 — USB cameras"
-if [ -x "$VALIDATE" ]; then
+if [ -f "$VALIDATE" ]; then
+  # We invoke with `bash $VALIDATE` so the executable bit isn't required —
+  # only readable. This survives clones on Windows / network shares that
+  # strip Unix exec bits.
   bash "$VALIDATE"
   rc=$?
   if [ "$rc" -ne 0 ]; then
     FAIL_COUNT=$((FAIL_COUNT + 1))
   fi
 else
-  err "validate_cameras.sh not found or not executable at $VALIDATE"
+  err "validate_cameras.sh not found at $VALIDATE"
   FAIL_COUNT=$((FAIL_COUNT + 1))
 fi
 
@@ -67,23 +70,33 @@ fi
 
 # ─── Sub-check 3: optional — OSC bridge reachable ────────
 # Only fires if OSC_PORT is set (operator using TouchOSC integration).
+# Probes the local socket table (NOT a live packet send) so the check is
+# cheap and works without DNS or network. Cross-platform: ss on Linux,
+# lsof or netstat on macOS / BSDs.
 section "3/3 — OSC bridge (TouchOSC) — optional"
 if [ -z "${OSC_PORT:-}" ]; then
   warn "OSC_PORT not set; skipping (TouchOSC integration not in use)"
+elif ! command -v ss >/dev/null 2>&1 \
+  && ! command -v lsof >/dev/null 2>&1 \
+  && ! command -v netstat >/dev/null 2>&1; then
+  warn "Neither ss, lsof, nor netstat is installed; cannot verify UDP port. Skipping."
+  WARN_COUNT=$((WARN_COUNT + 1))
 else
-  if ! command -v nc >/dev/null 2>&1; then
-    warn "nc (netcat) not installed; cannot probe UDP port. Skipping."
-    WARN_COUNT=$((WARN_COUNT + 1))
+  PORT_FOUND=false
+  if command -v ss >/dev/null 2>&1; then
+    ss -lu 2>/dev/null | grep -q ":${OSC_PORT}\b" && PORT_FOUND=true
+  elif command -v lsof >/dev/null 2>&1; then
+    lsof -iUDP:"${OSC_PORT}" >/dev/null 2>&1 && PORT_FOUND=true
+  elif command -v netstat >/dev/null 2>&1; then
+    # BSD/macOS: netstat -an -p udp; ports show as ".PORT" in the address column.
+    netstat -an -p udp 2>/dev/null | grep -q "\.${OSC_PORT}\b" && PORT_FOUND=true
+  fi
+
+  if [ "$PORT_FOUND" = true ]; then
+    ok "OSC bridge listening on UDP :${OSC_PORT}"
   else
-    # Probe the bridge by sending a benign OSC-ish UDP packet to its port.
-    # We only check that the host doesn't reject the packet with ICMP
-    # unreachable; the bridge itself logs invalid OSC and keeps running.
-    if ss -lu 2>/dev/null | grep -q ":${OSC_PORT}\b"; then
-      ok "OSC bridge listening on UDP :${OSC_PORT}"
-    else
-      err "Nothing listening on UDP :${OSC_PORT}. Start the bridge first."
-      FAIL_COUNT=$((FAIL_COUNT + 1))
-    fi
+    err "Nothing listening on UDP :${OSC_PORT}. Start the bridge first."
+    FAIL_COUNT=$((FAIL_COUNT + 1))
   fi
 fi
 
