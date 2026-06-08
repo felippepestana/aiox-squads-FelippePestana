@@ -19,3 +19,6 @@ squads/transmissao-multicam/operator-panel/tsconfig.tsbuildinfo
 
 # Squad validation runtime state (ephemeral)
 .aiox/squad-runtime/validate-squad/
+
+# Claude Code local worktrees/state
+.claude/

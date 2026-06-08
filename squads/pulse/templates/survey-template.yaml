@@ -1,0 +1,21 @@
+# Survey Template (climate / eNPS / pulse)
+# Owner: survey-designer. Fewest items that yield action; one consistent scale; anonymity by design.
+
+survey_design:
+  audience: ""
+  cadence: ""               # climate | pulse | enps | ad-hoc
+
+  items:
+    - { id: "enps", text: "De 0 a 10, o quanto você recomendaria esta empresa como lugar para trabalhar?", scale: "0-10", driver: "advocacy" }
+    - { id: "recognition", text: "Sinto que meu trabalho é reconhecido.", scale: "1-5", driver: "recognition" }
+    - { id: "clarity", text: "Tenho clareza do que se espera de mim.", scale: "1-5", driver: "clarity" }
+    - { id: "workload", text: "Minha carga de trabalho é sustentável.", scale: "1-5", driver: "workload" }
+    - { id: "leadership", text: "Confio na liderança da minha área.", scale: "1-5", driver: "leadership" }
+
+  open_question: "O que mais faria diferença para você neste momento?"
+  enps: true
+
+  reporting:
+    min_group_size: 5         # no cut reported below this
+    allowed_cuts: ["area"]    # safe segments only
+    blocked_cuts: ["area x cargo x tempo_de_casa"]   # combinations that re-identify
