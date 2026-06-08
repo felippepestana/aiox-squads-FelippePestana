@@ -9,8 +9,11 @@ integração às APIs públicas do governo.
 
 - **Contratações (ativo):** geração de **ETP**, **Termo de Referência** e **Projeto Básico** via IA
   (Claude), alinhada à Lei 14.133/2021, com **pesquisa de preços no PNCP** e checagem orçamentária.
+- **Diário Oficial (ativo):** **editor de atos** por tipo/caderno (lei, decreto, portaria, extrato,
+  aviso, atos de pessoal) com geração assistida e metadados para a biblioteca.
+- **Orçamento (ativo):** consulta à **execução orçamentária (RREO)** no SICONFI por ente/exercício/bimestre.
 - **Transparência (ativo):** checklist de conformidade (LAI/LC131/SIAFIC/PNTP/EBT/WCAG).
-- **Diário Oficial / RH (vitrine):** páginas com a estrutura e o roadmap.
+- **RH (vitrine):** página com a estrutura e o roadmap.
 - **Integrações públicas (sem credencial):** PNCP, SICONFI (RREO do ente, ex.: Porto Velho 1100205) e IBGE.
 
 ## Stack
@@ -33,6 +36,7 @@ npm run dev                     # http://localhost:3000
 | Método | Rota | Função | Fonte |
 |--------|------|--------|-------|
 | POST | `/api/etp` | Gera ETP/TR/PB | Anthropic |
+| POST | `/api/diario-oficial` | Gera ato oficial por tipo/caderno | Anthropic |
 | GET | `/api/precos?q=` | Pesquisa de preços | PNCP |
 | GET | `/api/orcamento?ente=&exercicio=&periodo=` | Execução orçamentária (RREO) | SICONFI |
 

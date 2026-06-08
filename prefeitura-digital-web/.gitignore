@@ -9,6 +9,9 @@ out/
 build/
 next-env.d.ts
 
+# TypeScript incremental build
+*.tsbuildinfo
+
 # Ambiente / segredos
 .env
 .env.local

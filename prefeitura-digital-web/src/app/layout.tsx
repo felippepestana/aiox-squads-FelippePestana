@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 const nav = [
   { href: "/", label: "Início" },
   { href: "/contratacoes", label: "Contratações" },
+  { href: "/orcamento", label: "Orçamento" },
   { href: "/diario-oficial", label: "Diário Oficial" },
   { href: "/rh", label: "Recursos Humanos" },
   { href: "/transparencia", label: "Transparência" },

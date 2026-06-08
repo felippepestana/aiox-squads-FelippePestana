@@ -30,11 +30,11 @@ const modulos = [
     ativo: true,
   },
   {
-    href: "/contratacoes",
+    href: "/orcamento",
     icon: "💰",
     titulo: "Orçamento (eixo)",
-    desc: "Execução do orçamento via SICONFI, mínimos constitucionais e limites da LRF.",
-    ativo: false,
+    desc: "Execução do orçamento via SICONFI (RREO), mínimos constitucionais e limites da LRF.",
+    ativo: true,
   },
   {
     href: "/contratacoes",
