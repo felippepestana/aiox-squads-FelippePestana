@@ -12,7 +12,9 @@ export type Provider =
   | "minimax"
   | "gemini"
   | "groq"
-  | "openrouter";
+  | "openrouter"
+  | "mistral"
+  | "custom";
 
 interface ModelConfig {
   name: string;
@@ -69,6 +71,30 @@ export const MODELS: Record<string, ModelConfig> = {
     contextWindow: 64000,
     costPer1kTokens: { input: 0.00007, output: 0.00027 },
   },
+  "deepseek-r1": {
+    name: "DeepSeek R1 (reasoner)",
+    provider: "deepseek",
+    apiModel: "deepseek-reasoner",
+    tier: "premium",
+    contextWindow: 64000,
+    costPer1kTokens: { input: 0.00055, output: 0.00219 },
+  },
+  "mistral-large": {
+    name: "Mistral Large",
+    provider: "mistral",
+    apiModel: "mistral-large-latest",
+    tier: "premium",
+    contextWindow: 128000,
+    costPer1kTokens: { input: 0.002, output: 0.006 },
+  },
+  "mistral-small": {
+    name: "Mistral Small",
+    provider: "mistral",
+    apiModel: "mistral-small-latest",
+    tier: "budget",
+    contextWindow: 128000,
+    costPer1kTokens: { input: 0.0002, output: 0.0006 },
+  },
   "qwen-2.5": {
     name: "Qwen 2.5",
     provider: "qwen",
@@ -117,6 +143,22 @@ export const MODELS: Record<string, ModelConfig> = {
     contextWindow: 128000,
     costPer1kTokens: { input: 0.00059, output: 0.00079 },
   },
+  "groq-llama-3.1-8b": {
+    name: "Llama 3.1 8B (Groq)",
+    provider: "groq",
+    apiModel: "llama-3.1-8b-instant",
+    tier: "budget",
+    contextWindow: 128000,
+    costPer1kTokens: { input: 0.00005, output: 0.00008 },
+  },
+  "groq-gemma2-9b": {
+    name: "Gemma 2 9B (Groq)",
+    provider: "groq",
+    apiModel: "gemma2-9b-it",
+    tier: "budget",
+    contextWindow: 8192,
+    costPer1kTokens: { input: 0.0002, output: 0.0002 },
+  },
   "openrouter-auto": {
     name: "OpenRouter (configurável)",
     provider: "openrouter",
@@ -124,6 +166,17 @@ export const MODELS: Record<string, ModelConfig> = {
     tier: "standard",
     contextWindow: 128000,
     costPer1kTokens: { input: 0.0001, output: 0.0003 },
+  },
+  // Generic OpenAI-compatible provider. Point CUSTOM_BASE_URL + CUSTOM_API_KEY
+  // at ANY compatible endpoint (Together, Fireworks, Cerebras, Ollama, vLLM,
+  // LM Studio, ...) and set the model via CUSTOM_MODEL. Tier via CUSTOM_TIER.
+  custom: {
+    name: "Custom (OpenAI-compatible)",
+    provider: "custom",
+    apiModel: "",
+    tier: "standard",
+    contextWindow: 128000,
+    costPer1kTokens: { input: 0, output: 0 },
   },
 };
 
@@ -189,8 +242,13 @@ class LLMGateway {
       gemini: "https://generativelanguage.googleapis.com/v1beta/openai/",
       kimi: "https://api.moonshot.cn/v1",
       qwen: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      mistral: "https://api.mistral.ai/v1",
+      minimax: "https://api.minimax.chat/v1",
     };
 
+    // "custom" has no default base URL — it must be provided. It lets users
+    // plug ANY OpenAI-compatible endpoint (Together, Fireworks, Cerebras,
+    // Ollama, vLLM, ...) without code changes.
     const compatibleProviders: Provider[] = [
       "deepseek",
       "qwen",
@@ -199,6 +257,8 @@ class LLMGateway {
       "gemini",
       "groq",
       "openrouter",
+      "mistral",
+      "custom",
     ];
 
     for (const provider of compatibleProviders) {
@@ -235,13 +295,22 @@ class LLMGateway {
     return provider ? this.clients.has(provider) : false;
   }
 
+  /** Effective tier for a model (the custom provider honors CUSTOM_TIER). */
+  private modelTier(modelId: string): ModelTier {
+    if (MODELS[modelId]?.provider === "custom") {
+      const t = process.env.CUSTOM_TIER;
+      if (t === "budget" || t === "standard" || t === "premium") return t;
+    }
+    return MODELS[modelId]?.tier ?? "standard";
+  }
+
   selectModel(taskComplexity: TaskComplexity, preferredTier?: ModelTier): string {
     const tier = preferredTier || COMPLEXITY_RULES[taskComplexity];
 
     // Prefer an available model in the requested tier, then any available
     // model, falling back to gpt-4o-mini (callers guard with isConfigured()).
     const inTier = Object.keys(MODELS).filter(
-      (id) => MODELS[id].tier === tier && this.isModelAvailable(id)
+      (id) => this.modelTier(id) === tier && this.isModelAvailable(id)
     );
     if (inTier.length > 0) {
       return inTier[Math.floor(Math.random() * inTier.length)];

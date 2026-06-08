@@ -63,9 +63,9 @@ presentes (`isConfigured()`), e degrada com mensagem clara quando nenhum está.
 
 | Tier | Exemplos de modelos |
 |------|---------------------|
-| Budget | DeepSeek V3, Qwen 2.5, MiniMax 01 |
+| Budget | DeepSeek V3, Qwen 2.5, MiniMax 01, Mistral Small, Llama 3.1 8B (Groq), Gemma 2 9B (Groq) |
 | Standard | GPT-4o-mini, Gemini 2.0 Flash, Llama 3.3 70B (Groq), Kimi K2 |
-| Premium | GPT-4o, Gemini 2.0 Pro |
+| Premium | GPT-4o, Gemini 2.0 Pro, DeepSeek R1, Mistral Large |
 
 ### Trocando de provedor LLM
 
@@ -73,14 +73,19 @@ Não precisa de OpenAI: defina a chave de **qualquer** provedor suportado e o
 gateway passa a usá-lo automaticamente. A `*_BASE_URL` tem padrão embutido para
 a maioria; o modelo real pode ser ajustado com `<PROVIDER>_MODEL`.
 
-| Provedor | Variável | Observação |
-|----------|----------|------------|
-| OpenAI | `OPENAI_API_KEY` | padrão |
-| **DeepSeek** | `DEEPSEEK_API_KEY` | barato, alta qualidade |
-| **Groq** | `GROQ_API_KEY` | **tier gratuito**, muito rápido (Llama 3.3 70B) |
-| **Google Gemini** | `GEMINI_API_KEY` | **tier gratuito** |
+| Provedor | Variável | Modelos / Observação |
+|----------|----------|----------------------|
+| OpenAI | `OPENAI_API_KEY` | GPT-4o, GPT-4o-mini (padrão) |
+| **DeepSeek** | `DEEPSEEK_API_KEY` | DeepSeek V3 e **R1 (reasoner)** — barato |
+| **Groq** | `GROQ_API_KEY` | **gratuito**, rápido — Llama 3.3 70B / 3.1 8B, **Gemma 2 9B** |
+| **Google Gemini** | `GEMINI_API_KEY` | **gratuito** — Gemini 2.0 Flash / Pro |
+| **Mistral** | `MISTRAL_API_KEY` | Mistral Large / Small |
 | **OpenRouter** | `OPENROUTER_API_KEY` | uma chave, centenas de modelos |
-| Qwen / Kimi / MiniMax | `QWEN_API_KEY` / `KIMI_API_KEY` / `MINIMAX_API_KEY` | compatíveis |
+| Qwen / Kimi / MiniMax | `QWEN_API_KEY` / `KIMI_API_KEY` / `MINIMAX_API_KEY` | Qwen 2.5 / Kimi K2 / MiniMax 01 |
+| **Custom** | `CUSTOM_API_KEY` + `CUSTOM_BASE_URL` + `CUSTOM_MODEL` | **qualquer** endpoint compatível (Together, Fireworks, Cerebras, Ollama, vLLM, LM Studio…) |
+
+Ajuste o modelo real de qualquer provedor com `<PROVIDER>_MODEL` (ex.:
+`DEEPSEEK_MODEL`, `GROQ_MODEL`, `MISTRAL_MODEL`).
 
 Exemplos (`.env.local`):
 
@@ -95,11 +100,17 @@ DEEPSEEK_API_KEY=sk-...
 # Ou OpenRouter com um modelo específico
 OPENROUTER_API_KEY=sk-or-...
 OPENROUTER_MODEL=anthropic/claude-3.5-sonnet
+
+# Ou um modelo local (Ollama) via provedor custom
+CUSTOM_API_KEY=ollama
+CUSTOM_BASE_URL=http://localhost:11434/v1
+CUSTOM_MODEL=llama3.1
 ```
 
 É possível configurar **vários** provedores ao mesmo tempo — o gateway escolhe
-por tier e usa fallback se um falhar. Reinicie o `npm run dev` (e o
-`npm run worker`, se estiver usando) após alterar as variáveis.
+por tier (complexidade da tarefa) e usa **fallback** automático se um falhar.
+Reinicie o `npm run dev` (e o `npm run worker`, se estiver usando) após alterar
+as variáveis.
 
 ## Getting Started
 
