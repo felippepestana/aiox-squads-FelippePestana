@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { loadAnalysisForRequest } from "@/lib/auth";
+import { extractDocumentText } from "@/lib/document-extraction";
+
+// PDF/DOCX parsing and OCR rely on Node APIs; keep this route on the Node
+// runtime. OCR (images/scanned docs) can be slow, so allow up to 5 minutes.
+export const runtime = "nodejs";
+export const maxDuration = 300;
 
 export async function POST(
   request: NextRequest,
@@ -7,6 +14,16 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
+
+    const access = await loadAnalysisForRequest(id);
+    if (!access.ok) {
+      const messages = { 401: "Não autenticado", 403: "Acesso negado", 404: "Análise não encontrada" } as const;
+      return NextResponse.json(
+        { error: messages[access.status] },
+        { status: access.status }
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
 
@@ -17,16 +34,10 @@ export async function POST(
       );
     }
 
-    const analysis = await prisma.analysis.findUnique({ where: { id } });
-    if (!analysis) {
-      return NextResponse.json(
-        { error: "Análise não encontrada" },
-        { status: 404 }
-      );
-    }
-
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+
+    const extraction = await extractDocumentText(file.name, file.type, buffer);
 
     const document = await prisma.document.create({
       data: {
@@ -35,6 +46,12 @@ export async function POST(
         fileType: file.type,
         fileSize: file.size,
         storagePath: `analyses/${id}/${file.name}`,
+        extractedText: extraction.text,
+        metadata: {
+          textExtracted: Boolean(extraction.text),
+          extractionMethod: extraction.method,
+          needsOcr: extraction.needsOcr,
+        },
       },
     });
 

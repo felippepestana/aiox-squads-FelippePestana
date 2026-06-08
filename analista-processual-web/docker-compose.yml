@@ -1,0 +1,25 @@
+# Local development database (macOS/Linux with Docker Desktop).
+# Start with:  docker compose up -d
+# Then set in .env.local:
+#   DATABASE_URL="postgresql://analista:analista@localhost:5432/analista_processual"
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: analista-processual-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: analista
+      POSTGRES_PASSWORD: analista
+      POSTGRES_DB: analista_processual
+    ports:
+      - "5432:5432"
+    volumes:
+      - analista_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U analista -d analista_processual"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  analista_pgdata:

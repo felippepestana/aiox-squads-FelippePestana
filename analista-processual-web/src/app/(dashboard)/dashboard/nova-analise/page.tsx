@@ -90,7 +90,6 @@ export default function NovaAnalisePage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: "demo-user",
           processNumber: processInfo.processNumber || undefined,
           court: processInfo.court || undefined,
           processClass: processInfo.processClass || undefined,
@@ -114,12 +113,42 @@ export default function NovaAnalisePage() {
       }
 
       toast({
-        title: "Análise criada!",
-        description: "Seus documentos estão sendo processados.",
+        title: "Documentos enviados",
+        description: "Iniciando análise multiagente...",
       });
 
+      // Trigger the pipeline and wait for completion before navigating so the
+      // results page opens with the final state. The detail page also polls as
+      // a safety net.
+      const processResponse = await fetch(
+        `/api/analyses/${analysis.id}/process`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            processType: processInfo.processClass || undefined,
+          }),
+        }
+      );
+
+      const processResult = await processResponse.json().catch(() => ({}));
+
+      if (processResult?.status === "FAILED") {
+        toast({
+          title: "Análise concluída com erros",
+          description:
+            processResult?.message || "Verifique os detalhes da análise.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Análise concluída!",
+          description: "Os resultados estão disponíveis.",
+        });
+      }
+
       router.push(`/dashboard/analises/${analysis.id}`);
-    } catch (error) {
+    } catch {
       toast({
         title: "Erro",
         description: "Não foi possível criar a análise. Tente novamente.",
@@ -339,7 +368,7 @@ export default function NovaAnalisePage() {
           {isUploading ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Enviando...
+              Analisando...
             </>
           ) : (
             <>
