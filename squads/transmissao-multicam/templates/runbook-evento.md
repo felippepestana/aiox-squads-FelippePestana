@@ -43,6 +43,18 @@ Streaming público: _______________________________
 
 ## Show flow
 
+### T-48h — Preparação remota
+
+- [ ] Briefing recebido (data, horário, título, sala Meet, agenda)
+- [ ] Conferir firmware das câmeras OBSBOT (rodar `OBSBOT Center` em máquina de bancada, atualizar se houver release, **desinstalar Center antes de devolver à máquina de transmissão**)
+- [ ] Distribuir `templates/event-card.md` preenchido para operador + backup
+- [ ] Confirmar que o backup operador está disponível e ciente
+
+### T-2h — Pre-flight automatizado
+
+- [ ] `bash scripts/run-preflight.sh` → PASS (ver `tasks/run-preflight-checks.md`)
+- [ ] Aviso amarelo (WARN) revisado, decisão documentada
+
 ### T-30 min — Setup final
 
 - [ ] PC + 4 câmeras energizados, USB conectado
@@ -122,6 +134,34 @@ Cooldown manual sugerido: ~3 segundos entre cortes em sequência.
 2. Avisar audiência via outro canal (Slack, WhatsApp)
 3. Reentrar em sala nova; redistribuir link
 4. Retomar transmissão
+
+### OBS crashou mid-show
+
+1. Reabrir OBS — Scene Collection carrega automaticamente
+2. Reativar Virtual Camera (botão na coluna de controles)
+3. Reentrar no Meet (a câmera virtual reaparece em segundos)
+4. Tempo total esperado: ~60-90s
+5. Se demorar > 2min: avisar audiência via canal alternativo e considerar sala backup
+
+### Rede caiu totalmente (LAN down)
+
+1. Verificar cabo gigabit (LED do switch)
+2. Tentar tethering 4G/5G do celular como fallback emergencial
+3. Avisar audiência via canal alternativo (Slack/WhatsApp)
+4. Se rede não voltar em 5min: adiar, retomar quando OK
+
+### F6 engine (auto-switch) offline mid-show
+
+1. Forçar **modo manual** no painel web (ou desligar engine no terminal)
+2. Operar 100% via atalhos de teclado / TouchOSC
+3. Avisar producer que o auto-switch está desabilitado
+4. Pós-evento: investigar logs do `tx-auto-switch`, abrir issue
+
+### TouchOSC desconectado (bridge OK, tablet perdeu conexão)
+
+1. Continuar operando via painel web ou atalhos de teclado
+2. No tablet: forçar refresh do layout (Settings → Connections → reconnect)
+3. Se persistir: verificar IP do tablet no `.env` do bridge (mudou de rede?)
 
 ## Pós-evento
 
