@@ -1,6 +1,8 @@
 "use client";
 
-import { Bell, Search, User } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Bell, Search } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -16,9 +18,34 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 interface HeaderProps {
   title?: string;
   description?: string;
+  user?: { name: string | null; email: string };
+  authEnabled?: boolean;
 }
 
-export function Header({ title, description }: HeaderProps) {
+function initialsFrom(name: string | null, email: string): string {
+  const source = (name && name.trim()) || email;
+  const parts = source.split(/[\s@.]+/).filter(Boolean);
+  const letters = (parts[0]?.[0] ?? "") + (parts[1]?.[0] ?? "");
+  return (letters || source.slice(0, 2)).toUpperCase();
+}
+
+export function Header({ title, description, user, authEnabled }: HeaderProps) {
+  const router = useRouter();
+  const displayName = user?.name || (authEnabled ? "Minha conta" : "Usuário Demo");
+  const displayEmail = user?.email || "modo-demo@local";
+
+  async function handleSignOut() {
+    if (authEnabled) {
+      try {
+        await createClient().auth.signOut();
+      } catch {
+        // ignore — fall through to navigation
+      }
+    }
+    router.push("/login");
+    router.refresh();
+  }
+
   return (
     <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b border-border bg-background/95 px-6 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex-1">
@@ -52,36 +79,39 @@ export function Header({ title, description }: HeaderProps) {
         </Button>
 
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-9 w-9 rounded-full">
-              <Avatar className="h-9 w-9">
-                <AvatarFallback className="bg-primary text-primary-foreground">
-                  FP
-                </AvatarFallback>
-              </Avatar>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end" forceMount>
-            <DropdownMenuLabel className="font-normal">
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Felippe Pestana</p>
-                <p className="text-xs leading-none text-muted-foreground">
-                  felippe@exemplo.com
-                </p>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <a href="/dashboard/config/perfil">Meu Perfil</a>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <a href="/dashboard/config">Configurações</a>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-danger">
-              Sair
-            </DropdownMenuItem>
-          </DropdownMenuContent>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                <Avatar className="h-9 w-9">
+                  <AvatarFallback className="bg-primary text-primary-foreground">
+                    {initialsFrom(user?.name ?? null, displayEmail)}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end" forceMount>
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">{displayName}</p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {displayEmail}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <a href="/dashboard/config">Configurações</a>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="text-danger"
+                onSelect={(e) => {
+                  e.preventDefault();
+                  void handleSignOut();
+                }}
+              >
+                {authEnabled ? "Sair" : "Trocar de conta"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
         </DropdownMenu>
       </div>
     </header>

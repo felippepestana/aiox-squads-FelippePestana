@@ -1,9 +1,11 @@
 import { prisma } from "@/lib/prisma";
 
 /**
- * Until real authentication is wired, analyses are attributed to a single
- * deterministic demo profile. This avoids foreign-key violations from the
- * previous hardcoded `userId: "demo-user"` (which never existed in the DB).
+ * Demo-mode ownership fallback. Used only when Supabase auth is NOT configured
+ * (see `isSupabaseConfigured()` / `src/lib/auth.ts`). Analyses are attributed to
+ * a single deterministic demo profile, avoiding foreign-key violations from a
+ * non-existent user. When Supabase is configured, `auth.ts` takes over and this
+ * fallback is never used.
  */
 export const DEMO_USER_EMAIL = "demo@analista-processual.local";
 

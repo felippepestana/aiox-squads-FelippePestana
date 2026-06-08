@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { loadAnalysisForRequest } from "@/lib/auth";
 
 // PDF/DOCX parsing relies on Node APIs; keep this route on the Node runtime.
 export const runtime = "nodejs";
@@ -76,6 +77,16 @@ export async function POST(
 ) {
   try {
     const { id } = await params;
+
+    const access = await loadAnalysisForRequest(id);
+    if (!access.ok) {
+      const messages = { 401: "Não autenticado", 403: "Acesso negado", 404: "Análise não encontrada" } as const;
+      return NextResponse.json(
+        { error: messages[access.status] },
+        { status: access.status }
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
 
@@ -83,14 +94,6 @@ export async function POST(
       return NextResponse.json(
         { error: "Nenhum arquivo enviado" },
         { status: 400 }
-      );
-    }
-
-    const analysis = await prisma.analysis.findUnique({ where: { id } });
-    if (!analysis) {
-      return NextResponse.json(
-        { error: "Análise não encontrada" },
-        { status: 404 }
       );
     }
 
