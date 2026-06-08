@@ -1,0 +1,36 @@
+# Template: Consent & Privacy Audit
+# Produced by: consent-gate
+# Mandatory gate before enrollment. PASS or VETO — no "PASS with caveat" on misuse of sensitive data.
+
+consent_audit:
+  audited_by: "consent-gate"
+  timestamp: ""
+
+  checks:
+    explicit_consent:
+      present: null
+      method: ""                 # ex: "confirmação ativa (não pré-marcado)"
+      passed: null
+    health_data_minimization:
+      health_data_used: null
+      purpose: ""
+      used_beyond_purpose: null
+      passed: null
+    third_party_privacy:
+      others_elections_exposed: null
+      passed: null
+    advice_scope:
+      tax_legal_medical_advice_given: null
+      passed: null
+    audit_trail:
+      complete: null
+      passed: null
+
+  verdict: ""                    # PASS | VETO
+  # se PASS:
+  clearance_statement: ""
+  next_action: ""                # ex: "Handoff to eligibility-checker for guided enrollment"
+  # se VETO:
+  reasons: []
+  remediation_steps: []
+  resubmit: ""

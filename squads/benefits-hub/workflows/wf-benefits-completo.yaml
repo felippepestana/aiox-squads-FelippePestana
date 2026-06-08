@@ -1,0 +1,269 @@
+name: "wf-benefits-completo"
+display_name: "Ciclo Completo de Benefícios (da Necessidade à Adesão)"
+description: "Orquestra benefícios: intake da necessidade → catálogo e elegibilidade → recomendação por momento de vida + análise de valor → gate de consentimento → adesão guiada. Nenhuma adesão acontece sem PASS do consent-gate e consentimento explícito."
+
+trigger: "user command (*catalog | *recommend | *enrollment | *cost-analysis) or life event (push de peopleops)"
+orchestrator: "benefits-hub-chief"
+
+entry_point: "Phase 1: INTAKE"
+
+inputs:
+  - name: "need"
+    type: "string"
+    required: true
+    description: "A necessidade (pedido do colaborador ou revisão de programa)"
+
+  - name: "employee"
+    type: "object"
+    required: false
+    description: "Dados de vínculo/dependentes (de peopleops) para elegibilidade"
+
+  - name: "life_moment"
+    type: "string"
+    required: false
+    description: "Momento de vida (parentalidade, mudança, saúde, finanças)"
+
+phases:
+  phase_1_intake:
+    name: "INTAKE"
+    display_name: "Framing da Necessidade"
+    description: "Confirmar a necessidade e o contexto de vida. Definir se é adesão individual ou revisão de programa."
+
+    agents:
+      - "benefits-hub-chief"
+
+    execution: "sequential"
+
+    tasks: []  # Intake é conversacional
+
+    outputs:
+      - name: "need_framed"
+        type: "object"
+        schema:
+          need: "string"
+          life_moment: "string"
+          mode: "enrollment | program_review"
+
+    exit_condition:
+      - name: "need_defined"
+        rule: "Necessidade e contexto confirmados."
+        type: "HARD"
+
+  phase_2_catalog_eligibility:
+    name: "CATALOG_ELIGIBILITY"
+    display_name: "Catálogo & Elegibilidade"
+    description: "Resolver o catálogo aplicável e determinar a elegibilidade determinística."
+
+    agents:
+      - "catalog-keeper"
+      - "eligibility-checker"
+
+    execution: "sequential"
+
+    tasks:
+      - id: "manage-catalog"
+        executor: "catalog-keeper"
+        elicit: "benefit, category, vendor"
+        mode: "deterministic catalog maintenance"
+        input_source: "output_phase_1_intake.need_framed"
+        output_format: "benefits_catalog.yaml"
+
+      - id: "check-eligibility"
+        executor: "eligibility-checker"
+        elicit: "employee, benefit, cct_context"
+        mode: "deterministic rule evaluation"
+        input_source: "output_phase_1_intake.need_framed"
+        output_format: "eligibility_result.yaml"
+
+    outputs:
+      - name: "benefits_catalog"
+        type: "object"
+        schema:
+          benefits: "array (category, plain_description, sensitive_data)"
+      - name: "eligibility_result"
+        type: "object"
+        schema:
+          evaluations: "array (eligible, rule_trace, carencia)"
+          cct_mandatory: "array"
+
+    exit_condition:
+      - name: "eligibility_resolved"
+        rule: "Elegibilidade determinística com rule trace. CCT confirmada (ou ALERT)."
+        type: "HARD"
+
+  phase_3_analysis:
+    name: "ANALYSIS"
+    display_name: "Recomendação & Valor"
+    description: "Recomendar por momento de vida (fit) e analisar custo vs. adoção (valor). Paralelo."
+
+    agents:
+      - "fit-advisor"
+      - "value-analyst"
+
+    execution: "parallel"
+
+    tasks:
+      - id: "recommend-benefits"
+        executor: "fit-advisor"
+        elicit: "life_moment, shared_context, eligibility_result, consent_status"
+        mode: "personalized fit (anti-overselling)"
+        input_source: "output_phase_2_catalog_eligibility.eligibility_result"
+        output_format: "recommendation.md"
+
+      - id: "analyze-value"
+        executor: "value-analyst"
+        elicit: "benefits_cost, adoption_data, perceived_value"
+        mode: "aggregate cost-benefit"
+        input_source: "output_phase_2_catalog_eligibility.benefits_catalog"
+        output_format: "value_analysis.yaml"
+
+    outputs:
+      - name: "recommendation"
+        type: "object"
+        schema:
+          items: "array (benefit, why_fits_now)"
+          oversell_avoided: "boolean"
+      - name: "value_analysis"
+        type: "object"
+        schema:
+          benefits: "array (cost, adoption_pct, verdict)"
+
+    exit_condition:
+      - name: "recommendation_ready"
+        rule: "Recomendação por fit (poucos e certos) só de elegíveis. Sem overselling."
+        type: "SOFT"
+      - name: "value_aggregated"
+        rule: "Valor analisado em agregado; sem adesão/saúde individual."
+        type: "SOFT"
+
+  phase_4_consent_gate:
+    name: "CONSENT_GATE"
+    display_name: "Gate de Consentimento & Privacidade"
+    description: "Auditoria obrigatória antes da adesão: consentimento explícito, minimização de dado de saúde, sigilo de terceiros, escopo. VETO se achados duros."
+
+    agents:
+      - "consent-gate"
+
+    execution: "sequential"
+
+    tasks:
+      - id: "audit-consent"
+        executor: "consent-gate"
+        elicit: "recommendation, eligibility_result, consent_record, health_data_use"
+        mode: "deterministic privacy/consent audit"
+        input_sources:
+          - "output_phase_2_catalog_eligibility.eligibility_result"
+          - "output_phase_3_analysis.recommendation"
+        output_format: "consent_audit.yaml"
+
+    outputs:
+      - name: "consent_verdict"
+        type: "object"
+        schema:
+          verdict: "PASS | VETO"
+          checks: "object (consent, health_minimization, third_party, scope, trail)"
+          if_veto:
+            reasons: "array"
+            remediation_steps: "array"
+          if_pass:
+            clearance_statement: "string"
+            next_action: "Guided enrollment"
+
+    exit_condition:
+      - name: "consent_audited"
+        rule: "Consentimento, minimização, sigilo e escopo validados. Retorna PASS ou VETO."
+        type: "HARD"
+      - name: "veto_blocks_enrollment"
+        rule: "Se VETO, adesão bloqueada. Remediação e reapresentação. Se PASS, libera adesão."
+        type: "HARD"
+
+  phase_5_enrollment:
+    name: "ENROLLMENT"
+    display_name: "Adesão Guiada"
+    description: "Conduzir a adesão em linguagem clara — somente após PASS do gate e consentimento explícito."
+
+    agents:
+      - "eligibility-checker"
+
+    execution: "sequential"
+
+    tasks:
+      - id: "guide-enrollment"
+        executor: "eligibility-checker"
+        elicit: "eligibility_result, consent_verdict (PASS)"
+        mode: "guided enrollment"
+        input_sources:
+          - "output_phase_2_catalog_eligibility.eligibility_result"
+          - "output_phase_4_consent_gate.consent_verdict"
+        output_format: "enrollment_confirmation.yaml"
+
+    outputs:
+      - name: "enrollment_confirmation"
+        type: "object"
+        schema:
+          enrolled_benefits: "array"
+          consent_ref: "string"
+          payroll_handoff: "to peopleops"
+
+    exit_condition:
+      - name: "enrollment_complete"
+        rule: "Adesão efetivada apenas com consent_verdict == PASS e consentimento explícito. Handoff a peopleops para desconto/registro."
+        type: "HARD"
+
+handoffs:
+  - from: "consent-gate"
+    to: "eligibility-checker"
+    when: "Phase 4 returns PASS"
+    data: "consent_verdict + eligibility_result"
+    purpose: "Adesão guiada"
+
+  - from: "consent-gate"
+    to: "benefits-hub-chief"
+    when: "Phase 4 returns VETO"
+    data: "consent_verdict (reasons + remediation)"
+    purpose: "Bloqueio de adesão; remediação e reapresentação"
+
+  - from: "benefits-hub-chief"
+    to: "peopleops-chief"
+    when: "Adesão efetivada"
+    data: "enrollment_confirmation"
+    purpose: "Desconto em folha + registro de benefício"
+
+  - from: "value-analyst"
+    to: "insights-chief"
+    when: "Análise de valor de programa pronta"
+    data: "value_analysis (agregado)"
+    purpose: "People analytics de custo/adoção cross-módulo"
+
+error_handling:
+  - phase: "phase_2_catalog_eligibility"
+    error: "cct_unknown"
+    action: "ALERT — convenção coletiva não confirmada"
+    remediation: "Confirmar CCT/ACT com peopleops antes de concluir"
+
+  - phase: "phase_3_analysis"
+    error: "overselling_detected"
+    action: "ALERT — recomendação ampla demais"
+    remediation: "Reduzir a 2–4 itens com fit explícito"
+
+  - phase: "phase_4_consent_gate"
+    error: "consent_or_privacy_violation"
+    action: "VETO — adesão não autorizada"
+    remediation: "Obter consentimento explícito; minimizar dado de saúde; reapresentar"
+
+audit_trail:
+  - action: "phase_initiated"
+    tracked_by: "benefits-hub-chief"
+    fields: ["timestamp", "user", "phase", "need", "inputs"]
+
+  - action: "task_executed"
+    tracked_by: "executor_agent"
+    fields: ["timestamp", "user", "task", "consent_status", "output", "status"]
+
+  - action: "phase_completed"
+    tracked_by: "orchestrator"
+    fields: ["timestamp", "phase", "exit_condition_met", "next_phase"]
+
+  - action: "workflow_completed"
+    tracked_by: "benefits-hub-chief"
+    fields: ["timestamp", "verdict", "enrolled", "consent_ref", "responsible_agent"]

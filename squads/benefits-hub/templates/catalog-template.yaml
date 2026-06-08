@@ -1,0 +1,30 @@
+# Template: Benefits Catalog
+# Produced by: catalog-keeper | Consumed by: eligibility-checker, fit-advisor
+# Plain-language descriptions. Verified vendor data. Sensitive-data benefits flagged.
+
+benefits_catalog:
+  updated_by: "catalog-keeper"
+  timestamp: ""
+
+  benefits:
+    - id: ""                     # ex: BEN_VR
+      name: ""
+      category: ""               # saúde | alimentação | transporte | previdência | bem-estar | educação
+      plain_description: ""       # linguagem simples, sem jargão de apólice
+      example: ""                # exemplo concreto de uso/valor
+      vendor:
+        name: ""
+        verified: null
+      conditions:
+        cost_employer: ""
+        cost_employee: ""
+        carencia: ""
+      sensitive_data: false      # true se a adesão envolve dado de saúde → consent-gate
+      last_updated: ""
+      validity: ""
+      status: ""                 # active | discontinued
+
+  flags:
+    - benefit_id: ""
+      issue: ""                  # ex: "sem atualização há N meses"
+      action: ""
