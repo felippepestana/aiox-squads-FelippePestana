@@ -254,8 +254,9 @@ Módulos pendentes de ativação (ordem sugerida por dependência de lifecycle):
 
 1. `onboard` — recebe handoff do talent-compass
 2. `chronos` — controle de ponto, foundation para peopleops
-3. `pulse` — clima, pode usar dados de performa
-4. `org-architect` — cargos & salários, foundation para tudo
-5. `academy` — desenvolvimento, usa gaps do performa
-6. `benefits-hub` — benefícios
-7. `insights` — analytics, consome dados de todos
+3. `peopleops` — DP & folha, consome ponto do chronos *(em andamento — PR #63)*
+4. `pulse` — clima, pode usar dados de performa
+5. `org-architect` — cargos & salários, foundation para tudo
+6. `academy` — desenvolvimento, usa gaps do performa
+7. `benefits-hub` — benefícios
+8. `insights` — analytics, consome dados de todos
