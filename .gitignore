@@ -14,6 +14,14 @@ analista-processual-web/node_modules/
 analista-processual-web/.env*
 analista-processual-web/dist/
 analista-processual-web/.next/
+legendarios-top/node_modules/
+legendarios-top/.env*
+!legendarios-top/.env.example
+legendarios-top/.next/
+legendarios-top/out/
+legendarios-top/.netlify/
+legendarios-top/supabase/.temp/
+legendarios-top/supabase/.branches/
 squads/transmissao-multicam/auto-switch-engine/src/tx_multicam_auto_switch.egg-info/
 squads/transmissao-multicam/operator-panel/tsconfig.tsbuildinfo
 
