@@ -46,6 +46,21 @@ legal-performance-chief
 5. O `legal-report-writer` consolida o entregável.
 6. O `quality-compliance-validator` aprova ou bloqueia a entrega.
 
+## Casos de uso (UC-LP)
+
+Os 8 casos de uso são a fonte canônica de classificação e roteamento (`config.yaml > pipeline.use_cases`). Cada um define a rota ordenada de agentes que o `legal-performance-chief` ativa.
+
+| UC | Nome | Rota de agentes |
+|---|---|---|
+| UC-LP-001 | Triagem e Diagnóstico Processual | `process-intake-analyst` → `civil-procedure-classifier` → `procedural-auditor` → `legal-report-writer` → `quality-compliance-validator` |
+| UC-LP-002 | Análise Jurídica Completa | `process-intake-analyst` → `legal-document-reader` → `jurisprudence-researcher` → `litigation-strategist` → `legal-action-advisor` → `legal-report-writer` → `quality-compliance-validator` |
+| UC-LP-003 | Análise Estratégica Processual Civil | `process-intake-analyst` → `civil-procedure-classifier` → `procedural-auditor` → `legal-document-reader` → `jurisprudence-researcher` → `litigation-strategist` → `legal-action-advisor` → `legal-report-writer` → `quality-compliance-validator` |
+| UC-LP-004 | Estratégia Recursal | `process-intake-analyst` → `civil-procedure-classifier` → `procedural-auditor` → `legal-document-reader` → `jurisprudence-researcher` → `appeals-analyst` → `legal-action-advisor` → `legal-report-writer` → `quality-compliance-validator` |
+| UC-LP-005 | Mapeamento e Performance de Processo | `process-intake-analyst` → `process-mapper` → `risk-and-maturity-evaluator` → `legal-ux-architect` → `legal-report-writer` → `quality-compliance-validator` |
+| UC-LP-006 | Pesquisa Jurisprudencial e Normativa | `process-intake-analyst` → `jurisprudence-researcher` → `legal-normative-specialist` → `legal-report-writer` → `quality-compliance-validator` |
+| UC-LP-007 | Perícia Judicial Técnica | `process-intake-analyst` → `legal-normative-specialist` → `forensic-device-specialist` → `legal-report-writer` → `quality-compliance-validator` |
+| UC-LP-008 | Design de Produto Jurídico | `process-intake-analyst` → `legal-ux-architect` → `legal-report-writer` → `quality-compliance-validator` |
+
 ## Roteamento por domínio
 
 | Domínio | Agentes principais |

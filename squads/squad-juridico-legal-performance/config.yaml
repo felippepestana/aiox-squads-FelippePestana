@@ -145,7 +145,7 @@ pipeline:
     UC-LP-006:
       name: "Pesquisa Jurisprudencial e Normativa"
       trigger_patterns: ["jurisprudência", "STJ", "STF", "súmula", "precedente", "legislação", "tese repetitiva"]
-      route: [process-intake-analyst, jurisprudence-researcher, legal-normative-specialist, legal-report-writer]
+      route: [process-intake-analyst, jurisprudence-researcher, legal-normative-specialist, legal-report-writer, quality-compliance-validator]
     UC-LP-007:
       name: "Perícia Judicial Técnica"
       trigger_patterns: ["perícia", "laudo", "iPhone", "IMEI", "cadeia de custódia", "quesitos", "ABNT", "CDC"]
