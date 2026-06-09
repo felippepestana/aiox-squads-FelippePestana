@@ -21,7 +21,7 @@ A porta de entrada de talento. Cobre o funil completo de aquisição.
 - **Auditoria de viés** — quality gate de fairness/compliance.
 - **Relatório & handoff para onboarding** — pacote de dados do contratado.
 
-## 2. Inteligência Comportamental — `profiler-dna` 🟡
+## 2. Inteligência Comportamental — `profiler-dna` 🟢
 
 Motor comportamental transversal, reutilizável por todos os módulos.
 
@@ -31,7 +31,7 @@ Motor comportamental transversal, reutilizável por todos os módulos.
 - Fit cultura, fit cargo, fit time.
 - Relatório de liderança, gaps e dicas de gestão por perfil.
 
-## 3. Gestão de Desempenho — `performa` 🟡
+## 3. Gestão de Desempenho — `performa` 🟢
 
 - Avaliação 90° / 180° / 360°.
 - Matriz 9-Box (desempenho × potencial).
@@ -41,7 +41,7 @@ Motor comportamental transversal, reutilizável por todos os módulos.
 - Ciclos de avaliação e calibração.
 - Planejamento de sucessão.
 
-## 4. Clima & Engajamento — `pulse` 🟡
+## 4. Clima & Engajamento — `pulse` 🟢
 
 - Pesquisa de clima organizacional.
 - eNPS e pulses recorrentes.
@@ -49,7 +49,7 @@ Motor comportamental transversal, reutilizável por todos os módulos.
 - Gamificação e reconhecimento.
 - Planos de ação a partir de resultados.
 
-## 5. Departamento Pessoal & Folha — `peopleops` 🟡
+## 5. Departamento Pessoal & Folha — `peopleops` 🟢
 
 - Admissão digital e gestão de documentos.
 - Folha de pagamento.
@@ -57,7 +57,7 @@ Motor comportamental transversal, reutilizável por todos os módulos.
 - Férias, afastamentos e rescisão.
 - Holerite e base compartilhada RH ↔ DP.
 
-## 6. Controle de Ponto — `chronos` 🟡
+## 6. Controle de Ponto — `chronos` 🟢
 
 - Registro de ponto (biometria facial / geolocalização / mobile).
 - Banco de horas.
@@ -65,21 +65,21 @@ Motor comportamental transversal, reutilizável por todos os módulos.
 - Alertas de jornada e espelho de ponto.
 - Equipes externas / home office.
 
-## 7. Onboarding & Integração — `onboard` 🟡
+## 7. Onboarding & Integração — `onboard` 🟢
 
 - Jornada do novo colaborador.
 - Trilhas de integração e checklists dinâmicos.
 - Coleta de documentos e assinatura de contrato.
 - Acompanhamento 30 / 60 / 90 dias.
 
-## 8. Treinamento & Desenvolvimento (LMS) — `academy` 🟡
+## 8. Treinamento & Desenvolvimento (LMS) — `academy` 🟢
 
 - Trilhas de aprendizagem e cursos.
 - Capacitações, avaliações e certificados.
 - Matriz de competências.
 - Recomendação de conteúdo por gap.
 
-## 9. People Analytics — `insights` 🟡
+## 9. People Analytics — `insights` 🟢
 
 - Dashboards: headcount, turnover, absenteísmo, custo de pessoal.
 - Turnover preditivo.
@@ -87,7 +87,7 @@ Motor comportamental transversal, reutilizável por todos os módulos.
 - Diversidade & inclusão.
 - Benchmarks de mercado.
 
-## 10. Cargos, Salários & Org Design — `org-architect` 🟡
+## 10. Cargos, Salários & Org Design — `org-architect` 🟢
 
 - Descrições de cargo e plano de carreira.
 - Faixas salariais.
@@ -95,7 +95,7 @@ Motor comportamental transversal, reutilizável por todos os módulos.
 - Job architecture skills-based (matriz 4R: Redesign → Reskill → Retain → Recruit).
 - Equidade salarial.
 
-## 11. Benefícios — `benefits-hub` 🟡
+## 11. Benefícios — `benefits-hub` 🟢
 
 - Catálogo e elegibilidade de benefícios.
 - Adesão / enrollment.

@@ -26,12 +26,12 @@ metadata:
     - { squad: "performa", area: "Gestão de Desempenho", status: ACTIVE }
     - { squad: "pulse", area: "Clima & Engajamento", status: ACTIVE }
     - { squad: "peopleops", area: "Departamento Pessoal & Folha", status: ACTIVE }
-    - { squad: "chronos", area: "Controle de Ponto", status: DEVELOPING }
+    - { squad: "chronos", area: "Controle de Ponto", status: ACTIVE }
     - { squad: "onboard", area: "Onboarding & Integração", status: ACTIVE }
-    - { squad: "academy", area: "Treinamento & Desenvolvimento", status: DEVELOPING }
-    - { squad: "insights", area: "People Analytics", status: DEVELOPING }
+    - { squad: "academy", area: "Treinamento & Desenvolvimento", status: ACTIVE }
+    - { squad: "insights", area: "People Analytics", status: ACTIVE }
     - { squad: "org-architect", area: "Cargos, Salários & Org Design", status: ACTIVE }
-    - { squad: "benefits-hub", area: "Benefícios", status: DEVELOPING }
+    - { squad: "benefits-hub", area: "Benefícios", status: ACTIVE }
 
 tier_structure:
   tier_0:

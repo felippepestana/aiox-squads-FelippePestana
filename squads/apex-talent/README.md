@@ -13,14 +13,14 @@ A proposta de valor é cobrir o máximo de funcionalidades de uma suíte de RH m
 | [`performa`](../performa/) | Gestão de Desempenho | 🟢 Ativo |
 | [`pulse`](../pulse/) | Clima & Engajamento | 🟢 Ativo |
 | [`peopleops`](../peopleops/) | Departamento Pessoal & Folha | 🟢 Ativo |
-| [`chronos`](../chronos/) | Controle de Ponto | 🟡 Em desenvolvimento |
+| [`chronos`](../chronos/) | Controle de Ponto | 🟢 Ativo |
 | [`onboard`](../onboard/) | Onboarding & Integração | 🟢 Ativo |
-| [`academy`](../academy/) | Treinamento & Desenvolvimento | 🟡 Em desenvolvimento |
-| [`insights`](../insights/) | People Analytics | 🟡 Em desenvolvimento |
+| [`academy`](../academy/) | Treinamento & Desenvolvimento | 🟢 Ativo |
+| [`insights`](../insights/) | People Analytics | 🟢 Ativo |
 | [`org-architect`](../org-architect/) | Cargos, Salários & Org Design | 🟢 Ativo |
-| [`benefits-hub`](../benefits-hub/) | Benefícios | 🟡 Em desenvolvimento |
+| [`benefits-hub`](../benefits-hub/) | Benefícios | 🟢 Ativo |
 
-> 🟢 **Ativo** = fluxos completos construídos. 🟡 **Em desenvolvimento** = esqueleto disponível (apenas o agente Chief), pronto para desenhar e evoluir o módulo.
+> 🟢 **Plataforma completa:** todos os 12 módulos (orquestrador + 11 áreas) estão **ativos** com fluxos completos (Tier 0→3, tasks, templates, workflow e quality gate). 🟡 **Em desenvolvimento** = esqueleto (apenas o agente Chief) — nenhum módulo está neste estado no momento.
 
 > 🛠️ **Promover um módulo 🟡 → 🟢:** veja [`templates/module-activation-checklist.md`](./templates/module-activation-checklist.md). Passo-a-passo do design (Tier 0→3) ao wiring no orquestrador, baseado nos patterns de `talent-compass`, `profiler-dna` e `performa`.
 
