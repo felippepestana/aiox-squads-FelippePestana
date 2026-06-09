@@ -87,13 +87,13 @@ entry_points:
   tutor: "*tutor"
 
 workspace_integration:
-  level: full
+  level: read_write
   produces:
-    - "skills_matrix.yaml"
-    - "learning_track.yaml"
-    - "course_content.md"
-    - "assessment.yaml"
-    - "learning_audit.md"
+    - "workspace/academy/skills_matrix.yaml"
+    - "workspace/academy/learning_track.yaml"
+    - "workspace/academy/course_content.md"
+    - "workspace/academy/assessment.yaml"
+    - "workspace/academy/learning_audit.md"
   consumes:
     - "from performa: gaps de competência por ciclo/9-box e PDI"
     - "from org-architect: matriz de competências por cargo e job architecture"

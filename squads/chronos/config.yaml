@@ -87,12 +87,12 @@ entry_points:
   compliance_check: "*audit-compliance"
 
 workspace_integration:
-  level: full
+  level: read_write
   produces:
-    - "espelho_de_ponto.pdf"
-    - "banco_de_horas.yaml"
-    - "anomaly_report.md"
-    - "compliance_audit.md"
+    - "workspace/chronos/espelho_de_ponto.pdf"
+    - "workspace/chronos/banco_de_horas.yaml"
+    - "workspace/chronos/anomaly_report.md"
+    - "workspace/chronos/compliance_audit.md"
   consumes:
     - "from performa: attendance/punctuality data"
     - "from pulse: indirect signals of fatigue/pressure"
