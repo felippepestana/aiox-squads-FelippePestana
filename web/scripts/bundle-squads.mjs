@@ -29,10 +29,16 @@ function loadSquadMeta(squadDir, squadId) {
     const iconMatch = raw.match(/^\s*icon:\s*"?([^\n"]+)"?\s*$/m);
     const titleMatch = raw.match(/^\s*title:\s*"?([^\n"]+)"?\s*$/m);
     const descMatch = raw.match(/^\s*description:\s*"?([^\n"]+)"?\s*$/m);
+    const platformMatch = raw.match(/^\s*platform:\s*"?([^\n"]+)"?\s*$/m);
+    const statusMatch = raw.match(/^\s*status:\s*"?([^\n"]+)"?\s*$/m);
+    const domainMatch = raw.match(/^\s*domain:\s*"?([^\n"]+)"?\s*$/m);
     return {
       icon: iconMatch ? iconMatch[1].trim() : fallback.icon,
       title: titleMatch ? titleMatch[1].trim() : fallback.title,
       description: descMatch ? descMatch[1].trim() : fallback.description,
+      platform: platformMatch ? platformMatch[1].trim() : undefined,
+      status: statusMatch ? statusMatch[1].trim() : undefined,
+      domain: domainMatch ? domainMatch[1].trim() : undefined,
     };
   } catch {
     return fallback;

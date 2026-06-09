@@ -8,6 +8,12 @@ export interface SquadMeta {
   icon: string;
   title: string;
   description: string;
+  /** metadata.platform from config.yaml (ex: "apex-talent") */
+  platform?: string;
+  /** metadata.status from config.yaml (ex: "ACTIVE", "DEVELOPING") */
+  status?: string;
+  /** top-level domain from config.yaml */
+  domain?: string;
 }
 
 export interface SquadSummary {

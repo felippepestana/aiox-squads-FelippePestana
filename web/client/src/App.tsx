@@ -9,6 +9,7 @@ import {
 } from "react";
 import { PericiaView } from "./PericiaView";
 import { InterviewView } from "./InterviewView";
+import { PlatformHub } from "./PlatformHub";
 import {
   chatStream,
   clearPortalKey,
@@ -63,6 +64,7 @@ export function App() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [showPericia, setShowPericia] = useState(false);
   const [showInterview, setShowInterview] = useState(false);
+  const [showHub, setShowHub] = useState(false);
   const [squadId, setSquadId] = useState("");
   const [agentId, setAgentId] = useState("");
   const [agentSearch, setAgentSearch] = useState("");
@@ -94,6 +96,10 @@ export function App() {
       setSquadId((cur) => cur || s[0].id);
       const first = s[0].agents[0];
       if (first) setAgentId((cur) => cur || first.id);
+      // Land on the Apex-Talent hub when the platform is present (once).
+      if (s.some((x) => x.meta.platform === "apex-talent")) {
+        setShowHub(true);
+      }
     }
   }, []);
 
@@ -315,35 +321,59 @@ export function App() {
     }
   }, []);
 
-  const startSession = useCallback(async () => {
-    setError(null);
-    setBusy(true);
-    try {
-      const { sessionId: sid, agent } = await createSession(squadId, agentId);
-      setSessionId(sid);
-      setCurrentAgent(agent);
-      setLines([]);
-      setPendingFiles([]);
-      upsertRecentSession({
-        sessionId: sid,
-        squadId,
-        agentId,
-        agentName: agent.name,
-        squadName: agent.squad,
-        preview: "",
-      });
-      refreshRecent();
-      if (typeof sessionStorage !== "undefined") {
-        setInput(sessionStorage.getItem(`aiox-draft:${sid}`) ?? "");
-      } else {
-        setInput("");
+  const beginSession = useCallback(
+    async (sq: string, ag: string) => {
+      setError(null);
+      setBusy(true);
+      try {
+        const { sessionId: sid, agent } = await createSession(sq, ag);
+        setSessionId(sid);
+        setCurrentAgent(agent);
+        setLines([]);
+        setPendingFiles([]);
+        upsertRecentSession({
+          sessionId: sid,
+          squadId: sq,
+          agentId: ag,
+          agentName: agent.name,
+          squadName: agent.squad,
+          preview: "",
+        });
+        refreshRecent();
+        if (typeof sessionStorage !== "undefined") {
+          setInput(sessionStorage.getItem(`aiox-draft:${sid}`) ?? "");
+        } else {
+          setInput("");
+        }
+      } catch (e) {
+        setError(String(e));
+      } finally {
+        setBusy(false);
       }
-    } catch (e) {
-      setError(String(e));
-    } finally {
-      setBusy(false);
-    }
-  }, [squadId, agentId, refreshRecent]);
+    },
+    [refreshRecent]
+  );
+
+  const startSession = useCallback(
+    () => beginSession(squadId, agentId),
+    [beginSession, squadId, agentId]
+  );
+
+  // Launch a module from the platform hub: select it + its entry agent
+  // (the *-chief, ordered first by the server) and open a session.
+  const launchModule = useCallback(
+    (sq: string) => {
+      const squad = squads.find((x) => x.id === sq);
+      const entry = squad?.agents[0];
+      if (!squad || !entry) return;
+      setSquadId(sq);
+      setAgentId(entry.id);
+      setAgentSearch("");
+      setShowHub(false);
+      void beginSession(sq, entry.id);
+    },
+    [squads, beginSession]
+  );
 
   const onSwitchAgent = useCallback(async () => {
     if (!sessionId) return;
@@ -583,6 +613,15 @@ export function App() {
     <div className="layout">
       <aside className="sidebar">
         <h1>AIOX Squads</h1>
+        {squads.some((s) => s.meta.platform === "apex-talent") ? (
+          <button
+            type="button"
+            className="btn btn-ghost"
+            onClick={() => setShowHub(true)}
+          >
+            🏢 Plataforma Apex-Talent
+          </button>
+        ) : null}
         <div>
           <label htmlFor="squad">Squad</label>
           <select
@@ -750,13 +789,20 @@ export function App() {
       </aside>
 
       <main className="main">
+        {showHub ? (
+          <PlatformHub
+            squads={squads}
+            onLaunch={launchModule}
+            onClose={() => setShowHub(false)}
+          />
+        ) : null}
         {showPericia ? (
           <PericiaView onClose={() => setShowPericia(false)} />
         ) : null}
         {showInterview ? (
           <InterviewView onClose={() => setShowInterview(false)} />
         ) : null}
-        <div className="messages" style={showPericia || showInterview ? { display: "none" } : undefined}>
+        <div className="messages" style={showHub || showPericia || showInterview ? { display: "none" } : undefined}>
           {!sessionId && (
             <p className="loading">
               Escolha squad e agente e clique em <strong>Iniciar sessão</strong>
@@ -830,7 +876,7 @@ export function App() {
           <div ref={messagesEndRef} aria-hidden />
         </div>
 
-        <div className="composer" style={showPericia || showInterview ? { display: "none" } : undefined}>
+        <div className="composer" style={showHub || showPericia || showInterview ? { display: "none" } : undefined}>
           {error ? <div className="error-banner">{error}</div> : null}
           {sessionId ? (
             <>
