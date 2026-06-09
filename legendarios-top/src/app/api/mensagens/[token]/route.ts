@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { isMensagemPortalOpen } from "@/lib/token-expiry";
+import { resolveMensagemToken } from "@/lib/tokens";
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 const ALLOWED_MIME: Record<string, string> = {
@@ -33,21 +33,12 @@ export async function GET(
   { params }: { params: Promise<{ token: string }> }
 ) {
   const { token } = await params;
-  const admin = createAdminClient();
 
-  const { data: senderista, error } = await admin
-    .from("senderistas")
-    .select("id, nome, evento_nome, evento_data")
-    .eq("mensagens_token", token)
-    .single();
-
-  if (error || !senderista) {
-    return NextResponse.json({ error: "Link inválido ou expirado" }, { status: 404 });
+  const resolution = await resolveMensagemToken(token);
+  if (!resolution.ok) {
+    return NextResponse.json({ error: resolution.message }, { status: resolution.status });
   }
-
-  if (!isMensagemPortalOpen(senderista.evento_data)) {
-    return NextResponse.json({ error: "Link expirado" }, { status: 410 });
-  }
+  const { senderista } = resolution;
 
   return NextResponse.json({
     nome: senderista.nome,
@@ -64,19 +55,11 @@ export async function POST(
   const supabase = await createClient();
   const admin = createAdminClient();
 
-  const { data: senderista, error: lookupErr } = await admin
-    .from("senderistas")
-    .select("id, evento_data")
-    .eq("mensagens_token", token)
-    .single();
-
-  if (lookupErr || !senderista) {
-    return NextResponse.json({ error: "Link inválido" }, { status: 404 });
+  const resolution = await resolveMensagemToken(token);
+  if (!resolution.ok) {
+    return NextResponse.json({ error: resolution.message }, { status: resolution.status });
   }
-
-  if (!isMensagemPortalOpen(senderista.evento_data)) {
-    return NextResponse.json({ error: "Prazo para envio de mensagens encerrado" }, { status: 410 });
-  }
+  const { senderista } = resolution;
 
   const contentType = request.headers.get("content-type") ?? "";
 

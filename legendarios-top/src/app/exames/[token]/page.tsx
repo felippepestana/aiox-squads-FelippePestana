@@ -1,7 +1,7 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { notFound } from "next/navigation";
 import ExameUpload from "@/components/exam-upload";
-import { isExameUploadOpen } from "@/lib/token-expiry";
+import { isExameUploadOpen } from "@/lib/tokens";
 
 export const metadata = {
   title: "Envio de Exames — Legendários TOP",

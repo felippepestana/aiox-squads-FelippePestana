@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { isExameUploadOpen } from "@/lib/token-expiry";
+import { resolveExameToken } from "@/lib/tokens";
 
 const ALLOWED_TIPOS = ["atestado_cg", "atestado_cardio", "teste_esteira"] as const;
 type TipoExame = typeof ALLOWED_TIPOS[number];
@@ -15,22 +14,13 @@ interface Params {
 
 export async function POST(request: Request, { params }: Params) {
   const { token } = await params;
-  const supabase = await createClient();
   const admin = createAdminClient();
 
-  const { data: senderista, error: lookupError } = await admin
-    .from("senderistas")
-    .select("id, evento_data")
-    .eq("upload_token", token)
-    .single();
-
-  if (lookupError || !senderista) {
-    return NextResponse.json({ error: "Token inválido" }, { status: 404 });
+  const resolution = await resolveExameToken(token);
+  if (!resolution.ok) {
+    return NextResponse.json({ error: resolution.message }, { status: resolution.status });
   }
-
-  if (!isExameUploadOpen(senderista.evento_data)) {
-    return NextResponse.json({ error: "Prazo de envio de exames encerrado" }, { status: 410 });
-  }
+  const { senderista } = resolution;
 
   const formData = await request.formData();
   const file = formData.get("file") as File | null;
