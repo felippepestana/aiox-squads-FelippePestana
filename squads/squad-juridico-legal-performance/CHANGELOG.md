@@ -1,6 +1,14 @@
 # Changelog — Squad Jurídico Legal Performance
 
-All notable changes to this squad follow [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format.
+Todas as alterações notáveis neste squad seguem o formato [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+
+---
+
+## [Unreleased]
+
+### Changed
+
+- `UC-LP-006` (Pesquisa Jurisprudencial e Normativa) — a rota passa a incluir `quality-compliance-validator` ao final, conforme o critério geral do `SMOKE_TESTS.md`: nenhum fluxo que gera relatório pula a validação de conformidade (QG-LP-006, revisão humana).
 
 ---
 
