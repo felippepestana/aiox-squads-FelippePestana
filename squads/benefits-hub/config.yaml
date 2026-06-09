@@ -87,13 +87,13 @@ entry_points:
   cost: "*cost-analysis"
 
 workspace_integration:
-  level: full
+  level: read_write
   produces:
-    - "benefits_catalog.yaml"
-    - "eligibility_result.yaml"
-    - "recommendation.md"
-    - "value_analysis.yaml"
-    - "consent_audit.md"
+    - "workspace/benefits-hub/benefits_catalog.yaml"
+    - "workspace/benefits-hub/eligibility_result.yaml"
+    - "workspace/benefits-hub/recommendation.md"
+    - "workspace/benefits-hub/value_analysis.yaml"
+    - "workspace/benefits-hub/consent_audit.md"
   consumes:
     - "from peopleops: vínculo, salário, dependentes, admissão (elegibilidade e custo)"
     - "from profiler-dna: contexto comportamental (advisory, opcional)"

@@ -89,13 +89,13 @@ entry_points:
   narrative: "*narrative"
 
 workspace_integration:
-  level: full
+  level: read_write
   produces:
-    - "dashboard.yaml"
-    - "metrics_report.md"
-    - "risk_model.yaml"
-    - "ethics_audit.md"
-    - "executive_narrative.md"
+    - "workspace/insights/dashboard.yaml"
+    - "workspace/insights/metrics_report.md"
+    - "workspace/insights/risk_model.yaml"
+    - "workspace/insights/ethics_audit.md"
+    - "workspace/insights/executive_narrative.md"
   consumes:
     - "from chronos: jornada, horas extra, sinais de fadiga/super-jornada"
     - "from performa: desempenho, 9-box, ciclos de avaliação"
