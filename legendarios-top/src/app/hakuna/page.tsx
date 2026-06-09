@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RISK_LABELS, type RiskLevel } from "@/lib/triage";
+import { getHakunaRole } from "@/lib/hakuna-role";
+import { hasPermission } from "@/lib/hakuna-permissions";
 
 const STATUS_LABELS: Record<string, string> = {
   pendente: "Pendente",
@@ -17,7 +19,7 @@ export default async function HakunaDashboard({
   searchParams: Promise<{ risco?: string; status?: string; q?: string }>;
 }) {
   const params = await searchParams;
-  const supabase = await createClient();
+  const [supabase, role] = await Promise.all([createClient(), getHakunaRole()]);
 
   let query = supabase
     .from("senderistas")
@@ -45,7 +47,9 @@ export default async function HakunaDashboard({
         <div className="flex gap-2">
           <Link href="/hakuna/evento" className="text-sm bg-blue-700 text-white px-3 py-1.5 rounded-md font-medium">Evento 72h</Link>
           <Link href="/hakuna/checkin" className="text-sm bg-green-700 text-white px-3 py-1.5 rounded-md font-medium">Check-in</Link>
-          <Link href="/hakuna/importar" className="text-sm text-green-700 underline">Importar TICKETGO</Link>
+          {hasPermission(role, "import_ticketgo") && (
+            <Link href="/hakuna/importar" className="text-sm text-green-700 underline">Importar TICKETGO</Link>
+          )}
           <Link href="/hakuna/nfc" className="text-sm text-green-700 underline">Gravar TAGs NFC</Link>
         </div>
       </div>

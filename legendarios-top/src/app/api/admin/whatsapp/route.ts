@@ -24,8 +24,9 @@ export async function POST(request: Request) {
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
 
-  const { data: hakuna } = await supabase.from("hakunas").select("id").eq("email", user.email!).single();
+  const { data: hakuna } = await supabase.from("hakunas").select("id, role").eq("email", user.email!).single();
   if (!hakuna) return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+  if (hakuna.role !== "coordenador") return NextResponse.json({ error: "Sem permissão" }, { status: 403 });
 
   if (!isWhatsAppConfigured()) {
     return NextResponse.json(

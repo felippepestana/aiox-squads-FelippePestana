@@ -112,11 +112,14 @@ export async function POST(request: Request) {
 
   const { data: hakuna } = await supabase
     .from("hakunas")
-    .select("id")
+    .select("id, role")
     .eq("email", user.email!)
     .single();
   if (!hakuna) {
     return NextResponse.json({ error: "Não autorizado" }, { status: 401 });
+  }
+  if (hakuna.role !== "coordenador") {
+    return NextResponse.json({ error: "Sem permissão" }, { status: 403 });
   }
 
   const formData = await request.formData();

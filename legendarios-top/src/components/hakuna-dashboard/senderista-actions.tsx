@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, XCircle, MessageCircle, Link as LinkIcon } from "lucide-react";
 import { EXAM_LABELS, type ExamType } from "@/lib/triage";
+import { useHakuna, hasPermission } from "@/lib/hakuna-context";
 
 interface Senderista {
   id: string;
@@ -23,6 +24,7 @@ interface Props {
 
 export default function SenderistActions({ senderista, uploadLink }: Props) {
   const router = useRouter();
+  const { role } = useHakuna();
   const [loading, setLoading] = useState<string | null>(null);
   const [showReprovar, setShowReprovar] = useState(false);
   const [motivo, setMotivo] = useState("");
@@ -95,8 +97,8 @@ export default function SenderistActions({ senderista, uploadLink }: Props) {
           </div>
         </div>
 
-        {/* Validação */}
-        {senderista.status === "exames_enviados" && (
+        {/* Validação — apenas médico e coordenador */}
+        {senderista.status === "exames_enviados" && hasPermission(role, "validate_exames") && (
           <div className="space-y-2">
             <p className="text-sm font-medium">Validação de exames</p>
             <div className="flex gap-2">

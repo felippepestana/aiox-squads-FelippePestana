@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle } from "lucide-react";
+import { useHakuna, hasPermission } from "@/lib/hakuna-context";
 
 interface Props {
   exameId: string;
@@ -12,11 +13,13 @@ interface Props {
 
 export default function ExameValidar({ exameId, validado }: Props) {
   const router = useRouter();
+  const { role } = useHakuna();
   const [loading, setLoading] = useState<"aprovado" | "reprovado" | null>(null);
   const [showMotivo, setShowMotivo] = useState(false);
   const [motivo, setMotivo] = useState("");
 
   if (validado !== null) return null;
+  if (!hasPermission(role, "validate_exames")) return null;
 
   async function validar(val: boolean, motivo_reprovacao?: string) {
     setLoading(val ? "aprovado" : "reprovado");

@@ -3,7 +3,8 @@
 import { useRef, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Upload, CheckCircle, AlertCircle, FileSpreadsheet, X, MessageSquare } from "lucide-react";
+import { Upload, CheckCircle, AlertCircle, FileSpreadsheet, X, MessageSquare, Lock } from "lucide-react";
+import { useHakuna, hasPermission } from "@/lib/hakuna-context";
 
 interface ImportResult {
   imported: number;
@@ -21,6 +22,16 @@ export default function ImportarPage() {
   const [waSending, setWaSending] = useState(false);
   const [waResult, setWaResult] = useState<{ sent: number; failed: number; total: number } | null>(null);
   const [dragging, setDragging] = useState(false);
+  const { role } = useHakuna();
+
+  if (!hasPermission(role, "import_ticketgo")) {
+    return (
+      <div className="flex flex-col items-center justify-center py-24 gap-3 text-muted-foreground">
+        <Lock className="w-8 h-8" />
+        <p className="text-sm">Esta área é restrita a coordenadores.</p>
+      </div>
+    );
+  }
 
   function handleFile(f: File | null) {
     if (!f) return;

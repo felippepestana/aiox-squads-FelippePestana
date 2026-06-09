@@ -7,6 +7,8 @@ import SenderistActions from "@/components/hakuna-dashboard/senderista-actions";
 import ExameValidar from "@/components/hakuna-dashboard/exame-validar";
 import Link from "next/link";
 import { ChevronLeft, Heart } from "lucide-react";
+import { getHakunaRole } from "@/lib/hakuna-role";
+import { hasPermission } from "@/lib/hakuna-permissions";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -24,7 +26,7 @@ function Row({ label, value }: { label: string; value: React.ReactNode }) {
 
 export default async function SenderistaDetailPage({ params }: Props) {
   const { id } = await params;
-  const supabase = await createClient();
+  const [supabase, role] = await Promise.all([createClient(), getHakunaRole()]);
 
   const [{ data: s }, { data: examesRaw }, { data: prontuariosRaw }] = await Promise.all([
     supabase
@@ -189,8 +191,8 @@ export default async function SenderistaDetailPage({ params }: Props) {
         )}
       </div>
 
-      {/* Exames enviados */}
-      <Card>
+      {/* Exames enviados — apenas médico e coordenador */}
+      {hasPermission(role, "view_exames") && <Card>
         <CardHeader>
           <CardTitle className="text-base">Exames Enviados</CardTitle>
           <CardDescription>
@@ -226,7 +228,7 @@ export default async function SenderistaDetailPage({ params }: Props) {
             </div>
           )}
         </CardContent>
-      </Card>
+      </Card>}
 
       {/* Mensagens de apoio */}
       <Link
@@ -240,8 +242,8 @@ export default async function SenderistaDetailPage({ params }: Props) {
       {/* Ações (validar, reprovar, WhatsApp stubs) */}
       <SenderistActions senderista={s} uploadLink={uploadLink} />
 
-      {/* Prontuários */}
-      {prontuarios && prontuarios.length > 0 && (
+      {/* Prontuários — apenas médico e coordenador */}
+      {hasPermission(role, "view_prontuarios") && prontuarios && prontuarios.length > 0 && (
         <Card>
           <CardHeader><CardTitle className="text-base">Prontuários de Campo</CardTitle></CardHeader>
           <CardContent className="space-y-3">
