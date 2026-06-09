@@ -59,6 +59,70 @@ export function promptTR(input: {
 Inclua todos os elementos exigidos e a adequação orçamentária. Especificações devem ser isonômicas (sem direcionamento de marca sem justificativa).`;
 }
 
+// ── Recursos Humanos — atos de pessoal ─────────────────────────────────────
+
+export const SYSTEM_RH = `Você é o núcleo de Recursos Humanos (Semad) do "Prefeitura Digital", assistente de gestão pública municipal brasileira.
+Elabore atos de pessoal prontos para publicação a partir de informações mínimas.
+
+Regras:
+- Fundamentos constitucionais: CF art. 37 (legalidade, impessoalidade, publicidade, concurso público), art. 38/39/40/41 e o Estatuto dos Servidores do Município (referencie como "Estatuto do Servidor Municipal" quando a lei local não for informada).
+- Limite de despesa com pessoal (LRF, arts. 19-23): atos que AUMENTAM a despesa com pessoal exigem prévia dotação, estimativa de impacto (LRF art. 16/17 quando aplicável) e observância dos limites; se o ente estiver acima do limite prudencial (art. 22, parágrafo único), há VEDAÇÃO a provimento de cargo, criação/majoração de vantagens e contratação de horas extras — registre isso quando o ato aumentar a folha.
+- Assinatura eletrônica: Lei 14.063/2020; publicidade no Diário Oficial Municipal.
+- LGPD (art. 5º, II): não inclua dados pessoais desnecessários nem sensíveis. Use CPF na forma reduzida (***.***.***-**) e nunca inclua conta bancária, dados de saúde ou biométricos.
+- Marque qualquer informação ausente com [PREENCHER: ...]. Não invente nomes, matrículas, números de processo, datas ou valores.
+- Estruture o ato na forma legal (epígrafe, preâmbulo com fundamento, corpo articulado, fecho com data/autoridade/cargo).
+- Produza o ato em Markdown, pronto para revisão e assinatura pela autoridade competente.
+Lembre-se: o resultado é uma MINUTA DE APOIO e não substitui parecer jurídico nem decisão da autoridade competente.`;
+
+export type TipoAtoRH =
+  | "nomeacao"
+  | "exoneracao"
+  | "designacao-fg"
+  | "gratificacao"
+  | "concessao-licenca"
+  | "ferias"
+  | "aposentadoria-rpps"
+  | "pad-instauracao";
+
+// impactaFolha = o ato tende a AUMENTAR a despesa com pessoal (dispara checagem LRF).
+export const ATOS_RH: {
+  id: TipoAtoRH;
+  rotulo: string;
+  fundamento: string;
+  impactaFolha: boolean;
+}[] = [
+  { id: "nomeacao", rotulo: "Nomeação / provimento", fundamento: "CF art. 37, II; Estatuto do Servidor", impactaFolha: true },
+  { id: "exoneracao", rotulo: "Exoneração / vacância", fundamento: "Estatuto do Servidor", impactaFolha: false },
+  { id: "designacao-fg", rotulo: "Designação de função gratificada", fundamento: "Estatuto do Servidor; lei de cargos", impactaFolha: true },
+  { id: "gratificacao", rotulo: "Concessão de gratificação/vantagem", fundamento: "Lei municipal de cargos; LRF art. 21", impactaFolha: true },
+  { id: "concessao-licenca", rotulo: "Concessão de licença/afastamento", fundamento: "Estatuto do Servidor", impactaFolha: false },
+  { id: "ferias", rotulo: "Concessão de férias", fundamento: "Estatuto do Servidor", impactaFolha: false },
+  { id: "aposentadoria-rpps", rotulo: "Aposentadoria (RPPS/IPAM)", fundamento: "CF art. 40; lei do RPPS", impactaFolha: false },
+  { id: "pad-instauracao", rotulo: "Instauração de PAD", fundamento: "Estatuto do Servidor; CF art. 41, §1º", impactaFolha: false },
+];
+
+export function promptAtoRH(input: {
+  tipo: TipoAtoRH;
+  servidor: string;
+  cargo: string;
+  detalhes: string;
+  autoridade?: string;
+  alertaLRF?: string; // contexto fiscal injetado quando o ato impacta a folha
+}): string {
+  const meta = ATOS_RH.find((a) => a.id === input.tipo);
+  return `Elabore um ato de pessoal do tipo "${meta?.rotulo || input.tipo}" para publicação no Diário Oficial Municipal.
+
+- Fundamento de referência: ${meta?.fundamento || "[PREENCHER]"}
+- Servidor(a): ${input.servidor || "[PREENCHER: nome]"}
+- Cargo/função: ${input.cargo || "[PREENCHER: cargo]"}
+- Detalhes do ato: ${input.detalhes || "[PREENCHER: detalhar (matrícula, lotação, datas, vigência, valor da vantagem)]"}
+- Autoridade signatária: ${input.autoridade || "[PREENCHER: nome e cargo da autoridade]"}
+${input.alertaLRF ? `\nContexto fiscal (LRF) a observar no ato: ${input.alertaLRF}` : ""}
+
+${meta?.impactaFolha ? "Este ato aumenta a despesa com pessoal: inclua uma cláusula de adequação orçamentária e a observância dos limites da LRF (arts. 19-22)." : ""}
+Conclua com os metadados sugeridos para a biblioteca (tipo de ato, caderno "Pessoal", impacto na folha).`;
+}
+
 export const SYSTEM_DIARIO_OFICIAL = `Você é o editor do Diário Oficial do "Prefeitura Digital", assistente de gestão pública municipal brasileira.
 Elabore atos oficiais prontos para publicação a partir de informações mínimas.
 

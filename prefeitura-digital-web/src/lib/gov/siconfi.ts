@@ -152,3 +152,23 @@ export async function consultarPessoalLRF(opts: {
     return { ...base, indisponivel: true };
   }
 }
+
+/**
+ * Busca o RGF mais recente disponível, tentando o exercício atual (quadrimestres
+ * 3→1) e, em seguida, o anterior. Usado para checar a situação fiscal da folha
+ * antes de emitir atos de pessoal. Retorna null se nada estiver publicado.
+ */
+export async function consultarPessoalLRFRecente(
+  ente: string
+): Promise<PessoalLRF | null> {
+  const anoAtual = new Date().getFullYear();
+  const candidatos: Array<{ exercicio: number; periodo: number }> = [];
+  for (const exercicio of [anoAtual, anoAtual - 1]) {
+    for (const periodo of [3, 2, 1]) candidatos.push({ exercicio, periodo });
+  }
+  for (const c of candidatos) {
+    const r = await consultarPessoalLRF({ ente, ...c });
+    if (!r.indisponivel) return r;
+  }
+  return null;
+}

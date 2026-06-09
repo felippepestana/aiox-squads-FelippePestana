@@ -11,9 +11,12 @@ integração às APIs públicas do governo.
   (Claude), alinhada à Lei 14.133/2021, com **pesquisa de preços no PNCP** e checagem orçamentária.
 - **Diário Oficial (ativo):** **editor de atos** por tipo/caderno (lei, decreto, portaria, extrato,
   aviso, atos de pessoal) com geração assistida e metadados para a biblioteca.
-- **Orçamento (ativo):** consulta à **execução orçamentária (RREO)** no SICONFI por ente/exercício/bimestre.
+- **Orçamento (ativo):** **execução orçamentária (RREO)** no SICONFI + **painel da LRF** (Despesa com
+  Pessoal / RGF) com semáforo frente aos limites de alerta, prudencial e máximo (54% da RCL).
 - **Transparência (ativo):** checklist de conformidade (LAI/LC131/SIAFIC/PNTP/EBT/WCAG).
-- **RH (vitrine):** página com a estrutura e o roadmap.
+- **RH (ativo):** geração de **atos de pessoal** (nomeação, exoneração, designação de FG, gratificação,
+  licença, férias, aposentadoria RPPS, PAD) com fundamento legal e **checagem automática da LRF** (RGF
+  ao vivo) para atos que aumentam a folha.
 - **Persistência e login (opcional):** com Supabase configurado, é possível **entrar** (magic link por
   e-mail; gov.br OIDC no roadmap) e **salvar artefatos** em *Meus artefatos*, isolados por usuário (RLS).
 - **Integrações públicas (sem credencial):** PNCP, SICONFI (RREO do ente, ex.: Porto Velho 1100205) e IBGE.
@@ -50,6 +53,8 @@ npm run dev                     # http://localhost:3000
 | POST | `/api/diario-oficial` | Gera ato oficial por tipo/caderno | Anthropic |
 | GET | `/api/precos?q=` | Pesquisa de preços | PNCP |
 | GET | `/api/orcamento?ente=&exercicio=&periodo=` | Execução orçamentária (RREO) | SICONFI |
+| GET | `/api/fiscal/pessoal?ente=&exercicio=&periodo=` | Despesa com Pessoal (LRF) | RGF/SICONFI |
+| POST | `/api/rh` | Gera ato de pessoal + checagem LRF | Anthropic + SICONFI |
 | GET/POST | `/api/artefatos` | Lista/salva artefatos do usuário | Supabase |
 | DELETE | `/api/artefatos/[id]` | Exclui artefato do usuário | Supabase |
 
@@ -57,9 +62,10 @@ npm run dev                     # http://localhost:3000
 
 - **Minutas de apoio:** os documentos gerados não substituem parecer jurídico (PGM) nem decisão da
   autoridade competente.
-- **Feito nesta iteração:** editor do Diário Oficial, dashboard de orçamento (RREO), **persistência e
-  login** (Supabase + RLS, magic link).
-- **Roadmap:** login **gov.br (OIDC)**, integração viva ao **SEI** (mod-wssei), **Diário Oficial
+- **Feito nas últimas iterações:** editor do Diário Oficial, dashboard de orçamento (RREO), **persistência
+  e login** (Supabase + RLS, magic link), **painel da LRF** (RGF) e **RH interativo** com checagem fiscal.
+- **Roadmap:** login **gov.br (OIDC)**, mínimos de saúde/educação (RREO anexos 08/12), integração viva ao
+  **SEI** (mod-wssei), **Diário Oficial
   eletrônico** (assinatura ICP-Brasil + biblioteca pesquisável), reconstrução do **Portal da
   Transparência** (dados abertos/CKAN, dashboards), módulos de RH (eSocial/SIPREV) e cruzamento
   SIOPS/SIOPE com alertas de mínimos e LRF.
