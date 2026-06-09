@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { brl, pct } from "@/lib/format";
 
 interface PessoalLRF {
   rcl?: number;
@@ -10,14 +11,6 @@ interface PessoalLRF {
   limitePrudencialPct?: number;
   limiteAlertaPct?: number;
   indisponivel?: boolean;
-}
-
-function brl(v?: number) {
-  if (typeof v !== "number") return "—";
-  return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
-function pct(v?: number) {
-  return typeof v === "number" ? `${v.toLocaleString("pt-BR", { maximumFractionDigits: 2 })}%` : "—";
 }
 
 // Classifica a situação fiscal da Despesa com Pessoal frente aos limites da LRF.

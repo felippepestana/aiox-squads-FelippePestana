@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { brl, pct } from "@/lib/format";
 
 interface FuncaoDespesa {
   funcao: string;
@@ -16,13 +17,8 @@ interface DespesaFuncao {
   indisponivel?: boolean;
 }
 
-function brl(v?: number) {
-  if (typeof v !== "number") return "—";
-  return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
-}
-function pct(v?: number) {
-  return typeof v === "number" ? `${v.toLocaleString("pt-BR", { maximumFractionDigits: 2 })}%` : "—";
-}
+// Valores por função em reais inteiros (sem centavos) para densidade visual.
+const brl0 = (v?: number) => brl(v, { semCentavos: true });
 
 interface Props {
   ente: string;
@@ -41,15 +37,15 @@ function LinhaFuncao({ f }: { f?: FuncaoDespesa }) {
       <dl className="mt-2 grid grid-cols-3 gap-2 text-xs">
         <div>
           <dt className="text-gray-500">Dotação</dt>
-          <dd className="tabular-nums">{brl(f.dotacao)}</dd>
+          <dd className="tabular-nums">{brl0(f.dotacao)}</dd>
         </div>
         <div>
           <dt className="text-gray-500">Empenhado</dt>
-          <dd className="tabular-nums">{brl(f.empenhado)}</dd>
+          <dd className="tabular-nums">{brl0(f.empenhado)}</dd>
         </div>
         <div>
           <dt className="text-gray-500">Liquidado</dt>
-          <dd className="tabular-nums">{brl(f.liquidado)}</dd>
+          <dd className="tabular-nums">{brl0(f.liquidado)}</dd>
         </div>
       </dl>
       {typeof exec === "number" && (

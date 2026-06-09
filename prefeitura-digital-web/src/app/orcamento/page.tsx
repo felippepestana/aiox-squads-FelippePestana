@@ -3,6 +3,7 @@
 import { useState } from "react";
 import PainelPessoalLRF from "@/components/PainelPessoalLRF";
 import PainelFuncoes from "@/components/PainelFuncoes";
+import { brl } from "@/lib/format";
 
 interface RreoLinha {
   conta?: string;
@@ -13,11 +14,6 @@ interface RreoLinha {
 
 const ENTE_PADRAO = process.env.NEXT_PUBLIC_MUNICIPIO_IBGE || "1100205";
 const ANO_ATUAL = new Date().getFullYear();
-
-function brl(v?: number) {
-  if (typeof v !== "number") return "—";
-  return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
 
 export default function OrcamentoPage() {
   const [ente, setEnte] = useState(ENTE_PADRAO);

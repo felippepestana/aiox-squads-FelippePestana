@@ -2,13 +2,24 @@
 
 import { useState } from "react";
 import SalvarArtefato from "@/components/SalvarArtefato";
+import { brl } from "@/lib/format";
 
 interface PrecoItem {
   descricao: string;
   orgao?: string;
-  valorUnitario?: number;
+  valorEstimado?: number; // valor total estimado da contratação (não é preço unitário)
   data?: string;
   fonte: string;
+  link?: string;
+}
+
+// Resumo textual das contratações de referência, para alimentar a seção de
+// estimativa de valor do ETP (o backend aceita body.precos como texto).
+function resumoPrecos(itens: PrecoItem[]): string {
+  if (itens.length === 0) return "";
+  return itens
+    .map((p) => `- ${p.descricao} — ${p.orgao || "órgão não informado"} — ${brl(p.valorEstimado)} (PNCP${p.data ? `, ${p.data.slice(0, 10)}` : ""})`)
+    .join("\n");
 }
 
 export default function ContratacoesPage() {
@@ -34,7 +45,14 @@ export default function ContratacoesPage() {
       const res = await fetch("/api/etp", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ tipo, objeto, secretaria, necessidade, dotacao }),
+        body: JSON.stringify({
+          tipo,
+          objeto,
+          secretaria,
+          necessidade,
+          dotacao,
+          precos: resumoPrecos(precos), // alimenta a estimativa de valor (PNCP)
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Falha na geração.");
@@ -135,6 +153,10 @@ export default function ContratacoesPage() {
               {buscandoPrecos ? "Buscando…" : "Buscar"}
             </button>
           </div>
+          <p className="mt-1 text-[11px] text-gray-400">
+            Contratações recentes (pregão eletrônico) cujo objeto contém o termo. Valor total estimado da
+            contratação — não é preço unitário. Alimenta a estimativa de valor do ETP.
+          </p>
           <ul className="mt-3 space-y-2 text-xs text-gray-600">
             {precos.length === 0 && <li className="text-gray-400">Sem resultados ainda.</li>}
             {precos.map((p, i) => (
@@ -142,8 +164,14 @@ export default function ContratacoesPage() {
                 <div className="font-medium text-gray-800">{p.descricao}</div>
                 <div>{p.orgao}</div>
                 <div>
-                  {p.valorUnitario ? `R$ ${p.valorUnitario.toLocaleString("pt-BR")}` : "—"} ·{" "}
-                  {p.fonte}
+                  {brl(p.valorEstimado)} ·{" "}
+                  {p.link ? (
+                    <a href={p.link} target="_blank" rel="noopener noreferrer" className="text-brand underline">
+                      {p.fonte}
+                    </a>
+                  ) : (
+                    p.fonte
+                  )}
                 </div>
               </li>
             ))}
