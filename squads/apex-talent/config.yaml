@@ -39,11 +39,16 @@ tier_structure:
     agents: ["apex-talent-chief"]
 
 workflow:
-  primary: "module routing"
+  primary: "wf-employee-lifecycle"
+  cross_module:
+    - "wf-employee-lifecycle — mapa de orquestração (7 etapas → módulos + handoffs)"
+    - "wf-hire-to-onboard — contratar → integrar → desenvolver"
+    - "wf-retention-loop — operar → analisar → desenvolver (RH preditivo)"
   phases:
     - "Phase 1: INTAKE - Entender a necessidade de RH do usuário"
-    - "Phase 2: ROUTE - Encaminhar ao módulo (squad) responsável"
-    - "Phase 3: SYNTHESIZE - Consolidar resultados cross-módulo quando aplicável"
+    - "Phase 2: ROUTE - Encaminhar ao módulo (squad) responsável (route-need)"
+    - "Phase 3: CHAIN - Encadear módulos em pedidos multi-etapa (map-lifecycle)"
+    - "Phase 4: SYNTHESIZE - Consolidar visões cross-módulo (consolidate-cross-module)"
 
 entry_points:
   catalog: "*catalog"
@@ -52,6 +57,13 @@ entry_points:
   lifecycle: "*lifecycle"
 
 workspace_integration:
-  level: none
+  level: read_write
+  produces:
+    - "workspace/apex-talent/cross-module-report.md"
+  consumes:
+    - "outputs dos módulos (performa, pulse, chronos, insights, academy, ...) para consolidação cross-módulo"
   rationale: >-
-    O apex-talent e um orquestrador de plataforma. Roteia entre modulos (squads) e nao consome nem produz artefatos diretamente no workspace/.
+    O apex-talent orquestra a plataforma: roteia necessidades (route-need), encadeia
+    módulos em pedidos multi-etapa (map-lifecycle) e consolida visões cross-módulo
+    (consolidate-cross-module) gravando um relatório em workspace/. Respeita os quality
+    gates dos módulos-fonte na consolidação; não decide pelos módulos.
