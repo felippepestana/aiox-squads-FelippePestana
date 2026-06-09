@@ -117,6 +117,10 @@ Caso
 - `QG-LP-007`: aprovado se brief cobrir personas, jornada, estados, acessibilidade e rastreabilidade.
 - `QG-LP-006`: aprovado se revisão humana aparecer no fluxo.
 
+## Output de regressão
+
+Compare a saída real com o entregável fictício completo em [`expected-outputs/brief-dashboard-juridico.md`](expected-outputs/brief-dashboard-juridico.md).
+
 ## Critério de aprovação do exemplo
 
 O exemplo passa se a saída for um brief de produto pronto para revisão, sem iniciar implementação frontend e com handoff ao `apex` explicitamente condicionado à aprovação do checklist.

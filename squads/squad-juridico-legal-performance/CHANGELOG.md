@@ -1,5 +1,15 @@
 # Changelog — Squad Jurídico Legal Performance
 
+## 1.0.2 — 2026-06-01
+
+- Scripts `validate-deliverable.sh` e `run-smoke-baselines.sh` para checagem de seções e quality gates.
+- Pacote `handoff/apex/` com wireframes, critérios de aceite e prompt de entrada para o squad Apex.
+
+## 1.0.1 — 2026-06-01
+
+- Adiciona `examples/expected-outputs/` com três baselines fictícios completos para regressão (civil, recursal, produto).
+- Vincula exemplos, `SMOKE_TESTS.md` e `README.md` aos outputs esperados.
+
 ## 1.0.0 — 2026-05-25
 
 - Cria squad unificado para atividades jurídicas, processuais, cíveis, recursais, periciais e de produto jurídico.

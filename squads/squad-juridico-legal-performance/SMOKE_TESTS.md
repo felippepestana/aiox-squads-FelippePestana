@@ -9,6 +9,18 @@ Este arquivo define os cenários funcionais mínimos para revisar se o squad est
 3. Compare a classificação, rota de agentes, quality gates e entregáveis esperados.
 4. Registre qualquer divergência como ajuste de arquitetura, agente, task ou template.
 
+### Validação automatizada (baselines)
+
+```bash
+bash squads/squad-juridico-legal-performance/scripts/run-smoke-baselines.sh
+```
+
+Validar um entregável Markdown gerado:
+
+```bash
+bash squads/squad-juridico-legal-performance/scripts/validate-deliverable.sh <arquivo.md> --profile auto
+```
+
 ## Critério geral de aprovação
 
 - O `legal-performance-chief` classifica o UC correto antes de acionar agentes.
@@ -196,10 +208,17 @@ legal-performance-chief
 
 | Cenário | Status esperado | Observação |
 |---|---|---|
-| Análise processual civil | Coberto | Rota e gates estão definidos em `config.yaml`; este teste formaliza a validação. |
-| Estratégia recursal | Coberto | `appeals-analyst` e `UC-LP-004` cobrem admissibilidade e mérito. |
-| Frontend jurídico | Coberto com restrição | O fluxo deve gerar brief antes de qualquer handoff ao `apex`. |
+| Análise processual civil | Coberto | Rota e gates em `config.yaml`; este teste formaliza a validação. Baseline: [`relatorio-civil-acao-cobranca.md`](examples/expected-outputs/relatorio-civil-acao-cobranca.md). |
+| Estratégia recursal | Coberto | `appeals-analyst` e `UC-LP-004` cobrem admissibilidade e mérito. Baseline: [`relatorio-recursal-resp.md`](examples/expected-outputs/relatorio-recursal-resp.md). |
+| Frontend jurídico | Coberto com restrição | Brief antes de handoff ao `apex`. Baseline: [`brief-dashboard-juridico.md`](examples/expected-outputs/brief-dashboard-juridico.md); implementação: [`handoff/apex/README.md`](handoff/apex/README.md). |
+
+## Regressão com outputs esperados
+
+Índice e critérios de equivalência: [`examples/expected-outputs/README.md`](examples/expected-outputs/README.md).
 
 ## Próximo passo recomendado
 
-Após aprovar estes smoke tests e exemplos, evoluir para um pacote `examples/expected-outputs/` com relatórios completos fictícios para comparação de regressão.
+1. Executar `run-smoke-baselines.sh` após cada alteração em templates ou baselines.
+2. Rodar smoke tests manuais com os inputs dos exemplos e comparar com `expected-outputs/`.
+3. Implementar frontend via handoff Apex: [`handoff/apex/README.md`](handoff/apex/README.md) (prompt em `apex-entry-prompt.md`).
+4. Deploy preview: [`docs/deploy/vercel.md`](../../docs/deploy/vercel.md).

@@ -119,6 +119,10 @@ confiabilidade: alta
 ---
 ```
 
+## Output de regressão
+
+Compare a saída real com o entregável fictício completo em [`expected-outputs/relatorio-civil-acao-cobranca.md`](expected-outputs/relatorio-civil-acao-cobranca.md).
+
 ## Critério de aprovação do exemplo
 
 O exemplo passa se a saída final for um relatório com triagem, auditoria, pesquisa, cenários, plano e citações rastreadas, sem inventar documentos não fornecidos.
