@@ -11,8 +11,9 @@ integração às APIs públicas do governo.
   (Claude), alinhada à Lei 14.133/2021, com **pesquisa de preços no PNCP** e checagem orçamentária.
 - **Diário Oficial (ativo):** **editor de atos** por tipo/caderno (lei, decreto, portaria, extrato,
   aviso, atos de pessoal) com geração assistida e metadados para a biblioteca.
-- **Orçamento (ativo):** **execução orçamentária (RREO)** no SICONFI + **painel da LRF** (Despesa com
-  Pessoal / RGF) com semáforo frente aos limites de alerta, prudencial e máximo (54% da RCL).
+- **Orçamento (ativo):** **execução orçamentária (RREO)** no SICONFI, **painel da LRF** (Despesa com
+  Pessoal / RGF) com semáforo frente aos limites (54% da RCL) e **despesa por função** (Saúde/Educação,
+  Anexo 02) — execução, não o mínimo constitucional.
 - **Transparência (ativo):** checklist de conformidade (LAI/LC131/SIAFIC/PNTP/EBT/WCAG).
 - **RH (ativo):** geração de **atos de pessoal** (nomeação, exoneração, designação de FG, gratificação,
   licença, férias, aposentadoria RPPS, PAD) com fundamento legal e **checagem automática da LRF** (RGF
@@ -54,6 +55,7 @@ npm run dev                     # http://localhost:3000
 | GET | `/api/precos?q=` | Pesquisa de preços | PNCP |
 | GET | `/api/orcamento?ente=&exercicio=&periodo=` | Execução orçamentária (RREO) | SICONFI |
 | GET | `/api/fiscal/pessoal?ente=&exercicio=&periodo=` | Despesa com Pessoal (LRF) | RGF/SICONFI |
+| GET | `/api/fiscal/funcoes?ente=&exercicio=&periodo=` | Despesa por função (Saúde/Educação) | RREO Anexo 02/SICONFI |
 | POST | `/api/rh` | Gera ato de pessoal + checagem LRF | Anthropic + SICONFI |
 | GET/POST | `/api/artefatos` | Lista/salva artefatos do usuário | Supabase |
 | DELETE | `/api/artefatos/[id]` | Exclui artefato do usuário | Supabase |

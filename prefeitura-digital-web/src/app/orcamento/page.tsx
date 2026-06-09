@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import PainelPessoalLRF from "@/components/PainelPessoalLRF";
+import PainelFuncoes from "@/components/PainelFuncoes";
 
 interface RreoLinha {
   conta?: string;
@@ -140,9 +141,11 @@ export default function OrcamentoPage() {
 
       <PainelPessoalLRF ente={ente} exercicio={exercicio} />
 
+      <PainelFuncoes ente={ente} exercicio={exercicio} />
+
       <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-        Roadmap: apuração dos mínimos de saúde (15%) e educação (25% + FUNDEB) a partir dos anexos
-        específicos do RREO, quando publicados pelo ente, e cruzamento com SIOPS/SIOPE.
+        Roadmap: apuração do mínimo constitucional de saúde (15%) e educação (25% + FUNDEB) a partir dos
+        anexos específicos do RREO (08/12) e cruzamento com SIOPS/SIOPE, quando publicados pelo ente.
       </div>
     </div>
   );
