@@ -1,0 +1,109 @@
+name: "wf-hire-to-onboard"
+display_name: "Contratar → Integrar → Desenvolver (cadeia de aquisição)"
+description: "Recorte executável do ciclo de vida: encadeia talent-compass (contratação) → onboard (integração) → academy (desenvolvimento inicial), com os handoffs explícitos. Demonstra a plataforma operando como sistema — o contratado e seu scorecard fluem do R&S à integração e à trilha de desenvolvimento."
+
+trigger: "user command (orchestrator) when a request spans hire + onboard (+ develop)"
+orchestrator: "apex-talent-chief"
+
+entry_point: "Phase 1: HIRE"
+
+inputs:
+  - name: "role"
+    type: "string"
+    required: true
+    description: "Cargo a contratar (ex: analista financeiro)"
+  - name: "candidate_pool"
+    type: "array | string"
+    required: false
+    description: "Candidatos ou fonte (banco de talentos / aplicação)"
+
+phases:
+  phase_1_hire:
+    name: "HIRE"
+    display_name: "Contratação (talent-compass)"
+    description: "Define vaga por objetivos, conduz entrevista, gera scorecard, audita viés."
+    orchestrated_to: "talent-compass-chief"
+    internal_workflow: "talent-compass / wf-hire-full-cycle"
+    gate: "fairness-gate — veto antes de qualquer recomendação"
+    outputs:
+      - name: "hired_package"
+        schema:
+          candidate_profile: "object"
+          scorecard: "object (competências, evidência, grade)"
+          performance_objectives: "array"
+          fairness_status: "PASS | review"
+    exit_condition:
+      - name: "candidate_selected_fairly"
+        rule: "Scorecard gerado e fairness-gate = PASS. Decisão de contratação é do gestor."
+        type: "HARD"
+
+  phase_2_onboard:
+    name: "ONBOARD"
+    display_name: "Integração (onboard)"
+    description: "Monta a jornada 30/60/90 personalizada por cargo e perfil; checklists e documentos."
+    orchestrated_to: "onboard-chief"
+    handoff_in:
+      from: "talent-compass"
+      data: "hired_package (perfil + scorecard + objetivos)"
+    outputs:
+      - name: "onboarding_plan"
+        schema:
+          journey_30_60_90: "object"
+          checklists: "array"
+          milestones: "array"
+    exit_condition:
+      - name: "journey_ready"
+        rule: "Jornada 30/60/90 montada a partir do perfil do contratado."
+        type: "HARD"
+
+  phase_3_develop:
+    name: "DEVELOP"
+    display_name: "Desenvolvimento inicial (academy)"
+    description: "A partir dos gaps do scorecard, gera a primeira trilha 70-20-10 do contratado."
+    orchestrated_to: "academy-chief"
+    handoff_in:
+      from: "talent-compass + onboard"
+      data: "Competências abaixo do alvo (scorecard) + marcos de integração"
+    gate: "learning-gate — pedagógico (objetivos mensuráveis, SME, acessibilidade)"
+    outputs:
+      - name: "initial_track"
+        schema:
+          skills_matrix: "object"
+          learning_track: "object (70-20-10)"
+    exit_condition:
+      - name: "track_published"
+        rule: "Trilha publicada apenas com learning-gate = PASS."
+        type: "SOFT"
+
+handoffs:
+  - from: "apex-talent-chief"
+    to: "talent-compass-chief"
+    when: "Início da cadeia"
+    data: "role + candidate_pool"
+  - from: "talent-compass-chief"
+    to: "onboard-chief"
+    when: "Phase 1 PASS (candidato aprovado)"
+    data: "hired_package"
+  - from: "talent-compass-chief"
+    to: "academy-chief"
+    when: "Gaps identificados no scorecard"
+    data: "Competências abaixo do alvo"
+  - from: "onboard-chief"
+    to: "academy-chief"
+    when: "Jornada montada"
+    data: "Marcos de integração"
+
+error_handling:
+  - phase: "phase_1_hire"
+    error: "fairness_review"
+    action: "PARAR a cadeia — não integrar antes de resolver o achado de viés"
+    remediation: "Resolver no talent-compass; reapresentar"
+
+principles:
+  - "Cada módulo mantém seu gate; o orquestrador encadeia e passa o handoff."
+  - "A decisão de contratar é humana; a IA fornece o scorecard e a auditoria."
+
+audit_trail:
+  - action: "phase_completed"
+    tracked_by: "apex-talent-chief"
+    fields: ["timestamp", "phase", "module", "handoff_data", "gate_status"]

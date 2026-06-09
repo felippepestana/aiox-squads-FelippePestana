@@ -36,6 +36,24 @@ ATRAIR ──▶ CONTRATAR ──▶ INTEGRAR ──▶ DESENVOLVER ──▶ EN
             org-architect (estrutura de cargos transversal)
 ```
 
+## Orquestração cross-módulo
+
+O que torna o Apex-Talent uma **plataforma** (e não 12 squads soltos) é a camada de orquestração do squad `apex-talent`:
+
+**Tasks de orquestração** (`tasks/`):
+
+- [`route-need`](tasks/route-need.md) — classifica a necessidade em uma etapa do ciclo de vida e roteia ao módulo dono (backing do `*route`).
+- [`map-lifecycle`](tasks/map-lifecycle.md) — encadeia pedidos multi-etapa na sequência de módulos, com o dado de handoff entre eles (backing do `*lifecycle`).
+- [`consolidate-cross-module`](tasks/consolidate-cross-module.md) — costura visões cross-módulo (360, retenção, sucessão) num relatório, respeitando os gates dos módulos-fonte.
+
+**Workflows cross-módulo** (`workflows/`):
+
+- [`wf-employee-lifecycle`](workflows/wf-employee-lifecycle.yaml) — o mapa-backbone: 7 etapas (atrair→contratar→integrar→desenvolver→engajar→operar→analisar) → módulos donos + handoffs.
+- [`wf-hire-to-onboard`](workflows/wf-hire-to-onboard.yaml) — recorte executável: `talent-compass` → `onboard` → `academy`.
+- [`wf-retention-loop`](workflows/wf-retention-loop.yaml) — loop preditivo: `chronos`+`pulse`+`performa` → `insights` (gate de ética) → `academy`/`org-architect`.
+
+A referência canônica de etapas e handoffs está em [`data/lifecycle-orchestration.md`](data/lifecycle-orchestration.md).
+
 ## Como usar
 
 O orquestrador é o agente `apex-talent-chief`. No chatbot ou na web, selecione `apex-talent:apex-talent-chief` e descreva sua necessidade.
@@ -43,9 +61,9 @@ O orquestrador é o agente `apex-talent-chief`. No chatbot ou na web, selecione 
 Comandos do Chief:
 
 - `*catalog` — lista todos os módulos e seus status
-- `*route` — diagnostica a necessidade e encaminha ao módulo certo
+- `*route` — diagnostica a necessidade e encaminha ao módulo certo (task `route-need`)
 - `*roadmap` — mostra o que está construído vs. planejado
-- `*lifecycle` — mapeia um pedido ao longo do ciclo de vida do colaborador
+- `*lifecycle` — mapeia um pedido ao longo do ciclo de vida do colaborador (task `map-lifecycle`)
 
 ## Documentação de referência
 

@@ -1,0 +1,120 @@
+name: "wf-retention-loop"
+display_name: "Operar → Analisar → Desenvolver (loop de retenção)"
+description: "Recorte executável do ciclo de vida focado em retenção: reúne sinais de chronos (fadiga), pulse (engajamento) e performa (progressão), cruza em insights (risco agregado de turnover/burnout) sob o gate de ética, e devolve intervenções de apoio via academy (trilha) e org-architect (carreira). Fecha o loop operar→analisar→desenvolver — o RH preditivo cross-módulo que é o diferencial da plataforma."
+
+trigger: "scheduled (revisão periódica) or user command focused on retention/turnover risk"
+orchestrator: "apex-talent-chief"
+
+entry_point: "Phase 1: COLLECT_SIGNALS"
+
+inputs:
+  - name: "scope"
+    type: "object"
+    required: true
+    description: "Área/coorte alvo (n≥5 para respeitar privacidade do insights)"
+  - name: "window"
+    type: "string"
+    required: true
+    description: "Janela de análise (ex: 2026-01..2026-06)"
+
+phases:
+  phase_1_collect_signals:
+    name: "COLLECT_SIGNALS"
+    display_name: "Coleta de Sinais (chronos + pulse + performa)"
+    description: "Reúne sinais operacionais e de engajamento das fontes de verdade."
+    agents: ["chronos-chief", "pulse-chief", "performa-chief"]
+    execution: "parallel"
+    outputs:
+      - name: "signals"
+        schema:
+          fatigue: "from chronos — super-jornada/absenteísmo"
+          engagement: "from pulse — eNPS/tendência"
+          progression: "from performa — estagnação/9-box"
+    exit_condition:
+      - name: "min_two_sources"
+        rule: "Pelo menos 2 fontes-módulo presentes (insights recusa fonte única)."
+        type: "HARD"
+
+  phase_2_model_risk:
+    name: "MODEL_RISK"
+    display_name: "Modelagem de Risco (insights)"
+    description: "Cruza os sinais em risco agregado de turnover/burnout por coorte, com confiança e drivers."
+    orchestrated_to: "insights-chief"
+    internal_workflow: "insights / wf-analytics-completo"
+    handoff_in:
+      from: "chronos + pulse + performa"
+      data: "signals (fadiga + engajamento + progressão)"
+    gate: "ethics-gate — n≥5, sem veredito individual, correlação≠causa, LGPD"
+    outputs:
+      - name: "risk_model"
+        schema:
+          cohort_risk: "array (risk_level, confidence, drivers)"
+          framing: "sinal agregado de apoio — NÃO veredito individual"
+    exit_condition:
+      - name: "risk_passed_gate"
+        rule: "Risco liberado apenas com ethics-gate = PASS."
+        type: "HARD"
+
+  phase_3_intervene:
+    name: "INTERVENE"
+    display_name: "Intervenção de Apoio (academy + org-architect)"
+    description: "Converte os drivers acionáveis em intervenções: trilha de desenvolvimento (estagnação) e revisão de carreira/faixa."
+    agents: ["academy-chief", "org-architect-chief"]
+    execution: "parallel"
+    handoff_in:
+      from: "insights"
+      data: "Drivers acionáveis por coorte (estagnação, fadiga, eNPS)"
+    routing:
+      - driver: "progressão estagnada"
+        to: "academy-chief"
+        action: "Trilha 70-20-10 para o gap"
+      - driver: "progressão estagnada / inequidade"
+        to: "org-architect-chief"
+        action: "Revisão de plano de carreira / faixa salarial"
+      - driver: "super-jornada"
+        to: "chronos-chief"
+        action: "Rebalanceamento de carga"
+    outputs:
+      - name: "intervention_plan"
+        schema:
+          actions: "array (driver → módulo → ação de apoio)"
+    exit_condition:
+      - name: "interventions_assigned"
+        rule: "Cada driver acionável vira uma ação de APOIO (nunca punição por predição)."
+        type: "SOFT"
+
+handoffs:
+  - from: "chronos-chief / pulse-chief / performa-chief"
+    to: "insights-chief"
+    when: "Sinais coletados"
+    data: "signals (≥ 2 fontes)"
+  - from: "insights-chief"
+    to: "academy-chief / org-architect-chief"
+    when: "Risco modelado e gate PASS"
+    data: "Drivers acionáveis por coorte"
+
+error_handling:
+  - phase: "phase_1_collect_signals"
+    error: "single_source_only"
+    action: "ALERT — validade insuficiente; insights recusa fonte única"
+    remediation: "Adicionar segunda fonte-módulo antes de modelar"
+  - phase: "phase_2_model_risk"
+    error: "ethics_violation"
+    action: "VETO — não libera o risco"
+    remediation: "Agregar (n≥5), remover veredito individual; reapresentar"
+
+principles:
+  - "Predição é alerta precoce para APOIO, nunca veredito ou punição."
+  - "Correlação ≠ causa; toda ação é de apoio, validada com gestores."
+  - "O gate de ética do insights é inviolável na consolidação."
+
+audit_trail:
+  - action: "signals_collected"
+    tracked_by: "apex-talent-chief"
+    fields: ["timestamp", "scope", "window", "sources"]
+  - action: "risk_modeled"
+    tracked_by: "insights-chief"
+    fields: ["timestamp", "cohort", "risk_level", "confidence", "gate_status"]
+  - action: "intervention_assigned"
+    tracked_by: "apex-talent-chief"
+    fields: ["timestamp", "driver", "module", "support_action"]

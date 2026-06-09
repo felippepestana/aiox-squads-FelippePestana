@@ -1,0 +1,123 @@
+name: "wf-employee-lifecycle"
+display_name: "Ciclo de Vida do Colaborador (mapa de orquestração da plataforma)"
+description: "Backbone de orquestração do apex-talent: mapeia as 7 etapas do ciclo de vida do colaborador aos módulos donos e aos handoffs entre eles. Não executa um módulo — descreve como a plataforma encadeia os 12 squads como um sistema. Os workflows wf-hire-to-onboard e wf-retention-loop são recortes executáveis deste mapa."
+
+trigger: "user command (*lifecycle) or a multi-stage people request"
+orchestrator: "apex-talent-chief"
+
+entry_point: "Stage classification (route-need / map-lifecycle)"
+
+inputs:
+  - name: "request"
+    type: "string"
+    required: true
+    description: "Necessidade de pessoas (pode atravessar várias etapas)"
+  - name: "role_context"
+    type: "object"
+    required: false
+    description: "Cargo, área, coorte alvo"
+
+phases:
+  stage_1_attract:
+    name: "ATRAIR"
+    owner_module: "talent-compass"
+    agents: ["talent-compass-chief"]
+    description: "Sourcing, página de carreira, banco de talentos."
+    handoff_out: "Candidatos qualificados → etapa CONTRATAR"
+
+  stage_2_hire:
+    name: "CONTRATAR"
+    owner_module: "talent-compass"
+    transversal: ["profiler-dna"]
+    agents: ["talent-compass-chief"]
+    description: "Vaga por objetivos → entrevista → scorecard → gate de viés."
+    gate: "fairness-gate (veto antes da decisão)"
+    handoff_out: "Perfil do contratado + scorecard + objetivos de performance → INTEGRAR"
+
+  stage_3_onboard:
+    name: "INTEGRAR"
+    owner_module: "onboard"
+    transversal: ["academy"]
+    agents: ["onboard-chief"]
+    description: "Jornada 30/60/90, checklists, documentos."
+    handoff_in: "Perfil do contratado + scorecard"
+    handoff_out: "Marcos de integração → DESENVOLVER"
+
+  stage_4_develop:
+    name: "DESENVOLVER"
+    owner_module: "performa"
+    co_owner: "academy"
+    transversal: ["org-architect"]
+    agents: ["performa-chief", "academy-chief"]
+    description: "Avaliação/9-box/PDI (performa) + trilhas por gap (academy)."
+    handoff_out: "Gap de competência → academy; 9-box → org-architect (carreira/sucessão)"
+
+  stage_5_engage:
+    name: "ENGAJAR"
+    owner_module: "pulse"
+    transversal: ["profiler-dna"]
+    agents: ["pulse-chief"]
+    description: "Clima, eNPS, planos de ação, reconhecimento."
+    handoff_out: "Sinal de engajamento → ANALISAR (insights)"
+
+  stage_6_operate:
+    name: "OPERAR"
+    owner_module: "peopleops"
+    co_owner: "chronos"
+    transversal: ["benefits-hub"]
+    agents: ["peopleops-chief", "chronos-chief"]
+    description: "Folha, eSocial, férias (peopleops) + ponto, jornada, banco (chronos); benefícios (benefits-hub)."
+    handoff_out: "Banco/espelho (chronos) → folha (peopleops); fadiga → ANALISAR (insights)"
+
+  stage_7_analyze:
+    name: "ANALISAR"
+    owner_module: "insights"
+    agents: ["insights-chief"]
+    description: "Headcount, turnover/burnout preditivo, diversidade, narrativa executiva."
+    gate: "ethics-gate (privacidade/fairness — n≥5, sem veredito individual)"
+    handoff_in: "Sinais de chronos + pulse + performa"
+    handoff_out: "Driver acionável → academy (trilha) / org-architect (carreira) — fecha o ciclo em DESENVOLVER"
+
+transversal_modules:
+  - module: "profiler-dna"
+    role: "Lente comportamental (advisory) — alimenta contratar, integrar, engajar"
+  - module: "org-architect"
+    role: "Estrutura de cargos/faixas — alimenta desenvolver, analisar"
+  - module: "benefits-hub"
+    role: "Benefícios (Total Rewards) — alimenta operar"
+
+handoffs:
+  - from: "talent-compass"
+    to: "onboard"
+    data: "Perfil do contratado + scorecard + objetivos de performance"
+  - from: "onboard"
+    to: "performa"
+    data: "Marcos de integração 30/60/90"
+  - from: "performa"
+    to: "academy"
+    data: "Gap de competência (nível atual/alvo)"
+  - from: "performa"
+    to: "org-architect"
+    data: "Posição 9-box → carreira/sucessão"
+  - from: "chronos"
+    to: "insights"
+    data: "Anomalia HIGH (fadiga/super-jornada)"
+  - from: "pulse"
+    to: "insights"
+    data: "Queda de eNPS/engajamento"
+  - from: "insights"
+    to: "academy"
+    data: "Driver acionável (estagnação) → trilha"
+
+principles:
+  - "Human-in-the-loop: cada módulo decide via seu gate + humano responsável; o orquestrador costura, não decide."
+  - "Capability honesty: rotear ao dono e descrever só o que o módulo entrega."
+  - "Gates respeitados na consolidação: privacidade/ética dos módulos-fonte são preservadas."
+
+audit_trail:
+  - action: "stage_classified"
+    tracked_by: "apex-talent-chief"
+    fields: ["timestamp", "user", "request", "stage", "owner_module"]
+  - action: "module_routed"
+    tracked_by: "apex-talent-chief"
+    fields: ["timestamp", "stage", "module", "handoff_data"]
