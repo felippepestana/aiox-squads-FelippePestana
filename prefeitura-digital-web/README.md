@@ -14,7 +14,8 @@ integração às APIs públicas do governo.
 - **Orçamento (ativo):** **execução orçamentária (RREO)** no SICONFI, **painel da LRF** (Despesa com
   Pessoal / RGF) com semáforo frente aos limites (54% da RCL) e **despesa por função** (Saúde/Educação,
   Anexo 02) — execução, não o mínimo constitucional.
-- **Transparência (ativo):** checklist de conformidade (LAI/LC131/SIAFIC/PNTP/EBT/WCAG).
+- **Transparência (ativo):** **diagnóstico de conformidade** gerado por IA a partir de um checklist
+  interativo (LAI/LC131/SIAFIC/PNTP/EBT/WCAG) + plano de reconstrução.
 - **RH (ativo):** geração de **atos de pessoal** (nomeação, exoneração, designação de FG, gratificação,
   licença, férias, aposentadoria RPPS, PAD) com fundamento legal e **checagem automática da LRF** (RGF
   ao vivo) para atos que aumentam a folha.
@@ -57,6 +58,7 @@ npm run dev                     # http://localhost:3000
 | GET | `/api/fiscal/pessoal?ente=&exercicio=&periodo=` | Despesa com Pessoal (LRF) | RGF/SICONFI |
 | GET | `/api/fiscal/funcoes?ente=&exercicio=&periodo=` | Despesa por função (Saúde/Educação) | RREO Anexo 02/SICONFI |
 | POST | `/api/rh` | Gera ato de pessoal + checagem LRF | Anthropic + SICONFI |
+| POST | `/api/transparencia` | Diagnóstico de conformidade + plano | Anthropic |
 | GET/POST | `/api/artefatos` | Lista/salva artefatos do usuário | Supabase |
 | DELETE | `/api/artefatos/[id]` | Exclui artefato do usuário | Supabase |
 

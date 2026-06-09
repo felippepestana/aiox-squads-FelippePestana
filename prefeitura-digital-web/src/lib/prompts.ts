@@ -20,6 +20,46 @@ Lei 14.129/2021 e LGPD, além dos critérios da EBT/PNTP (CGU) e acessibilidade 
 Produza diagnóstico + checklist + recomendações de reconstrução (API documentada, dados abertos, dashboards,
 linguagem cidadã). Saída em Markdown.`;
 
+export const ITENS_TRANSPARENCIA: { id: string; rotulo: string }[] = [
+  { id: "receitas-despesas", rotulo: "Receitas e despesas detalhadas, em tempo real (LC 131/2009)" },
+  { id: "licitacoes-contratos", rotulo: "Licitações, contratos e convênios" },
+  { id: "folha", rotulo: "Folha/remuneração nominal (sem dados pessoais excedentes — LGPD)" },
+  { id: "rreo-rgf", rotulo: "RREO e RGF publicados (LRF art. 48/48-A)" },
+  { id: "esic", rotulo: "e-SIC funcional (transparência passiva)" },
+  { id: "dados-abertos", rotulo: "Dados abertos em formato aberto + API documentada (OpenAPI)" },
+  { id: "siafic", rotulo: "Padrão mínimo SIAFIC (Decreto 10.540/2020)" },
+  { id: "acessibilidade", rotulo: "Acessibilidade WCAG 2.1 AA / ABNT NBR 17225:2025" },
+  { id: "linguagem-cidada", rotulo: "Linguagem cidadã nos sumários (RREO/RGF)" },
+];
+
+export function promptTransparencia(input: {
+  portalUrl?: string;
+  situacao?: string;
+  itensAtendidos: string[]; // ids de ITENS_TRANSPARENCIA já cumpridos
+}): string {
+  const atendidos = ITENS_TRANSPARENCIA.filter((i) => input.itensAtendidos.includes(i.id));
+  const pendentes = ITENS_TRANSPARENCIA.filter((i) => !input.itensAtendidos.includes(i.id));
+  const lista = (arr: { rotulo: string }[]) =>
+    arr.length ? arr.map((i) => `  - ${i.rotulo}`).join("\n") : "  - (nenhum informado)";
+
+  return `Elabore um DIAGNÓSTICO DE TRANSPARÊNCIA do Portal da Transparência do município.
+
+- Portal (URL): ${input.portalUrl || "[PREENCHER: informar URL do portal]"}
+- Situação atual descrita: ${input.situacao || "[PREENCHER: descrever o estado atual]"}
+
+Itens declarados como ATENDIDOS:
+${lista(atendidos)}
+
+Itens PENDENTES / não declarados:
+${lista(pendentes)}
+
+Produza:
+1. Diagnóstico de conformidade (LAI, LC 131/2009, LRF art. 48/48-A, SIAFIC, Lei 14.129/2021, LGPD, EBT/PNTP, WCAG), classificando cada item pendente por criticidade.
+2. Checklist priorizado (quick wins x estruturantes).
+3. Plano de reconstrução: dados abertos (CKAN), API documentada (OpenAPI), dashboards por tema (execução orçamentária, licitações, pessoal), linguagem cidadã e auditoria de acessibilidade.
+Não invente dados do município; marque lacunas com [PREENCHER: ...].`;
+}
+
 export function promptETP(input: {
   objeto: string;
   secretaria: string;
