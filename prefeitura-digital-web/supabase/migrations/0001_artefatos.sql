@@ -5,6 +5,7 @@
 create table if not exists public.artefatos (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users (id) on delete cascade,
+  -- Mantenha em sincronia com MODULOS_VALIDOS em src/lib/artefatos.ts.
   modulo text not null check (modulo in ('contratacoes', 'diario-oficial', 'orcamento', 'rh', 'transparencia')),
   tipo text not null,          -- ex.: ETP, TR, PB, portaria, decreto
   titulo text not null,
