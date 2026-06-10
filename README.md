@@ -205,6 +205,20 @@ docker compose --profile web up -d --build
 - Health: `GET /api/health` · catálogo: `GET /api/squads`.
 - Única variável obrigatória: `ANTHROPIC_API_KEY`. Opcional: `WEB_PORTAL_API_KEY` (protege a API). Opções completas em [`web/README.md`](web/README.md).
 
+#### Acesso a uma URL pública (versão funcional online)
+
+A imagem do portal é publicada automaticamente no **GHCR** a cada push em `main`. Três caminhos para uma versão acessível:
+
+1. **Imagem publicada (qualquer host com Docker) — imediato:**
+   ```bash
+   docker run -p 8787:8787 -e ANTHROPIC_API_KEY=sk-ant-... \
+     ghcr.io/felippepestana/aiox-squads-felippepestana/web:latest
+   ```
+2. **Render (URL HTTPS gerenciada, 1 clique):** este repo inclui [`render.yaml`](render.yaml). No Render → *New + → Blueprint* → conecte o repositório → defina `ANTHROPIC_API_KEY` → Deploy. Resultado: `https://aiox-squads-web.onrender.com`.
+3. **Cloudflare Workers (serverless, experimental):** o repo traz [`web/wrangler.toml`](web/wrangler.toml) e um worker que embrulha o servidor. Após `cd web && npm run build && node scripts/bundle-squads.mjs`, rode `npx wrangler deploy` (requer login na sua conta Cloudflare). URL: `https://aiox-squads-web.<conta>.workers.dev`.
+
+> Caminhos 1 e 2 rodam a **mesma imagem Docker validada na CI** (recomendados para a v1 funcional). O caminho 3 é o destino serverless e pode exigir ajustes de SSE/upload.
+
 ### Squad Creator: Free vs Pro
 
 O AIOX já vem com o **Squad Creator Free** — 1 agente, 24 tasks, criação template-driven. Para quem precisa de mais, existe o **Squad Creator Pro**: mind cloning, model routing, 3 agentes especialistas e axioma assessment.
