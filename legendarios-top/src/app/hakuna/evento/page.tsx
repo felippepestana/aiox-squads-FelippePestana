@@ -65,10 +65,16 @@ interface Atividade {
   evento_nome: string | null;
 }
 
+interface Participacao {
+  atividade_id: string;
+  senderista_id: string;
+}
+
 interface DashboardData {
   stats: Stats;
   senderistas: Senderista[];
   atividades: Atividade[];
+  participacoes: Participacao[];
 }
 
 type Tab = "geral" | "presenca" | "atividades";
@@ -149,7 +155,16 @@ export default function EventoDashboard() {
     );
   }
 
-  const { stats, senderistas, atividades } = data;
+  const { stats, senderistas, atividades, participacoes } = data;
+
+  const participacoesPorAtividade = (participacoes ?? []).reduce<Record<string, Set<string>>>(
+    (acc, p) => {
+      if (!acc[p.atividade_id]) acc[p.atividade_id] = new Set();
+      acc[p.atividade_id].add(p.senderista_id);
+      return acc;
+    },
+    {}
+  );
   const presencaPercent = stats.total > 0 ? Math.round((stats.presente / stats.total) * 100) : 0;
 
   const filteredParticipants = senderistas.filter(s => {
@@ -408,40 +423,50 @@ export default function EventoDashboard() {
                 Nenhuma atividade cadastrada. Adicione a programação do evento.
               </p>
             )}
-            {atividades.map(a => (
-              <div key={a.id} className="flex items-center gap-3 border rounded-lg p-3">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${TIPO_COLOR[a.tipo] ?? "bg-gray-100"}`}>
-                      {TIPO_LABEL[a.tipo] ?? a.tipo}
-                    </span>
-                    <span className="font-medium text-sm">{a.nome}</span>
-                  </div>
-                  <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      Planejado: {fmtTime(a.hora_planejada)}
-                    </span>
-                    {a.hora_real && (
-                      <span className="flex items-center gap-1 text-green-700">
-                        <CheckCircle className="w-3 h-3" />
-                        Realizado: {fmtTime(a.hora_real)}
+            {atividades.map(a => {
+              const count = participacoesPorAtividade[a.id]?.size ?? 0;
+              const pct = stats.presente > 0 ? Math.round((count / stats.presente) * 100) : 0;
+              return (
+                <div key={a.id} className="flex items-center gap-3 border rounded-lg p-3">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${TIPO_COLOR[a.tipo] ?? "bg-gray-100"}`}>
+                        {TIPO_LABEL[a.tipo] ?? a.tipo}
                       </span>
-                    )}
+                      <span className="font-medium text-sm">{a.nome}</span>
+                    </div>
+                    <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        Planejado: {fmtTime(a.hora_planejada)}
+                      </span>
+                      {a.hora_real && (
+                        <span className="flex items-center gap-1 text-green-700">
+                          <CheckCircle className="w-3 h-3" />
+                          Realizado: {fmtTime(a.hora_real)}
+                        </span>
+                      )}
+                      {count > 0 && (
+                        <span className="flex items-center gap-1 text-blue-700">
+                          <Activity className="w-3 h-3" />
+                          {count} presença(s) ({pct}%)
+                        </span>
+                      )}
+                    </div>
                   </div>
+                  {!a.hora_real && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-xs"
+                      onClick={() => marcarRealizado(a.id)}
+                    >
+                      <Activity className="w-3 h-3 mr-1" /> Realizado
+                    </Button>
+                  )}
                 </div>
-                {!a.hora_real && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="text-xs"
-                    onClick={() => marcarRealizado(a.id)}
-                  >
-                    <Activity className="w-3 h-3 mr-1" /> Realizado
-                  </Button>
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

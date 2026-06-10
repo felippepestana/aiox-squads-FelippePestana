@@ -9,8 +9,20 @@ import { saveProntuarioOffline, getPendingProntuarios, markProntuarioSynced } fr
 import { RISK_LABELS, type RiskLevel } from "@/lib/triage";
 import {
   Wifi, WifiOff, Nfc, AlertCircle, ChevronLeft,
-  Camera, Save, RefreshCw
+  Camera, Save, RefreshCw, CheckSquare, Square, Loader2
 } from "lucide-react";
+
+interface Atividade {
+  id: string;
+  nome: string;
+  tipo: string;
+  hora_real: string | null;
+}
+
+interface Participacao {
+  id: string;
+  atividade_id: string;
+}
 
 type Screen = "home" | "reading" | "profile" | "prontuario" | "syncing";
 
@@ -29,6 +41,8 @@ export default function CampoApp() {
   const [syncing, setSyncing] = useState(false);
   const [hakuna, setHakuna] = useState("");
   const nfcAbortRef = useRef<AbortController | null>(null);
+  const [atividades, setAtividades] = useState<Atividade[]>([]);
+  const [participacoesParticipante, setParticipacoesParticipante] = useState<Participacao[]>([]);
 
   useEffect(() => {
     setIsOnline(navigator.onLine);
@@ -52,6 +66,25 @@ export default function CampoApp() {
     setScreen("home");
   }
 
+  async function loadAtividadesParticipante(senderista_id: string) {
+    if (!isOnline) return;
+    try {
+      const [eventoRes, partRes] = await Promise.all([
+        fetch("/api/admin/evento"),
+        fetch(`/api/participacoes?senderista_id=${senderista_id}`),
+      ]);
+      if (eventoRes.ok) {
+        const eventoData = await eventoRes.json();
+        setAtividades(eventoData.atividades ?? []);
+      }
+      if (partRes.ok) {
+        setParticipacoesParticipante(await partRes.json());
+      }
+    } catch {
+      // silent — campos works offline, checkpoints just won't show
+    }
+  }
+
   async function startNFCRead() {
     // Abort any previous scan before starting a new one
     nfcAbortRef.current?.abort();
@@ -64,12 +97,34 @@ export default function CampoApp() {
       const data = await readNFCTag(controller.signal);
       nfcAbortRef.current = null;
       setParticipant(data);
+      setAtividades([]);
+      setParticipacoesParticipante([]);
+      await loadAtividadesParticipante(data.id);
       setScreen("profile");
     } catch (e) {
       nfcAbortRef.current = null;
       if (e instanceof Error && e.message === "Cancelado") return;
       setNfcError(e instanceof Error ? e.message : "Erro ao ler TAG");
       setScreen("home");
+    }
+  }
+
+  async function handleToggleParticipacao(atividadeId: string) {
+    if (!participant || !isOnline) return;
+    const existing = participacoesParticipante.find(p => p.atividade_id === atividadeId);
+    if (existing) {
+      setParticipacoesParticipante(prev => prev.filter(p => p.atividade_id !== atividadeId));
+      await fetch(`/api/participacoes/${existing.id}`, { method: "DELETE" });
+    } else {
+      const res = await fetch("/api/participacoes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ senderista_id: participant.id, atividade_id: atividadeId }),
+      });
+      if (res.ok) {
+        const { id } = await res.json();
+        setParticipacoesParticipante(prev => [...prev, { id, atividade_id: atividadeId }]);
+      }
     }
   }
 
@@ -210,8 +265,12 @@ export default function CampoApp() {
         {screen === "profile" && participant && (
           <ParticipantProfile
             participant={participant}
+            atividades={atividades}
+            participacoes={participacoesParticipante}
+            isOnline={isOnline}
             onBack={() => setScreen("home")}
             onProntuario={() => setScreen("prontuario")}
+            onToggleParticipacao={handleToggleParticipacao}
           />
         )}
 
@@ -229,16 +288,36 @@ export default function CampoApp() {
   );
 }
 
+const TIPO_LABEL: Record<string, string> = {
+  predica: "Prédica", hidratacao: "Hidratação", acampamento: "Acampamento",
+  checkpoint: "Checkpoint", chegada: "Chegada", saida: "Saída", outro: "Outro",
+};
+
 function ParticipantProfile({
   participant,
+  atividades,
+  participacoes,
+  isOnline,
   onBack,
   onProntuario,
+  onToggleParticipacao,
 }: {
   participant: NFCTagData;
+  atividades: Atividade[];
+  participacoes: Participacao[];
+  isOnline: boolean;
   onBack: () => void;
   onProntuario: () => void;
+  onToggleParticipacao: (atividadeId: string) => Promise<void>;
 }) {
   const riskBg = RISK_BG[participant.risco] ?? "bg-gray-800 border-gray-600";
+  const [toggling, setToggling] = useState<string | null>(null);
+
+  async function toggle(id: string) {
+    setToggling(id);
+    await onToggleParticipacao(id);
+    setToggling(null);
+  }
 
   return (
     <div className="space-y-4">
@@ -282,6 +361,44 @@ function ParticipantProfile({
           <p className="text-sm font-medium capitalize">{participant.status}</p>
         </div>
       </div>
+
+      {/* Checkpoints */}
+      {atividades.length > 0 && (
+        <div className="rounded-lg border border-gray-700 bg-gray-800 p-4 space-y-3">
+          <p className="text-sm font-medium text-gray-300">Checkpoints</p>
+          {atividades.map(a => {
+            const checked = participacoes.some(p => p.atividade_id === a.id);
+            const isToggling = toggling === a.id;
+            return (
+              <button
+                key={a.id}
+                disabled={!isOnline || isToggling}
+                onClick={() => toggle(a.id)}
+                className={`w-full flex items-center gap-3 text-left px-3 py-2 rounded transition-colors ${
+                  checked ? "bg-green-800 text-green-100" : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                } disabled:opacity-60`}
+              >
+                {isToggling ? (
+                  <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+                ) : checked ? (
+                  <CheckSquare className="w-4 h-4 shrink-0 text-green-400" />
+                ) : (
+                  <Square className="w-4 h-4 shrink-0" />
+                )}
+                <span className="text-sm">
+                  <span className="font-medium">{a.nome}</span>
+                  <span className="text-xs ml-2 opacity-70">{TIPO_LABEL[a.tipo] ?? a.tipo}</span>
+                </span>
+              </button>
+            );
+          })}
+          {!isOnline && (
+            <p className="text-xs text-amber-400 flex items-center gap-1">
+              <WifiOff className="w-3 h-3" /> Offline — checkpoints requerem conexão
+            </p>
+          )}
+        </div>
+      )}
 
       <Button onClick={onProntuario} className="w-full h-12 bg-green-600 hover:bg-green-700">
         Abrir Prontuário
