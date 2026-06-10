@@ -41,7 +41,9 @@ squads/<nome>/
 ├── tasks/           # Tasks executáveis
 ├── templates/       # Templates de output
 ├── data/            # Dados de referência
-├── config.yml       # Configuração do squad
+├── workflows/       # (opcional) Workflows .yaml encadeando tasks
+├── checklists/      # (opcional) Quality gates como checklists
+├── config.yaml      # Configuração do squad
 └── README.md        # Documentação do squad
 ```
 
