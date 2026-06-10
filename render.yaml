@@ -1,0 +1,38 @@
+# Render Blueprint — deploy do Portal Apex-Talent (v1) com URL HTTPS pública.
+#
+# Como usar (uma vez, ~2 min):
+#   1. Em https://dashboard.render.com → New + → Blueprint
+#   2. Conecte este repositório (felippepestana/aiox-squads-FelippePestana)
+#   3. O Render lê este arquivo e cria o serviço Docker
+#   4. Defina o secret ANTHROPIC_API_KEY no painel (sync:false abaixo)
+#   5. Deploy → URL pública: https://aiox-squads-web.onrender.com (ou similar)
+#
+# Faz build da MESMA imagem validada na CI (web/Dockerfile, contexto = raiz,
+# inclui squads/). Health em /api/health. Única variável obrigatória:
+# ANTHROPIC_API_KEY. O Render injeta PORT automaticamente (o servidor lê PORT).
+
+services:
+  - type: web
+    name: aiox-squads-web
+    runtime: docker
+    repo: https://github.com/felippepestana/aiox-squads-FelippePestana
+    branch: main
+    dockerfilePath: ./web/Dockerfile
+    dockerContext: .
+    plan: free
+    region: oregon
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false          # defina no painel do Render (secreto)
+      - key: NODE_ENV
+        value: production
+      - key: SQUADS_ROOT
+        value: /app/squads
+      - key: TRUST_PROXY
+        value: "1"
+      # Opcional: proteger as rotas /api/* com uma chave de portal.
+      # A UI pede a chave uma vez e guarda em sessionStorage.
+      # - key: WEB_PORTAL_API_KEY
+      #   sync: false
