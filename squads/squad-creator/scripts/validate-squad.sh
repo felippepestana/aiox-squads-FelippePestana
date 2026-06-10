@@ -762,6 +762,20 @@ check_workflow_contracts() {
     return 0
   fi
 
+  # WF-001 validator is an optional external tool exposed as an npm script
+  # (validate:workflow-contracts:strict). When it is not available in this
+  # environment — e.g. no package.json defines it — skip gracefully: a missing
+  # validator is an environment/tooling gap, not a squad defect, and must not
+  # hard-fail the squad's score. (When the script is present, it runs as before.)
+  if ! command -v npm >/dev/null 2>&1 || ! npm run 2>/dev/null | grep -q "validate:workflow-contracts:strict"; then
+    log_info "WF-001: workflow-contract validator unavailable (npm script 'validate:workflow-contracts:strict' not found) — skipping (non-blocking, environment tooling gap)"
+    WF_CONTRACT_FAIL=0
+    M_WORKFLOW_CONTRACT_FILES="$workflow_files"
+    M_WORKFLOW_CONTRACT_ERRORS=0
+    M_WORKFLOW_CONTRACT_WARNINGS=0
+    return 0
+  fi
+
   local contract_output=""
   if contract_output=$(npm run -s validate:workflow-contracts:strict -- --squads "$SQUAD_NAME" --json 2>&1); then
     :
