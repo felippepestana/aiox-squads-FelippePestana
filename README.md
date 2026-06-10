@@ -182,9 +182,28 @@ Squads publicados pela comunidade neste repositório.
 - 🟢 **Cargos & salários construído:** [`org-architect`](squads/org-architect/) (cargos skills-based, faixas salariais, organograma, 4R) — 6 agentes (T0→T3), tasks, templates, checklist e workflow, com gate de equidade salarial e princípio de pay mapeado a cargo/skills/impacto.
 - 🟢 **DP & Folha construído:** [`peopleops`](squads/peopleops/) (admissão digital, folha, eSocial, férias, afastamentos, rescisão) — 6 agentes (T0→T3), tasks, templates, checklist e workflow, com gate de fechamento de folha (anomalias + privacidade) e princípio de conformidade-primeiro (CLT/eSocial/LGPD).
 - 🟢 **Clima & engajamento construído:** [`pulse`](squads/pulse/) (clima, eNPS, pulses, sentimento, sinais, planos de ação) — 6 agentes (T0→T3), tasks, templates, checklist e workflow, com gate de anonimato (tamanho mínimo de grupo) e princípio de survey-to-action.
-- 🟡 **Esqueletos (Chief-only):** `chronos`, `academy`, `insights`, `benefits-hub`.
+- 🟢 **Controle de ponto construído:** [`chronos`](squads/chronos/) (registro multimodal, banco de horas, escalas, anomalias) — 6 agentes (T0→T3), com gate de conformidade CLT/eSocial e minutas (espelho de ponto, extrato de banco de horas).
+- 🟢 **People analytics construído:** [`insights`](squads/insights/) (dashboards, turnover/burnout preditivo, diversidade, narrativa) — 6 agentes (T0→T3), com gate de ética/privacidade (LGPD, n≥5) e predição como apoio (nunca veredito).
+- 🟢 **Treinamento & desenvolvimento construído:** [`academy`](squads/academy/) (trilhas 70-20-10, conteúdo, avaliação, certificação) — 6 agentes (T0→T3), com gate pedagógico e foco em aplicação (Kirkpatrick 3+).
+- 🟢 **Benefícios construído:** [`benefits-hub`](squads/benefits-hub/) (catálogo, elegibilidade, recomendação por momento de vida, custo×adoção) — 6 agentes (T0→T3), com gate de consentimento/privacidade e minutas (holerite, recibo de férias).
+- 🟢 **Orquestração cross-módulo:** o `apex-talent-chief` encadeia os módulos pelo ciclo de vida (contratar→integrar→desenvolver; loop preditivo de retenção) via tasks e workflows de orquestração.
+
+> **Plataforma completa: 12/12 módulos ativos**, todos `VALIDATION PASSED`, conversáveis no chatbot e no **hub web** (`web/`).
 
 Veja o [blueprint por área](squads/apex-talent/data/platform-blueprint.md) e o [mapa de oportunidades de IA](squads/apex-talent/data/ai-opportunity-map.md).
+
+#### Deploy do Portal (v1)
+
+A plataforma é servida pelo portal web (`web/`) — um único container que serve a API, o hub e os 12 squads. Para subir a primeira versão:
+
+```bash
+cp .env.example .env        # defina ANTHROPIC_API_KEY
+docker compose --profile web up -d --build
+```
+
+- Acesse **http://127.0.0.1:8787** — o hub Apex-Talent abre com os 12 módulos agrupados por área.
+- Health: `GET /api/health` · catálogo: `GET /api/squads`.
+- Única variável obrigatória: `ANTHROPIC_API_KEY`. Opcional: `WEB_PORTAL_API_KEY` (protege a API). Opções completas em [`web/README.md`](web/README.md).
 
 ### Squad Creator: Free vs Pro
 
