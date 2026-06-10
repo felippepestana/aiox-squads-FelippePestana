@@ -3,12 +3,23 @@ import OpenAI from "openai";
 export type ModelTier = "budget" | "standard" | "premium";
 export type TaskComplexity = "simple" | "moderate" | "complex" | "expert";
 
+type Provider =
+  | "openai"
+  | "anthropic"
+  | "deepseek"
+  | "qwen"
+  | "kimi"
+  | "minimax"
+  | "gemini";
+
 interface ModelConfig {
   name: string;
-  provider: "openai" | "anthropic" | "deepseek" | "qwen" | "kimi" | "minimax" | "gemini";
+  provider: Provider;
   tier: ModelTier;
   contextWindow: number;
   costPer1kTokens: { input: number; output: number };
+  // Identifier expected by the provider's API (differs from the internal key).
+  apiModel: string;
 }
 
 export const MODELS: Record<string, ModelConfig> = {
@@ -18,6 +29,7 @@ export const MODELS: Record<string, ModelConfig> = {
     tier: "premium",
     contextWindow: 128000,
     costPer1kTokens: { input: 0.005, output: 0.015 },
+    apiModel: "gpt-4o",
   },
   "gpt-4o-mini": {
     name: "GPT-4o-mini",
@@ -25,6 +37,7 @@ export const MODELS: Record<string, ModelConfig> = {
     tier: "standard",
     contextWindow: 128000,
     costPer1kTokens: { input: 0.00015, output: 0.0006 },
+    apiModel: "gpt-4o-mini",
   },
   "claude-3-5-sonnet": {
     name: "Claude 3.5 Sonnet",
@@ -32,6 +45,7 @@ export const MODELS: Record<string, ModelConfig> = {
     tier: "premium",
     contextWindow: 200000,
     costPer1kTokens: { input: 0.003, output: 0.015 },
+    apiModel: "claude-3-5-sonnet-20241022",
   },
   "claude-3-5-haiku": {
     name: "Claude 3.5 Haiku",
@@ -39,6 +53,7 @@ export const MODELS: Record<string, ModelConfig> = {
     tier: "standard",
     contextWindow: 200000,
     costPer1kTokens: { input: 0.0008, output: 0.004 },
+    apiModel: "claude-3-5-haiku-20241022",
   },
   "deepseek-v3": {
     name: "DeepSeek V3",
@@ -46,6 +61,7 @@ export const MODELS: Record<string, ModelConfig> = {
     tier: "budget",
     contextWindow: 64000,
     costPer1kTokens: { input: 0.00007, output: 0.00027 },
+    apiModel: "deepseek-chat",
   },
   "qwen-2.5": {
     name: "Qwen 2.5",
@@ -53,6 +69,7 @@ export const MODELS: Record<string, ModelConfig> = {
     tier: "budget",
     contextWindow: 32000,
     costPer1kTokens: { input: 0.0005, output: 0.0015 },
+    apiModel: "qwen2.5-72b-instruct",
   },
   "kimi-k2": {
     name: "Kimi K2",
@@ -60,6 +77,7 @@ export const MODELS: Record<string, ModelConfig> = {
     tier: "standard",
     contextWindow: 128000,
     costPer1kTokens: { input: 0.001, output: 0.004 },
+    apiModel: "moonshot-v1-128k",
   },
   "minimax-01": {
     name: "MiniMax 01",
@@ -67,6 +85,7 @@ export const MODELS: Record<string, ModelConfig> = {
     tier: "budget",
     contextWindow: 1000000,
     costPer1kTokens: { input: 0.0001, output: 0.0005 },
+    apiModel: "MiniMax-Text-01",
   },
   "gemini-2.0-pro": {
     name: "Gemini 2.0 Pro",
@@ -74,7 +93,31 @@ export const MODELS: Record<string, ModelConfig> = {
     tier: "premium",
     contextWindow: 1000000,
     costPer1kTokens: { input: 0.00125, output: 0.005 },
+    apiModel: "gemini-2.0-flash",
   },
+};
+
+// Env var that holds each provider's API key.
+const PROVIDER_ENV: Record<Provider, string> = {
+  openai: "OPENAI_API_KEY",
+  anthropic: "ANTHROPIC_API_KEY",
+  deepseek: "DEEPSEEK_API_KEY",
+  qwen: "QWEN_API_KEY",
+  kimi: "KIMI_API_KEY",
+  minimax: "MINIMAX_API_KEY",
+  gemini: "GEMINI_API_KEY",
+};
+
+// OpenAI-compatible base URL per provider (openai uses the SDK default).
+// These reflect each provider's documented OpenAI-compatible endpoint as of
+// the time of writing — verify against the provider before relying on it.
+const PROVIDER_BASE_URLS: Partial<Record<Provider, string>> = {
+  deepseek: "https://api.deepseek.com",
+  qwen: "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+  kimi: "https://api.moonshot.ai/v1",
+  minimax: "https://api.minimaxi.chat/v1",
+  gemini: "https://generativelanguage.googleapis.com/v1beta/openai/",
+  anthropic: "https://api.anthropic.com/v1/",
 };
 
 const COMPLEXITY_RULES: Record<TaskComplexity, ModelTier> = {
@@ -83,6 +126,8 @@ const COMPLEXITY_RULES: Record<TaskComplexity, ModelTier> = {
   complex: "premium",
   expert: "premium",
 };
+
+const TIERS_CHEAPEST_FIRST: ModelTier[] = ["budget", "standard", "premium"];
 
 interface LLMRequest {
   model: string;
@@ -110,7 +155,7 @@ interface CostTracker {
 }
 
 class LLMGateway {
-  private clients: Map<string, OpenAI> = new Map();
+  private clients: Map<Provider, OpenAI> = new Map();
   private costTracker: CostTracker = {
     totalCost: 0,
     byModel: {},
@@ -122,33 +167,47 @@ class LLMGateway {
   }
 
   private initializeClients() {
-    const apiKeys = {
-      openai: process.env.OPENAI_API_KEY,
-      anthropic: process.env.ANTHROPIC_API_KEY,
-      deepseek: process.env.DEEPSEEK_API_KEY,
-      qwen: process.env.QWEN_API_KEY,
-      kimi: process.env.KIMI_API_KEY,
-      minimax: process.env.MINIMAX_API_KEY,
-      gemini: process.env.GEMINI_API_KEY,
-    };
+    (Object.keys(PROVIDER_ENV) as Provider[]).forEach((provider) => {
+      const apiKey = process.env[PROVIDER_ENV[provider]];
+      if (!apiKey) return;
+      const baseURL = PROVIDER_BASE_URLS[provider];
+      this.clients.set(
+        provider,
+        new OpenAI(baseURL ? { apiKey, baseURL } : { apiKey })
+      );
+    });
+  }
 
-    if (apiKeys.openai) {
-      this.clients.set("openai", new OpenAI({ apiKey: apiKeys.openai }));
-    }
+  /** A model is usable only if its provider has an initialized client. */
+  private isAvailable(modelId: string): boolean {
+    const config = MODELS[modelId];
+    return !!config && this.clients.has(config.provider);
+  }
+
+  private modelsInTier(tier: ModelTier, onlyAvailable: boolean): string[] {
+    return Object.keys(MODELS).filter(
+      (id) => MODELS[id].tier === tier && (!onlyAvailable || this.isAvailable(id))
+    );
   }
 
   selectModel(taskComplexity: TaskComplexity, preferredTier?: ModelTier): string {
     const tier = preferredTier || COMPLEXITY_RULES[taskComplexity];
-    
-    const modelsInTier = Object.entries(MODELS)
-      .filter(([_, config]) => config.tier === tier)
-      .map(([id, _]) => id);
 
-    if (modelsInTier.length === 0) {
-      return "gpt-4o-mini";
+    // Prefer a configured model in the requested tier.
+    const inTier = this.modelsInTier(tier, true);
+    if (inTier.length > 0) {
+      return inTier[Math.floor(Math.random() * inTier.length)];
     }
 
-    return modelsInTier[Math.floor(Math.random() * modelsInTier.length)];
+    // Otherwise fall back to any configured model (cheapest tier first).
+    for (const t of TIERS_CHEAPEST_FIRST) {
+      const available = this.modelsInTier(t, true);
+      if (available.length > 0) return available[0];
+    }
+
+    throw new Error(
+      "Nenhum provedor de LLM configurado. Defina ao menos uma chave de API (ex.: OPENAI_API_KEY)."
+    );
   }
 
   estimateCost(model: string, tokens: number): number {
@@ -171,7 +230,7 @@ class LLMGateway {
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         const response = await this.executeRequest(request, options?.onStream);
-        
+
         this.trackCost(request.model, response.usage);
 
         return response;
@@ -195,14 +254,15 @@ class LLMGateway {
     request: LLMRequest,
     onStream?: (chunk: string) => void
   ): Promise<LLMResponse> {
-    const client = this.clients.get(MODELS[request.model]?.provider || "openai");
-    
+    const config = MODELS[request.model];
+    const client = this.clients.get(config?.provider ?? "openai");
+
     if (!client) {
       throw new Error(`No client available for model: ${request.model}`);
     }
 
     const response = await client.chat.completions.create({
-      model: request.model,
+      model: config?.apiModel ?? request.model,
       messages: request.messages,
       temperature: request.temperature ?? 0.7,
       max_tokens: request.max_tokens ?? 4096,
@@ -242,15 +302,17 @@ class LLMGateway {
     };
   }
 
+  /** Picks a different configured model in the same or a cheaper tier. */
   private getFallbackModel(model: string): string | null {
     const config = MODELS[model];
     if (!config) return null;
 
-    if (config.tier === "premium") {
-      return "gpt-4o-mini";
-    }
-    if (config.tier === "standard") {
-      return "deepseek-v3";
+    const startIdx = TIERS_CHEAPEST_FIRST.indexOf(config.tier);
+    for (let i = startIdx; i >= 0; i--) {
+      const candidate = this.modelsInTier(TIERS_CHEAPEST_FIRST[i], true).find(
+        (id) => id !== model
+      );
+      if (candidate) return candidate;
     }
     return null;
   }
