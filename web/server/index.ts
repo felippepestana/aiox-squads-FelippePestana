@@ -32,8 +32,11 @@ import {
   saveInterview,
   saveScorecard,
   saveDocument,
+  registerAdmin,
+  type AdminRegistrationInput,
 } from "./db/repositories.js";
 import type { Json } from "./db/types.js";
+import { isValidCPF, isValidCNPJ, isValidEmail, onlyDigits } from "./validation/br-docs.js";
 import {
   uploadFileFromBuffer,
   supportedExtensions,
@@ -353,6 +356,85 @@ app.get("/api/squads", (_req, res) => {
   const squads = loadAllSquads();
   res.json(squadsSummary(squads));
 });
+
+// ── Admin registration (cadastro do administrador — PF/PJ) ──────────────────
+app.get("/api/admin/status", (_req, res) => {
+  res.json({ dbEnabled: dbEnabled() });
+});
+
+app.post(
+  "/api/admin/register",
+  rateLimitDisabled ? ((_req, _res, next) => next()) : heavyLimiter,
+  asyncHandler(async (req, res) => {
+    const b = (req.body ?? {}) as Record<string, unknown>;
+    const tipo = String(b.tipo_pessoa ?? "").trim().toUpperCase();
+    const email = String(b.email ?? "").trim();
+    const telefone = b.telefone ? String(b.telefone).trim() : null;
+    const errors: Record<string, string> = {};
+
+    if (tipo !== "PF" && tipo !== "PJ") {
+      errors.tipo_pessoa = "Tipo deve ser PF (pessoa física) ou PJ (pessoa jurídica)";
+    }
+    if (!isValidEmail(email)) errors.email = "E-mail inválido";
+
+    let payload: AdminRegistrationInput | null = null;
+
+    if (tipo === "PF") {
+      const nome = String(b.nome_completo ?? "").trim();
+      const cpf = onlyDigits(String(b.cpf ?? ""));
+      if (nome.length < 3) errors.nome_completo = "Informe o nome completo";
+      if (!isValidCPF(cpf)) errors.cpf = "CPF inválido";
+      payload = { tipo_pessoa: "PF", nome_completo: nome, cpf, email, telefone };
+    } else if (tipo === "PJ") {
+      const razao = String(b.razao_social ?? "").trim();
+      const fantasia = b.nome_fantasia ? String(b.nome_fantasia).trim() : null;
+      const cnpj = onlyDigits(String(b.cnpj ?? ""));
+      const resp = String(b.responsavel_nome ?? "").trim();
+      if (razao.length < 2) errors.razao_social = "Informe a razão social";
+      if (!isValidCNPJ(cnpj)) errors.cnpj = "CNPJ inválido";
+      if (resp.length < 3) errors.responsavel_nome = "Informe o nome do responsável";
+      payload = {
+        tipo_pessoa: "PJ",
+        razao_social: razao,
+        nome_fantasia: fantasia,
+        cnpj,
+        responsavel_nome: resp,
+        email,
+        telefone,
+      };
+    }
+
+    if (Object.keys(errors).length > 0 || !payload) {
+      res.status(400).json({ error: "Dados de cadastro inválidos", fields: errors });
+      return;
+    }
+
+    const result = await registerAdmin(payload);
+    if (result.ok) {
+      res.status(201).json({
+        ok: true,
+        admin: { id: result.admin.id, tipo_pessoa: result.admin.tipo_pessoa, email: result.admin.email },
+        persisted: true,
+      });
+      return;
+    }
+    if (result.reason === "duplicate") {
+      res.status(409).json({ error: "Já existe um cadastro com este e-mail/CPF/CNPJ" });
+      return;
+    }
+    if (result.reason === "db_unavailable") {
+      // Persistence not configured: accept the data shape as valid but report it
+      // wasn't stored, so the operator knows to configure Supabase.
+      res.status(200).json({
+        ok: true,
+        persisted: false,
+        note: "Cadastro validado, mas a persistência (Supabase) não está configurada neste ambiente.",
+      });
+      return;
+    }
+    res.status(500).json({ error: "Falha ao registrar o administrador" });
+  })
+);
 
 app.post(
   "/api/sessions",

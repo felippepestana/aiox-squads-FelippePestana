@@ -10,6 +10,7 @@ import type {
   InterviewRow,
   ScorecardRow,
   DocumentRow,
+  AdminRow,
 } from "./types.js";
 
 const ORG_NAME = "Apex-Talent Demo";
@@ -155,6 +156,72 @@ export async function saveScorecard(input: {
     .single();
   logDbError("saveScorecard", error);
   return (data as ScorecardRow) ?? null;
+}
+
+export interface AdminRegistrationInput {
+  tipo_pessoa: "PF" | "PJ";
+  nome_completo?: string | null;
+  cpf?: string | null;
+  razao_social?: string | null;
+  nome_fantasia?: string | null;
+  cnpj?: string | null;
+  responsavel_nome?: string | null;
+  email: string;
+  telefone?: string | null;
+}
+
+export type AdminRegistrationResult =
+  | { ok: true; admin: AdminRow }
+  | { ok: false; reason: "db_unavailable" | "duplicate" | "error" };
+
+/** Register an administrator (PF/PJ): creates a dedicated org + admin record.
+ * Best-effort — returns { ok:false, reason:"db_unavailable" } if Supabase is
+ * not configured, so the UI can degrade gracefully. */
+export async function registerAdmin(
+  input: AdminRegistrationInput
+): Promise<AdminRegistrationResult> {
+  const db = getDb();
+  if (!db) return { ok: false, reason: "db_unavailable" };
+
+  const orgName =
+    input.tipo_pessoa === "PJ"
+      ? input.razao_social?.trim() || input.nome_fantasia?.trim() || input.email
+      : input.nome_completo?.trim() || input.email;
+
+  const orgRes = await db
+    .from("apex_talent_orgs")
+    .insert({ name: orgName })
+    .select("id")
+    .single();
+  logDbError("registerAdmin(org)", orgRes.error);
+  const orgId = (orgRes.data?.id as string) ?? null;
+
+  const { data, error } = await db
+    .from("apex_talent_admins")
+    .insert({
+      org_id: orgId,
+      tipo_pessoa: input.tipo_pessoa,
+      nome_completo: input.nome_completo ?? null,
+      cpf: input.cpf ?? null,
+      razao_social: input.razao_social ?? null,
+      nome_fantasia: input.nome_fantasia ?? null,
+      cnpj: input.cnpj ?? null,
+      responsavel_nome: input.responsavel_nome ?? null,
+      email: input.email,
+      telefone: input.telefone ?? null,
+    })
+    .select("*")
+    .single();
+
+  if (error) {
+    logDbError("registerAdmin(admin)", error);
+    // 23505 = unique_violation (email/cpf/cnpj already registered)
+    if ((error as { code?: string }).code === "23505") {
+      return { ok: false, reason: "duplicate" };
+    }
+    return { ok: false, reason: "error" };
+  }
+  return { ok: true, admin: data as AdminRow };
 }
 
 export async function saveDocument(input: {

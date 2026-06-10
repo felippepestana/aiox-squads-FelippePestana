@@ -10,6 +10,7 @@ import {
 import { PericiaView } from "./PericiaView";
 import { InterviewView } from "./InterviewView";
 import { PlatformHub } from "./PlatformHub";
+import { AdminRegister } from "./AdminRegister";
 import {
   chatStream,
   clearPortalKey,
@@ -65,6 +66,7 @@ export function App() {
   const [showPericia, setShowPericia] = useState(false);
   const [showInterview, setShowInterview] = useState(false);
   const [showHub, setShowHub] = useState(false);
+  const [showAdminRegister, setShowAdminRegister] = useState(false);
   const [squadId, setSquadId] = useState("");
   const [agentId, setAgentId] = useState("");
   const [agentSearch, setAgentSearch] = useState("");
@@ -558,6 +560,15 @@ export function App() {
   }
 
   if (portalPhase === "key") {
+    if (showAdminRegister) {
+      return (
+        <div className="portal-overlay">
+          <div className="portal-card portal-card--wide">
+            <AdminRegister onClose={() => setShowAdminRegister(false)} />
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="portal-overlay">
         <form className="portal-card" onSubmit={(e) => void submitPortalKey(e)}>
@@ -586,6 +597,13 @@ export function App() {
             disabled={keyBusy || !keyDraft.trim()}
           >
             Continuar
+          </button>
+          <button
+            type="button"
+            className="btn btn-ghost portal-submit"
+            onClick={() => setShowAdminRegister(true)}
+          >
+            Primeiro acesso? Cadastrar administrador
           </button>
         </form>
       </div>
@@ -622,6 +640,13 @@ export function App() {
             🏢 Plataforma Apex-Talent
           </button>
         ) : null}
+        <button
+          type="button"
+          className="btn btn-ghost"
+          onClick={() => setShowAdminRegister(true)}
+        >
+          👤 Cadastro de administrador
+        </button>
         <div>
           <label htmlFor="squad">Squad</label>
           <select
@@ -796,13 +821,16 @@ export function App() {
             onClose={() => setShowHub(false)}
           />
         ) : null}
+        {showAdminRegister ? (
+          <AdminRegister onClose={() => setShowAdminRegister(false)} />
+        ) : null}
         {showPericia ? (
           <PericiaView onClose={() => setShowPericia(false)} />
         ) : null}
         {showInterview ? (
           <InterviewView onClose={() => setShowInterview(false)} />
         ) : null}
-        <div className="messages" style={showHub || showPericia || showInterview ? { display: "none" } : undefined}>
+        <div className="messages" style={showHub || showAdminRegister || showPericia || showInterview ? { display: "none" } : undefined}>
           {!sessionId && (
             <p className="loading">
               Escolha squad e agente e clique em <strong>Iniciar sessão</strong>
@@ -876,7 +904,7 @@ export function App() {
           <div ref={messagesEndRef} aria-hidden />
         </div>
 
-        <div className="composer" style={showHub || showPericia || showInterview ? { display: "none" } : undefined}>
+        <div className="composer" style={showHub || showAdminRegister || showPericia || showInterview ? { display: "none" } : undefined}>
           {error ? <div className="error-banner">{error}</div> : null}
           {sessionId ? (
             <>
