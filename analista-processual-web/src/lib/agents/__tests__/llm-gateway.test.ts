@@ -25,7 +25,11 @@ describe("LLM gateway — provider-aware routing", () => {
   const ORIGINAL_ENV = { ...process.env };
 
   afterEach(() => {
-    process.env = { ...ORIGINAL_ENV };
+    // Restore env in place so module-held references stay valid.
+    for (const key of Object.keys(process.env)) {
+      if (!(key in ORIGINAL_ENV)) delete process.env[key];
+    }
+    Object.assign(process.env, ORIGINAL_ENV);
   });
 
   it("routes a budget task to an available provider instead of failing", () => {

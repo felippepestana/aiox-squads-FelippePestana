@@ -11,7 +11,7 @@ jest.mock("@/lib/agents/llm-gateway", () => ({
 import { calculatorAgent } from "@/lib/agents/agents/calculator";
 import { llmGateway } from "@/lib/agents/llm-gateway";
 
-const mockedComplete = llmGateway.complete as jest.Mock;
+const mockedComplete = jest.mocked(llmGateway.complete);
 
 function deadline(overrides: Record<string, unknown>) {
   return {
@@ -26,8 +26,17 @@ function deadline(overrides: Record<string, unknown>) {
   };
 }
 
+function llmResponse(content: string) {
+  return {
+    content,
+    model: "gpt-4o-mini",
+    usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
+    cost: 0,
+  };
+}
+
 function respondWith(payload: Record<string, unknown>) {
-  mockedComplete.mockResolvedValue({ content: JSON.stringify(payload) });
+  mockedComplete.mockResolvedValue(llmResponse(JSON.stringify(payload)));
 }
 
 const baseTimeline = [
@@ -82,7 +91,8 @@ describe("CalculatorAgent — deterministic post-processing", () => {
   });
 
   it("returns a safe fallback when the response has no JSON", async () => {
-    mockedComplete.mockResolvedValue({ content: "sem json aqui" });
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+    mockedComplete.mockResolvedValue(llmResponse("sem json aqui"));
 
     const out = await calculatorAgent.execute({
       timeline: [],
@@ -92,5 +102,7 @@ describe("CalculatorAgent — deterministic post-processing", () => {
 
     expect(out.deadlines).toEqual([]);
     expect(out.warnings).toContain("Erro ao processar prazos");
+    expect(consoleSpy).toHaveBeenCalled();
+    consoleSpy.mockRestore();
   });
 });
