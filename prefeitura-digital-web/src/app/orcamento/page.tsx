@@ -4,19 +4,13 @@ import { useState } from "react";
 import PainelPessoalLRF from "@/components/PainelPessoalLRF";
 import PainelFuncoes from "@/components/PainelFuncoes";
 import { brl } from "@/lib/format";
+import { MUNICIPIO_IBGE } from "@/lib/municipio";
+import type { RreoLinha } from "@/lib/gov/siconfi";
 
-interface RreoLinha {
-  conta?: string;
-  coluna?: string;
-  valor?: number;
-  cod_conta?: string;
-}
-
-const ENTE_PADRAO = process.env.NEXT_PUBLIC_MUNICIPIO_IBGE || "1100205";
 const ANO_ATUAL = new Date().getFullYear();
 
 export default function OrcamentoPage() {
-  const [ente, setEnte] = useState(ENTE_PADRAO);
+  const [ente, setEnte] = useState(MUNICIPIO_IBGE);
   const [exercicio, setExercicio] = useState(String(ANO_ATUAL));
   const [periodo, setPeriodo] = useState("1");
 

@@ -1,5 +1,12 @@
 // System prompts que carregam o conhecimento de domínio do squad prefeitura-digital.
 // Mantêm o app alinhado às regras dos agentes (Lei 14.133/2021, LRF, LGPD).
+//
+// Os catálogos (tipos de ato, itens de checklist) vivem em ./catalogos para
+// serem compartilhados com as páginas cliente sem arrastar o texto dos prompts.
+import { ATOS_DO, ATOS_RH, ITENS_TRANSPARENCIA, TipoAtoDO, TipoAtoRH } from "./catalogos";
+
+export { ATOS_DO, ATOS_RH, ITENS_TRANSPARENCIA };
+export type { TipoAtoDO, TipoAtoRH };
 
 export const SYSTEM_CONTRATACOES = `Você é o núcleo de contratações do "Prefeitura Digital", assistente de gestão pública municipal brasileira.
 Atue conforme a Lei nº 14.133/2021 e os modelos da AGU.
@@ -19,18 +26,6 @@ Avalie conformidade com LAI (12.527/2011), LC 131/2009, LRF (art. 48/48-A), Decr
 Lei 14.129/2021 e LGPD, além dos critérios da EBT/PNTP (CGU) e acessibilidade WCAG 2.1 AA.
 Produza diagnóstico + checklist + recomendações de reconstrução (API documentada, dados abertos, dashboards,
 linguagem cidadã). Saída em Markdown.`;
-
-export const ITENS_TRANSPARENCIA: { id: string; rotulo: string }[] = [
-  { id: "receitas-despesas", rotulo: "Receitas e despesas detalhadas, em tempo real (LC 131/2009)" },
-  { id: "licitacoes-contratos", rotulo: "Licitações, contratos e convênios" },
-  { id: "folha", rotulo: "Folha/remuneração nominal (sem dados pessoais excedentes — LGPD)" },
-  { id: "rreo-rgf", rotulo: "RREO e RGF publicados (LRF art. 48/48-A)" },
-  { id: "esic", rotulo: "e-SIC funcional (transparência passiva)" },
-  { id: "dados-abertos", rotulo: "Dados abertos em formato aberto + API documentada (OpenAPI)" },
-  { id: "siafic", rotulo: "Padrão mínimo SIAFIC (Decreto 10.540/2020)" },
-  { id: "acessibilidade", rotulo: "Acessibilidade WCAG 2.1 AA / ABNT NBR 17225:2025" },
-  { id: "linguagem-cidada", rotulo: "Linguagem cidadã nos sumários (RREO/RGF)" },
-];
 
 export function promptTransparencia(input: {
   portalUrl?: string;
@@ -114,33 +109,6 @@ Regras:
 - Produza o ato em Markdown, pronto para revisão e assinatura pela autoridade competente.
 Lembre-se: o resultado é uma MINUTA DE APOIO e não substitui parecer jurídico nem decisão da autoridade competente.`;
 
-export type TipoAtoRH =
-  | "nomeacao"
-  | "exoneracao"
-  | "designacao-fg"
-  | "gratificacao"
-  | "concessao-licenca"
-  | "ferias"
-  | "aposentadoria-rpps"
-  | "pad-instauracao";
-
-// impactaFolha = o ato tende a AUMENTAR a despesa com pessoal (dispara checagem LRF).
-export const ATOS_RH: {
-  id: TipoAtoRH;
-  rotulo: string;
-  fundamento: string;
-  impactaFolha: boolean;
-}[] = [
-  { id: "nomeacao", rotulo: "Nomeação / provimento", fundamento: "CF art. 37, II; Estatuto do Servidor", impactaFolha: true },
-  { id: "exoneracao", rotulo: "Exoneração / vacância", fundamento: "Estatuto do Servidor", impactaFolha: false },
-  { id: "designacao-fg", rotulo: "Designação de função gratificada", fundamento: "Estatuto do Servidor; lei de cargos", impactaFolha: true },
-  { id: "gratificacao", rotulo: "Concessão de gratificação/vantagem", fundamento: "Lei municipal de cargos; LRF art. 21", impactaFolha: true },
-  { id: "concessao-licenca", rotulo: "Concessão de licença/afastamento", fundamento: "Estatuto do Servidor", impactaFolha: false },
-  { id: "ferias", rotulo: "Concessão de férias", fundamento: "Estatuto do Servidor", impactaFolha: false },
-  { id: "aposentadoria-rpps", rotulo: "Aposentadoria (RPPS/IPAM)", fundamento: "CF art. 40; lei do RPPS", impactaFolha: false },
-  { id: "pad-instauracao", rotulo: "Instauração de PAD", fundamento: "Estatuto do Servidor; CF art. 41, §1º", impactaFolha: false },
-];
-
 export function promptAtoRH(input: {
   tipo: TipoAtoRH;
   servidor: string;
@@ -176,27 +144,6 @@ Regras:
 - Ao final, indique em metadados sugeridos: tipo de ato, caderno e se exige publicação no PNCP.
 - Produza o ato em Markdown, pronto para revisão e assinatura pela autoridade competente.
 Lembre-se: o resultado é uma MINUTA DE APOIO e não substitui a revisão jurídica nem a decisão da autoridade competente.`;
-
-export type TipoAtoDO =
-  | "lei"
-  | "decreto"
-  | "portaria"
-  | "extrato-contrato"
-  | "aviso-licitacao"
-  | "nomeacao"
-  | "exoneracao"
-  | "aposentadoria";
-
-export const ATOS_DO: { id: TipoAtoDO; rotulo: string; caderno: string; pncp: boolean }[] = [
-  { id: "lei", rotulo: "Lei", caderno: "Poder Executivo", pncp: false },
-  { id: "decreto", rotulo: "Decreto", caderno: "Poder Executivo", pncp: false },
-  { id: "portaria", rotulo: "Portaria", caderno: "Poder Executivo / Pessoal", pncp: false },
-  { id: "extrato-contrato", rotulo: "Extrato de contrato/aditivo", caderno: "Licitações e Contratos", pncp: true },
-  { id: "aviso-licitacao", rotulo: "Aviso de licitação", caderno: "Licitações e Contratos", pncp: true },
-  { id: "nomeacao", rotulo: "Nomeação", caderno: "Pessoal", pncp: false },
-  { id: "exoneracao", rotulo: "Exoneração", caderno: "Pessoal", pncp: false },
-  { id: "aposentadoria", rotulo: "Aposentadoria (RPPS)", caderno: "Pessoal", pncp: false },
-];
 
 export function promptAtoDO(input: {
   tipo: TipoAtoDO;

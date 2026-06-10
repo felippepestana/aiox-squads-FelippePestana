@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { brl, pct } from "@/lib/format";
+import { classificarNivel, limitesLRF, NivelLRF } from "@/lib/lrf";
 
 interface PessoalLRF {
   rcl?: number;
@@ -13,20 +14,17 @@ interface PessoalLRF {
   indisponivel?: boolean;
 }
 
-// Classifica a situação fiscal da Despesa com Pessoal frente aos limites da LRF.
+// Mapeia o nível compartilhado da LRF para rótulo e estilos do painel.
+const ESTILO: Record<Exclude<NivelLRF, "indisponivel">, { nivel: string; cor: string; barra: string }> = {
+  "vedado-maximo": { nivel: "Limite máximo excedido", cor: "bg-red-100 text-red-800 border-red-200", barra: "bg-red-500" },
+  "vedado-prudencial": { nivel: "Acima do limite prudencial", cor: "bg-orange-100 text-orange-800 border-orange-200", barra: "bg-orange-500" },
+  alerta: { nivel: "Em alerta", cor: "bg-amber-100 text-amber-800 border-amber-200", barra: "bg-amber-500" },
+  ok: { nivel: "Dentro do limite", cor: "bg-green-100 text-green-800 border-green-200", barra: "bg-green-500" },
+};
+
 function avaliar(d: PessoalLRF) {
-  const p = d.dtpPct;
-  const max = d.limiteMaximoPct ?? 54;
-  const prud = d.limitePrudencialPct ?? +(max * 0.95).toFixed(2);
-  const alerta = d.limiteAlertaPct ?? +(max * 0.9).toFixed(2);
-  if (typeof p !== "number") return null;
-  if (p >= max)
-    return { nivel: "Limite máximo excedido", cor: "bg-red-100 text-red-800 border-red-200", barra: "bg-red-500" };
-  if (p >= prud)
-    return { nivel: "Acima do limite prudencial", cor: "bg-orange-100 text-orange-800 border-orange-200", barra: "bg-orange-500" };
-  if (p >= alerta)
-    return { nivel: "Em alerta", cor: "bg-amber-100 text-amber-800 border-amber-200", barra: "bg-amber-500" };
-  return { nivel: "Dentro do limite", cor: "bg-green-100 text-green-800 border-green-200", barra: "bg-green-500" };
+  if (typeof d.dtpPct !== "number") return null;
+  return ESTILO[classificarNivel(d.dtpPct, limitesLRF(d))];
 }
 
 interface Props {
@@ -59,7 +57,8 @@ export default function PainelPessoalLRF({ ente, exercicio }: Props) {
 
   const av = dados && !dados.indisponivel ? avaliar(dados) : null;
   // Posição da DTP na barra, normalizada pelo limite máximo (com folga visual).
-  const escala = dados?.limiteMaximoPct ? dados.limiteMaximoPct * 1.15 : 62;
+  // Usa o MESMO limite máximo do classificador para barra e marcadores ficarem coerentes.
+  const escala = limitesLRF(dados ?? undefined).max * 1.15;
   const largura =
     typeof dados?.dtpPct === "number" ? Math.min(100, (dados.dtpPct / escala) * 100) : 0;
 
@@ -110,23 +109,25 @@ export default function PainelPessoalLRF({ ente, exercicio }: Props) {
             {av.nivel} — {pct(dados.dtpPct)} da RCL
           </div>
 
-          {/* Barra com marcadores dos limites de alerta, prudencial e máximo. */}
+          {/* Barra com marcadores dos limites de alerta, prudencial e máximo
+              (derivados, coerentes com a escala e o classificador). */}
           <div className="relative h-6 w-full overflow-hidden rounded bg-gray-100">
             <div className={`h-full ${av.barra}`} style={{ width: `${largura}%` }} />
-            {[
-              { v: dados.limiteAlertaPct, t: "alerta" },
-              { v: dados.limitePrudencialPct, t: "prudencial" },
-              { v: dados.limiteMaximoPct, t: "máximo" },
-            ].map((m, i) =>
-              typeof m.v === "number" ? (
+            {(() => {
+              const lim = limitesLRF(dados);
+              return [
+                { v: lim.alerta, t: "alerta" },
+                { v: lim.prudencial, t: "prudencial" },
+                { v: lim.max, t: "máximo" },
+              ].map((m, i) => (
                 <div
                   key={i}
                   className="absolute top-0 h-full border-l border-gray-500/60"
                   style={{ left: `${Math.min(100, (m.v / escala) * 100)}%` }}
                   title={`${m.t}: ${pct(m.v)}`}
                 />
-              ) : null
-            )}
+              ));
+            })()}
           </div>
 
           <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">

@@ -2,36 +2,9 @@
 
 import { useState } from "react";
 import SalvarArtefato from "@/components/SalvarArtefato";
-
-type TipoAtoRH =
-  | "nomeacao"
-  | "exoneracao"
-  | "designacao-fg"
-  | "gratificacao"
-  | "concessao-licenca"
-  | "ferias"
-  | "aposentadoria-rpps"
-  | "pad-instauracao";
-
-const ATOS: { id: TipoAtoRH; rotulo: string; fundamento: string; impactaFolha: boolean }[] = [
-  { id: "nomeacao", rotulo: "Nomeação / provimento", fundamento: "CF art. 37, II; Estatuto do Servidor", impactaFolha: true },
-  { id: "exoneracao", rotulo: "Exoneração / vacância", fundamento: "Estatuto do Servidor", impactaFolha: false },
-  { id: "designacao-fg", rotulo: "Designação de função gratificada", fundamento: "Estatuto do Servidor; lei de cargos", impactaFolha: true },
-  { id: "gratificacao", rotulo: "Concessão de gratificação/vantagem", fundamento: "Lei municipal de cargos; LRF art. 21", impactaFolha: true },
-  { id: "concessao-licenca", rotulo: "Concessão de licença/afastamento", fundamento: "Estatuto do Servidor", impactaFolha: false },
-  { id: "ferias", rotulo: "Concessão de férias", fundamento: "Estatuto do Servidor", impactaFolha: false },
-  { id: "aposentadoria-rpps", rotulo: "Aposentadoria (RPPS/IPAM)", fundamento: "CF art. 40; lei do RPPS", impactaFolha: false },
-  { id: "pad-instauracao", rotulo: "Instauração de PAD", fundamento: "Estatuto do Servidor; CF art. 41, §1º", impactaFolha: false },
-];
-
-type NivelLRF = "ok" | "alerta" | "vedado-prudencial" | "vedado-maximo" | "indisponivel";
-interface ChecagemLRF {
-  nivel: NivelLRF;
-  mensagem: string;
-  dtpPct?: number;
-  exercicio?: number;
-  periodo?: number;
-}
+import { ATOS_RH as ATOS, TipoAtoRH } from "@/lib/catalogos";
+import { ChecagemLRF, NivelLRF } from "@/lib/lrf";
+import { MUNICIPIO_IBGE_CONFIGURADO, MUNICIPIO_NOME } from "@/lib/municipio";
 
 const LRF_ESTILO: Record<NivelLRF, string> = {
   ok: "border-green-200 bg-green-50 text-green-800",
@@ -57,6 +30,7 @@ export default function RhPage() {
 
   const [doc, setDoc] = useState("");
   const [degraded, setDegraded] = useState(false);
+  const [aviso, setAviso] = useState("");
   const [lrf, setLrf] = useState<ChecagemLRF | null>(null);
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState("");
@@ -68,6 +42,8 @@ export default function RhPage() {
     setErro("");
     setDoc("");
     setLrf(null);
+    setDegraded(false);
+    setAviso("");
     try {
       const res = await fetch("/api/rh", {
         method: "POST",
@@ -78,6 +54,7 @@ export default function RhPage() {
       if (!res.ok) throw new Error(data.error || "Falha na geração.");
       setDoc(data.text);
       setDegraded(Boolean(data.degraded));
+      setAviso(data.aviso || "");
       setLrf(data.lrf || null);
     } catch (e: any) {
       setErro(e?.message || "Erro inesperado.");
@@ -95,6 +72,12 @@ export default function RhPage() {
           LGPD e checagem do limite de despesa com pessoal da LRF (RGF/SICONFI) para atos que aumentam a
           folha.
         </p>
+        {!MUNICIPIO_IBGE_CONFIGURADO && (
+          <p className="mt-2 rounded border border-amber-200 bg-amber-50 p-2 text-xs text-amber-800">
+            Município não configurado: a checagem da LRF usa {MUNICIPIO_NOME} (1100205) como referência.
+            Defina <code>NEXT_PUBLIC_MUNICIPIO_IBGE</code> para consultar o RGF do seu ente.
+          </p>
+        )}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
@@ -206,7 +189,7 @@ export default function RhPage() {
           {erro && <p className="rounded bg-red-50 p-3 text-sm text-red-700">{erro}</p>}
           {degraded && doc && (
             <p className="rounded border border-amber-200 bg-amber-50 p-2 text-xs text-amber-800">
-              Modo rascunho (sem IA): configure ANTHROPIC_API_KEY para geração assistida.
+              {aviso || "Modo rascunho (sem IA): configure ANTHROPIC_API_KEY para geração assistida."}
             </p>
           )}
 

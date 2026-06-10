@@ -2,18 +2,7 @@
 
 import { useState } from "react";
 import SalvarArtefato from "@/components/SalvarArtefato";
-
-const ITENS: { id: string; rotulo: string }[] = [
-  { id: "receitas-despesas", rotulo: "Receitas e despesas detalhadas, em tempo real (LC 131/2009)" },
-  { id: "licitacoes-contratos", rotulo: "Licitações, contratos e convênios" },
-  { id: "folha", rotulo: "Folha/remuneração nominal (sem dados pessoais excedentes — LGPD)" },
-  { id: "rreo-rgf", rotulo: "RREO e RGF publicados (LRF art. 48/48-A)" },
-  { id: "esic", rotulo: "e-SIC funcional (transparência passiva)" },
-  { id: "dados-abertos", rotulo: "Dados abertos em formato aberto + API documentada (OpenAPI)" },
-  { id: "siafic", rotulo: "Padrão mínimo SIAFIC (Decreto 10.540/2020)" },
-  { id: "acessibilidade", rotulo: "Acessibilidade WCAG 2.1 AA / ABNT NBR 17225:2025" },
-  { id: "linguagem-cidada", rotulo: "Linguagem cidadã nos sumários (RREO/RGF)" },
-];
+import { ITENS_TRANSPARENCIA as ITENS } from "@/lib/catalogos";
 
 export default function TransparenciaPage() {
   const [portalUrl, setPortalUrl] = useState("");
@@ -22,6 +11,7 @@ export default function TransparenciaPage() {
 
   const [doc, setDoc] = useState("");
   const [degraded, setDegraded] = useState(false);
+  const [aviso, setAviso] = useState("");
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState("");
 
@@ -33,6 +23,8 @@ export default function TransparenciaPage() {
     setLoading(true);
     setErro("");
     setDoc("");
+    setDegraded(false);
+    setAviso("");
     try {
       const res = await fetch("/api/transparencia", {
         method: "POST",
@@ -43,6 +35,7 @@ export default function TransparenciaPage() {
       if (!res.ok) throw new Error(data.error || "Falha na geração.");
       setDoc(data.text);
       setDegraded(Boolean(data.degraded));
+      setAviso(data.aviso || "");
     } catch (e: any) {
       setErro(e?.message || "Erro inesperado.");
     } finally {
@@ -143,7 +136,7 @@ export default function TransparenciaPage() {
           {erro && <p className="rounded bg-red-50 p-3 text-sm text-red-700">{erro}</p>}
           {degraded && doc && (
             <p className="rounded border border-amber-200 bg-amber-50 p-2 text-xs text-amber-800">
-              Modo rascunho (sem IA): configure ANTHROPIC_API_KEY para diagnóstico assistido.
+              {aviso || "Modo rascunho (sem IA): configure ANTHROPIC_API_KEY para diagnóstico assistido."}
             </p>
           )}
 

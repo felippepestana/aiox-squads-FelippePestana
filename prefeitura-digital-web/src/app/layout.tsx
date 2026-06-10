@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
 import AuthStatus from "@/components/AuthStatus";
+import { MUNICIPIO_NOME, MUNICIPIO_UF } from "@/lib/municipio";
 
 export const metadata: Metadata = {
   title: "Prefeitura Digital",
@@ -24,8 +25,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const municipio = process.env.NEXT_PUBLIC_MUNICIPIO_NOME || "Porto Velho";
-  const uf = process.env.NEXT_PUBLIC_MUNICIPIO_UF || "RO";
+  const municipio = MUNICIPIO_NOME;
+  const uf = MUNICIPIO_UF;
   return (
     <html lang="pt-BR">
       <body>

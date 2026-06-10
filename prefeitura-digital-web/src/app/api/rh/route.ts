@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generate } from "@/lib/ai";
-import { SYSTEM_RH, promptAtoRH, ATOS_RH, TipoAtoRH } from "@/lib/prompts";
-import { consultarPessoalLRFRecente, PessoalLRF } from "@/lib/gov/siconfi";
+import { SYSTEM_RH, promptAtoRH } from "@/lib/prompts";
+import { ATOS_RH, TipoAtoRH } from "@/lib/catalogos";
+import { consultarPessoalLRFRecente } from "@/lib/gov/siconfi";
+import { avaliarLRF, ChecagemLRF } from "@/lib/lrf";
+import { MUNICIPIO_IBGE } from "@/lib/municipio";
 
 export const runtime = "nodejs";
 
@@ -23,57 +26,6 @@ function fallbackAtoRH(tipo: TipoAtoRH, servidor: string) {
 
 ---
 **Metadados sugeridos** — tipo: ${meta?.rotulo || "[PREENCHER]"}; caderno: Pessoal; impacto na folha: ${meta?.impactaFolha ? "sim" : "não"}.`;
-}
-
-type NivelLRF = "ok" | "alerta" | "vedado-prudencial" | "vedado-maximo" | "indisponivel";
-
-interface ChecagemLRF {
-  nivel: NivelLRF;
-  mensagem: string;
-  dtpPct?: number;
-  limitePrudencialPct?: number;
-  limiteMaximoPct?: number;
-  exercicio?: number;
-  periodo?: number;
-}
-
-// Avalia a situação da despesa com pessoal e monta a mensagem de alerta da LRF.
-function avaliarLRF(d: PessoalLRF | null): ChecagemLRF {
-  if (!d || typeof d.dtpPct !== "number") {
-    return {
-      nivel: "indisponivel",
-      mensagem:
-        "Não foi possível obter o RGF mais recente para checagem automática da LRF. Verifique manualmente a disponibilidade orçamentária e os limites de pessoal antes de emitir o ato.",
-    };
-  }
-  const max = d.limiteMaximoPct ?? 54;
-  const prud = d.limitePrudencialPct ?? +(max * 0.95).toFixed(2);
-  const alerta = d.limiteAlertaPct ?? +(max * 0.9).toFixed(2);
-  const ctx = { dtpPct: d.dtpPct, limitePrudencialPct: prud, limiteMaximoPct: max, exercicio: d.exercicio, periodo: d.periodo };
-
-  if (d.dtpPct >= max)
-    return {
-      ...ctx,
-      nivel: "vedado-maximo",
-      mensagem: `Despesa com pessoal em ${d.dtpPct}% da RCL — acima do limite máximo (${max}%). A LRF (art. 22 e art. 23) impõe medidas de recondução; em regra, é vedado o provimento de cargo público e a concessão de vantagens. Avalie a juridicidade do ato.`,
-    };
-  if (d.dtpPct >= prud)
-    return {
-      ...ctx,
-      nivel: "vedado-prudencial",
-      mensagem: `Despesa com pessoal em ${d.dtpPct}% da RCL — acima do limite prudencial (${prud}%). O art. 22, parágrafo único, da LRF VEDA atos que aumentem a despesa com pessoal (provimento, criação/majoração de vantagens, horas extras). Este ato pode ser vedado.`,
-    };
-  if (d.dtpPct >= alerta)
-    return {
-      ...ctx,
-      nivel: "alerta",
-      mensagem: `Despesa com pessoal em ${d.dtpPct}% da RCL — em faixa de alerta (≥ ${alerta}%). Documente a adequação orçamentária e a estimativa de impacto antes de aumentar a folha.`,
-    };
-  return {
-    ...ctx,
-    nivel: "ok",
-    mensagem: `Despesa com pessoal em ${d.dtpPct}% da RCL — dentro do limite (abaixo de ${alerta}%). Mantenha a dotação e a estimativa de impacto no processo.`,
-  };
 }
 
 export async function POST(req: NextRequest) {
@@ -98,8 +50,7 @@ export async function POST(req: NextRequest) {
     // Checagem fiscal (LRF) apenas para atos que aumentam a despesa com pessoal.
     let lrf: ChecagemLRF | null = null;
     if (meta.impactaFolha) {
-      const ente = process.env.NEXT_PUBLIC_MUNICIPIO_IBGE || "1100205";
-      lrf = avaliarLRF(await consultarPessoalLRFRecente(ente));
+      lrf = avaliarLRF(await consultarPessoalLRFRecente(MUNICIPIO_IBGE));
     }
 
     const result = await generate({

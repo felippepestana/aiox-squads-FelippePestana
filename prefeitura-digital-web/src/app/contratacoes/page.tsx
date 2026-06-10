@@ -31,6 +31,7 @@ export default function ContratacoesPage() {
 
   const [doc, setDoc] = useState("");
   const [degraded, setDegraded] = useState(false);
+  const [aviso, setAviso] = useState("");
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState("");
 
@@ -41,6 +42,8 @@ export default function ContratacoesPage() {
     setLoading(true);
     setErro("");
     setDoc("");
+    setDegraded(false);
+    setAviso("");
     try {
       const res = await fetch("/api/etp", {
         method: "POST",
@@ -58,6 +61,7 @@ export default function ContratacoesPage() {
       if (!res.ok) throw new Error(data.error || "Falha na geração.");
       setDoc(data.text);
       setDegraded(Boolean(data.degraded));
+      setAviso(data.aviso || "");
     } catch (e: any) {
       setErro(e?.message || "Erro inesperado.");
     } finally {
@@ -204,7 +208,7 @@ export default function ContratacoesPage() {
         {erro && <p className="rounded bg-red-50 p-3 text-sm text-red-700">{erro}</p>}
         {degraded && doc && (
           <p className="mb-3 rounded bg-amber-50 p-2 text-xs text-amber-800">
-            Modo rascunho (sem IA). Configure <code>ANTHROPIC_API_KEY</code> para geração assistida.
+            {aviso || "Modo rascunho (sem IA). Configure ANTHROPIC_API_KEY para geração assistida."}
           </p>
         )}
         {!doc && !erro && (
