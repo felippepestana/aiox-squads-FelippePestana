@@ -8,6 +8,9 @@ web/node_modules/
 web/dist/
 web/hint-report/
 web/.env
+web/.env.*
+!web/.env.example
+!web/.env.*.example
 web/worker/*.js
 .env
 analista-processual-web/node_modules/
