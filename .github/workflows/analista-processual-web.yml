@@ -1,0 +1,38 @@
+name: Analista Processual Web
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+    paths:
+      - "analista-processual-web/**"
+      - ".github/workflows/analista-processual-web.yml"
+  pull_request:
+    paths:
+      - "analista-processual-web/**"
+      - ".github/workflows/analista-processual-web.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: analista-processual-web
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: analista-processual-web/package-lock.json
+
+      - name: Instalar dependências (inclui prisma generate)
+        run: npm ci
+
+      - name: Build (Next.js + lint + typecheck)
+        run: npm run build
+
+      - name: Testes
+        run: npm test
