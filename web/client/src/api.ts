@@ -235,6 +235,69 @@ async function postJson<T>(url: string, body: unknown): Promise<T> {
   return parsed as T;
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Admin registration (cadastro do administrador — PF/PJ)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface AdminRegistrationInput {
+  tipo_pessoa: "PF" | "PJ";
+  nome_completo?: string;
+  cpf?: string;
+  razao_social?: string;
+  nome_fantasia?: string;
+  cnpj?: string;
+  responsavel_nome?: string;
+  email: string;
+  telefone?: string;
+}
+
+export interface AdminRegistrationResult {
+  ok: true;
+  persisted: boolean;
+  note?: string;
+  admin?: { id: string; tipo_pessoa: "PF" | "PJ"; email: string };
+}
+
+export class AdminValidationError extends Error {
+  fields: Record<string, string>;
+  constructor(message: string, fields: Record<string, string>) {
+    super(message);
+    this.name = "AdminValidationError";
+    this.fields = fields;
+  }
+}
+
+export async function adminRegisterStatus(): Promise<{ dbEnabled: boolean }> {
+  const r = await fetch("/api/admin/status", { headers: portalHeaders(false) });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+export async function registerAdmin(
+  input: AdminRegistrationInput
+): Promise<AdminRegistrationResult> {
+  const r = await fetch("/api/admin/register", {
+    method: "POST",
+    headers: portalHeaders(true),
+    body: JSON.stringify(input),
+  });
+  const text = await r.text();
+  let parsed: unknown;
+  try {
+    parsed = text ? JSON.parse(text) : undefined;
+  } catch {
+    parsed = undefined;
+  }
+  if (!r.ok) {
+    const p = (parsed ?? {}) as { error?: string; fields?: Record<string, string> };
+    if (r.status === 400 && p.fields) {
+      throw new AdminValidationError(p.error ?? "Dados inválidos", p.fields);
+    }
+    throw new Error(p.error || text || `HTTP ${r.status}`);
+  }
+  return parsed as AdminRegistrationResult;
+}
+
 export async function interviewStatus(): Promise<{ dbEnabled: boolean }> {
   const r = await fetch("/api/interview/status", { headers: portalHeaders(false) });
   if (!r.ok) throw new Error(await r.text());

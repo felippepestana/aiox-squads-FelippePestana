@@ -16,6 +16,13 @@
 </p>
 
 <p align="center">
+  <a href="https://render.com/deploy?repo=https://github.com/felippepestana/aiox-squads-FelippePestana"><img src="https://render.com/images/deploy-to-render-button.svg" alt="Deploy to Render" /></a>
+</p>
+<p align="center">
+  <sub>Portal Apex-Talent (v1) — 1 clique no Render; defina <code>ANTHROPIC_API_KEY</code> e tenha uma URL HTTPS. Detalhes em <a href="#deploy-do-portal-v1">Deploy do Portal</a>.</sub>
+</p>
+
+<p align="center">
   <a href="doc/README.en.md">🇺🇸 English version</a>
 </p>
 

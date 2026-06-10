@@ -78,3 +78,18 @@ export interface DocumentRow {
   status: string;
   created_at: string;
 }
+
+export interface AdminRow {
+  id: string;
+  org_id: string | null;
+  tipo_pessoa: "PF" | "PJ";
+  nome_completo: string | null;
+  cpf: string | null;
+  razao_social: string | null;
+  nome_fantasia: string | null;
+  cnpj: string | null;
+  responsavel_nome: string | null;
+  email: string;
+  telefone: string | null;
+  created_at: string;
+}
