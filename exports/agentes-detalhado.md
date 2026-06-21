@@ -535,19 +535,19 @@
 
 #### Comandos
 
+- `*audit - Full accessibility audit (automated + manual + AT testing)`
+- `*focus - Design focus management pattern for a widget`
+- `*aria - ARIA implementation guidance for a component`
+- `*screen-reader - Screen reader testing strategy and expected behavior`
+- `*contrast - Color contrast validation against WCAG 2.2`
+- `*keyboard-nav - Keyboard navigation pattern design`
+- `*wcag-check - Check specific WCAG criterion compliance`
+- `*help - Show all available commands`
+- `*exit - Exit Sara mode`
 - `*aria` — Comando referenciado na definição do agente.
-- `*aria - ARIA implementation guidance for a component` — Comando referenciado na definição do agente.
 - `*audit` — Comando referenciado na definição do agente.
-- `*audit - Full accessibility audit (automated + manual + AT testing)` — Comando referenciado na definição do agente.
-- `*contrast - Color contrast validation against WCAG 2.2` — Comando referenciado na definição do agente.
-- `*exit - Exit Sara mode` — Comando referenciado na definição do agente.
 - `*focus` — Comando referenciado na definição do agente.
-- `*focus - Design focus management pattern for a widget` — Comando referenciado na definição do agente.
-- `*help - Show all available commands` — Comando referenciado na definição do agente.
-- `*keyboard-nav - Keyboard navigation pattern design` — Comando referenciado na definição do agente.
 - `*screen-reader` — Comando referenciado na definição do agente.
-- `*screen-reader - Screen reader testing strategy and expected behavior` — Comando referenciado na definição do agente.
-- `*wcag-check - Check specific WCAG criterion compliance` — Comando referenciado na definição do agente.
 
 ### Emil (`apex-lead`)
 
@@ -745,22 +745,22 @@
 
 #### Comandos
 
+- `*token - Create, update, or audit design tokens (primitive/semantic/component)`
+- `*component - Create or review a design system component with maturation level`
+- `*theme - Design or audit multi-mode theme (light/dark/high-contrast)`
+- `*sync-figma - Review or set up Figma Variables to code sync pipeline`
+- `*audit-tokens - Audit codebase for hardcoded values and token drift`
+- `*storybook - Create or review Storybook documentation for a component`
+- `*help - Show numbered list of available commands with descriptions`
+- `*exit - Deactivate Diana persona and return to default mode`
 - `*audit-tokens` — Comando referenciado na definição do agente.
-- `*audit-tokens - Audit codebase for hardcoded values and token drift` — Comando referenciado na definição do agente.
 - `*component` — Comando referenciado na definição do agente.
-- `*component - Create or review a design system component with maturation level` — Comando referenciado na definição do agente.
 - `*exit` — Comando referenciado na definição do agente.
-- `*exit - Deactivate Diana persona and return to default mode` — Comando referenciado na definição do agente.
 - `*help` — Comando referenciado na definição do agente.
-- `*help - Show numbered list of available commands with descriptions` — Comando referenciado na definição do agente.
 - `*storybook` — Comando referenciado na definição do agente.
-- `*storybook - Create or review Storybook documentation for a component` — Comando referenciado na definição do agente.
 - `*sync-figma` — Comando referenciado na definição do agente.
-- `*sync-figma - Review or set up Figma Variables to code sync pipeline` — Comando referenciado na definição do agente.
 - `*theme` — Comando referenciado na definição do agente.
-- `*theme - Design or audit multi-mode theme (light/dark/high-contrast)` — Comando referenciado na definição do agente.
 - `*token` — Comando referenciado na definição do agente.
-- `*token - Create, update, or audit design tokens (primitive/semantic/component)` — Comando referenciado na definição do agente.
 
 #### Handoffs
 
@@ -973,19 +973,19 @@
 
 #### Comandos
 
+- `*lighthouse - Lighthouse analysis strategy and interpretation`
+- `*bundle-analyze - Bundle size analysis and reduction recommendations`
+- `*web-vitals - Core Web Vitals optimization (LCP, INP, CLS)`
+- `*image-optimize - Image optimization pipeline (format, sizing, loading)`
+- `*code-split - Code splitting strategy for routes and components`
+- `*font-optimize - Font loading strategy (preload, display, subsetting)`
+- `*perf-budget - Set up performance budget with CI enforcement`
+- `*help - Show all available commands`
+- `*exit - Exit Addy mode`
 - `*bundle-analyze` — Comando referenciado na definição do agente.
-- `*bundle-analyze - Bundle size analysis and reduction recommendations` — Comando referenciado na definição do agente.
-- `*code-split - Code splitting strategy for routes and components` — Comando referenciado na definição do agente.
-- `*exit - Exit Addy mode` — Comando referenciado na definição do agente.
-- `*font-optimize - Font loading strategy (preload, display, subsetting)` — Comando referenciado na definição do agente.
-- `*help - Show all available commands` — Comando referenciado na definição do agente.
 - `*image-optimize` — Comando referenciado na definição do agente.
-- `*image-optimize - Image optimization pipeline (format, sizing, loading)` — Comando referenciado na definição do agente.
 - `*lighthouse` — Comando referenciado na definição do agente.
-- `*lighthouse - Lighthouse analysis strategy and interpretation` — Comando referenciado na definição do agente.
-- `*perf-budget - Set up performance budget with CI enforcement` — Comando referenciado na definição do agente.
 - `*web-vitals` — Comando referenciado na definição do agente.
-- `*web-vitals - Core Web Vitals optimization (LCP, INP, CLS)` — Comando referenciado na definição do agente.
 
 ### Andy (`qa-visual`)
 
@@ -1031,19 +1031,19 @@
 
 #### Comandos
 
+- `*visual-test - Set up visual regression test suite`
+- `*compare - Compare screenshots between builds`
+- `*regression - Investigate and diagnose visual regression`
+- `*cross-browser - Cross-browser visual validation`
+- `*theme-test - Theme testing (light/dark/high-contrast)`
+- `*responsive-test - Responsive viewport testing strategy`
+- `*screenshot - Capture screenshots at all matrix points`
+- `*help - Show all available commands`
+- `*exit - Exit Andy mode`
 - `*compare` — Comando referenciado na definição do agente.
-- `*compare - Compare screenshots between builds` — Comando referenciado na definição do agente.
 - `*cross-browser` — Comando referenciado na definição do agente.
-- `*cross-browser - Cross-browser visual validation` — Comando referenciado na definição do agente.
-- `*exit - Exit Andy mode` — Comando referenciado na definição do agente.
-- `*help - Show all available commands` — Comando referenciado na definição do agente.
 - `*regression` — Comando referenciado na definição do agente.
-- `*regression - Investigate and diagnose visual regression` — Comando referenciado na definição do agente.
-- `*responsive-test - Responsive viewport testing strategy` — Comando referenciado na definição do agente.
-- `*screenshot - Capture screenshots at all matrix points` — Comando referenciado na definição do agente.
-- `*theme-test - Theme testing (light/dark/high-contrast)` — Comando referenciado na definição do agente.
 - `*visual-test` — Comando referenciado na definição do agente.
-- `*visual-test - Set up visual regression test suite` — Comando referenciado na definição do agente.
 
 ### Michal (`qa-xplatform`)
 
@@ -1089,18 +1089,18 @@
 
 #### Comandos
 
-- `*deep-link-test - Deep link testing (universal links, app links)` — Comando referenciado na definição do agente.
+- `*device-test - Design real device testing strategy`
+- `*platform-compare - Cross-platform parity validation`
+- `*gesture-test - Gesture interaction testing strategy`
+- `*offline-test - Offline and connectivity testing`
+- `*spatial-test - visionOS spatial testing strategy`
+- `*deep-link-test - Deep link testing (universal links, app links)`
+- `*help - Show all available commands`
+- `*exit - Exit Michal mode`
 - `*device-test` — Comando referenciado na definição do agente.
-- `*device-test - Design real device testing strategy` — Comando referenciado na definição do agente.
-- `*exit - Exit Michal mode` — Comando referenciado na definição do agente.
 - `*gesture-test` — Comando referenciado na definição do agente.
-- `*gesture-test - Gesture interaction testing strategy` — Comando referenciado na definição do agente.
-- `*help - Show all available commands` — Comando referenciado na definição do agente.
 - `*offline-test` — Comando referenciado na definição do agente.
-- `*offline-test - Offline and connectivity testing` — Comando referenciado na definição do agente.
 - `*platform-compare` — Comando referenciado na definição do agente.
-- `*platform-compare - Cross-platform parity validation` — Comando referenciado na definição do agente.
-- `*spatial-test - visionOS spatial testing strategy` — Comando referenciado na definição do agente.
 
 ### Kent (`react-eng`)
 
@@ -1336,10 +1336,11 @@
 
 #### Comandos
 
-- `*help` — Comando referenciado na definição do agente.
-- `*preview` — Comando referenciado na definição do agente.
-- `*render` — Comando referenciado na definição do agente.
-- `*render-all` — Comando referenciado na definição do agente.
+- `*render` — Render a single cut from validated YAML
+- `*render-all` — Batch render all cuts from validated YAML
+- `*preview` — Dry-run: show ffmpeg commands without executing
+- `*help` — Show available commands
+- `*exit` — Exit agent, handoff to curator-chief
 
 ### Jonah Berger (`jonah-berger`)
 
@@ -2203,15 +2204,15 @@
 
 #### Comandos
 
-- `*audit-difficulty {lesson} - Is difficulty desirable (productive) or undesirable (frustrating)?` — Comando referenciado na definição do agente.
-- `*chat-mode - Discuss memory and learning science` — Comando referenciado na definição do agente.
-- `*design-interleaving {modules} - Design interleaved practice across topics` — Comando referenciado na definição do agente.
-- `*design-retrieval {lesson} - Add retrieval practice activities to a lesson` — Comando referenciado na definição do agente.
-- `*design-schedule {course} - Full retention engineering: spacing + interleaving + retrieval across course` — Comando referenciado na definição do agente.
-- `*design-spacing {module} - Create spaced practice schedule with optimal intervals` — Comando referenciado na definição do agente.
-- `*design-variability {exercises} - Create varied practice conditions` — Comando referenciado na definição do agente.
-- `*exit - Exit agent` — Comando referenciado na definição do agente.
-- `*help - Show available commands` — Comando referenciado na definição do agente.
+- `*help - Show available commands`
+- `*design-spacing {module} - Create spaced practice schedule with optimal intervals`
+- `*design-interleaving {modules} - Design interleaved practice across topics`
+- `*design-retrieval {lesson} - Add retrieval practice activities to a lesson`
+- `*design-variability {exercises} - Create varied practice conditions`
+- `*audit-difficulty {lesson} - Is difficulty desirable (productive) or undesirable (frustrating)?`
+- `*design-schedule {course} - Full retention engineering: spacing + interleaving + retrieval across course`
+- `*chat-mode - Discuss memory and learning science`
+- `*exit - Exit agent`
 
 ### bloom-diagnostician (`bloom-diagnostician`)
 
@@ -2270,15 +2271,15 @@
 
 #### Comandos
 
-- `*audit-games {design} - Validate gamification/game-based learning decisions against evidence` — Comando referenciado na definição do agente.
-- `*chat-mode - Discuss evidence-based design` — Comando referenciado na definição do agente.
-- `*check-myths {curriculum} - Scan for learning myths (styles, digital natives, pyramids, etc.)` — Comando referenciado na definição do agente.
-- `*exit - Exit agent` — Comando referenciado na definição do agente.
-- `*expertise-check {design} - Check for expertise reversal — are strategies matched to learner level?` — Comando referenciado na definição do agente.
-- `*help - Show available commands` — Comando referenciado na definição do agente.
-- `*recommend-strategy {context} - Evidence-based strategy recommendation for specific learner + content context` — Comando referenciado na definição do agente.
-- `*validate-evidence {design} - Check all instructional design decisions against empirical evidence` — Comando referenciado na definição do agente.
-- `*worked-example-decision {context} - Should this use worked examples or practice? (depends on expertise)` — Comando referenciado na definição do agente.
+- `*help - Show available commands`
+- `*validate-evidence {design} - Check all instructional design decisions against empirical evidence`
+- `*check-myths {curriculum} - Scan for learning myths (styles, digital natives, pyramids, etc.)`
+- `*recommend-strategy {context} - Evidence-based strategy recommendation for specific learner + content context`
+- `*audit-games {design} - Validate gamification/game-based learning decisions against evidence`
+- `*expertise-check {design} - Check for expertise reversal — are strategies matched to learner level?`
+- `*worked-example-decision {context} - Should this use worked examples or practice? (depends on expertise)`
+- `*chat-mode - Discuss evidence-based design`
+- `*exit - Exit agent`
 
 ### Education Chief (`education-chief`)
 
@@ -2310,15 +2311,15 @@
 
 #### Comandos
 
-- `*adapt-progression {learner-level} - Adjust for beginner/intermediate/advanced` — Comando referenciado na definição do agente.
-- `*create-course {domain} - Full pipeline: research → design → validate → deliver` — Comando referenciado na definição do agente.
-- `*design-curriculum {domain} - Phase 2-3: Architecture + Module design` — Comando referenciado na definição do agente.
-- `*design-lesson {module} - Phase 4: Single lesson design` — Comando referenciado na definição do agente.
-- `*diagnose-domain {domain} - Phase 0-1: Triage + Research only` — Comando referenciado na definição do agente.
-- `*exit - Exit education mode` — Comando referenciado na definição do agente.
-- `*help - Show all commands` — Comando referenciado na definição do agente.
-- `*mec-check {course-type} - Run MEC compliance for specific course type` — Comando referenciado na definição do agente.
-- `*validate-curriculum - Phase 5: Full validation pass` — Comando referenciado na definição do agente.
+- `*create-course {domain} - Full pipeline: research → design → validate → deliver`
+- `*diagnose-domain {domain} - Phase 0-1: Triage + Research only`
+- `*design-curriculum {domain} - Phase 2-3: Architecture + Module design`
+- `*design-lesson {module} - Phase 4: Single lesson design`
+- `*validate-curriculum - Phase 5: Full validation pass`
+- `*adapt-progression {learner-level} - Adjust for beginner/intermediate/advanced`
+- `*mec-check {course-type} - Run MEC compliance for specific course type`
+- `*help - Show all commands`
+- `*exit - Exit education mode`
 
 ### Ericsson Coach (`ericsson-coach`)
 
@@ -2479,15 +2480,15 @@
 
 #### Comandos
 
-- `*audit-multimedia {lesson} - Check all 12 principles against a lesson/presentation` — Comando referenciado na definição do agente.
-- `*chat-mode - Discuss multimedia learning` — Comando referenciado na definição do agente.
-- `*decide-format {content} - Recommend optimal media format with principle-based justification` — Comando referenciado na definição do agente.
-- `*design-slide {content} - Design a single slide/screen following all 12 principles` — Comando referenciado na definição do agente.
-- `*exit - Exit agent` — Comando referenciado na definição do agente.
-- `*fix-redundancy {lesson} - Identify and fix redundancy principle violations` — Comando referenciado na definição do agente.
-- `*help - Show available commands` — Comando referenciado na definição do agente.
-- `*optimize-visual {lesson} - Apply spatial and temporal contiguity principles` — Comando referenciado na definição do agente.
-- `*reduce-load {lesson} - Identify and remove extraneous cognitive load` — Comando referenciado na definição do agente.
+- `*help - Show available commands`
+- `*decide-format {content} - Recommend optimal media format with principle-based justification`
+- `*audit-multimedia {lesson} - Check all 12 principles against a lesson/presentation`
+- `*fix-redundancy {lesson} - Identify and fix redundancy principle violations`
+- `*optimize-visual {lesson} - Apply spatial and temporal contiguity principles`
+- `*design-slide {content} - Design a single slide/screen following all 12 principles`
+- `*reduce-load {lesson} - Identify and remove extraneous cognitive load`
+- `*chat-mode - Discuss multimedia learning`
+- `*exit - Exit agent`
 
 ### mec-compliance (`mec-compliance`)
 
@@ -2546,15 +2547,15 @@
 
 #### Comandos
 
-- `*chat-mode - Discuss instructional design` — Comando referenciado na definição do agente.
-- `*check-principles {lesson} - Validate all 5 principles are present and properly implemented` — Comando referenciado na definição do agente.
-- `*design-coaching-fade {skill} - Design the coaching progression: full guidance → hints → independence` — Comando referenciado na definição do agente.
-- `*design-lesson {lesson} - Full lesson design: Problem → Activation → Demonstration → Application → Integration` — Comando referenciado na definição do agente.
-- `*design-module {module} - Apply all 5 First Principles to a complete module` — Comando referenciado na definição do agente.
-- `*design-progression {module} - Create problem progression from simple to complex with fading coaching` — Comando referenciado na definição do agente.
-- `*exit - Exit agent` — Comando referenciado na definição do agente.
-- `*fix-lesson {lesson} - Diagnose and fix a lesson that violates First Principles` — Comando referenciado na definição do agente.
-- `*help - Show available commands` — Comando referenciado na definição do agente.
+- `*help - Show available commands`
+- `*design-module {module} - Apply all 5 First Principles to a complete module`
+- `*design-lesson {lesson} - Full lesson design: Problem → Activation → Demonstration → Application → Integration`
+- `*check-principles {lesson} - Validate all 5 principles are present and properly implemented`
+- `*design-progression {module} - Create problem progression from simple to complex with fading coaching`
+- `*fix-lesson {lesson} - Diagnose and fix a lesson that violates First Principles`
+- `*design-coaching-fade {skill} - Design the coaching progression: full guidance → hints → independence`
+- `*chat-mode - Discuss instructional design`
+- `*exit - Exit agent`
 
 ### moore-filter (`moore-filter`)
 
@@ -2762,15 +2763,15 @@
 
 #### Comandos
 
-- `*chat-mode - Discuss curriculum design philosophy` — Comando referenciado na definição do agente.
-- `*create-essential-questions {topic} - Generate essential questions (open-ended, thought-provoking, recurring)` — Comando referenciado na definição do agente.
-- `*create-learning-plan {module} - WHERETO-based learning plan for a module` — Comando referenciado na definição do agente.
-- `*design-assessments {outcomes} - Create assessment evidence aligned to desired outcomes` — Comando referenciado na definição do agente.
-- `*design-curriculum {domain} - Full backward design: Stage 1 → Stage 2 → Stage 3` — Comando referenciado na definição do agente.
-- `*exit - Exit agent` — Comando referenciado na definição do agente.
-- `*facets-check {outcome} - Verify which of the 6 Facets of Understanding are addressed` — Comando referenciado na definição do agente.
-- `*help - Show available commands` — Comando referenciado na definição do agente.
-- `*validate-alignment {curriculum} - Audit outcomes ↔ assessments ↔ activities alignment` — Comando referenciado na definição do agente.
+- `*help - Show available commands`
+- `*design-curriculum {domain} - Full backward design: Stage 1 → Stage 2 → Stage 3`
+- `*create-essential-questions {topic} - Generate essential questions (open-ended, thought-provoking, recurring)`
+- `*design-assessments {outcomes} - Create assessment evidence aligned to desired outcomes`
+- `*create-learning-plan {module} - WHERETO-based learning plan for a module`
+- `*validate-alignment {curriculum} - Audit outcomes ↔ assessments ↔ activities alignment`
+- `*facets-check {outcome} - Verify which of the 6 Facets of Understanding are addressed`
+- `*chat-mode - Discuss curriculum design philosophy`
+- `*exit - Exit agent`
 
 ## Squad `iphone-judicial-assessment`
 
@@ -3429,14 +3430,14 @@
 
 #### Comandos
 
-- `*exit — Deactivate SEO Chief` — Comando referenciado na definição do agente.
-- `*help — Show available commands` — Comando referenciado na definição do agente.
-- `*seo-audit-optimize — Full 3-phase cycle: evaluate, optimize, report` — Comando referenciado na definição do agente.
-- `*seo-evaluate — Audit only, produce 0-100 score with breakdown` — Comando referenciado na definição do agente.
+- `*seo-audit-optimize — Full 3-phase cycle: evaluate, optimize, report`
+- `*seo-evaluate — Audit only, produce 0-100 score with breakdown`
+- `*seo-optimize — Run optimization phase (requires prior audit)`
+- `*seo-report — Generate before/after comparison report`
+- `*seo-score — Quick score check without full audit`
+- `*help — Show available commands`
+- `*exit — Deactivate SEO Chief`
 - `*seo-optimize` — Comando referenciado na definição do agente.
-- `*seo-optimize — Run optimization phase (requires prior audit)` — Comando referenciado na definição do agente.
-- `*seo-report — Generate before/after comparison report` — Comando referenciado na definição do agente.
-- `*seo-score — Quick score check without full audit` — Comando referenciado na definição do agente.
 
 ### Site Architect (`site-architect`)
 
@@ -3532,41 +3533,41 @@
 
 #### Comandos
 
-- `*add-tool {name} - Add discovered tool to squad config.yaml dependencies` — Comando referenciado na definição do agente.
-- `*chat-mode - (Default) Conversational mode for squad guidance` — Comando referenciado na definição do agente.
+- `*help - Show numbered list of available commands`
+- `*create-squad - Create a complete squad through guided workflow`
+- `*create-agent - Create individual agent for squad`
+- `*create-workflow - Create multi-phase workflow (PREFERRED over standalone tasks)`
+- `*create-task - Create atomic task (only when workflow is overkill)`
+- `*create-template - Create output template for squad`
+- `*create-pipeline - Generate pipeline code scaffolding (state, progress, runner) for a squad`
+- `*discover-tools {domain} - Internal-first discovery with mandatory canonical domain validation`
+- `*upgrade-squad {name} - Upgrade existing squad to current AIOX standards (audit→plan→execute)`
+- `*validate-squad {name} - Validate entire squad with component-by-component analysis`
+- `*validate-final-artifacts {name} - Validate only final deliverables with hard gates`
+- `*validate-agent {file} - Validate single agent against AIOX 6-level structure`
+- `*validate-task {file} - Validate single task against Task Anatomy (8 fields)`
+- `*validate-workflow {file} - Validate single workflow (phases, checkpoints)`
+- `*validate-template {file} - Validate single template (syntax, placeholders)`
+- `*validate-checklist {file} - Validate single checklist (structure, specificity)`
+- `*reexecute-phase {squad} {workflow} {phase} - Backup and reexecute one workflow phase safely`
+- `*next-squad - Analyze ecosystem and recommend next squad to create or improve`
+- `*guide - Interactive onboarding guide for new users (concepts, workflow, first steps)`
+- `*squad-analytics - Detailed analytics dashboard (agents, tasks, workflows, templates, checklists per squad)`
+- `*refresh-registry - Scan squads/ and update registry (runs scripts/refresh-registry.py)`
+- `*squad-overview {name} - Generate comprehensive SQUAD-OVERVIEW.md documentation for a squad`
+- `*sync - Sync squad commands to .claude/commands/ (runs tasks/sync-ide-command.md)`
+- `*show-tools - Display global tool registry by reading {registry_path}`
+- `*add-tool {name} - Add discovered tool to squad config.yaml dependencies`
+- `*list-squads - List all squads by reading {registry_path}`
+- `*show-registry - Display squad registry by reading {registry_path}`
+- `*show-context - Show what context files are loaded in current session`
+- `*chat-mode - (Default) Conversational mode for squad guidance`
+- `*exit - Say goodbye and deactivate persona`
 - `*create-agent` — Comando referenciado na definição do agente.
-- `*create-agent - Create individual agent for squad` — Comando referenciado na definição do agente.
-- `*create-pipeline - Generate pipeline code scaffolding (state, progress, runner) for a squad` — Comando referenciado na definição do agente.
 - `*create-squad` — Comando referenciado na definição do agente.
-- `*create-squad - Create a complete squad through guided workflow` — Comando referenciado na definição do agente.
-- `*create-task - Create atomic task (only when workflow is overkill)` — Comando referenciado na definição do agente.
-- `*create-template - Create output template for squad` — Comando referenciado na definição do agente.
-- `*create-workflow - Create multi-phase workflow (PREFERRED over standalone tasks)` — Comando referenciado na definição do agente.
 - `*discover-tools` — Comando referenciado na definição do agente.
-- `*discover-tools {domain} - Internal-first discovery with mandatory canonical domain validation` — Comando referenciado na definição do agente.
-- `*exit - Say goodbye and deactivate persona` — Comando referenciado na definição do agente.
-- `*guide - Interactive onboarding guide for new users (concepts, workflow, first steps)` — Comando referenciado na definição do agente.
-- `*help - Show numbered list of available commands` — Comando referenciado na definição do agente.
-- `*list-squads - List all squads by reading {registry_path}` — Comando referenciado na definição do agente.
-- `*next-squad - Analyze ecosystem and recommend next squad to create or improve` — Comando referenciado na definição do agente.
-- `*reexecute-phase {squad} {workflow} {phase} - Backup and reexecute one workflow phase safely` — Comando referenciado na definição do agente.
-- `*refresh-registry - Scan squads/ and update registry (runs scripts/refresh-registry.py)` — Comando referenciado na definição do agente.
-- `*show-context - Show what context files are loaded in current session` — Comando referenciado na definição do agente.
-- `*show-registry - Display squad registry by reading {registry_path}` — Comando referenciado na definição do agente.
-- `*show-tools - Display global tool registry by reading {registry_path}` — Comando referenciado na definição do agente.
-- `*squad-analytics - Detailed analytics dashboard (agents, tasks, workflows, templates, checklists per squad)` — Comando referenciado na definição do agente.
-- `*squad-overview {name} - Generate comprehensive SQUAD-OVERVIEW.md documentation for a squad` — Comando referenciado na definição do agente.
-- `*sync - Sync squad commands to .claude/commands/ (runs tasks/sync-ide-command.md)` — Comando referenciado na definição do agente.
 - `*upgrade-squad` — Comando referenciado na definição do agente.
-- `*upgrade-squad {name} - Upgrade existing squad to current AIOX standards (audit→plan→execute)` — Comando referenciado na definição do agente.
-- `*validate-agent {file} - Validate single agent against AIOX 6-level structure` — Comando referenciado na definição do agente.
-- `*validate-checklist {file} - Validate single checklist (structure, specificity)` — Comando referenciado na definição do agente.
-- `*validate-final-artifacts {name} - Validate only final deliverables with hard gates` — Comando referenciado na definição do agente.
 - `*validate-squad` — Comando referenciado na definição do agente.
-- `*validate-squad {name} - Validate entire squad with component-by-component analysis` — Comando referenciado na definição do agente.
-- `*validate-task {file} - Validate single task against Task Anatomy (8 fields)` — Comando referenciado na definição do agente.
-- `*validate-template {file} - Validate single template (syntax, placeholders)` — Comando referenciado na definição do agente.
-- `*validate-workflow {file} - Validate single workflow (phases, checkpoints)` — Comando referenciado na definição do agente.
 
 #### Handoffs
 

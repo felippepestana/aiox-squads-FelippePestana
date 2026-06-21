@@ -773,11 +773,43 @@
       },
       "commands": [
         {
-          "name": "aria",
-          "description": "Comando referenciado na definição do agente."
+          "name": "audit - Full accessibility audit (automated + manual + AT testing)",
+          "description": ""
+        },
+        {
+          "name": "focus - Design focus management pattern for a widget",
+          "description": ""
         },
         {
           "name": "aria - ARIA implementation guidance for a component",
+          "description": ""
+        },
+        {
+          "name": "screen-reader - Screen reader testing strategy and expected behavior",
+          "description": ""
+        },
+        {
+          "name": "contrast - Color contrast validation against WCAG 2.2",
+          "description": ""
+        },
+        {
+          "name": "keyboard-nav - Keyboard navigation pattern design",
+          "description": ""
+        },
+        {
+          "name": "wcag-check - Check specific WCAG criterion compliance",
+          "description": ""
+        },
+        {
+          "name": "help - Show all available commands",
+          "description": ""
+        },
+        {
+          "name": "exit - Exit Sara mode",
+          "description": ""
+        },
+        {
+          "name": "aria",
           "description": "Comando referenciado na definição do agente."
         },
         {
@@ -785,43 +817,11 @@
           "description": "Comando referenciado na definição do agente."
         },
         {
-          "name": "audit - Full accessibility audit (automated + manual + AT testing)",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "contrast - Color contrast validation against WCAG 2.2",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "exit - Exit Sara mode",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "focus",
           "description": "Comando referenciado na definição do agente."
         },
         {
-          "name": "focus - Design focus management pattern for a widget",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "help - Show all available commands",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "keyboard-nav - Keyboard navigation pattern design",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "screen-reader",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "screen-reader - Screen reader testing strategy and expected behavior",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "wcag-check - Check specific WCAG criterion compliance",
           "description": "Comando referenciado na definição do agente."
         }
       ],
@@ -1302,11 +1302,39 @@
       },
       "commands": [
         {
-          "name": "audit-tokens",
-          "description": "Comando referenciado na definição do agente."
+          "name": "token - Create, update, or audit design tokens (primitive/semantic/component)",
+          "description": ""
+        },
+        {
+          "name": "component - Create or review a design system component with maturation level",
+          "description": ""
+        },
+        {
+          "name": "theme - Design or audit multi-mode theme (light/dark/high-contrast)",
+          "description": ""
+        },
+        {
+          "name": "sync-figma - Review or set up Figma Variables to code sync pipeline",
+          "description": ""
         },
         {
           "name": "audit-tokens - Audit codebase for hardcoded values and token drift",
+          "description": ""
+        },
+        {
+          "name": "storybook - Create or review Storybook documentation for a component",
+          "description": ""
+        },
+        {
+          "name": "help - Show numbered list of available commands with descriptions",
+          "description": ""
+        },
+        {
+          "name": "exit - Deactivate Diana persona and return to default mode",
+          "description": ""
+        },
+        {
+          "name": "audit-tokens",
           "description": "Comando referenciado na definição do agente."
         },
         {
@@ -1314,15 +1342,7 @@
           "description": "Comando referenciado na definição do agente."
         },
         {
-          "name": "component - Create or review a design system component with maturation level",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "exit",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "exit - Deactivate Diana persona and return to default mode",
           "description": "Comando referenciado na definição do agente."
         },
         {
@@ -1330,15 +1350,7 @@
           "description": "Comando referenciado na definição do agente."
         },
         {
-          "name": "help - Show numbered list of available commands with descriptions",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "storybook",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "storybook - Create or review Storybook documentation for a component",
           "description": "Comando referenciado na definição do agente."
         },
         {
@@ -1346,23 +1358,11 @@
           "description": "Comando referenciado na definição do agente."
         },
         {
-          "name": "sync-figma - Review or set up Figma Variables to code sync pipeline",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "theme",
           "description": "Comando referenciado na definição do agente."
         },
         {
-          "name": "theme - Design or audit multi-mode theme (light/dark/high-contrast)",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "token",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "token - Create, update, or audit design tokens (primitive/semantic/component)",
           "description": "Comando referenciado na definição do agente."
         }
       ],
@@ -1804,27 +1804,43 @@
       },
       "commands": [
         {
-          "name": "bundle-analyze",
-          "description": "Comando referenciado na definição do agente."
+          "name": "lighthouse - Lighthouse analysis strategy and interpretation",
+          "description": ""
         },
         {
           "name": "bundle-analyze - Bundle size analysis and reduction recommendations",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
+        },
+        {
+          "name": "web-vitals - Core Web Vitals optimization (LCP, INP, CLS)",
+          "description": ""
+        },
+        {
+          "name": "image-optimize - Image optimization pipeline (format, sizing, loading)",
+          "description": ""
         },
         {
           "name": "code-split - Code splitting strategy for routes and components",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "exit - Exit Addy mode",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
         },
         {
           "name": "font-optimize - Font loading strategy (preload, display, subsetting)",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
+        },
+        {
+          "name": "perf-budget - Set up performance budget with CI enforcement",
+          "description": ""
         },
         {
           "name": "help - Show all available commands",
+          "description": ""
+        },
+        {
+          "name": "exit - Exit Addy mode",
+          "description": ""
+        },
+        {
+          "name": "bundle-analyze",
           "description": "Comando referenciado na definição do agente."
         },
         {
@@ -1832,27 +1848,11 @@
           "description": "Comando referenciado na definição do agente."
         },
         {
-          "name": "image-optimize - Image optimization pipeline (format, sizing, loading)",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "lighthouse",
           "description": "Comando referenciado na definição do agente."
         },
         {
-          "name": "lighthouse - Lighthouse analysis strategy and interpretation",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "perf-budget - Set up performance budget with CI enforcement",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "web-vitals",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "web-vitals - Core Web Vitals optimization (LCP, INP, CLS)",
           "description": "Comando referenciado na definição do agente."
         }
       ],
@@ -1951,11 +1951,43 @@
       },
       "commands": [
         {
-          "name": "compare",
-          "description": "Comando referenciado na definição do agente."
+          "name": "visual-test - Set up visual regression test suite",
+          "description": ""
         },
         {
           "name": "compare - Compare screenshots between builds",
+          "description": ""
+        },
+        {
+          "name": "regression - Investigate and diagnose visual regression",
+          "description": ""
+        },
+        {
+          "name": "cross-browser - Cross-browser visual validation",
+          "description": ""
+        },
+        {
+          "name": "theme-test - Theme testing (light/dark/high-contrast)",
+          "description": ""
+        },
+        {
+          "name": "responsive-test - Responsive viewport testing strategy",
+          "description": ""
+        },
+        {
+          "name": "screenshot - Capture screenshots at all matrix points",
+          "description": ""
+        },
+        {
+          "name": "help - Show all available commands",
+          "description": ""
+        },
+        {
+          "name": "exit - Exit Andy mode",
+          "description": ""
+        },
+        {
+          "name": "compare",
           "description": "Comando referenciado na definição do agente."
         },
         {
@@ -1963,43 +1995,11 @@
           "description": "Comando referenciado na definição do agente."
         },
         {
-          "name": "cross-browser - Cross-browser visual validation",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "exit - Exit Andy mode",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "help - Show all available commands",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "regression",
           "description": "Comando referenciado na definição do agente."
         },
         {
-          "name": "regression - Investigate and diagnose visual regression",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "responsive-test - Responsive viewport testing strategy",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "screenshot - Capture screenshots at all matrix points",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "theme-test - Theme testing (light/dark/high-contrast)",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "visual-test",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "visual-test - Set up visual regression test suite",
           "description": "Comando referenciado na definição do agente."
         }
       ],
@@ -2098,19 +2098,39 @@
       },
       "commands": [
         {
-          "name": "deep-link-test - Deep link testing (universal links, app links)",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "device-test",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "device-test - Design real device testing strategy",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
+        },
+        {
+          "name": "platform-compare - Cross-platform parity validation",
+          "description": ""
+        },
+        {
+          "name": "gesture-test - Gesture interaction testing strategy",
+          "description": ""
+        },
+        {
+          "name": "offline-test - Offline and connectivity testing",
+          "description": ""
+        },
+        {
+          "name": "spatial-test - visionOS spatial testing strategy",
+          "description": ""
+        },
+        {
+          "name": "deep-link-test - Deep link testing (universal links, app links)",
+          "description": ""
+        },
+        {
+          "name": "help - Show all available commands",
+          "description": ""
         },
         {
           "name": "exit - Exit Michal mode",
+          "description": ""
+        },
+        {
+          "name": "device-test",
           "description": "Comando referenciado na definição do agente."
         },
         {
@@ -2118,31 +2138,11 @@
           "description": "Comando referenciado na definição do agente."
         },
         {
-          "name": "gesture-test - Gesture interaction testing strategy",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "help - Show all available commands",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "offline-test",
           "description": "Comando referenciado na definição do agente."
         },
         {
-          "name": "offline-test - Offline and connectivity testing",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "platform-compare",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "platform-compare - Cross-platform parity validation",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "spatial-test - visionOS spatial testing strategy",
           "description": "Comando referenciado na definição do agente."
         }
       ],
@@ -2568,20 +2568,24 @@
       },
       "commands": [
         {
-          "name": "help",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "preview",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "render",
-          "description": "Comando referenciado na definição do agente."
+          "description": "Render a single cut from validated YAML"
         },
         {
           "name": "render-all",
-          "description": "Comando referenciado na definição do agente."
+          "description": "Batch render all cuts from validated YAML"
+        },
+        {
+          "name": "preview",
+          "description": "Dry-run: show ffmpeg commands without executing"
+        },
+        {
+          "name": "help",
+          "description": "Show available commands"
+        },
+        {
+          "name": "exit",
+          "description": "Exit agent, handoff to curator-chief"
         }
       ],
       "quality": {
@@ -4017,40 +4021,40 @@
       },
       "commands": [
         {
-          "name": "audit-difficulty {lesson} - Is difficulty desirable (productive) or undesirable (frustrating)?",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "chat-mode - Discuss memory and learning science",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "design-interleaving {modules} - Design interleaved practice across topics",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "design-retrieval {lesson} - Add retrieval practice activities to a lesson",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "design-schedule {course} - Full retention engineering: spacing + interleaving + retrieval across course",
-          "description": "Comando referenciado na definição do agente."
+          "name": "help - Show available commands",
+          "description": ""
         },
         {
           "name": "design-spacing {module} - Create spaced practice schedule with optimal intervals",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
+        },
+        {
+          "name": "design-interleaving {modules} - Design interleaved practice across topics",
+          "description": ""
+        },
+        {
+          "name": "design-retrieval {lesson} - Add retrieval practice activities to a lesson",
+          "description": ""
         },
         {
           "name": "design-variability {exercises} - Create varied practice conditions",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
+        },
+        {
+          "name": "audit-difficulty {lesson} - Is difficulty desirable (productive) or undesirable (frustrating)?",
+          "description": ""
+        },
+        {
+          "name": "design-schedule {course} - Full retention engineering: spacing + interleaving + retrieval across course",
+          "description": ""
+        },
+        {
+          "name": "chat-mode - Discuss memory and learning science",
+          "description": ""
         },
         {
           "name": "exit - Exit agent",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "help - Show available commands",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
         }
       ],
       "quality": {
@@ -4143,40 +4147,40 @@
       },
       "commands": [
         {
-          "name": "audit-games {design} - Validate gamification/game-based learning decisions against evidence",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "chat-mode - Discuss evidence-based design",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "check-myths {curriculum} - Scan for learning myths (styles, digital natives, pyramids, etc.)",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "exit - Exit agent",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "expertise-check {design} - Check for expertise reversal — are strategies matched to learner level?",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "help - Show available commands",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "recommend-strategy {context} - Evidence-based strategy recommendation for specific learner + content context",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
         },
         {
           "name": "validate-evidence {design} - Check all instructional design decisions against empirical evidence",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
+        },
+        {
+          "name": "check-myths {curriculum} - Scan for learning myths (styles, digital natives, pyramids, etc.)",
+          "description": ""
+        },
+        {
+          "name": "recommend-strategy {context} - Evidence-based strategy recommendation for specific learner + content context",
+          "description": ""
+        },
+        {
+          "name": "audit-games {design} - Validate gamification/game-based learning decisions against evidence",
+          "description": ""
+        },
+        {
+          "name": "expertise-check {design} - Check for expertise reversal — are strategies matched to learner level?",
+          "description": ""
         },
         {
           "name": "worked-example-decision {context} - Should this use worked examples or practice? (depends on expertise)",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
+        },
+        {
+          "name": "chat-mode - Discuss evidence-based design",
+          "description": ""
+        },
+        {
+          "name": "exit - Exit agent",
+          "description": ""
         }
       ],
       "quality": {
@@ -4226,40 +4230,40 @@
       },
       "commands": [
         {
-          "name": "adapt-progression {learner-level} - Adjust for beginner/intermediate/advanced",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "create-course {domain} - Full pipeline: research → design → validate → deliver",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "design-curriculum {domain} - Phase 2-3: Architecture + Module design",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "design-lesson {module} - Phase 4: Single lesson design",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
         },
         {
           "name": "diagnose-domain {domain} - Phase 0-1: Triage + Research only",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
         },
         {
-          "name": "exit - Exit education mode",
-          "description": "Comando referenciado na definição do agente."
+          "name": "design-curriculum {domain} - Phase 2-3: Architecture + Module design",
+          "description": ""
         },
         {
-          "name": "help - Show all commands",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "mec-check {course-type} - Run MEC compliance for specific course type",
-          "description": "Comando referenciado na definição do agente."
+          "name": "design-lesson {module} - Phase 4: Single lesson design",
+          "description": ""
         },
         {
           "name": "validate-curriculum - Phase 5: Full validation pass",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
+        },
+        {
+          "name": "adapt-progression {learner-level} - Adjust for beginner/intermediate/advanced",
+          "description": ""
+        },
+        {
+          "name": "mec-check {course-type} - Run MEC compliance for specific course type",
+          "description": ""
+        },
+        {
+          "name": "help - Show all commands",
+          "description": ""
+        },
+        {
+          "name": "exit - Exit education mode",
+          "description": ""
         }
       ],
       "quality": {
@@ -4537,40 +4541,40 @@
       },
       "commands": [
         {
-          "name": "audit-multimedia {lesson} - Check all 12 principles against a lesson/presentation",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "chat-mode - Discuss multimedia learning",
-          "description": "Comando referenciado na definição do agente."
+          "name": "help - Show available commands",
+          "description": ""
         },
         {
           "name": "decide-format {content} - Recommend optimal media format with principle-based justification",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
         },
         {
-          "name": "design-slide {content} - Design a single slide/screen following all 12 principles",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "exit - Exit agent",
-          "description": "Comando referenciado na definição do agente."
+          "name": "audit-multimedia {lesson} - Check all 12 principles against a lesson/presentation",
+          "description": ""
         },
         {
           "name": "fix-redundancy {lesson} - Identify and fix redundancy principle violations",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "help - Show available commands",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
         },
         {
           "name": "optimize-visual {lesson} - Apply spatial and temporal contiguity principles",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
+        },
+        {
+          "name": "design-slide {content} - Design a single slide/screen following all 12 principles",
+          "description": ""
         },
         {
           "name": "reduce-load {lesson} - Identify and remove extraneous cognitive load",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
+        },
+        {
+          "name": "chat-mode - Discuss multimedia learning",
+          "description": ""
+        },
+        {
+          "name": "exit - Exit agent",
+          "description": ""
         }
       ],
       "quality": {
@@ -4663,40 +4667,40 @@
       },
       "commands": [
         {
-          "name": "chat-mode - Discuss instructional design",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "check-principles {lesson} - Validate all 5 principles are present and properly implemented",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "design-coaching-fade {skill} - Design the coaching progression: full guidance → hints → independence",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "design-lesson {lesson} - Full lesson design: Problem → Activation → Demonstration → Application → Integration",
-          "description": "Comando referenciado na definição do agente."
+          "name": "help - Show available commands",
+          "description": ""
         },
         {
           "name": "design-module {module} - Apply all 5 First Principles to a complete module",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
+        },
+        {
+          "name": "design-lesson {lesson} - Full lesson design: Problem → Activation → Demonstration → Application → Integration",
+          "description": ""
+        },
+        {
+          "name": "check-principles {lesson} - Validate all 5 principles are present and properly implemented",
+          "description": ""
         },
         {
           "name": "design-progression {module} - Create problem progression from simple to complex with fading coaching",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "exit - Exit agent",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
         },
         {
           "name": "fix-lesson {lesson} - Diagnose and fix a lesson that violates First Principles",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
         },
         {
-          "name": "help - Show available commands",
-          "description": "Comando referenciado na definição do agente."
+          "name": "design-coaching-fade {skill} - Design the coaching progression: full guidance → hints → independence",
+          "description": ""
+        },
+        {
+          "name": "chat-mode - Discuss instructional design",
+          "description": ""
+        },
+        {
+          "name": "exit - Exit agent",
+          "description": ""
         }
       ],
       "quality": {
@@ -5050,40 +5054,40 @@
       },
       "commands": [
         {
-          "name": "chat-mode - Discuss curriculum design philosophy",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "create-essential-questions {topic} - Generate essential questions (open-ended, thought-provoking, recurring)",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "create-learning-plan {module} - WHERETO-based learning plan for a module",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "design-assessments {outcomes} - Create assessment evidence aligned to desired outcomes",
-          "description": "Comando referenciado na definição do agente."
+          "name": "help - Show available commands",
+          "description": ""
         },
         {
           "name": "design-curriculum {domain} - Full backward design: Stage 1 → Stage 2 → Stage 3",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
         },
         {
-          "name": "exit - Exit agent",
-          "description": "Comando referenciado na definição do agente."
+          "name": "create-essential-questions {topic} - Generate essential questions (open-ended, thought-provoking, recurring)",
+          "description": ""
         },
         {
-          "name": "facets-check {outcome} - Verify which of the 6 Facets of Understanding are addressed",
-          "description": "Comando referenciado na definição do agente."
+          "name": "design-assessments {outcomes} - Create assessment evidence aligned to desired outcomes",
+          "description": ""
         },
         {
-          "name": "help - Show available commands",
-          "description": "Comando referenciado na definição do agente."
+          "name": "create-learning-plan {module} - WHERETO-based learning plan for a module",
+          "description": ""
         },
         {
           "name": "validate-alignment {curriculum} - Audit outcomes ↔ assessments ↔ activities alignment",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
+        },
+        {
+          "name": "facets-check {outcome} - Verify which of the 6 Facets of Understanding are addressed",
+          "description": ""
+        },
+        {
+          "name": "chat-mode - Discuss curriculum design philosophy",
+          "description": ""
+        },
+        {
+          "name": "exit - Exit agent",
+          "description": ""
         }
       ],
       "quality": {
@@ -6256,35 +6260,35 @@
       },
       "commands": [
         {
-          "name": "exit — Deactivate SEO Chief",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "help — Show available commands",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "seo-audit-optimize — Full 3-phase cycle: evaluate, optimize, report",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
         },
         {
           "name": "seo-evaluate — Audit only, produce 0-100 score with breakdown",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "seo-optimize",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
         },
         {
           "name": "seo-optimize — Run optimization phase (requires prior audit)",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
         },
         {
           "name": "seo-report — Generate before/after comparison report",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
         },
         {
           "name": "seo-score — Quick score check without full audit",
+          "description": ""
+        },
+        {
+          "name": "help — Show available commands",
+          "description": ""
+        },
+        {
+          "name": "exit — Deactivate SEO Chief",
+          "description": ""
+        },
+        {
+          "name": "seo-optimize",
           "description": "Comando referenciado na definição do agente."
         }
       ],
@@ -6439,23 +6443,127 @@
       },
       "commands": [
         {
-          "name": "add-tool {name} - Add discovered tool to squad config.yaml dependencies",
-          "description": "Comando referenciado na definição do agente."
+          "name": "help - Show numbered list of available commands",
+          "description": ""
         },
         {
-          "name": "chat-mode - (Default) Conversational mode for squad guidance",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "create-agent",
-          "description": "Comando referenciado na definição do agente."
+          "name": "create-squad - Create a complete squad through guided workflow",
+          "description": ""
         },
         {
           "name": "create-agent - Create individual agent for squad",
-          "description": "Comando referenciado na definição do agente."
+          "description": ""
+        },
+        {
+          "name": "create-workflow - Create multi-phase workflow (PREFERRED over standalone tasks)",
+          "description": ""
+        },
+        {
+          "name": "create-task - Create atomic task (only when workflow is overkill)",
+          "description": ""
+        },
+        {
+          "name": "create-template - Create output template for squad",
+          "description": ""
         },
         {
           "name": "create-pipeline - Generate pipeline code scaffolding (state, progress, runner) for a squad",
+          "description": ""
+        },
+        {
+          "name": "discover-tools {domain} - Internal-first discovery with mandatory canonical domain validation",
+          "description": ""
+        },
+        {
+          "name": "upgrade-squad {name} - Upgrade existing squad to current AIOX standards (audit→plan→execute)",
+          "description": ""
+        },
+        {
+          "name": "validate-squad {name} - Validate entire squad with component-by-component analysis",
+          "description": ""
+        },
+        {
+          "name": "validate-final-artifacts {name} - Validate only final deliverables with hard gates",
+          "description": ""
+        },
+        {
+          "name": "validate-agent {file} - Validate single agent against AIOX 6-level structure",
+          "description": ""
+        },
+        {
+          "name": "validate-task {file} - Validate single task against Task Anatomy (8 fields)",
+          "description": ""
+        },
+        {
+          "name": "validate-workflow {file} - Validate single workflow (phases, checkpoints)",
+          "description": ""
+        },
+        {
+          "name": "validate-template {file} - Validate single template (syntax, placeholders)",
+          "description": ""
+        },
+        {
+          "name": "validate-checklist {file} - Validate single checklist (structure, specificity)",
+          "description": ""
+        },
+        {
+          "name": "reexecute-phase {squad} {workflow} {phase} - Backup and reexecute one workflow phase safely",
+          "description": ""
+        },
+        {
+          "name": "next-squad - Analyze ecosystem and recommend next squad to create or improve",
+          "description": ""
+        },
+        {
+          "name": "guide - Interactive onboarding guide for new users (concepts, workflow, first steps)",
+          "description": ""
+        },
+        {
+          "name": "squad-analytics - Detailed analytics dashboard (agents, tasks, workflows, templates, checklists per squad)",
+          "description": ""
+        },
+        {
+          "name": "refresh-registry - Scan squads/ and update registry (runs scripts/refresh-registry.py)",
+          "description": ""
+        },
+        {
+          "name": "squad-overview {name} - Generate comprehensive SQUAD-OVERVIEW.md documentation for a squad",
+          "description": ""
+        },
+        {
+          "name": "sync - Sync squad commands to .claude/commands/ (runs tasks/sync-ide-command.md)",
+          "description": ""
+        },
+        {
+          "name": "show-tools - Display global tool registry by reading {registry_path}",
+          "description": ""
+        },
+        {
+          "name": "add-tool {name} - Add discovered tool to squad config.yaml dependencies",
+          "description": ""
+        },
+        {
+          "name": "list-squads - List all squads by reading {registry_path}",
+          "description": ""
+        },
+        {
+          "name": "show-registry - Display squad registry by reading {registry_path}",
+          "description": ""
+        },
+        {
+          "name": "show-context - Show what context files are loaded in current session",
+          "description": ""
+        },
+        {
+          "name": "chat-mode - (Default) Conversational mode for squad guidance",
+          "description": ""
+        },
+        {
+          "name": "exit - Say goodbye and deactivate persona",
+          "description": ""
+        },
+        {
+          "name": "create-agent",
           "description": "Comando referenciado na definição do agente."
         },
         {
@@ -6463,79 +6571,7 @@
           "description": "Comando referenciado na definição do agente."
         },
         {
-          "name": "create-squad - Create a complete squad through guided workflow",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "create-task - Create atomic task (only when workflow is overkill)",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "create-template - Create output template for squad",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "create-workflow - Create multi-phase workflow (PREFERRED over standalone tasks)",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "discover-tools",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "discover-tools {domain} - Internal-first discovery with mandatory canonical domain validation",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "exit - Say goodbye and deactivate persona",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "guide - Interactive onboarding guide for new users (concepts, workflow, first steps)",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "help - Show numbered list of available commands",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "list-squads - List all squads by reading {registry_path}",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "next-squad - Analyze ecosystem and recommend next squad to create or improve",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "reexecute-phase {squad} {workflow} {phase} - Backup and reexecute one workflow phase safely",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "refresh-registry - Scan squads/ and update registry (runs scripts/refresh-registry.py)",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "show-context - Show what context files are loaded in current session",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "show-registry - Display squad registry by reading {registry_path}",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "show-tools - Display global tool registry by reading {registry_path}",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "squad-analytics - Detailed analytics dashboard (agents, tasks, workflows, templates, checklists per squad)",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "squad-overview {name} - Generate comprehensive SQUAD-OVERVIEW.md documentation for a squad",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "sync - Sync squad commands to .claude/commands/ (runs tasks/sync-ide-command.md)",
           "description": "Comando referenciado na definição do agente."
         },
         {
@@ -6543,39 +6579,7 @@
           "description": "Comando referenciado na definição do agente."
         },
         {
-          "name": "upgrade-squad {name} - Upgrade existing squad to current AIOX standards (audit→plan→execute)",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "validate-agent {file} - Validate single agent against AIOX 6-level structure",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "validate-checklist {file} - Validate single checklist (structure, specificity)",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "validate-final-artifacts {name} - Validate only final deliverables with hard gates",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
           "name": "validate-squad",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "validate-squad {name} - Validate entire squad with component-by-component analysis",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "validate-task {file} - Validate single task against Task Anatomy (8 fields)",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "validate-template {file} - Validate single template (syntax, placeholders)",
-          "description": "Comando referenciado na definição do agente."
-        },
-        {
-          "name": "validate-workflow {file} - Validate single workflow (phases, checkpoints)",
           "description": "Comando referenciado na definição do agente."
         }
       ],

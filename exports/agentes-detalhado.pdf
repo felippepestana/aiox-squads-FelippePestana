@@ -3,7 +3,7 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R 25 0 R 27 0 R 29 0 R 31 0 R 33 0 R 35 0 R 37 0 R 39 0 R 41 0 R 43 0 R 45 0 R 47 0 R 49 0 R 51 0 R 53 0 R 55 0 R 57 0 R 59 0 R 61 0 R 63 0 R 65 0 R 67 0 R 69 0 R 71 0 R 73 0 R 75 0 R 77 0 R 79 0 R 81 0 R 83 0 R 85 0 R 87 0 R 89 0 R 91 0 R 93 0 R 95 0 R 97 0 R 99 0 R 101 0 R 103 0 R 105 0 R 107 0 R 109 0 R 111 0 R 113 0 R 115 0 R 117 0 R 119 0 R 121 0 R 123 0 R 125 0 R 127 0 R 129 0 R 131 0 R 133 0 R 135 0 R 137 0 R 139 0 R 141 0 R 143 0 R 145 0 R 147 0 R 149 0 R 151 0 R 153 0 R 155 0 R 157 0 R 159 0 R] /Count 78 >>
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R 25 0 R 27 0 R 29 0 R 31 0 R 33 0 R 35 0 R 37 0 R 39 0 R 41 0 R 43 0 R 45 0 R 47 0 R 49 0 R 51 0 R 53 0 R 55 0 R 57 0 R 59 0 R 61 0 R 63 0 R 65 0 R 67 0 R 69 0 R 71 0 R 73 0 R 75 0 R 77 0 R 79 0 R 81 0 R 83 0 R 85 0 R 87 0 R 89 0 R 91 0 R 93 0 R 95 0 R 97 0 R 99 0 R 101 0 R 103 0 R 105 0 R 107 0 R 109 0 R 111 0 R 113 0 R 115 0 R 117 0 R 119 0 R 121 0 R 123 0 R 125 0 R 127 0 R 129 0 R 131 0 R 133 0 R 135 0 R 137 0 R 139 0 R 141 0 R 143 0 R 145 0 R 147 0 R 149 0 R 151 0 R 153 0 R 155 0 R 157 0 R] /Count 77 >>
 endobj
 3 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
@@ -1499,7 +1499,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 22 0 R >>
 endobj
 24 0 obj
-<< /Length 3905 >>
+<< /Length 3581 >>
 stream
 BT
 /F1 8 Tf
@@ -1507,35 +1507,31 @@ BT
 12 TL
 () Tj
 T*
-(- *aria ? Comando referenciado na definio do agente.) Tj
+(- *audit - Full accessibility audit \(automated + manual + AT testing\)) Tj
 T*
-(- *aria - ARIA implementation guidance for a component ? Comando referenciado na definio do agente.) Tj
+(- *focus - Design focus management pattern for a widget) Tj
+T*
+(- *aria - ARIA implementation guidance for a component) Tj
+T*
+(- *screen-reader - Screen reader testing strategy and expected behavior) Tj
+T*
+(- *contrast - Color contrast validation against WCAG 2.2) Tj
+T*
+(- *keyboard-nav - Keyboard navigation pattern design) Tj
+T*
+(- *wcag-check - Check specific WCAG criterion compliance) Tj
+T*
+(- *help - Show all available commands) Tj
+T*
+(- *exit - Exit Sara mode) Tj
+T*
+(- *aria ? Comando referenciado na definio do agente.) Tj
 T*
 (- *audit ? Comando referenciado na definio do agente.) Tj
 T*
-(- *audit - Full accessibility audit \(automated + manual + AT testing\) ? Comando referenciado na definio) Tj
-T*
-(do agente.) Tj
-T*
-(- *contrast - Color contrast validation against WCAG 2.2 ? Comando referenciado na definio do agente.) Tj
-T*
-(- *exit - Exit Sara mode ? Comando referenciado na definio do agente.) Tj
-T*
 (- *focus ? Comando referenciado na definio do agente.) Tj
 T*
-(- *focus - Design focus management pattern for a widget ? Comando referenciado na definio do agente.) Tj
-T*
-(- *help - Show all available commands ? Comando referenciado na definio do agente.) Tj
-T*
-(- *keyboard-nav - Keyboard navigation pattern design ? Comando referenciado na definio do agente.) Tj
-T*
 (- *screen-reader ? Comando referenciado na definio do agente.) Tj
-T*
-(- *screen-reader - Screen reader testing strategy and expected behavior ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
-T*
-(- *wcag-check - Check specific WCAG criterion compliance ? Comando referenciado na definio do agente.) Tj
 T*
 () Tj
 T*
@@ -1641,6 +1637,10 @@ T*
 T*
 (- *design ? Start design flow for new feature/component) Tj
 T*
+(- *build ? Start implementation flow) Tj
+T*
+(- *polish ? Start polish flow \(motion + a11y + performance\)) Tj
+T*
 ET
 endstream
 endobj
@@ -1648,16 +1648,12 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 24 0 R >>
 endobj
 26 0 obj
-<< /Length 3949 >>
+<< /Length 3976 >>
 stream
 BT
 /F1 8 Tf
 42 800 Td
 12 TL
-(- *build ? Start implementation flow) Tj
-T*
-(- *polish ? Start polish flow \(motion + a11y + performance\)) Tj
-T*
 (- *ship ? Start validation and ship flow \(all QA gates\)) Tj
 T*
 (- *exit ? Exit Squad Apex mode) Tj
@@ -1790,6 +1786,10 @@ T*
 T*
 (- *help ? Comando referenciado na definio do agente.) Tj
 T*
+(- *navigation ? Comando referenciado na definio do agente.) Tj
+T*
+(- *platform-check ? Comando referenciado na definio do agente.) Tj
+T*
 ET
 endstream
 endobj
@@ -1797,16 +1797,12 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 26 0 R >>
 endobj
 28 0 obj
-<< /Length 3449 >>
+<< /Length 3483 >>
 stream
 BT
 /F1 8 Tf
 42 800 Td
 12 TL
-(- *navigation ? Comando referenciado na definio do agente.) Tj
-T*
-(- *platform-check ? Comando referenciado na definio do agente.) Tj
-T*
 (- *responsive ? Comando referenciado na definio do agente.) Tj
 T*
 (- *shared-component ? Comando referenciado na definio do agente.) Tj
@@ -1939,6 +1935,10 @@ T*
 T*
 (design system components, implementing multi-mode theming \(light/dark/high-contrast\), syncing Figma) Tj
 T*
+(variables with code, auditing token usage compliance, setting up Storybook documentation, or making any) Tj
+T*
+(decision about naming conventions in the design system.) Tj
+T*
 ET
 endstream
 endobj
@@ -1946,16 +1946,12 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 28 0 R >>
 endobj
 30 0 obj
-<< /Length 3968 >>
+<< /Length 3889 >>
 stream
 BT
 /F1 8 Tf
 42 800 Td
 12 TL
-(variables with code, auditing token usage compliance, setting up Storybook documentation, or making any) Tj
-T*
-(decision about naming conventions in the design system.) Tj
-T*
 (- Papel: Design System Designer/Engineer ? Token Guardian) Tj
 T*
 (- Foco operacional: Design token architecture, multi-mode theming \(light/dark/high-contrast\), component) Tj
@@ -2026,53 +2022,37 @@ T*
 T*
 () Tj
 T*
+(- *token - Create, update, or audit design tokens \(primitive/semantic/component\)) Tj
+T*
+(- *component - Create or review a design system component with maturation level) Tj
+T*
+(- *theme - Design or audit multi-mode theme \(light/dark/high-contrast\)) Tj
+T*
+(- *sync-figma - Review or set up Figma Variables to code sync pipeline) Tj
+T*
+(- *audit-tokens - Audit codebase for hardcoded values and token drift) Tj
+T*
+(- *storybook - Create or review Storybook documentation for a component) Tj
+T*
+(- *help - Show numbered list of available commands with descriptions) Tj
+T*
+(- *exit - Deactivate Diana persona and return to default mode) Tj
+T*
 (- *audit-tokens ? Comando referenciado na definio do agente.) Tj
-T*
-(- *audit-tokens - Audit codebase for hardcoded values and token drift ? Comando referenciado na definio) Tj
-T*
-(do agente.) Tj
 T*
 (- *component ? Comando referenciado na definio do agente.) Tj
 T*
-(- *component - Create or review a design system component with maturation level ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
-T*
 (- *exit ? Comando referenciado na definio do agente.) Tj
-T*
-(- *exit - Deactivate Diana persona and return to default mode ? Comando referenciado na definio do) Tj
-T*
-(agente.) Tj
 T*
 (- *help ? Comando referenciado na definio do agente.) Tj
 T*
-(- *help - Show numbered list of available commands with descriptions ? Comando referenciado na definio) Tj
-T*
-(do agente.) Tj
-T*
 (- *storybook ? Comando referenciado na definio do agente.) Tj
-T*
-(- *storybook - Create or review Storybook documentation for a component ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
 T*
 (- *sync-figma ? Comando referenciado na definio do agente.) Tj
 T*
-(- *sync-figma - Review or set up Figma Variables to code sync pipeline ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
-T*
 (- *theme ? Comando referenciado na definio do agente.) Tj
 T*
-(- *theme - Design or audit multi-mode theme \(light/dark/high-contrast\) ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
-T*
 (- *token ? Comando referenciado na definio do agente.) Tj
-T*
-(- *token - Create, update, or audit design tokens \(primitive/semantic/component\) ? Comando referenciado) Tj
-T*
-(na definio do agente.) Tj
 T*
 () Tj
 T*
@@ -2088,19 +2068,6 @@ T*
 T*
 (implementation in CSS custom properties; agent: react-eng; context: Component implementation consuming) Tj
 T*
-ET
-endstream
-endobj
-31 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 30 0 R >>
-endobj
-32 0 obj
-<< /Length 3523 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (design tokens; agent: a11y-eng; context: Token contrast ratios and high-contrast mode validation; agent:) Tj
 T*
 (frontend-arch; context: Token build pipeline changes affecting monorepo architecture; agent: interaction-) Tj
@@ -2121,6 +2088,19 @@ T*
 T*
 (- Aliases: No informado.) Tj
 T*
+ET
+endstream
+endobj
+31 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 30 0 R >>
+endobj
+32 0 obj
+<< /Length 3568 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 () Tj
 T*
 (#### Finalidade) Tj
@@ -2237,19 +2217,6 @@ T*
 T*
 (- Papel: Senior Product Designer \(Interaction\)) Tj
 T*
-ET
-endstream
-endobj
-33 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 32 0 R >>
-endobj
-34 0 obj
-<< /Length 3379 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Foco operacional: - Component interaction design with visual-first methodology - Responsive layouts) Tj
 T*
 (with container queries over media queries - CSS architecture with defensive patterns - Fluid typography) Tj
@@ -2270,6 +2237,19 @@ T*
 T*
 (- Design e experincia do usurio) Tj
 T*
+ET
+endstream
+endobj
+33 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 32 0 R >>
+endobj
+34 0 obj
+<< /Length 3279 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Especializao em Senior, Product, Designer, Interaction) Tj
 T*
 (- Qualidade visual) Tj
@@ -2386,19 +2366,6 @@ T*
 T*
 () Tj
 T*
-ET
-endstream
-endobj
-35 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 34 0 R >>
-endobj
-36 0 obj
-<< /Length 3446 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Ativao via instrues do prprio agente) Tj
 T*
 (- Comandos *... declarados ou referenciados) Tj
@@ -2419,6 +2386,19 @@ T*
 T*
 (- *help ? Comando referenciado na definio do agente.) Tj
 T*
+ET
+endstream
+endobj
+35 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 34 0 R >>
+endobj
+36 0 obj
+<< /Length 3550 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- *native-module ? Comando referenciado na definio do agente.) Tj
 T*
 (- *navigation ? Comando referenciado na definio do agente.) Tj
@@ -2535,19 +2515,6 @@ T*
 T*
 (- Arquivo fonte: squads/apex/agents/perf-eng.md) Tj
 T*
-ET
-endstream
-endobj
-37 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 36 0 R >>
-endobj
-38 0 obj
-<< /Length 4134 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Ttulo: Performance Engineer ? Core Web Vitals) Tj
 T*
 (- Tier: 4) Tj
@@ -2568,6 +2535,19 @@ T*
 T*
 (strategies \(preload, display, subsetting\) - Set up performance budgets and monitoring - Profile runtime) Tj
 T*
+ET
+endstream
+endobj
+37 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 36 0 R >>
+endobj
+38 0 obj
+<< /Length 4011 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (performance with Chrome DevTools - Implement the PRPL pattern \(Push, Render, Pre-cache, Lazy-load\) -) Tj
 T*
 (Optimize SSR/SSG hydration strategies - Design caching strategies \(HTTP cache, service worker, CDN\)) Tj
@@ -2646,58 +2626,31 @@ T*
 T*
 () Tj
 T*
+(- *lighthouse - Lighthouse analysis strategy and interpretation) Tj
+T*
+(- *bundle-analyze - Bundle size analysis and reduction recommendations) Tj
+T*
+(- *web-vitals - Core Web Vitals optimization \(LCP, INP, CLS\)) Tj
+T*
+(- *image-optimize - Image optimization pipeline \(format, sizing, loading\)) Tj
+T*
+(- *code-split - Code splitting strategy for routes and components) Tj
+T*
+(- *font-optimize - Font loading strategy \(preload, display, subsetting\)) Tj
+T*
+(- *perf-budget - Set up performance budget with CI enforcement) Tj
+T*
+(- *help - Show all available commands) Tj
+T*
+(- *exit - Exit Addy mode) Tj
+T*
 (- *bundle-analyze ? Comando referenciado na definio do agente.) Tj
-T*
-(- *bundle-analyze - Bundle size analysis and reduction recommendations ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
-T*
-(- *code-split - Code splitting strategy for routes and components ? Comando referenciado na definio do) Tj
-T*
-(agente.) Tj
-T*
-(- *exit - Exit Addy mode ? Comando referenciado na definio do agente.) Tj
-T*
-(- *font-optimize - Font loading strategy \(preload, display, subsetting\) ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
-T*
-(- *help - Show all available commands ? Comando referenciado na definio do agente.) Tj
 T*
 (- *image-optimize ? Comando referenciado na definio do agente.) Tj
 T*
-(- *image-optimize - Image optimization pipeline \(format, sizing, loading\) ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
-T*
 (- *lighthouse ? Comando referenciado na definio do agente.) Tj
 T*
-(- *lighthouse - Lighthouse analysis strategy and interpretation ? Comando referenciado na definio do) Tj
-T*
-(agente.) Tj
-T*
-(- *perf-budget - Set up performance budget with CI enforcement ? Comando referenciado na definio do) Tj
-T*
-(agente.) Tj
-T*
 (- *web-vitals ? Comando referenciado na definio do agente.) Tj
-T*
-(- *web-vitals - Core Web Vitals optimization \(LCP, INP, CLS\) ? Comando referenciado na definio do) Tj
-T*
-ET
-endstream
-endobj
-39 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 38 0 R >>
-endobj
-40 0 obj
-<< /Length 4064 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
-(agente.) Tj
 T*
 () Tj
 T*
@@ -2731,6 +2684,19 @@ T*
 T*
 (width - Test motion/animation states in visual regression captures - Ensure visual parity between Figma) Tj
 T*
+ET
+endstream
+endobj
+39 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 38 0 R >>
+endobj
+40 0 obj
+<< /Length 3721 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (designs and implementation) Tj
 T*
 (- Papel: Frontend QA Engineer ? Visual Regression) Tj
@@ -2807,45 +2773,32 @@ T*
 T*
 () Tj
 T*
-(- *compare ? Comando referenciado na definio do agente.) Tj
+(- *visual-test - Set up visual regression test suite) Tj
 T*
-(- *compare - Compare screenshots between builds ? Comando referenciado na definio do agente.) Tj
+(- *compare - Compare screenshots between builds) Tj
+T*
+(- *regression - Investigate and diagnose visual regression) Tj
+T*
+(- *cross-browser - Cross-browser visual validation) Tj
+T*
+(- *theme-test - Theme testing \(light/dark/high-contrast\)) Tj
+T*
+(- *responsive-test - Responsive viewport testing strategy) Tj
+T*
+(- *screenshot - Capture screenshots at all matrix points) Tj
+T*
+(- *help - Show all available commands) Tj
+T*
+(- *exit - Exit Andy mode) Tj
+T*
+(- *compare ? Comando referenciado na definio do agente.) Tj
 T*
 (- *cross-browser ? Comando referenciado na definio do agente.) Tj
 T*
-(- *cross-browser - Cross-browser visual validation ? Comando referenciado na definio do agente.) Tj
-T*
-(- *exit - Exit Andy mode ? Comando referenciado na definio do agente.) Tj
-T*
-(- *help - Show all available commands ? Comando referenciado na definio do agente.) Tj
-T*
 (- *regression ? Comando referenciado na definio do agente.) Tj
-T*
-(- *regression - Investigate and diagnose visual regression ? Comando referenciado na definio do agente.) Tj
-T*
-(- *responsive-test - Responsive viewport testing strategy ? Comando referenciado na definio do agente.) Tj
-T*
-(- *screenshot - Capture screenshots at all matrix points ? Comando referenciado na definio do agente.) Tj
-T*
-(- *theme-test - Theme testing \(light/dark/high-contrast\) ? Comando referenciado na definio do agente.) Tj
 T*
 (- *visual-test ? Comando referenciado na definio do agente.) Tj
 T*
-(- *visual-test - Set up visual regression test suite ? Comando referenciado na definio do agente.) Tj
-T*
-ET
-endstream
-endobj
-41 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 40 0 R >>
-endobj
-42 0 obj
-<< /Length 4160 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 () Tj
 T*
 (### Michal \(qa-xplatform\)) Tj
@@ -2880,6 +2833,19 @@ T*
 T*
 (overhead\) - Set up device testing labs \(real devices over emulators\)) Tj
 T*
+ET
+endstream
+endobj
+41 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 40 0 R >>
+endobj
+42 0 obj
+<< /Length 3878 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Papel: Frontend QA Engineer ? Cross-Platform Testing) Tj
 T*
 (- Foco operacional: - Ensuring behavioral parity across iOS, Android, and web - Testing gestures as) Tj
@@ -2954,47 +2920,32 @@ T*
 T*
 () Tj
 T*
-(- *deep-link-test - Deep link testing \(universal links, app links\) ? Comando referenciado na definio do) Tj
+(- *device-test - Design real device testing strategy) Tj
 T*
-(agente.) Tj
+(- *platform-compare - Cross-platform parity validation) Tj
+T*
+(- *gesture-test - Gesture interaction testing strategy) Tj
+T*
+(- *offline-test - Offline and connectivity testing) Tj
+T*
+(- *spatial-test - visionOS spatial testing strategy) Tj
+T*
+(- *deep-link-test - Deep link testing \(universal links, app links\)) Tj
+T*
+(- *help - Show all available commands) Tj
+T*
+(- *exit - Exit Michal mode) Tj
 T*
 (- *device-test ? Comando referenciado na definio do agente.) Tj
 T*
-(- *device-test - Design real device testing strategy ? Comando referenciado na definio do agente.) Tj
-T*
-(- *exit - Exit Michal mode ? Comando referenciado na definio do agente.) Tj
-T*
 (- *gesture-test ? Comando referenciado na definio do agente.) Tj
-T*
-(- *gesture-test - Gesture interaction testing strategy ? Comando referenciado na definio do agente.) Tj
-T*
-(- *help - Show all available commands ? Comando referenciado na definio do agente.) Tj
 T*
 (- *offline-test ? Comando referenciado na definio do agente.) Tj
 T*
-(- *offline-test - Offline and connectivity testing ? Comando referenciado na definio do agente.) Tj
-T*
 (- *platform-compare ? Comando referenciado na definio do agente.) Tj
-T*
-(- *platform-compare - Cross-platform parity validation ? Comando referenciado na definio do agente.) Tj
-T*
-(- *spatial-test - visionOS spatial testing strategy ? Comando referenciado na definio do agente.) Tj
 T*
 () Tj
 T*
-ET
-endstream
-endobj
-43 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 42 0 R >>
-endobj
-44 0 obj
-<< /Length 3687 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (### Kent \(react-eng\)) Tj
 T*
 () Tj
@@ -3031,6 +2982,19 @@ T*
 T*
 (- Foco operacional: - Designing React component APIs that are composable and flexible - Writing tests) Tj
 T*
+ET
+endstream
+endobj
+43 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 42 0 R >>
+endobj
+44 0 obj
+<< /Length 3422 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (that give confidence without coupling to implementation - Choosing the right state management for each) Tj
 T*
 (state category - Deciding server vs client boundaries in React Server Components - Building accessible,) Tj
@@ -3131,19 +3095,6 @@ T*
 T*
 (3D camera controls, raycasting, and scene management) Tj
 T*
-ET
-endstream
-endobj
-45 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 44 0 R >>
-endobj
-46 0 obj
-<< /Length 3281 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Papel: Design Engineer ? Spatial & 3D) Tj
 T*
 (- Foco operacional: - Making 3D accessible through React's component model - Building reusable 3D) Tj
@@ -3180,6 +3131,19 @@ T*
 T*
 (#### Heursticas relevantes) Tj
 T*
+ET
+endstream
+endobj
+45 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 44 0 R >>
+endobj
+46 0 obj
+<< /Length 3103 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 () Tj
 T*
 (- No declarado explicitamente.) Tj
@@ -3280,19 +3244,6 @@ T*
 T*
 () Tj
 T*
-ET
-endstream
-endobj
-47 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 46 0 R >>
-endobj
-48 0 obj
-<< /Length 3560 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- No declarado explicitamente.) Tj
 T*
 () Tj
@@ -3329,6 +3280,19 @@ T*
 T*
 (- Quando usar: Use when you need to: - Extract moments from transcripts with EXACT timestamps - Create) Tj
 T*
+ET
+endstream
+endobj
+47 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 46 0 R >>
+endobj
+48 0 obj
+<< /Length 3541 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 ({source-slug}/momentos.md for video editing - Identify hooks, insights, stories, quotes from content -) Tj
 T*
 (Detect viral triggers \(LACUNA, QUEBRA, PICO, CONTRAINTUITIVO, etc.\) - Prepare content for narrative) Tj
@@ -3429,19 +3393,6 @@ T*
 T*
 (#### Skills e capacidades) Tj
 T*
-ET
-endstream
-endobj
-49 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 48 0 R >>
-endobj
-50 0 obj
-<< /Length 2495 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 () Tj
 T*
 (- Coordinating curation pipeline, ensuring narrative coherence, delivering editor-ready outputs) Tj
@@ -3478,6 +3429,19 @@ T*
 T*
 (- Arquivo fonte: squads/curator/agents/data-curator.md) Tj
 T*
+ET
+endstream
+endobj
+49 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 48 0 R >>
+endobj
+50 0 obj
+<< /Length 2604 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Ttulo: News, Trends & Data Curator) Tj
 T*
 (- Tier: 0.5) Tj
@@ -3578,19 +3542,6 @@ T*
 T*
 (#### Meios de interao) Tj
 T*
-ET
-endstream
-endobj
-51 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 50 0 R >>
-endobj
-52 0 obj
-<< /Length 3696 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 () Tj
 T*
 (- Ativao via instrues do prprio agente) Tj
@@ -3607,13 +3558,15 @@ T*
 T*
 () Tj
 T*
-(- *help ? Comando referenciado na definio do agente.) Tj
+(- *render ? Render a single cut from validated YAML) Tj
 T*
-(- *preview ? Comando referenciado na definio do agente.) Tj
+(- *render-all ? Batch render all cuts from validated YAML) Tj
 T*
-(- *render ? Comando referenciado na definio do agente.) Tj
+(- *preview ? Dry-run: show ffmpeg commands without executing) Tj
 T*
-(- *render-all ? Comando referenciado na definio do agente.) Tj
+(- *help ? Show available commands) Tj
+T*
+(- *exit ? Exit agent, handoff to curator-chief) Tj
 T*
 () Tj
 T*
@@ -3625,6 +3578,19 @@ T*
 T*
 (- Ttulo: Shareability Architect & Contagious Content Expert) Tj
 T*
+ET
+endstream
+endobj
+51 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 50 0 R >>
+endobj
+52 0 obj
+<< /Length 3772 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Tier: 2) Tj
 T*
 (- Aliases: No informado.) Tj
@@ -3727,19 +3693,6 @@ T*
 T*
 (or journey-based narratives - Content that needs to "breathe" - Stories where "one plus one equals three") Tj
 T*
-ET
-endstream
-endobj
-53 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 52 0 R >>
-endobj
-54 0 obj
-<< /Length 3376 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (COMPLEMENTS: - Robert McKee \(scene structure\) ? Burns adds form and assembly - Matthew Dicks \(finding THE) Tj
 T*
 (moment\) ? Burns builds the narrative around it - Walter Murch \(editing decisions\) ? Burns provides the) Tj
@@ -3774,6 +3727,19 @@ T*
 T*
 (#### Heursticas relevantes) Tj
 T*
+ET
+endstream
+endobj
+53 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 52 0 R >>
+endobj
+54 0 obj
+<< /Length 3699 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 () Tj
 T*
 (- No declarado explicitamente.) Tj
@@ -3876,19 +3842,6 @@ T*
 T*
 (### MrBeast \(mrbeast\)) Tj
 T*
-ET
-endstream
-endobj
-55 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 54 0 R >>
-endobj
-56 0 obj
-<< /Length 3979 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 () Tj
 T*
 (- Arquivo fonte: squads/curator/agents/mrbeast.md) Tj
@@ -3923,6 +3876,19 @@ T*
 T*
 (framework\)) Tj
 T*
+ET
+endstream
+endobj
+55 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 54 0 R >>
+endobj
+56 0 obj
+<< /Length 3409 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Papel: Retention Architect & Content Systems Engineer) Tj
 T*
 (- Foco operacional: Retention architecture, minute-mark optimization, re-engagement engineering) Tj
@@ -4025,19 +3991,6 @@ T*
 T*
 (#### Heursticas relevantes) Tj
 T*
-ET
-endstream
-endobj
-57 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 56 0 R >>
-endobj
-58 0 obj
-<< /Length 3628 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 () Tj
 T*
 (- No declarado explicitamente.) Tj
@@ -4072,6 +4025,19 @@ T*
 T*
 (#### Finalidade) Tj
 T*
+ET
+endstream
+endobj
+57 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 56 0 R >>
+endobj
+58 0 obj
+<< /Length 3658 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 () Tj
 T*
 (- Quando usar: Use when you need to: - Create searchable index of all transcript content - Find specific) Tj
@@ -4174,19 +4140,6 @@ T*
 T*
 () Tj
 T*
-ET
-endstream
-endobj
-59 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 58 0 R >>
-endobj
-60 0 obj
-<< /Length 2993 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Cut precision, emotional impact, complex assembly, cross-domain pattern recognition) Tj
 T*
 (- Especializao em Master, Editor, Decision, Architect) Tj
@@ -4221,6 +4174,19 @@ T*
 T*
 (### Andrew Booth \(booth\)) Tj
 T*
+ET
+endstream
+endobj
+59 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 58 0 R >>
+endobj
+60 0 obj
+<< /Length 2936 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 () Tj
 T*
 (- Arquivo fonte: squads/deep-research/agents/booth.md) Tj
@@ -4323,19 +4289,6 @@ T*
 T*
 (produce...) Tj
 T*
-ET
-endstream
-endobj
-61 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 60 0 R >>
-endobj
-62 0 obj
-<< /Length 2888 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Documentao e sntese) Tj
 T*
 (- Especializao em Evidence, Synthesis, Auditor, executes) Tj
@@ -4370,6 +4323,19 @@ T*
 T*
 (- Aliases: No informado.) Tj
 T*
+ET
+endstream
+endobj
+61 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 60 0 R >>
+endobj
+62 0 obj
+<< /Length 2819 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 () Tj
 T*
 (#### Finalidade) Tj
@@ -4472,19 +4438,6 @@ T*
 T*
 (- Synthesize multi-agent outputs into structured reports) Tj
 T*
-ET
-endstream
-endobj
-63 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 62 0 R >>
-endobj
-64 0 obj
-<< /Length 2859 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 () Tj
 T*
 (#### Heursticas relevantes) Tj
@@ -4519,6 +4472,19 @@ T*
 T*
 (- Arquivo fonte: squads/deep-research/agents/forsgren.md) Tj
 T*
+ET
+endstream
+endobj
+63 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 62 0 R >>
+endobj
+64 0 obj
+<< /Length 2864 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Ttulo: Co-creator of DORA Metrics - Technical Performance Diagnostician) Tj
 T*
 (- Tier: 1 # Master - Primary for Technical Deep Dive) Tj
@@ -4621,19 +4587,6 @@ T*
 T*
 () Tj
 T*
-ET
-endstream
-endobj
-65 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 64 0 R >>
-endobj
-66 0 obj
-<< /Length 2853 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (#### Heursticas relevantes) Tj
 T*
 () Tj
@@ -4668,6 +4621,19 @@ T*
 T*
 () Tj
 T*
+ET
+endstream
+endobj
+65 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 64 0 R >>
+endobj
+66 0 obj
+<< /Length 3301 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Quando usar: Use for open-source investigations, source verification, multi-source triangulation,) Tj
 T*
 (geolocation, chronolocation, digital forensics, competitive intelligence gathering, and any task) Tj
@@ -4770,19 +4736,6 @@ T*
 T*
 (- Execuo sob demanda de tasks/templates/checklists/workflows do squad) Tj
 T*
-ET
-endstream
-endobj
-67 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 66 0 R >>
-endobj
-68 0 obj
-<< /Length 3115 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Roteamento flexvel por inteno do usurio) Tj
 T*
 () Tj
@@ -4817,6 +4770,19 @@ T*
 T*
 (structured protocols) Tj
 T*
+ET
+endstream
+endobj
+67 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 66 0 R >>
+endobj
+68 0 obj
+<< /Length 3040 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 () Tj
 T*
 (#### Skills e capacidades) Tj
@@ -4919,19 +4885,6 @@ T*
 T*
 (- Ttulo: Research Question Architect & EBM Framework Designer) Tj
 T*
-ET
-endstream
-endobj
-69 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 68 0 R >>
-endobj
-70 0 obj
-<< /Length 2516 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Tier: 0) Tj
 T*
 (- Aliases: No informado.) Tj
@@ -4966,6 +4919,19 @@ T*
 T*
 (- Especializao em Founder, Evidence, Medicine, clinical) Tj
 T*
+ET
+endstream
+endobj
+69 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 68 0 R >>
+endobj
+70 0 obj
+<< /Length 2298 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Transform fuzzy questions into precise, answerable, structured research questions that guide evidence) Tj
 T*
 (gathering) Tj
@@ -5068,19 +5034,6 @@ T*
 T*
 (operational excellence) Tj
 T*
-ET
-endstream
-endobj
-71 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 70 0 R >>
-endobj
-72 0 obj
-<< /Length 2492 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Foco operacional: End-to-end delivery pipeline optimization, from commit to production monitoring) Tj
 T*
 () Tj
@@ -5115,6 +5068,19 @@ T*
 T*
 () Tj
 T*
+ET
+endstream
+endobj
+71 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 70 0 R >>
+endobj
+72 0 obj
+<< /Length 2373 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (#### Comandos) Tj
 T*
 () Tj
@@ -5217,19 +5183,6 @@ T*
 T*
 () Tj
 T*
-ET
-endstream
-endobj
-73 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 72 0 R >>
-endobj
-74 0 obj
-<< /Length 2153 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Especializao em Specialist, provisions, manages, infrastructure) Tj
 T*
 () Tj
@@ -5264,6 +5217,19 @@ T*
 T*
 () Tj
 T*
+ET
+endstream
+endobj
+73 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 72 0 R >>
+endobj
+74 0 obj
+<< /Length 2154 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (#### Finalidade) Tj
 T*
 () Tj
@@ -5366,19 +5332,6 @@ T*
 T*
 (- Ttulo: Pipeline Orchestrator) Tj
 T*
-ET
-endstream
-endobj
-75 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 74 0 R >>
-endobj
-76 0 obj
-<< /Length 2403 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Tier: No informado.) Tj
 T*
 (- Aliases: No informado.) Tj
@@ -5413,6 +5366,19 @@ T*
 T*
 (- No declarado explicitamente.) Tj
 T*
+ET
+endstream
+endobj
+75 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 74 0 R >>
+endobj
+76 0 obj
+<< /Length 2450 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 () Tj
 T*
 (#### Meios de interao) Tj
@@ -5515,19 +5481,6 @@ T*
 T*
 (- Tier: 2) Tj
 T*
-ET
-endstream
-endobj
-77 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 76 0 R >>
-endobj
-78 0 obj
-<< /Length 3588 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Aliases: No informado.) Tj
 T*
 () Tj
@@ -5562,6 +5515,19 @@ T*
 T*
 (#### Meios de interao) Tj
 T*
+ET
+endstream
+endobj
+77 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 76 0 R >>
+endobj
+78 0 obj
+<< /Length 3580 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 () Tj
 T*
 (- Ativao via instrues do prprio agente) Tj
@@ -5664,19 +5630,6 @@ T*
 T*
 (- Especializao em theorist, constraint, analyst, chaotic) Tj
 T*
-ET
-endstream
-endobj
-79 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 78 0 R >>
-endobj
-80 0 obj
-<< /Length 3211 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Transform any work description into the fastest, cheapest execution plan by applying DAG optimization,) Tj
 T*
 (WIP...) Tj
@@ -5711,6 +5664,19 @@ T*
 T*
 () Tj
 T*
+ET
+endstream
+endobj
+79 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 78 0 R >>
+endobj
+80 0 obj
+<< /Length 2749 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Arquivo fonte: squads/education/agents/bjork-engineer.md) Tj
 T*
 (- Ttulo: Desirable Difficulties Engineer - Memory & Retention) Tj
@@ -5779,53 +5745,30 @@ T*
 T*
 () Tj
 T*
-(- *audit-difficulty {lesson} - Is difficulty desirable \(productive\) or undesirable \(frustrating\)? ?) Tj
+(- *help - Show available commands) Tj
 T*
-(Comando referenciado na definio do agente.) Tj
+(- *design-spacing {module} - Create spaced practice schedule with optimal intervals) Tj
 T*
-(- *chat-mode - Discuss memory and learning science ? Comando referenciado na definio do agente.) Tj
+(- *design-interleaving {modules} - Design interleaved practice across topics) Tj
 T*
-(- *design-interleaving {modules} - Design interleaved practice across topics ? Comando referenciado na) Tj
+(- *design-retrieval {lesson} - Add retrieval practice activities to a lesson) Tj
 T*
-(definio do agente.) Tj
+(- *design-variability {exercises} - Create varied practice conditions) Tj
 T*
-(- *design-retrieval {lesson} - Add retrieval practice activities to a lesson ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
+(- *audit-difficulty {lesson} - Is difficulty desirable \(productive\) or undesirable \(frustrating\)?) Tj
 T*
 (- *design-schedule {course} - Full retention engineering: spacing + interleaving + retrieval across) Tj
 T*
-(course ? Comando referenciado na definio do agente.) Tj
+(course) Tj
 T*
-(- *design-spacing {module} - Create spaced practice schedule with optimal intervals ? Comando) Tj
+(- *chat-mode - Discuss memory and learning science) Tj
 T*
-(referenciado na definio do agente.) Tj
-T*
-(- *design-variability {exercises} - Create varied practice conditions ? Comando referenciado na definio) Tj
-T*
-(do agente.) Tj
-T*
-(- *exit - Exit agent ? Comando referenciado na definio do agente.) Tj
-T*
-(- *help - Show available commands ? Comando referenciado na definio do agente.) Tj
+(- *exit - Exit agent) Tj
 T*
 () Tj
 T*
 (### bloom-diagnostician \(bloom-diagnostician\)) Tj
 T*
-ET
-endstream
-endobj
-81 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 80 0 R >>
-endobj
-82 0 obj
-<< /Length 2841 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 () Tj
 T*
 (- Arquivo fonte: squads/education/agents/bloom-diagnostician.md) Tj
@@ -5870,6 +5813,19 @@ T*
 T*
 () Tj
 T*
+ET
+endstream
+endobj
+81 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 80 0 R >>
+endobj
+82 0 obj
+<< /Length 3224 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Interao por prompt direto com base na persona do agente) Tj
 T*
 () Tj
@@ -5946,48 +5902,27 @@ T*
 T*
 () Tj
 T*
-(- *audit-games {design} - Validate gamification/game-based learning decisions against evidence ? Comando) Tj
+(- *help - Show available commands) Tj
 T*
-(referenciado na definio do agente.) Tj
+(- *validate-evidence {design} - Check all instructional design decisions against empirical evidence) Tj
 T*
-(- *chat-mode - Discuss evidence-based design ? Comando referenciado na definio do agente.) Tj
-T*
-(- *check-myths {curriculum} - Scan for learning myths \(styles, digital natives, pyramids, etc.\) ? Comando) Tj
-T*
-(referenciado na definio do agente.) Tj
-T*
-(- *exit - Exit agent ? Comando referenciado na definio do agente.) Tj
-T*
-(- *expertise-check {design} - Check for expertise reversal ? are strategies matched to learner level? ?) Tj
-T*
-(Comando referenciado na definio do agente.) Tj
-T*
-ET
-endstream
-endobj
-83 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 82 0 R >>
-endobj
-84 0 obj
-<< /Length 3604 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
-(- *help - Show available commands ? Comando referenciado na definio do agente.) Tj
+(- *check-myths {curriculum} - Scan for learning myths \(styles, digital natives, pyramids, etc.\)) Tj
 T*
 (- *recommend-strategy {context} - Evidence-based strategy recommendation for specific learner + content) Tj
 T*
-(context ? Comando referenciado na definio do agente.) Tj
+(context) Tj
 T*
-(- *validate-evidence {design} - Check all instructional design decisions against empirical evidence ?) Tj
+(- *audit-games {design} - Validate gamification/game-based learning decisions against evidence) Tj
 T*
-(Comando referenciado na definio do agente.) Tj
+(- *expertise-check {design} - Check for expertise reversal ? are strategies matched to learner level?) Tj
 T*
 (- *worked-example-decision {context} - Should this use worked examples or practice? \(depends on) Tj
 T*
-(expertise\) ? Comando referenciado na definio do agente.) Tj
+(expertise\)) Tj
+T*
+(- *chat-mode - Discuss evidence-based design) Tj
+T*
+(- *exit - Exit agent) Tj
 T*
 () Tj
 T*
@@ -6027,6 +5962,19 @@ T*
 T*
 (- Design instrucional e educao) Tj
 T*
+ET
+endstream
+endobj
+83 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 82 0 R >>
+endobj
+84 0 obj
+<< /Length 4113 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Especializao em Education, Engineer, Pipeline, Orchestrator) Tj
 T*
 (- Pipeline management, agent routing, quality gates, deliverable assembly) Tj
@@ -6053,33 +6001,23 @@ T*
 T*
 () Tj
 T*
-(- *adapt-progression {learner-level} - Adjust for beginner/intermediate/advanced ? Comando referenciado) Tj
+(- *create-course {domain} - Full pipeline: research ? design ? validate ? deliver) Tj
 T*
-(na definio do agente.) Tj
+(- *diagnose-domain {domain} - Phase 0-1: Triage + Research only) Tj
 T*
-(- *create-course {domain} - Full pipeline: research ? design ? validate ? deliver ? Comando referenciado) Tj
+(- *design-curriculum {domain} - Phase 2-3: Architecture + Module design) Tj
 T*
-(na definio do agente.) Tj
+(- *design-lesson {module} - Phase 4: Single lesson design) Tj
 T*
-(- *design-curriculum {domain} - Phase 2-3: Architecture + Module design ? Comando referenciado na) Tj
+(- *validate-curriculum - Phase 5: Full validation pass) Tj
 T*
-(definio do agente.) Tj
+(- *adapt-progression {learner-level} - Adjust for beginner/intermediate/advanced) Tj
 T*
-(- *design-lesson {module} - Phase 4: Single lesson design ? Comando referenciado na definio do agente.) Tj
+(- *mec-check {course-type} - Run MEC compliance for specific course type) Tj
 T*
-(- *diagnose-domain {domain} - Phase 0-1: Triage + Research only ? Comando referenciado na definio do) Tj
+(- *help - Show all commands) Tj
 T*
-(agente.) Tj
-T*
-(- *exit - Exit education mode ? Comando referenciado na definio do agente.) Tj
-T*
-(- *help - Show all commands ? Comando referenciado na definio do agente.) Tj
-T*
-(- *mec-check {course-type} - Run MEC compliance for specific course type ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
-T*
-(- *validate-curriculum - Phase 5: Full validation pass ? Comando referenciado na definio do agente.) Tj
+(- *exit - Exit education mode) Tj
 T*
 () Tj
 T*
@@ -6111,19 +6049,6 @@ T*
 T*
 (- Papel: No informado.) Tj
 T*
-ET
-endstream
-endobj
-85 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 84 0 R >>
-endobj
-86 0 obj
-<< /Length 4628 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Foco operacional: No informado.) Tj
 T*
 () Tj
@@ -6186,6 +6111,19 @@ T*
 T*
 (exercise must specify: goal \(measurable\), success criteria \(how to know it's done right\), feedback) Tj
 T*
+ET
+endstream
+endobj
+85 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 84 0 R >>
+endobj
+86 0 obj
+<< /Length 4657 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (mechanism \(how errors are detected\), and reflection prompt \(what to think about after\). Missing any =) Tj
 T*
 (incomplete exercise.; severity: MANDATORY) Tj
@@ -6260,19 +6198,6 @@ T*
 T*
 (- Foco operacional: No informado.) Tj
 T*
-ET
-endstream
-endobj
-87 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 86 0 R >>
-endobj
-88 0 obj
-<< /Length 4737 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 () Tj
 T*
 (#### Skills e capacidades) Tj
@@ -6335,6 +6260,19 @@ T*
 T*
 (- id: H-FS-06; name: Active Recall Only; when: Designing any review activity; rule: Minimum meaningful) Tj
 T*
+ET
+endstream
+endobj
+87 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 86 0 R >>
+endobj
+88 0 obj
+<< /Length 4710 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (review = retrieval practice \(not re-reading\). Every review must require the learner to produce an answer) Tj
 T*
 (from memory BEFORE seeing the correct answer. Recognition \(multiple choice\) is acceptable but less) Tj
@@ -6409,19 +6347,6 @@ T*
 T*
 (- Papel: No informado.) Tj
 T*
-ET
-endstream
-endobj
-89 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 88 0 R >>
-endobj
-90 0 obj
-<< /Length 4288 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Foco operacional: No informado.) Tj
 T*
 () Tj
@@ -6484,6 +6409,19 @@ T*
 T*
 (rule: VETO: Module with zero motivational design ? BLOCK. Content quality alone does not motivate. Even) Tj
 T*
+ET
+endstream
+endobj
+89 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 88 0 R >>
+endobj
+90 0 obj
+<< /Length 3371 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (excellent content needs deliberate attention hooks, relevance connections, confidence builders, and) Tj
 T*
 (satisfaction events.; severity: VETO) Tj
@@ -6558,19 +6496,6 @@ T*
 T*
 () Tj
 T*
-ET
-endstream
-endobj
-91 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 90 0 R >>
-endobj
-92 0 obj
-<< /Length 2879 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Design e experincia do usurio) Tj
 T*
 (- Design instrucional e educao) Tj
@@ -6613,38 +6538,39 @@ T*
 T*
 () Tj
 T*
-(- *audit-multimedia {lesson} - Check all 12 principles against a lesson/presentation ? Comando) Tj
+(- *help - Show available commands) Tj
 T*
-(referenciado na definio do agente.) Tj
+(- *decide-format {content} - Recommend optimal media format with principle-based justification) Tj
 T*
-(- *chat-mode - Discuss multimedia learning ? Comando referenciado na definio do agente.) Tj
+(- *audit-multimedia {lesson} - Check all 12 principles against a lesson/presentation) Tj
 T*
-(- *decide-format {content} - Recommend optimal media format with principle-based justification ? Comando) Tj
+(- *fix-redundancy {lesson} - Identify and fix redundancy principle violations) Tj
 T*
-(referenciado na definio do agente.) Tj
+(- *optimize-visual {lesson} - Apply spatial and temporal contiguity principles) Tj
 T*
-(- *design-slide {content} - Design a single slide/screen following all 12 principles ? Comando) Tj
+(- *design-slide {content} - Design a single slide/screen following all 12 principles) Tj
 T*
-(referenciado na definio do agente.) Tj
+(- *reduce-load {lesson} - Identify and remove extraneous cognitive load) Tj
 T*
-(- *exit - Exit agent ? Comando referenciado na definio do agente.) Tj
+(- *chat-mode - Discuss multimedia learning) Tj
 T*
-(- *fix-redundancy {lesson} - Identify and fix redundancy principle violations ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
-T*
-(- *help - Show available commands ? Comando referenciado na definio do agente.) Tj
-T*
-(- *optimize-visual {lesson} - Apply spatial and temporal contiguity principles ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
-T*
-(- *reduce-load {lesson} - Identify and remove extraneous cognitive load ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
+(- *exit - Exit agent) Tj
 T*
 () Tj
 T*
+ET
+endstream
+endobj
+91 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 90 0 R >>
+endobj
+92 0 obj
+<< /Length 2723 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (### mec-compliance \(mec-compliance\)) Tj
 T*
 () Tj
@@ -6707,19 +6633,6 @@ T*
 T*
 (- Aliases: No informado.) Tj
 T*
-ET
-endstream
-endobj
-93 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 92 0 R >>
-endobj
-94 0 obj
-<< /Length 3045 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 () Tj
 T*
 (#### Finalidade) Tj
@@ -6780,35 +6693,38 @@ T*
 T*
 () Tj
 T*
-(- *chat-mode - Discuss instructional design ? Comando referenciado na definio do agente.) Tj
+(- *help - Show available commands) Tj
 T*
-(- *check-principles {lesson} - Validate all 5 principles are present and properly implemented ? Comando) Tj
-T*
-(referenciado na definio do agente.) Tj
-T*
-(- *design-coaching-fade {skill} - Design the coaching progression: full guidance ? hints ? independence ?) Tj
-T*
-(Comando referenciado na definio do agente.) Tj
+(- *design-module {module} - Apply all 5 First Principles to a complete module) Tj
 T*
 (- *design-lesson {lesson} - Full lesson design: Problem ? Activation ? Demonstration ? Application ?) Tj
 T*
-(Integration ? Comando referenciado na definio do agente.) Tj
+(Integration) Tj
 T*
-(- *design-module {module} - Apply all 5 First Principles to a complete module ? Comando referenciado na) Tj
+(- *check-principles {lesson} - Validate all 5 principles are present and properly implemented) Tj
 T*
-(definio do agente.) Tj
+(- *design-progression {module} - Create problem progression from simple to complex with fading coaching) Tj
 T*
-(- *design-progression {module} - Create problem progression from simple to complex with fading coaching ?) Tj
+(- *fix-lesson {lesson} - Diagnose and fix a lesson that violates First Principles) Tj
 T*
-(Comando referenciado na definio do agente.) Tj
+ET
+endstream
+endobj
+93 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 92 0 R >>
+endobj
+94 0 obj
+<< /Length 3365 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
+(- *design-coaching-fade {skill} - Design the coaching progression: full guidance ? hints ? independence) Tj
 T*
-(- *exit - Exit agent ? Comando referenciado na definio do agente.) Tj
+(- *chat-mode - Discuss instructional design) Tj
 T*
-(- *fix-lesson {lesson} - Diagnose and fix a lesson that violates First Principles ? Comando referenciado) Tj
-T*
-(na definio do agente.) Tj
-T*
-(- *help - Show available commands ? Comando referenciado na definio do agente.) Tj
+(- *exit - Exit agent) Tj
 T*
 () Tj
 T*
@@ -6856,19 +6772,6 @@ T*
 T*
 (#### Meios de interao) Tj
 T*
-ET
-endstream
-endobj
-95 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 94 0 R >>
-endobj
-96 0 obj
-<< /Length 4231 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 () Tj
 T*
 (- Interao por prompt direto com base na persona do agente) Tj
@@ -6953,6 +6856,19 @@ T*
 T*
 (research, \(3\) Expand search to adjacent domains for broader context.; severity: MANDATORY) Tj
 T*
+ET
+endstream
+endobj
+95 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 94 0 R >>
+endobj
+96 0 obj
+<< /Length 4496 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- id: H-NM-05; name: Consensus Classification; when: Analyzing which concepts to include; rule: Classify) Tj
 T*
 (every concept as: consensus \(all curricula include ? must include\), controversial \(some include ?) Tj
@@ -7005,19 +6921,6 @@ T*
 T*
 () Tj
 T*
-ET
-endstream
-endobj
-97 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 96 0 R >>
-endobj
-98 0 obj
-<< /Length 4788 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Arquivo fonte: squads/education/agents/rosenshine-teacher.md) Tj
 T*
 (- Ttulo: Master of Effective Instruction) Tj
@@ -7102,6 +7005,19 @@ T*
 T*
 (severity: MANDATORY) Tj
 T*
+ET
+endstream
+endobj
+97 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 96 0 R >>
+endobj
+98 0 obj
+<< /Length 3549 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- id: H-RT-06; name: 80% Success Target; when: Calibrating practice difficulty; rule: Target 80% success) Tj
 T*
 (rate during practice \(Principle 7\). Below 70% = too hard, learners form misconceptions. Above 90% = too) Tj
@@ -7154,19 +7070,6 @@ T*
 T*
 (- *design-scaffolding ? Create scaffolding for a difficult task \(Principle 8\)) Tj
 T*
-ET
-endstream
-endobj
-99 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 98 0 R >>
-endobj
-100 0 obj
-<< /Length 3685 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- *check-success-rate ? Validate that practice/assessment targets ~80% success rate \(Principle 7\)) Tj
 T*
 () Tj
@@ -7251,6 +7154,19 @@ T*
 T*
 (- Foco operacional: No informado.) Tj
 T*
+ET
+endstream
+endobj
+99 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 98 0 R >>
+endobj
+100 0 obj
+<< /Length 4846 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 () Tj
 T*
 (#### Skills e capacidades) Tj
@@ -7303,19 +7219,6 @@ T*
 T*
 (assessment uses sanitized/simplified scenarios ? Not realistic ? Does not test transfer. Real-world) Tj
 T*
-ET
-endstream
-endobj
-101 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 100 0 R >>
-endobj
-102 0 obj
-<< /Length 3989 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (problems have ambiguity, incomplete information, time pressure, and distractions. Assessments must) Tj
 T*
 (include enough of these to be valid.; severity: MANDATORY) Tj
@@ -7400,6 +7303,19 @@ T*
 T*
 (desired result) Tj
 T*
+ET
+endstream
+endobj
+101 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 100 0 R >>
+endobj
+102 0 obj
+<< /Length 3165 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 () Tj
 T*
 (#### Skills e capacidades) Tj
@@ -7440,48 +7356,25 @@ T*
 T*
 () Tj
 T*
-(- *chat-mode - Discuss curriculum design philosophy ? Comando referenciado na definio do agente.) Tj
+(- *help - Show available commands) Tj
+T*
+(- *design-curriculum {domain} - Full backward design: Stage 1 ? Stage 2 ? Stage 3) Tj
 T*
 (- *create-essential-questions {topic} - Generate essential questions \(open-ended, thought-provoking,) Tj
 T*
-(recurring\) ? Comando referenciado na definio do agente.) Tj
+(recurring\)) Tj
 T*
-(- *create-learning-plan {module} - WHERETO-based learning plan for a module ? Comando referenciado na) Tj
+(- *design-assessments {outcomes} - Create assessment evidence aligned to desired outcomes) Tj
 T*
-(definio do agente.) Tj
+(- *create-learning-plan {module} - WHERETO-based learning plan for a module) Tj
 T*
-(- *design-assessments {outcomes} - Create assessment evidence aligned to desired outcomes ? Comando) Tj
+(- *validate-alignment {curriculum} - Audit outcomes ? assessments ? activities alignment) Tj
 T*
-ET
-endstream
-endobj
-103 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 102 0 R >>
-endobj
-104 0 obj
-<< /Length 3584 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
-(referenciado na definio do agente.) Tj
+(- *facets-check {outcome} - Verify which of the 6 Facets of Understanding are addressed) Tj
 T*
-(- *design-curriculum {domain} - Full backward design: Stage 1 ? Stage 2 ? Stage 3 ? Comando referenciado) Tj
+(- *chat-mode - Discuss curriculum design philosophy) Tj
 T*
-(na definio do agente.) Tj
-T*
-(- *exit - Exit agent ? Comando referenciado na definio do agente.) Tj
-T*
-(- *facets-check {outcome} - Verify which of the 6 Facets of Understanding are addressed ? Comando) Tj
-T*
-(referenciado na definio do agente.) Tj
-T*
-(- *help - Show available commands ? Comando referenciado na definio do agente.) Tj
-T*
-(- *validate-alignment {curriculum} - Audit outcomes ? assessments ? activities alignment ? Comando) Tj
-T*
-(referenciado na definio do agente.) Tj
+(- *exit - Exit agent) Tj
 T*
 () Tj
 T*
@@ -7559,6 +7452,19 @@ T*
 T*
 () Tj
 T*
+ET
+endstream
+endobj
+103 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 102 0 R >>
+endobj
+104 0 obj
+<< /Length 3687 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (### Hardware Specialist \(hardware-specialist\)) Tj
 T*
 () Tj
@@ -7601,19 +7507,6 @@ T*
 T*
 (- Avaliao e diagnstico) Tj
 T*
-ET
-endstream
-endobj
-105 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 104 0 R >>
-endobj
-106 0 obj
-<< /Length 3514 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Documentao e sntese) Tj
 T*
 (- Especializao em Especialista, Hardware, formao, Engenharia) Tj
@@ -7708,6 +7601,19 @@ T*
 T*
 (- Especializao em Especialista, Jurdico, Normativo, responsvel) Tj
 T*
+ET
+endstream
+endobj
+105 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 104 0 R >>
+endobj
+106 0 obj
+<< /Length 3379 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Mapeamento e melhoria de processos) Tj
 T*
 () Tj
@@ -7750,19 +7656,6 @@ T*
 T*
 (- Aliases: No informado.) Tj
 T*
-ET
-endstream
-endobj
-107 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 106 0 R >>
-endobj
-108 0 obj
-<< /Length 3400 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 () Tj
 T*
 (#### Finalidade) Tj
@@ -7857,6 +7750,19 @@ T*
 T*
 (#### Skills e capacidades) Tj
 T*
+ET
+endstream
+endobj
+107 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 106 0 R >>
+endobj
+108 0 obj
+<< /Length 4431 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 () Tj
 T*
 (- Anlise especializada) Tj
@@ -7899,19 +7805,6 @@ T*
 T*
 () Tj
 T*
-ET
-endstream
-endobj
-109 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 108 0 R >>
-endobj
-110 0 obj
-<< /Length 5678 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (## Squad kaizen) Tj
 T*
 () Tj
@@ -8006,6 +7899,19 @@ T*
 T*
 (upstream is the constraint; rationale: Se squads downstream esto ociosos esperando output do upstream, o) Tj
 T*
+ET
+endstream
+endobj
+109 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 108 0 R >>
+endobj
+110 0 obj
+<< /Length 6179 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (upstream  o gargalo. Isso  o Drum-Buffer-Rope em ao: o drum \(ritmo\) do sistema  ditado pelo recurso) Tj
 T*
 (mais lento. Squads ociosos downstream NO so o problema ? eles esto corretos ao esperar. O problema ) Tj
@@ -8048,19 +7954,6 @@ T*
 T*
 (DEVE migrar para outro lugar. Se o mesmo squad continua sendo a restrio aps investimento \(Step 4) Tj
 T*
-ET
-endstream
-endobj
-111 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 110 0 R >>
-endobj
-112 0 obj
-<< /Length 5289 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (ELEVATE\), significa que a elevao falhou ? ou foi insuficiente, ou mirou no lugar errado, ou existe uma) Tj
 T*
 (restrio de poltica escondida. Na fbrica: se voc comprou uma mquina nova para o gargalo e a produo) Tj
@@ -8155,6 +8048,19 @@ T*
 T*
 (- *help ? Mostrar todos os comandos disponveis) Tj
 T*
+ET
+endstream
+endobj
+111 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 110 0 R >>
+endobj
+112 0 obj
+<< /Length 5597 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- *exit ? Sair do modo Bottleneck Hunter) Tj
 T*
 () Tj
@@ -8197,19 +8103,6 @@ T*
 T*
 (strategic capability analysis that feeds into the kaizen-chief's synthesis and informs squad creation,) Tj
 T*
-ET
-endstream
-endobj
-113 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 112 0 R >>
-endobj
-114 0 obj
-<< /Length 6535 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (reskilling, and structural redesign.) Tj
 T*
 (- Foco operacional: No informado.) Tj
@@ -8304,6 +8197,19 @@ T*
 T*
 (standardized, well-understood, and widely available as utilities. When such capabilities still require) Tj
 T*
+ET
+endstream
+endobj
+113 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 112 0 R >>
+endobj
+114 0 obj
+<< /Length 6456 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (manual intervention \(human or agent doing bespoke work\), it represents waste ? resources are being spent) Tj
 T*
 (on undifferentiated work that should be automated or consumed as a service. Wardley doctrine D08 \(Use) Tj
@@ -8346,19 +8252,6 @@ T*
 T*
 (has a role, but its capabilities have drifted from the current state of the domain. Wardley context:) Tj
 T*
-ET
-endstream
-endobj
-115 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 114 0 R >>
-endobj
-116 0 obj
-<< /Length 5409 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (Inertia \(D09\). The agent resists evolution because its current framework "still works" ? but the) Tj
 T*
 (landscape has moved. What worked 2 years ago may be actively counterproductive now. Note: The 2-year) Tj
@@ -8453,6 +8346,19 @@ T*
 T*
 (- *recruit ? Recommend new mind clones needed) Tj
 T*
+ET
+endstream
+endobj
+115 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 114 0 R >>
+endobj
+116 0 obj
+<< /Length 5598 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- *reskill ? Identify agents needing capability updates) Tj
 T*
 (- *redesign ? Identify agents/squads needing structural changes) Tj
@@ -8495,19 +8401,6 @@ T*
 T*
 (- Papel: FinOps analyst and ROI strategist who applies financial discipline to the AI agent ecosystem.) Tj
 T*
-ET
-endstream
-endobj
-117 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 116 0 R >>
-endobj
-118 0 obj
-<< /Length 6673 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (Operates as a Tier 2 \(Specialist\) agent within the Kaizen Squad ? providing the financial lens that) Tj
 T*
 (validates whether structural, performance, capability, and technology recommendations from other kaizen) Tj
@@ -8602,6 +8495,19 @@ T*
 T*
 (calculate ongoing costs 3. If outputs == 0 AND costs > 0: - FLAG: "Squad {name} has ${X}/month in costs) Tj
 T*
+ET
+endstream
+endobj
+117 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 116 0 R >>
+endobj
+118 0 obj
+<< /Length 5231 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (but zero outputs in 14 days" - CALCULATE: Projected annual waste at current rate - RECOMMEND: Pause) Tj
 T*
 (infrastructure, reallocate budget, or sunset; severity: MEDIUM; output_format: [KZ_CA_003] IDLE COST:) Tj
@@ -8644,19 +8550,6 @@ T*
 T*
 (pricing. Recognizing when a squad crosses a scale threshold can unlock significant cost efficiencies that) Tj
 T*
-ET
-endstream
-endobj
-119 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 118 0 R >>
-endobj
-120 0 obj
-<< /Length 3655 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (are invisible at lower volumes.; action: 1. Analyze task volume trends per squad 2. Identify volume) Tj
 T*
 (thresholds for pricing tier changes 3. If current volume exceeds threshold: - CALCULATE: Savings from) Tj
@@ -8751,6 +8644,19 @@ T*
 T*
 (- Ecosystem health, resource optimization, proactive gap detection, and weekly actionable) Tj
 T*
+ET
+endstream
+endobj
+119 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 118 0 R >>
+endobj
+120 0 obj
+<< /Length 4036 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (recommendations.) Tj
 T*
 (- Especializao em Orchestrador, Kaizen, Coordena, agentes) Tj
@@ -8793,19 +8699,6 @@ T*
 T*
 (- *radar ? Technology radar update) Tj
 T*
-ET
-endstream
-endobj
-121 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 120 0 R >>
-endobj
-122 0 obj
-<< /Length 5607 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- *cost ? Cost analysis and ROI dashboard) Tj
 T*
 (- *report ? Generate weekly recommendations report) Tj
@@ -8900,6 +8793,19 @@ T*
 T*
 (buildup? Scope change? - CORRELATE: Check if rework rate also increased \(compound signal\) - ESCALATE: If) Tj
 T*
+ET
+endstream
+endobj
+121 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 120 0 R >>
+endobj
+122 0 obj
+<< /Length 7486 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (2+ consecutive weeks of degradation, alert kaizen-chief; severity: HIGH; output_format: [KZ_PT_001]) Tj
 T*
 (DEGRADING PERFORMANCE: {squad_name} Task Lead Time: {previous_period} ? {current_period} \(+{delta}%\)) Tj
@@ -8942,19 +8848,6 @@ T*
 T*
 (KZ_PT_003: id: KZ_PT_003; name: Stalled OKR; rule: IF OKR progress <30% at midpoint THEN ALERT; when:) Tj
 T*
-ET
-endstream
-endobj
-123 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 122 0 R >>
-endobj
-124 0 obj
-<< /Length 6445 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (Applied during *okr-status, *performance, *alert; rationale: OKRs operate on a quarterly cadence \(13) Tj
 T*
 (weeks\). At the midpoint \(week 6-7\), progress should be at least 30% to have a realistic chance of) Tj
@@ -9049,6 +8942,19 @@ T*
 T*
 (resolve blocker, or formally archive; severity: LOW; output_format: [KZ_PT_005] ZERO ACTIVITY:) Tj
 T*
+ET
+endstream
+endobj
+123 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 122 0 R >>
+endobj
+124 0 obj
+<< /Length 4559 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 ({squad_name} Last completed task: {date} \({days} days ago\) Last git activity: {git_date} \({git_days} days) Tj
 T*
 (ago\) Pending tasks: {pending_count} Blocked tasks: {blocked_count} Status:) Tj
@@ -9091,19 +8997,6 @@ T*
 T*
 (- *alert ? Show all active performance alerts across all squads ? sorted by severity with actions) Tj
 T*
-ET
-endstream
-endobj
-125 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 124 0 R >>
-endobj
-126 0 obj
-<< /Length 5592 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- *help ? Show numbered list of available commands) Tj
 T*
 (- *exit ? Say goodbye and deactivate persona) Tj
@@ -9198,6 +9091,19 @@ T*
 T*
 (check; rationale: Hold is meant to be a temporary state ? proceed with caution while evaluating) Tj
 T*
+ET
+endstream
+endobj
+125 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 124 0 R >>
+endobj
+126 0 obj
+<< /Length 6510 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (alternatives or waiting for issues to be resolved. A tool that has been in Hold for more than 90 days) Tj
 T*
 (without a review has been forgotten, not governed. Either the issues have been resolved \(move to Assess) Tj
@@ -9240,19 +9146,6 @@ T*
 T*
 (NOT DEFINED - Token Efficiency: NOT DEFINED - Output Accuracy: NOT DEFINED - Cost Per Task: NOT DEFINED) Tj
 T*
-ET
-endstream
-endobj
-127 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 126 0 R >>
-endobj
-128 0 obj
-<< /Length 5350 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (Action: Define fitness functions using squad_fitness_template Risk: Degradation will not be detected) Tj
 T*
 (until production impact; KZ_TR_004: id: KZ_TR_004; name: Tool Sprawl; rule: IF >3 tools in same quadrant) Tj
@@ -9347,6 +9240,19 @@ T*
 T*
 (- *help ? Show numbered list of available commands) Tj
 T*
+ET
+endstream
+endobj
+127 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 126 0 R >>
+endobj
+128 0 obj
+<< /Length 5826 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- *exit ? Say goodbye and deactivate persona) Tj
 T*
 () Tj
@@ -9389,19 +9295,6 @@ T*
 T*
 () Tj
 T*
-ET
-endstream
-endobj
-129 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 128 0 R >>
-endobj
-130 0 obj
-<< /Length 6975 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (#### Skills e capacidades) Tj
 T*
 () Tj
@@ -9496,6 +9389,19 @@ T*
 T*
 (Dependencies: {list_of_dependent_squads} Extraneous load contribution: +{load_points} Recommendation:) Tj
 T*
+ET
+endstream
+endobj
+129 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 128 0 R >>
+endobj
+130 0 obj
+<< /Length 4764 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 ({consolidate_or_internalize}; KZ_TA_005: id: KZ_TA_005; name: Idle Squad Detector; rule: IF squad has) Tj
 T*
 (been idle >30 days THEN FLAG for review or deprecation; when: Applied during *topology; rationale: Idle) Tj
@@ -9538,19 +9444,6 @@ T*
 T*
 ("Squad {name} has tilted governance triangle" - RECOMMEND: Rebalance before increasing autonomy;) Tj
 T*
-ET
-endstream
-endobj
-131 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 130 0 R >>
-endobj
-132 0 obj
-<< /Length 3516 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (severity: HIGH; output_format: [KZ_TA_006] GOVERNANCE IMBALANCE: {squad_name} Autonomy: {a}/10 | Context:) Tj
 T*
 ({c}/10 | Control: {ct}/10 Divergence: {max - min} points \(threshold: 3\) Active failure mode:) Tj
@@ -9645,6 +9538,19 @@ T*
 T*
 (- id: AIVISIBILITY_002; name: Self-Contained Block Test; rule: WHEN checking content blocks, each H2) Tj
 T*
+ET
+endstream
+endobj
+131 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 130 0 R >>
+endobj
+132 0 obj
+<< /Length 3483 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (section should make sense if extracted independently. If a section says 'As mentioned above...' it fails) Tj
 T*
 (the self-contained test.) Tj
@@ -9687,19 +9593,6 @@ T*
 T*
 (#### Finalidade) Tj
 T*
-ET
-endstream
-endobj
-133 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 132 0 R >>
-endobj
-134 0 obj
-<< /Length 4191 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 () Tj
 T*
 (- Quando usar: No informado.) Tj
@@ -9794,6 +9687,19 @@ T*
 T*
 () Tj
 T*
+ET
+endstream
+endobj
+133 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 132 0 R >>
+endobj
+134 0 obj
+<< /Length 4189 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Especializao em specialist, evaluates, optimizes, titles) Tj
 T*
 (- SEO e visibilidade orgnica) Tj
@@ -9836,19 +9742,6 @@ T*
 T*
 (duplicates\), 3\) alt describes the actual image, 4\) alt includes relevant keywords naturally. Report total) Tj
 T*
-ET
-endstream
-endobj
-135 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 134 0 R >>
-endobj
-136 0 obj
-<< /Length 3129 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (count and any failures. NEVER report 'images look fine' without checking each one.) Tj
 T*
 () Tj
@@ -9943,6 +9836,19 @@ T*
 T*
 () Tj
 T*
+ET
+endstream
+endobj
+135 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 134 0 R >>
+endobj
+136 0 obj
+<< /Length 3485 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (### Schema Architect \(schema-architect\)) Tj
 T*
 () Tj
@@ -9985,19 +9891,6 @@ T*
 T*
 () Tj
 T*
-ET
-endstream
-endobj
-137 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 136 0 R >>
-endobj
-138 0 obj
-<< /Length 4401 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- id: SCHEMA_001; name: Page Type Detection; rule: WHEN analyzing a page, detect type from: URL patterns) Tj
 T*
 (\(/blog/, /product/\), content patterns \(FAQ Q&A format\), page structure \(hero + CTA = landing page\). Map) Tj
@@ -10092,6 +9985,19 @@ T*
 T*
 (- id: SEO_ORCH_004; name: Minimum Viable SEO; rule: WHEN score < 50, THEN focus ONLY on on-page +) Tj
 T*
+ET
+endstream
+endobj
+137 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 136 0 R >>
+endobj
+138 0 obj
+<< /Length 3939 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (technical + schema \(60 points\). Don't optimize AI visibility on a site with broken meta tags.) Tj
 T*
 (- id: SEO_ORCH_005; name: Report Clarity; rule: ALWAYS explain WHY each score was given. Never just say) Tj
@@ -10134,42 +10040,23 @@ T*
 T*
 (#### Comandos) Tj
 T*
-ET
-endstream
-endobj
-139 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 138 0 R >>
-endobj
-140 0 obj
-<< /Length 3288 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 () Tj
 T*
-(- *exit ? Deactivate SEO Chief ? Comando referenciado na definio do agente.) Tj
+(- *seo-audit-optimize ? Full 3-phase cycle: evaluate, optimize, report) Tj
 T*
-(- *help ? Show available commands ? Comando referenciado na definio do agente.) Tj
+(- *seo-evaluate ? Audit only, produce 0-100 score with breakdown) Tj
 T*
-(- *seo-audit-optimize ? Full 3-phase cycle: evaluate, optimize, report ? Comando referenciado na) Tj
+(- *seo-optimize ? Run optimization phase \(requires prior audit\)) Tj
 T*
-(definio do agente.) Tj
+(- *seo-report ? Generate before/after comparison report) Tj
 T*
-(- *seo-evaluate ? Audit only, produce 0-100 score with breakdown ? Comando referenciado na definio do) Tj
+(- *seo-score ? Quick score check without full audit) Tj
 T*
-(agente.) Tj
+(- *help ? Show available commands) Tj
+T*
+(- *exit ? Deactivate SEO Chief) Tj
 T*
 (- *seo-optimize ? Comando referenciado na definio do agente.) Tj
-T*
-(- *seo-optimize ? Run optimization phase \(requires prior audit\) ? Comando referenciado na definio do) Tj
-T*
-(agente.) Tj
-T*
-(- *seo-report ? Generate before/after comparison report ? Comando referenciado na definio do agente.) Tj
-T*
-(- *seo-score ? Quick score check without full audit ? Comando referenciado na definio do agente.) Tj
 T*
 () Tj
 T*
@@ -10247,6 +10134,19 @@ T*
 T*
 () Tj
 T*
+ET
+endstream
+endobj
+139 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 138 0 R >>
+endobj
+140 0 obj
+<< /Length 3075 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Arquivo fonte: squads/seo/agents/technical-auditor.md) Tj
 T*
 (- Ttulo: Technical SEO Specialist) Tj
@@ -10283,19 +10183,6 @@ T*
 T*
 () Tj
 T*
-ET
-endstream
-endobj
-141 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 140 0 R >>
-endobj
-142 0 obj
-<< /Length 3664 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (#### Heursticas relevantes) Tj
 T*
 () Tj
@@ -10396,144 +10283,94 @@ T*
 T*
 () Tj
 T*
-(#### Comandos) Tj
-T*
-() Tj
-T*
-(- *add-tool {name} - Add discovered tool to squad config.yaml dependencies ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
-T*
-(- *chat-mode - \(Default\) Conversational mode for squad guidance ? Comando referenciado na definio do) Tj
-T*
-(agente.) Tj
-T*
-(- *create-agent ? Comando referenciado na definio do agente.) Tj
-T*
-(- *create-agent - Create individual agent for squad ? Comando referenciado na definio do agente.) Tj
-T*
-(- *create-pipeline - Generate pipeline code scaffolding \(state, progress, runner\) for a squad ? Comando) Tj
-T*
-(referenciado na definio do agente.) Tj
-T*
-(- *create-squad ? Comando referenciado na definio do agente.) Tj
-T*
-(- *create-squad - Create a complete squad through guided workflow ? Comando referenciado na definio do) Tj
-T*
-(agente.) Tj
-T*
-(- *create-task - Create atomic task \(only when workflow is overkill\) ? Comando referenciado na definio) Tj
-T*
-(do agente.) Tj
-T*
-(- *create-template - Create output template for squad ? Comando referenciado na definio do agente.) Tj
-T*
-(- *create-workflow - Create multi-phase workflow \(PREFERRED over standalone tasks\) ? Comando referenciado) Tj
-T*
-(na definio do agente.) Tj
-T*
 ET
 endstream
 endobj
-143 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 142 0 R >>
+141 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 140 0 R >>
 endobj
-144 0 obj
-<< /Length 4451 >>
+142 0 obj
+<< /Length 4352 >>
 stream
 BT
 /F1 8 Tf
 42 800 Td
 12 TL
-(- *discover-tools ? Comando referenciado na definio do agente.) Tj
+(#### Comandos) Tj
 T*
-(- *discover-tools {domain} - Internal-first discovery with mandatory canonical domain validation ?) Tj
+() Tj
 T*
-(Comando referenciado na definio do agente.) Tj
+(- *help - Show numbered list of available commands) Tj
 T*
-(- *exit - Say goodbye and deactivate persona ? Comando referenciado na definio do agente.) Tj
+(- *create-squad - Create a complete squad through guided workflow) Tj
 T*
-(- *guide - Interactive onboarding guide for new users \(concepts, workflow, first steps\) ? Comando) Tj
+(- *create-agent - Create individual agent for squad) Tj
 T*
-(referenciado na definio do agente.) Tj
+(- *create-workflow - Create multi-phase workflow \(PREFERRED over standalone tasks\)) Tj
 T*
-(- *help - Show numbered list of available commands ? Comando referenciado na definio do agente.) Tj
+(- *create-task - Create atomic task \(only when workflow is overkill\)) Tj
 T*
-(- *list-squads - List all squads by reading {registry_path} ? Comando referenciado na definio do) Tj
+(- *create-template - Create output template for squad) Tj
 T*
-(agente.) Tj
+(- *create-pipeline - Generate pipeline code scaffolding \(state, progress, runner\) for a squad) Tj
 T*
-(- *next-squad - Analyze ecosystem and recommend next squad to create or improve ? Comando referenciado na) Tj
+(- *discover-tools {domain} - Internal-first discovery with mandatory canonical domain validation) Tj
 T*
-(definio do agente.) Tj
+(- *upgrade-squad {name} - Upgrade existing squad to current AIOX standards \(audit?plan?execute\)) Tj
 T*
-(- *reexecute-phase {squad} {workflow} {phase} - Backup and reexecute one workflow phase safely ? Comando) Tj
+(- *validate-squad {name} - Validate entire squad with component-by-component analysis) Tj
 T*
-(referenciado na definio do agente.) Tj
+(- *validate-final-artifacts {name} - Validate only final deliverables with hard gates) Tj
 T*
-(- *refresh-registry - Scan squads/ and update registry \(runs scripts/refresh-registry.py\) ? Comando) Tj
+(- *validate-agent {file} - Validate single agent against AIOX 6-level structure) Tj
 T*
-(referenciado na definio do agente.) Tj
+(- *validate-task {file} - Validate single task against Task Anatomy \(8 fields\)) Tj
 T*
-(- *show-context - Show what context files are loaded in current session ? Comando referenciado na) Tj
+(- *validate-workflow {file} - Validate single workflow \(phases, checkpoints\)) Tj
 T*
-(definio do agente.) Tj
+(- *validate-template {file} - Validate single template \(syntax, placeholders\)) Tj
 T*
-(- *show-registry - Display squad registry by reading {registry_path} ? Comando referenciado na definio) Tj
+(- *validate-checklist {file} - Validate single checklist \(structure, specificity\)) Tj
 T*
-(do agente.) Tj
+(- *reexecute-phase {squad} {workflow} {phase} - Backup and reexecute one workflow phase safely) Tj
 T*
-(- *show-tools - Display global tool registry by reading {registry_path} ? Comando referenciado na) Tj
+(- *next-squad - Analyze ecosystem and recommend next squad to create or improve) Tj
 T*
-(definio do agente.) Tj
+(- *guide - Interactive onboarding guide for new users \(concepts, workflow, first steps\)) Tj
 T*
 (- *squad-analytics - Detailed analytics dashboard \(agents, tasks, workflows, templates, checklists per) Tj
 T*
-(squad\) ? Comando referenciado na definio do agente.) Tj
+(squad\)) Tj
 T*
-(- *squad-overview {name} - Generate comprehensive SQUAD-OVERVIEW.md documentation for a squad ? Comando) Tj
+(- *refresh-registry - Scan squads/ and update registry \(runs scripts/refresh-registry.py\)) Tj
 T*
-(referenciado na definio do agente.) Tj
+(- *squad-overview {name} - Generate comprehensive SQUAD-OVERVIEW.md documentation for a squad) Tj
 T*
-(- *sync - Sync squad commands to .claude/commands/ \(runs tasks/sync-ide-command.md\) ? Comando) Tj
+(- *sync - Sync squad commands to .claude/commands/ \(runs tasks/sync-ide-command.md\)) Tj
 T*
-(referenciado na definio do agente.) Tj
+(- *show-tools - Display global tool registry by reading {registry_path}) Tj
+T*
+(- *add-tool {name} - Add discovered tool to squad config.yaml dependencies) Tj
+T*
+(- *list-squads - List all squads by reading {registry_path}) Tj
+T*
+(- *show-registry - Display squad registry by reading {registry_path}) Tj
+T*
+(- *show-context - Show what context files are loaded in current session) Tj
+T*
+(- *chat-mode - \(Default\) Conversational mode for squad guidance) Tj
+T*
+(- *exit - Say goodbye and deactivate persona) Tj
+T*
+(- *create-agent ? Comando referenciado na definio do agente.) Tj
+T*
+(- *create-squad ? Comando referenciado na definio do agente.) Tj
+T*
+(- *discover-tools ? Comando referenciado na definio do agente.) Tj
 T*
 (- *upgrade-squad ? Comando referenciado na definio do agente.) Tj
 T*
-(- *upgrade-squad {name} - Upgrade existing squad to current AIOX standards \(audit?plan?execute\) ? Comando) Tj
-T*
-(referenciado na definio do agente.) Tj
-T*
-(- *validate-agent {file} - Validate single agent against AIOX 6-level structure ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
-T*
-(- *validate-checklist {file} - Validate single checklist \(structure, specificity\) ? Comando referenciado) Tj
-T*
-(na definio do agente.) Tj
-T*
-(- *validate-final-artifacts {name} - Validate only final deliverables with hard gates ? Comando) Tj
-T*
-(referenciado na definio do agente.) Tj
-T*
 (- *validate-squad ? Comando referenciado na definio do agente.) Tj
-T*
-(- *validate-squad {name} - Validate entire squad with component-by-component analysis ? Comando) Tj
-T*
-(referenciado na definio do agente.) Tj
-T*
-(- *validate-task {file} - Validate single task against Task Anatomy \(8 fields\) ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
-T*
-(- *validate-template {file} - Validate single template \(syntax, placeholders\) ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
-T*
-(- *validate-workflow {file} - Validate single workflow \(phases, checkpoints\) ? Comando referenciado na) Tj
-T*
-(definio do agente.) Tj
 T*
 () Tj
 T*
@@ -10581,19 +10418,6 @@ T*
 T*
 () Tj
 T*
-ET
-endstream
-endobj
-145 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 144 0 R >>
-endobj
-146 0 obj
-<< /Length 3489 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (#### Skills e capacidades) Tj
 T*
 () Tj
@@ -10608,6 +10432,19 @@ T*
 T*
 (#### Heursticas relevantes) Tj
 T*
+ET
+endstream
+endobj
+143 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 142 0 R >>
+endobj
+144 0 obj
+<< /Length 3482 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 () Tj
 T*
 (- Canal presente na interface mas ausente em mic-mapping.yaml: tratar como ambiente \(camera_target=null\),) Tj
@@ -10730,19 +10567,6 @@ T*
 T*
 (#### Meios de interao) Tj
 T*
-ET
-endstream
-endobj
-147 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 146 0 R >>
-endobj
-148 0 obj
-<< /Length 3178 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 () Tj
 T*
 (- Ativao via instrues do prprio agente) Tj
@@ -10757,6 +10581,19 @@ T*
 T*
 (#### Comandos) Tj
 T*
+ET
+endstream
+endobj
+145 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 144 0 R >>
+endobj
+146 0 obj
+<< /Length 3192 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 () Tj
 T*
 (- *rules ? Documentar/ajustar regras de auto-switch) Tj
@@ -10879,19 +10716,6 @@ T*
 T*
 (- Tier: 2) Tj
 T*
-ET
-endstream
-endobj
-149 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 148 0 R >>
-endobj
-150 0 obj
-<< /Length 3036 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- Aliases: No informado.) Tj
 T*
 () Tj
@@ -10906,6 +10730,19 @@ T*
 T*
 (- Papel: Arquiteto de cenas no OBS. Pixel-perfect, transies limpas.) Tj
 T*
+ET
+endstream
+endobj
+147 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 146 0 R >>
+endobj
+148 0 obj
+<< /Length 3340 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Foco operacional: Cenas que no cansam o olho e respeitam a hierarquia visual.) Tj
 T*
 () Tj
@@ -11028,19 +10865,6 @@ T*
 T*
 (- Nunca conectar uma segunda cmera enquanto a primeira no confirmar SuperSpeed em USBTreeView \(Win\) /) Tj
 T*
-ET
-endstream
-endobj
-151 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 150 0 R >>
-endobj
-152 0 obj
-<< /Length 3377 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (lsusb -t \(Linux\).) Tj
 T*
 (- Banda por root hub aproximando 70%: redistribuir para outro controlador raiz antes de continuar.) Tj
@@ -11055,6 +10879,19 @@ T*
 T*
 (- Cmera negociou Hi-Speed \(480M\) em vez de SuperSpeed: trocar de porta \(preferir traseiras marcadas) Tj
 T*
+ET
+endstream
+endobj
+149 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 148 0 R >>
+endobj
+150 0 obj
+<< /Length 3015 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (SS/SS10\) ou usar cabo OBSBOT original certificado.) Tj
 T*
 (- Auto-Track flagrando no rosto errado: alternar para preset Wide e desativar AT at reposicionar.) Tj
@@ -11177,19 +11014,6 @@ T*
 T*
 (- *timer ? Ajustar cronmetro regressivo \(tempo-alvo absoluto ou relativo\)) Tj
 T*
-ET
-endstream
-endobj
-153 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 152 0 R >>
-endobj
-154 0 obj
-<< /Length 3237 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- *go-live ? Disparar transio STANDBY ? CAM1) Tj
 T*
 (- *help ? Show commands) Tj
@@ -11204,6 +11028,19 @@ T*
 T*
 (- Arquivo fonte: squads/transmissao-multicam/agents/producer.md) Tj
 T*
+ET
+endstream
+endobj
+151 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 150 0 R >>
+endobj
+152 0 obj
+<< /Length 3316 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Ttulo: Live Scene Director) Tj
 T*
 (- Tier: 1) Tj
@@ -11326,19 +11163,6 @@ T*
 T*
 () Tj
 T*
-ET
-endstream
-endobj
-155 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 154 0 R >>
-endobj
-156 0 obj
-<< /Length 3928 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (- < 200ms entre toque e cena no programa; feedback visual imediato; nenhum boto fica 'morto' \(sempre tem) Tj
 T*
 (feedback\).) Tj
@@ -11353,6 +11177,19 @@ T*
 T*
 (#### Heursticas relevantes) Tj
 T*
+ET
+endstream
+endobj
+153 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 152 0 R >>
+endobj
+154 0 obj
+<< /Length 3917 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 () Tj
 T*
 (- Operador reporta 'boto no faz nada': checar /api/osc/status para confirmar que a mensagem chegou ao) Tj
@@ -11475,19 +11312,6 @@ T*
 T*
 (- Cmera caiu mid-evento: cortar imediatamente para outra cmera disponvel; tratar troca de cabo s aps) Tj
 T*
-ET
-endstream
-endobj
-157 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 156 0 R >>
-endobj
-158 0 obj
-<< /Length 1126 >>
-stream
-BT
-/F1 8 Tf
-42 800 Td
-12 TL
 (retomar programa estvel.) Tj
 T*
 (- Conflito entre auto-switch e operador: override manual SEMPRE prevalece por 10s ou at toggle de volta.) Tj
@@ -11502,6 +11326,19 @@ T*
 T*
 (- Comandos *... declarados ou referenciados) Tj
 T*
+ET
+endstream
+endobj
+155 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 154 0 R >>
+endobj
+156 0 obj
+<< /Length 824 >>
+stream
+BT
+/F1 8 Tf
+42 800 Td
+12 TL
 (- Execuo sob demanda de tasks/templates/checklists/workflows do squad) Tj
 T*
 (- Roteamento flexvel por inteno do usurio) Tj
@@ -11537,173 +11374,171 @@ T*
 ET
 endstream
 endobj
-159 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 158 0 R >>
+157 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 156 0 R >>
 endobj
 xref
-0 160
+0 158
 0000000000 65535 f 
 0000000009 00000 n 
 0000000058 00000 n 
-0000000683 00000 n 
-0000000753 00000 n 
-0000004864 00000 n 
-0000004990 00000 n 
-0000011316 00000 n 
-0000011442 00000 n 
-0000017313 00000 n 
-0000017439 00000 n 
-0000023390 00000 n 
-0000023518 00000 n 
-0000026786 00000 n 
-0000026914 00000 n 
-0000030539 00000 n 
-0000030667 00000 n 
-0000033910 00000 n 
-0000034038 00000 n 
-0000037508 00000 n 
-0000037636 00000 n 
-0000041298 00000 n 
-0000041426 00000 n 
-0000045315 00000 n 
-0000045443 00000 n 
-0000049401 00000 n 
-0000049529 00000 n 
-0000053531 00000 n 
-0000053659 00000 n 
-0000057161 00000 n 
-0000057289 00000 n 
-0000061310 00000 n 
-0000061438 00000 n 
-0000065014 00000 n 
-0000065142 00000 n 
-0000068574 00000 n 
-0000068702 00000 n 
-0000072201 00000 n 
-0000072329 00000 n 
-0000076516 00000 n 
-0000076644 00000 n 
-0000080761 00000 n 
-0000080889 00000 n 
-0000085102 00000 n 
-0000085230 00000 n 
-0000088970 00000 n 
-0000089098 00000 n 
-0000092432 00000 n 
-0000092560 00000 n 
-0000096173 00000 n 
-0000096301 00000 n 
-0000098849 00000 n 
-0000098977 00000 n 
-0000102726 00000 n 
-0000102854 00000 n 
-0000106283 00000 n 
-0000106411 00000 n 
-0000110443 00000 n 
-0000110571 00000 n 
-0000114252 00000 n 
-0000114380 00000 n 
-0000117426 00000 n 
-0000117554 00000 n 
-0000120495 00000 n 
-0000120623 00000 n 
-0000123535 00000 n 
-0000123663 00000 n 
-0000126569 00000 n 
-0000126697 00000 n 
-0000129865 00000 n 
-0000129993 00000 n 
-0000132562 00000 n 
-0000132690 00000 n 
-0000135235 00000 n 
-0000135363 00000 n 
-0000137569 00000 n 
-0000137697 00000 n 
-0000140153 00000 n 
-0000140281 00000 n 
-0000143922 00000 n 
-0000144050 00000 n 
-0000147314 00000 n 
-0000147442 00000 n 
-0000150336 00000 n 
-0000150464 00000 n 
-0000154121 00000 n 
-0000154249 00000 n 
-0000158930 00000 n 
-0000159058 00000 n 
-0000163848 00000 n 
-0000163976 00000 n 
-0000168317 00000 n 
-0000168445 00000 n 
-0000171377 00000 n 
-0000171505 00000 n 
-0000174603 00000 n 
-0000174731 00000 n 
-0000179015 00000 n 
-0000179143 00000 n 
-0000183984 00000 n 
-0000184112 00000 n 
-0000187851 00000 n 
-0000187981 00000 n 
-0000192024 00000 n 
-0000192154 00000 n 
-0000195792 00000 n 
-0000195922 00000 n 
-0000199490 00000 n 
-0000199620 00000 n 
-0000203074 00000 n 
-0000203204 00000 n 
-0000208936 00000 n 
-0000209066 00000 n 
-0000214409 00000 n 
-0000214539 00000 n 
-0000221128 00000 n 
-0000221258 00000 n 
-0000226721 00000 n 
-0000226851 00000 n 
-0000233578 00000 n 
-0000233708 00000 n 
-0000237417 00000 n 
-0000237547 00000 n 
-0000243208 00000 n 
-0000243338 00000 n 
-0000249837 00000 n 
-0000249967 00000 n 
-0000255613 00000 n 
-0000255743 00000 n 
-0000261147 00000 n 
-0000261277 00000 n 
-0000268306 00000 n 
-0000268436 00000 n 
-0000272006 00000 n 
-0000272136 00000 n 
-0000276381 00000 n 
-0000276511 00000 n 
-0000279694 00000 n 
-0000279824 00000 n 
-0000284279 00000 n 
-0000284409 00000 n 
-0000287751 00000 n 
-0000287881 00000 n 
-0000291599 00000 n 
-0000291729 00000 n 
-0000296234 00000 n 
-0000296364 00000 n 
-0000299907 00000 n 
-0000300037 00000 n 
-0000303269 00000 n 
-0000303399 00000 n 
-0000306489 00000 n 
-0000306619 00000 n 
-0000310050 00000 n 
-0000310180 00000 n 
-0000313471 00000 n 
-0000313601 00000 n 
-0000317583 00000 n 
-0000317713 00000 n 
-0000318893 00000 n 
+0000000675 00000 n 
+0000000745 00000 n 
+0000004856 00000 n 
+0000004982 00000 n 
+0000011308 00000 n 
+0000011434 00000 n 
+0000017305 00000 n 
+0000017431 00000 n 
+0000023382 00000 n 
+0000023510 00000 n 
+0000026778 00000 n 
+0000026906 00000 n 
+0000030531 00000 n 
+0000030659 00000 n 
+0000033902 00000 n 
+0000034030 00000 n 
+0000037500 00000 n 
+0000037628 00000 n 
+0000041290 00000 n 
+0000041418 00000 n 
+0000045307 00000 n 
+0000045435 00000 n 
+0000049069 00000 n 
+0000049197 00000 n 
+0000053226 00000 n 
+0000053354 00000 n 
+0000056890 00000 n 
+0000057018 00000 n 
+0000060960 00000 n 
+0000061088 00000 n 
+0000064709 00000 n 
+0000064837 00000 n 
+0000068169 00000 n 
+0000068297 00000 n 
+0000071900 00000 n 
+0000072028 00000 n 
+0000076092 00000 n 
+0000076220 00000 n 
+0000079994 00000 n 
+0000080122 00000 n 
+0000084053 00000 n 
+0000084181 00000 n 
+0000087656 00000 n 
+0000087784 00000 n 
+0000090940 00000 n 
+0000091068 00000 n 
+0000094662 00000 n 
+0000094790 00000 n 
+0000097447 00000 n 
+0000097575 00000 n 
+0000101400 00000 n 
+0000101528 00000 n 
+0000105280 00000 n 
+0000105408 00000 n 
+0000108870 00000 n 
+0000108998 00000 n 
+0000112709 00000 n 
+0000112837 00000 n 
+0000115826 00000 n 
+0000115954 00000 n 
+0000118826 00000 n 
+0000118954 00000 n 
+0000121871 00000 n 
+0000121999 00000 n 
+0000125353 00000 n 
+0000125481 00000 n 
+0000128574 00000 n 
+0000128702 00000 n 
+0000131053 00000 n 
+0000131181 00000 n 
+0000133607 00000 n 
+0000133735 00000 n 
+0000135942 00000 n 
+0000136070 00000 n 
+0000138573 00000 n 
+0000138701 00000 n 
+0000142334 00000 n 
+0000142462 00000 n 
+0000145264 00000 n 
+0000145392 00000 n 
+0000148669 00000 n 
+0000148797 00000 n 
+0000152963 00000 n 
+0000153091 00000 n 
+0000157801 00000 n 
+0000157929 00000 n 
+0000162692 00000 n 
+0000162820 00000 n 
+0000166244 00000 n 
+0000166372 00000 n 
+0000169148 00000 n 
+0000169276 00000 n 
+0000172694 00000 n 
+0000172822 00000 n 
+0000177371 00000 n 
+0000177499 00000 n 
+0000181101 00000 n 
+0000181229 00000 n 
+0000186129 00000 n 
+0000186259 00000 n 
+0000189478 00000 n 
+0000189608 00000 n 
+0000193349 00000 n 
+0000193479 00000 n 
+0000196912 00000 n 
+0000197042 00000 n 
+0000201527 00000 n 
+0000201657 00000 n 
+0000207890 00000 n 
+0000208020 00000 n 
+0000213671 00000 n 
+0000213801 00000 n 
+0000220311 00000 n 
+0000220441 00000 n 
+0000226093 00000 n 
+0000226223 00000 n 
+0000231508 00000 n 
+0000231638 00000 n 
+0000235728 00000 n 
+0000235858 00000 n 
+0000243398 00000 n 
+0000243528 00000 n 
+0000248141 00000 n 
+0000248271 00000 n 
+0000254835 00000 n 
+0000254965 00000 n 
+0000260845 00000 n 
+0000260975 00000 n 
+0000265793 00000 n 
+0000265923 00000 n 
+0000269460 00000 n 
+0000269590 00000 n 
+0000273833 00000 n 
+0000273963 00000 n 
+0000277502 00000 n 
+0000277632 00000 n 
+0000281625 00000 n 
+0000281755 00000 n 
+0000284884 00000 n 
+0000285014 00000 n 
+0000289420 00000 n 
+0000289550 00000 n 
+0000293086 00000 n 
+0000293216 00000 n 
+0000296462 00000 n 
+0000296592 00000 n 
+0000299986 00000 n 
+0000300116 00000 n 
+0000303185 00000 n 
+0000303315 00000 n 
+0000306685 00000 n 
+0000306815 00000 n 
+0000310786 00000 n 
+0000310916 00000 n 
+0000311793 00000 n 
 trailer
-<< /Size 160 /Root 1 0 R >>
+<< /Size 158 /Root 1 0 R >>
 startxref
-319023
+311923
 %%EOF

@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import os
 import re
 import textwrap
 from pathlib import Path
@@ -18,14 +19,45 @@ DEFAULT_SOURCE_GLOB = "squads/*/agents/*.md"
 DEFAULT_EXPORTS_DIR = ROOT / "exports"
 SCHEMA_VERSION = "2.0.0"
 
-STOPWORDS = {"para", "com", "como", "the", "and", "that", "this", "from", "into", "quando", "sempre", "nunca", "deve", "then", "inclua", "liste", "use"}
+STOPWORDS = {
+    "para",
+    "com",
+    "como",
+    "the",
+    "and",
+    "that",
+    "this",
+    "from",
+    "into",
+    "quando",
+    "sempre",
+    "nunca",
+    "deve",
+    "then",
+    "inclua",
+    "liste",
+    "use",
+}
 SKILL_KEYWORDS = {
-    "análise": "Análise especializada", "auditoria": "Auditoria e revisão", "avaliação": "Avaliação e diagnóstico",
-    "compliance": "Compliance e conformidade", "conteúdo": "Estratégia e curadoria de conteúdo", "design": "Design e experiência do usuário",
-    "document": "Documentação e síntese", "educ": "Design instrucional e educação", "frontend": "Engenharia frontend",
-    "juríd": "Análise jurídica/processual", "motion": "Motion e interação", "performance": "Performance e otimização",
-    "pesquisa": "Pesquisa e investigação", "process": "Mapeamento e melhoria de processos", "qualidade": "Quality gates e validação",
-    "rote": "Roteamento e orquestração", "seo": "SEO e visibilidade orgânica", "teste": "Testes e validação", "visual": "Qualidade visual",
+    "análise": "Análise especializada",
+    "auditoria": "Auditoria e revisão",
+    "avaliação": "Avaliação e diagnóstico",
+    "compliance": "Compliance e conformidade",
+    "conteúdo": "Estratégia e curadoria de conteúdo",
+    "design": "Design e experiência do usuário",
+    "document": "Documentação e síntese",
+    "educ": "Design instrucional e educação",
+    "frontend": "Engenharia frontend",
+    "juríd": "Análise jurídica/processual",
+    "motion": "Motion e interação",
+    "performance": "Performance e otimização",
+    "pesquisa": "Pesquisa e investigação",
+    "process": "Mapeamento e melhoria de processos",
+    "qualidade": "Quality gates e validação",
+    "rote": "Roteamento e orquestração",
+    "seo": "SEO e visibilidade orgânica",
+    "teste": "Testes e validação",
+    "visual": "Qualidade visual",
 }
 
 
@@ -198,15 +230,22 @@ def first_sentence(value: Any, limit: int = 220) -> str:
     return textwrap.shorten(sentence, width=limit, placeholder="...")
 
 
-def command_names(commands: Any, markdown: str) -> list[str]:
-    names: list[str] = []
+def iter_command_items(commands: Any) -> list[tuple[str, Any]]:
+    if isinstance(commands, dict):
+        return [(str(name), details) for name, details in commands.items()]
+    items: list[tuple[str, Any]] = []
     for command in as_list(commands):
         if isinstance(command, dict):
             name = command.get("name") or command.get("command") or command.get("key")
             if name:
-                names.append(str(name).lstrip("*"))
+                items.append((str(name), command))
         elif isinstance(command, str):
-            names.append(command.lstrip("*"))
+            items.append((command, {}))
+    return items
+
+
+def command_names(commands: Any, markdown: str) -> list[str]:
+    names = [name.lstrip("*") for name, _details in iter_command_items(commands)]
     for name in re.findall(r"`\*([^`\s]+)`", markdown):
         names.append(name.lstrip("*"))
     return sorted(dict.fromkeys(name for name in names if name))
@@ -214,17 +253,16 @@ def command_names(commands: Any, markdown: str) -> list[str]:
 
 def command_details(commands: Any, markdown: str) -> list[dict[str, str]]:
     details: list[dict[str, str]] = []
-    for command in as_list(commands):
+    for name, command in iter_command_items(commands):
+        description = ""
         if isinstance(command, dict):
-            name = stringify(command.get("name") or command.get("command") or command.get("key")).lstrip("*")
-            if name:
-                details.append({"name": name, "description": stringify(command.get("description") or command.get("desc") or command.get("purpose"))})
+            description = stringify(command.get("description") or command.get("desc") or command.get("purpose"))
+        details.append({"name": name.lstrip("*"), "description": description})
     known = {item["name"] for item in details}
     for name in command_names(commands, markdown):
         if name not in known:
             details.append({"name": name, "description": "Comando referenciado na definição do agente."})
     return details
-
 
 def expertise_domains(profile: dict[str, Any]) -> dict[str, Any]:
     domains = profile.get("expertise_domains")
@@ -288,7 +326,7 @@ def build_catalog(source_glob: str, generated_at: str) -> dict[str, Any]:
         agent = data.get("agent", {}) if isinstance(data.get("agent"), dict) else {}
         persona = data.get("persona", {}) if isinstance(data.get("persona"), dict) else {}
         profile = data.get("persona_profile", {}) if isinstance(data.get("persona_profile"), dict) else {}
-        commands = command_details(data.get("commands"), markdown)
+        commands = command_details(data.get("commands") or data.get("command_loader"), markdown)
         agent_id = stringify(agent.get("id")) or path.stem
         domains = expertise_domains(profile)
         agents.append({
@@ -463,17 +501,17 @@ Execute a partir da raiz do repositório:
 python scripts/export-agent-catalog.py
 ```
 
+Para builds determinísticos, informe `--generated-at` ou defina `SOURCE_DATE_EPOCH`:
+
+```bash
+python scripts/export-agent-catalog.py --generated-at 2026-06-21T00:00:00+00:00
+```
+
 ## Validações recomendadas
 
 ```bash
 python -m json.tool exports/agentes-detalhado.json >/tmp/agentes-detalhado.validated.json
-python - <<'PY_VALIDATE'
-from pathlib import Path
-for path in [Path('exports/agentes-detalhado.md'), Path('exports/agentes-detalhado.pdf')]:
-    assert path.exists(), path
-    assert path.stat().st_size > 0, path
-print('exports ok')
-PY_VALIDATE
+python scripts/validate-agent-catalog.py
 ```
 
 ## Estrutura do JSON
@@ -489,11 +527,19 @@ O JSON usa `schema_version` e contém:
     (exports_dir / "README.md").write_text(readme, encoding="utf-8")
 
 
+def default_generated_at() -> str:
+    source_date_epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    if source_date_epoch:
+        timestamp = dt.datetime.fromtimestamp(int(source_date_epoch), tz=dt.UTC)
+        return timestamp.replace(microsecond=0).isoformat()
+    return dt.datetime.now(dt.UTC).replace(microsecond=0).isoformat()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Export AIOX agent catalog")
     parser.add_argument("--source-glob", default=DEFAULT_SOURCE_GLOB)
     parser.add_argument("--exports-dir", default=str(DEFAULT_EXPORTS_DIR))
-    parser.add_argument("--generated-at", default=dt.datetime.now(dt.UTC).replace(microsecond=0).isoformat())
+    parser.add_argument("--generated-at", default=default_generated_at())
     args = parser.parse_args()
     exports_dir = Path(args.exports_dir)
     if not exports_dir.is_absolute():

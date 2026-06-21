@@ -16,17 +16,17 @@ Execute a partir da raiz do repositório:
 python scripts/export-agent-catalog.py
 ```
 
+Para builds determinísticos, informe `--generated-at` ou defina `SOURCE_DATE_EPOCH`:
+
+```bash
+python scripts/export-agent-catalog.py --generated-at 2026-06-21T00:00:00+00:00
+```
+
 ## Validações recomendadas
 
 ```bash
 python -m json.tool exports/agentes-detalhado.json >/tmp/agentes-detalhado.validated.json
-python - <<'PY_VALIDATE'
-from pathlib import Path
-for path in [Path('exports/agentes-detalhado.md'), Path('exports/agentes-detalhado.pdf')]:
-    assert path.exists(), path
-    assert path.stat().st_size > 0, path
-print('exports ok')
-PY_VALIDATE
+python scripts/validate-agent-catalog.py
 ```
 
 ## Estrutura do JSON
