@@ -441,7 +441,7 @@ def pdf_escape(text: str) -> str:
 def write_simple_pdf(markdown: str, output_path: Path) -> None:
     page_width, page_height = 595, 842
     margin_x, margin_y = 42, 42
-    line_height = 11
+    line_height = 12
     max_lines = int((page_height - 2 * margin_y) / line_height)
     pages: list[list[str]] = [[]]
     for raw_line in markdown.splitlines():
