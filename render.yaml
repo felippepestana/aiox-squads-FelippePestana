@@ -1,15 +1,19 @@
 # Render Blueprint — deploy do Portal Apex-Talent (v1) com URL HTTPS pública.
 #
 # Como usar (uma vez, ~2 min):
-#   1. Em https://dashboard.render.com → New + → Blueprint
-#   2. Conecte este repositório (felippepestana/aiox-squads-FelippePestana)
-#   3. O Render lê este arquivo e cria o serviço Docker
-#   4. Defina o secret ANTHROPIC_API_KEY no painel (sync:false abaixo)
-#   5. Deploy → URL pública: https://aiox-squads-web.onrender.com (ou similar)
+#   1. Abra https://render.com/deploy?repo=https://github.com/felippepestana/aiox-squads-FelippePestana
+#      (ou: dashboard.render.com → New + → Blueprint → conecte este repositório)
+#   2. O Render lê este arquivo e cria o serviço Docker
+#   3. Preencha os secrets pedidos (obrigatório: ANTHROPIC_API_KEY;
+#      os SUPABASE_* são opcionais — deixe em branco para pular a persistência)
+#   4. Apply/Deploy → a URL real aparece no painel do serviço
+#      (ex.: https://aiox-squads-web.onrender.com ou com sufixo se o nome estiver em uso)
 #
 # Faz build da MESMA imagem validada na CI (web/Dockerfile, contexto = raiz,
-# inclui squads/). Health em /api/health. Única variável obrigatória:
-# ANTHROPIC_API_KEY. O Render injeta PORT automaticamente (o servidor lê PORT).
+# inclui squads/). Health em /api/health.
+#
+# Porta: o Render injeta a env PORT em runtime e o servidor a lê (bind em
+# process.env.PORT) — sobrepõe o ENV PORT=8787 do Dockerfile. Nada a configurar.
 
 services:
   - type: web
@@ -24,15 +28,24 @@ services:
     healthCheckPath: /api/health
     autoDeploy: true
     envVars:
+      # ── Obrigatória ────────────────────────────────────────────────────────
       - key: ANTHROPIC_API_KEY
-        sync: false          # defina no painel do Render (secreto)
+        sync: false          # secreto — o painel pede o valor no deploy
+      # ── Runtime ────────────────────────────────────────────────────────────
       - key: NODE_ENV
         value: production
       - key: SQUADS_ROOT
         value: /app/squads
       - key: TRUST_PROXY
         value: "1"
-      # Opcional: proteger as rotas /api/* com uma chave de portal.
-      # A UI pede a chave uma vez e guarda em sessionStorage.
+      # ── Opcionais: persistência Supabase (cadastro de administrador PF/PJ,
+      #    entrevistas do talent-compass). Deixe em branco para pular —
+      #    o app degrada com elegância (valida sem gravar). ──────────────────
+      - key: SUPABASE_URL
+        sync: false          # ex.: https://<ref>.supabase.co (pode deixar vazio)
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false          # secreto, somente servidor (pode deixar vazio)
+      # ── Opcional: proteger as rotas /api/* com uma chave de portal.
+      #    A UI pede a chave uma vez e guarda em sessionStorage. ──────────────
       # - key: WEB_PORTAL_API_KEY
       #   sync: false
