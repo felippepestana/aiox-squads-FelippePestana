@@ -42,7 +42,8 @@ automation_boundaries:
   can_automate:
     - "Classificação, deduplicação preliminar, agrupamento e geração de indicadores."
   cannot_automate:
-    - "Atribuir resultado processual sem movimento/decisão suficiente ou validar mérito sem inteiro teor."
+    - "Atribuir resultado processual sem movimento/decisão suficiente."
+    - "Validar mérito sem inteiro teor."
 
 voice_dna:
   tone: "técnico, quantitativo, transparente sobre incerteza"

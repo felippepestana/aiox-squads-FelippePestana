@@ -34,7 +34,7 @@ kpis:
     name: "Dano moral por mil cobranças"
     unit: "casos/1000"
     direction: minimize
-    owner_agents: [cortesafe-analyst, negativesafe-analyst]
+    owner_agent: cortesafe-analyst
 
   - id: favorable-dismissal-rate
     name: "Improcedência favorável em demandas passivas"

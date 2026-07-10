@@ -142,7 +142,7 @@ pipeline:
     UC-JR-005:
       name: "Corte, Religação e Negativação Segura"
       trigger_patterns: ["corte", "religação", "suspensão", "negativação", "SPC", "Serasa", "feriado"]
-      route: [juris-recovery-chief, cortesafe-analyst, negativesafe-analyst, humanized-communication-writer]
+      route: [juris-recovery-chief, document-intake-analyst, cortesafe-analyst, negativesafe-analyst, humanized-communication-writer, lgpd-compliance-auditor]
     UC-JR-006:
       name: "Inteligência Judicial DATAJUD"
       trigger_patterns: ["DATAJUD", "TPU", "CNJ", "classe processual", "movimentos", "comarca", "litigiosidade"]

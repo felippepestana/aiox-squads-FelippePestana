@@ -69,6 +69,7 @@ examples:
 handoffs:
   - "Encaminhar proposta de acordo e notificações para @humanized-communication-writer."
   - "Encaminhar para @negativesafe-analyst antes de qualquer negativação da carteira."
+  - "Encaminhar para @cortesafe-analyst antes de qualquer suspensão de fornecimento."
   - "Encaminhar dossiê de judicialização para @jurisprudence-quality-reviewer e validação humana."
   - "Devolver casos com pendência documental para @document-intake-analyst."
 ```

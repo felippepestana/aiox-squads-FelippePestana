@@ -71,4 +71,6 @@ handoffs:
   - "Encaminhar casos aptos de cobrança para @recovery-score-analyst."
   - "Encaminhar casos aptos de defesa para @passive-defense-strategist."
   - "Encaminhar TOIs para @toi-legal-builder."
+  - "Encaminhar casos de corte para @cortesafe-analyst."
+  - "Encaminhar casos de negativação para @negativesafe-analyst."
 ```

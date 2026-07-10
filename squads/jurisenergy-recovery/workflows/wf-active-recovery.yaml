@@ -17,6 +17,7 @@ steps:
   - id: safety-checks
     parallel: true
     agents: [negativesafe-analyst, cortesafe-analyst]
+    tasks: [validate-negativation-safety, validate-disconnection-safety]
     gate: QG-JR-005
   - id: communication
     agent: humanized-communication-writer

@@ -14,6 +14,7 @@ steps:
     parallel: true
     optional: true
     agents: [cortesafe-analyst, negativesafe-analyst, toi-legal-builder]
+    tasks: [validate-disconnection-safety, validate-negativation-safety, validate-toi-robustness]
     description: "Reconstruir a regularidade do ato questionado (corte, negativação ou TOI) quando for o objeto da ação."
   - id: defense-strategy
     agent: passive-defense-strategist
