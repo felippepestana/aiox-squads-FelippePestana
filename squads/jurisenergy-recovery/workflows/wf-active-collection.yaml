@@ -1,0 +1,36 @@
+id: wf-active-collection
+name: Active Collection and Revenue Recovery Pipeline
+trigger: "Carteira ou débito para cobrança ativa e recuperação de receita"
+steps:
+  - id: route
+    agent: juris-orchestrator
+    task: route-case
+    gate: QG-JE-001
+  - id: intake
+    agent: document-intake-validator
+    task: validate-document-checklist
+    gate: QG-JE-002
+  - id: score
+    agent: recovery-score-analyst
+    task: score-recovery-viability
+    gate: QG-JE-003
+  - id: negativation-check
+    agent: negativesafe-validator
+    task: validate-negativation-safety
+    condition: "route includes negativation"
+  - id: outreach
+    agent: humanized-communication-writer
+    task: draft-humanized-communication
+    gate: QG-JE-006
+  - id: lgpd
+    agent: lgpd-compliance-auditor
+    task: audit-lgpd-compliance
+    gate: QG-JE-005
+  - id: human-validation
+    agent: juris-orchestrator
+    gate: QG-JE-004
+    description: "Advogado responsável valida, ajusta ou bloqueia dossiês de judicialização e comunicações sensíveis."
+outputs:
+  - recovery-dossier.md
+  - collection-communication-drafts.md
+  - audit-trail.md

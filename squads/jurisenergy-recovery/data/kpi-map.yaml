@@ -1,0 +1,58 @@
+# KPI map — indicators the platform must improve, per the research
+# and due diligence baseline (Notion blueprint).
+
+objectives:
+  - id: net-recovery
+    name: "Recuperação líquida"
+    direction: increase
+    owner_agents: [recovery-score-analyst, kpi-board-reporter]
+  - id: cost-per-recovered-real
+    name: "Custo por real recuperado"
+    direction: decrease
+    owner_agents: [recovery-score-analyst, kpi-board-reporter]
+  - id: collection-dismissal-rate
+    name: "Improcedência em cobranças"
+    direction: decrease
+    owner_agents: [recovery-score-analyst, toi-legal-builder, document-intake-validator]
+  - id: moral-damages-passive
+    name: "Dano moral em demandas passivas (por mil cobranças)"
+    direction: decrease
+    owner_agents: [passive-defense-strategist, cortesafe-validator, negativesafe-validator]
+  - id: favorable-dismissal-rate
+    name: "Taxa de improcedência favorável à Energisa"
+    direction: increase
+    owner_agents: [passive-defense-strategist, legal-thesis-curator]
+  - id: prescription-avoided
+    name: "Prescrição evitada"
+    direction: increase
+    owner_agents: [recovery-score-analyst, juris-orchestrator]
+  - id: complete-documentary-proof
+    name: "Índice de prova documental completa"
+    direction: increase
+    owner_agents: [document-intake-validator]
+  - id: operational-failures
+    name: "Falhas em TOI, corte, negativação, atendimento e cálculo"
+    direction: decrease
+    owner_agents: [toi-legal-builder, cortesafe-validator, negativesafe-validator]
+  - id: settlement-compliance
+    name: "Taxa de acordo cumprido"
+    direction: increase
+    owner_agents: [recovery-score-analyst, humanized-communication-writer]
+  - id: regulator-complaints
+    name: "Reclamações ANEEL/PROCON"
+    direction: decrease
+    owner_agents: [cortesafe-validator, negativesafe-validator, humanized-communication-writer]
+  - id: triage-time
+    name: "Tempo de triagem"
+    direction: decrease
+    owner_agents: [juris-orchestrator]
+  - id: platform-roi
+    name: "ROI da plataforma vs baseline da due diligence"
+    direction: increase
+    owner_agents: [kpi-board-reporter]
+
+reporting_rules:
+  - "Todo KPI declara fonte, período, amostra e status: confirmado, estimado ou pendente."
+  - "Comparação obrigatória com baseline da due diligence e período anterior."
+  - "Desvio relevante gera alerta com hipótese de causa e frente responsável."
+  - "Limitações metodológicas em seção própria de todo relatório."

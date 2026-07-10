@@ -1,0 +1,30 @@
+id: wf-cut-negativation-safety
+name: Safe Disconnection and Negativation Pipeline
+trigger: "Corte, suspensão, religação ou negativação a executar ou contestada"
+steps:
+  - id: route
+    agent: juris-orchestrator
+    task: route-case
+    gate: QG-JE-001
+  - id: intake
+    agent: document-intake-validator
+    task: validate-document-checklist
+    gate: QG-JE-002
+  - id: safety-checks
+    parallel: true
+    agents: [cortesafe-validator, negativesafe-validator]
+    gate: QG-JE-003
+    description: "CorteSafe valida corte/religação; NegativeSafe valida inscrição/baixa. Cada um emite veredito independente."
+  - id: notice
+    agent: humanized-communication-writer
+    task: draft-humanized-communication
+    gate: QG-JE-006
+    condition: "verdict is 'apto' and prior notice required"
+  - id: human-validation
+    agent: juris-orchestrator
+    gate: QG-JE-004
+    description: "Nenhum corte ou negativação é efetivado pelo squad — execução exige regra operacional validada e supervisão humana."
+outputs:
+  - safety-verdicts.md
+  - blocking-list.md
+  - audit-trail.md

@@ -1,0 +1,271 @@
+name: jurisenergy-recovery
+version: "1.0.0"
+title: "JurisEnergy Recovery Platform — Arquitetura Multiagente"
+description: >
+  Squad multiagente para operação jurídica de distribuidoras de energia
+  (caso Energisa): orquestrador jurídico central, frentes especializadas de
+  cobrança ativa, defesa passiva consumerista, TOI/perdas não técnicas,
+  corte/religação/negativação segura, inteligência DATAJUD, compliance LGPD,
+  comunicação humanizada e KPIs executivos. Toda recomendação jurídica
+  sensível exige validação humana; nenhum ato de judicialização, corte,
+  negativação ou protocolo de defesa é automatizado.
+author: "FelippePestana"
+language: pt-BR
+slashPrefix: "jurisenergy"
+patternPrefix: "JE"
+
+source_blueprint:
+  notion_page: "Arquitetura Multiagente - JurisEnergy Recovery Platform"
+  notion_url: "https://app.notion.com/p/398008359d9e8137b1bdd38220513fa1"
+  databases:
+    - "Squads Multiagentes - JurisEnergy"
+    - "Agentes IA - Papéis, Prompts e Guardrails"
+
+entry_agent: juris-orchestrator
+
+structural_rules:
+  - "Todo agente tem escopo delimitado e produz saída estruturada."
+  - "Toda recomendação jurídica sensível exige revisão humana."
+  - "Todo documento faltante gera pendência objetiva para o setor responsável."
+  - "Toda decisão automatizada possui justificativa, fonte e nível de confiança."
+  - "Toda classificação é rastreável ao documento analisado."
+  - "O orquestrador impede judicialização, corte, negativação ou defesa automática sem validação jurídica."
+
+tiers:
+  tier_0:
+    name: "Orquestrador Jurídico Central"
+    agents: [juris-orchestrator]
+    purpose: "Receber casos, identificar polo e tema, acionar frentes corretas, consolidar recomendação, exigir validação humana e registrar trilha de auditoria."
+  tier_1:
+    name: "Dados e Saneamento Documental"
+    agents: [datajud-intelligence-analyst, document-intake-validator]
+    purpose: "Extrair e classificar dados judiciais (DATAJUD/TPU/PJe), validar checklists documentais por tipo de demanda e devolver pendências setoriais."
+  tier_2:
+    name: "Frentes Jurídicas Especializadas"
+    agents: [recovery-score-analyst, passive-defense-strategist, toi-legal-builder, cortesafe-validator, negativesafe-validator]
+    purpose: "Cobrança ativa com ROI, defesa passiva consumerista, robustez de TOI, e prevenção de corte/negativação indevidos."
+  tier_3:
+    name: "Qualidade, Governança e Comunicação"
+    agents: [legal-thesis-curator, lgpd-compliance-auditor, humanized-communication-writer, kpi-board-reporter]
+    purpose: "Teses e jurisprudência, conformidade LGPD e auditoria de IA, comunicação humanizada e consolidação executiva de KPIs."
+
+agents:
+  juris-orchestrator:
+    file: agents/juris-orchestrator.md
+    tier: tier_0
+    risk_level: "Crítico"
+    human_validation: true
+    focus: "Identificar polo da Energisa, tema, risco preliminar, documentos obrigatórios e frentes a acionar; consolidar recomendação com trilha de auditoria."
+  datajud-intelligence-analyst:
+    file: agents/datajud-intelligence-analyst.md
+    tier: tier_1
+    risk_level: "Alto"
+    human_validation: true
+    focus: "Extração e classificação de metadados DATAJUD/TPU: classe, assunto, movimento, órgão julgador, grau, deduplicação e inteligência territorial."
+  document-intake-validator:
+    file: agents/document-intake-validator.md
+    tier: tier_1
+    risk_level: "Alto"
+    human_validation: true
+    focus: "Checklist documental por tipo de demanda, OCR, pendências setoriais, score documental e aptidão para análise jurídica."
+  recovery-score-analyst:
+    file: agents/recovery-score-analyst.md
+    tier: tier_2
+    risk_level: "Alto"
+    human_validation: true
+    focus: "Score de viabilidade jurídico-financeira 0-100, rota de cobrança, prescrição, ROI e judicialização seletiva."
+  passive-defense-strategist:
+    file: agents/passive-defense-strategist.md
+    tier: tier_2
+    risk_level: "Crítico"
+    human_validation: true
+    focus: "Leitura de inicial, extração de pedidos, risco de dano moral, tese defensiva por tema, minuta assistida e acordo mitigador."
+  toi-legal-builder:
+    file: agents/toi-legal-builder.md
+    tier: tier_2
+    risk_level: "Crítico"
+    human_validation: true
+    focus: "Robustez jurídica e técnica de TOI: fotos, laudo, histórico de consumo, memória de cálculo, notificação e contraditório administrativo."
+  cortesafe-validator:
+    file: agents/cortesafe-validator.md
+    tier: tier_2
+    risk_level: "Crítico"
+    human_validation: true
+    focus: "Risco jurídico-regulatório de corte, suspensão e religação: notificação, feriados, pagamento, SLA e vulnerabilidade."
+  negativesafe-validator:
+    file: agents/negativesafe-validator.md
+    tier: tier_2
+    risk_level: "Crítico"
+    human_validation: true
+    focus: "Prevenção de negativação indevida: titularidade, exigibilidade, prescrição, notificação prévia, contestação e baixa."
+  legal-thesis-curator:
+    file: agents/legal-thesis-curator.md
+    tier: tier_3
+    risk_level: "Alto"
+    human_validation: true
+    focus: "Jurisprudência setorial, teses vencedoras por comarca/tema, padronização de qualidade jurídica e retroalimentação das frentes."
+  lgpd-compliance-auditor:
+    file: agents/lgpd-compliance-auditor.md
+    tier: tier_3
+    risk_level: "Crítico"
+    human_validation: true
+    focus: "Dados pessoais, minimização, base legal, permissões, logs, retenção e auditoria das decisões assistidas por IA."
+  humanized-communication-writer:
+    file: agents/humanized-communication-writer.md
+    tier: tier_3
+    risk_level: "Médio"
+    human_validation: true
+    focus: "Comunicações claras, respeitosas e juridicamente seguras para cobrança, solicitação documental e contato setorial."
+  kpi-board-reporter:
+    file: agents/kpi-board-reporter.md
+    tier: tier_3
+    risk_level: "Alto"
+    human_validation: true
+    focus: "KPIs executivos, ROI, alertas, narrativa de Conselho e separação entre dados confirmados, estimados e pendentes."
+
+pipeline:
+  use_cases:
+    UC-JE-001:
+      name: "Triagem e Roteamento de Caso"
+      trigger_patterns: ["novo caso", "triagem", "polo", "roteamento", "para qual squad", "classificar demanda"]
+      route: [juris-orchestrator, document-intake-validator]
+    UC-JE-002:
+      name: "Cobrança Ativa e Recuperação de Receita"
+      trigger_patterns: ["cobrança", "recuperação de receita", "carteira", "débito", "judicialização", "acordo", "régua de cobrança"]
+      route: [juris-orchestrator, document-intake-validator, recovery-score-analyst, humanized-communication-writer, lgpd-compliance-auditor]
+    UC-JE-003:
+      name: "Defesa Passiva Consumerista"
+      trigger_patterns: ["petição inicial", "ação contra", "dano moral", "contestação", "liminar", "defesa"]
+      route: [juris-orchestrator, document-intake-validator, passive-defense-strategist, legal-thesis-curator, lgpd-compliance-auditor]
+    UC-JE-004:
+      name: "TOI e Recuperação de Consumo"
+      trigger_patterns: ["TOI", "perdas não técnicas", "fraude", "recuperação de consumo", "irregularidade no medidor"]
+      route: [juris-orchestrator, document-intake-validator, toi-legal-builder, legal-thesis-curator]
+    UC-JE-005:
+      name: "Corte, Religação e Negativação Segura"
+      trigger_patterns: ["corte", "suspensão de fornecimento", "religação", "negativação", "SPC", "Serasa", "inscrição em cadastro"]
+      route: [juris-orchestrator, document-intake-validator, cortesafe-validator, negativesafe-validator, humanized-communication-writer]
+    UC-JE-006:
+      name: "Inteligência Judicial e DATAJUD"
+      trigger_patterns: ["DATAJUD", "TPU", "PJe", "litigiosidade", "comarca", "estatística judicial", "classificar processos"]
+      route: [juris-orchestrator, datajud-intelligence-analyst, kpi-board-reporter]
+    UC-JE-007:
+      name: "Compliance LGPD e Auditoria de IA"
+      trigger_patterns: ["LGPD", "dados pessoais", "auditoria", "base legal", "retenção", "minimização", "trilha de auditoria"]
+      route: [juris-orchestrator, lgpd-compliance-auditor]
+    UC-JE-008:
+      name: "Dashboard, KPIs e Conselho"
+      trigger_patterns: ["KPI", "dashboard", "ROI", "relatório executivo", "conselho", "indicadores"]
+      route: [juris-orchestrator, kpi-board-reporter]
+
+quality_gates:
+  QG-JE-001:
+    name: "Roteamento e escopo definidos"
+    agent: juris-orchestrator
+    criteria: "Polo, tema, UC-JE, frentes acionadas, documentos obrigatórios e necessidade de validação humana declarados antes de qualquer análise."
+  QG-JE-002:
+    name: "Prova documental completa"
+    agent: document-intake-validator
+    criteria: "Checklist do tipo de demanda aplicado; caso classificado como apto, pendente de saneamento ou bloqueado; pendências atribuídas a setor responsável."
+  QG-JE-003:
+    name: "Justificativa, fonte e confiança"
+    agent: juris-orchestrator
+    criteria: "Toda decisão automatizada registra justificativa objetiva, documento-fonte e nível de confiança; classificações rastreáveis ao documento analisado."
+  QG-JE-004:
+    name: "Bloqueio de ato sensível sem validação humana"
+    agent: juris-orchestrator
+    criteria: "Nenhuma judicialização, corte, negativação, protocolo de defesa ou envio externo sensível prossegue sem aprovação de advogado responsável."
+  QG-JE-005:
+    name: "Conformidade LGPD"
+    agent: lgpd-compliance-auditor
+    criteria: "Dados pessoais identificados, minimização aplicada, base legal presumida declarada e trilha de auditoria registrada."
+  QG-JE-006:
+    name: "Comunicação humanizada"
+    agent: humanized-communication-writer
+    criteria: "Comunicações sem linguagem agressiva, robótica ou ameaças; tom claro, respeitoso e orientado à solução."
+  QG-JE-007:
+    name: "Transparência estatística"
+    agent: kpi-board-reporter
+    criteria: "Relatórios separam dados confirmados, estimados e pendentes, e declaram limitações metodológicas."
+
+tasks:
+  - id: route-case
+    path: tasks/route-case.md
+  - id: classify-judicial-data
+    path: tasks/classify-judicial-data.md
+  - id: validate-document-checklist
+    path: tasks/validate-document-checklist.md
+  - id: score-recovery-viability
+    path: tasks/score-recovery-viability.md
+  - id: build-passive-defense
+    path: tasks/build-passive-defense.md
+  - id: assess-toi-robustness
+    path: tasks/assess-toi-robustness.md
+  - id: validate-disconnection-safety
+    path: tasks/validate-disconnection-safety.md
+  - id: validate-negativation-safety
+    path: tasks/validate-negativation-safety.md
+  - id: draft-humanized-communication
+    path: tasks/draft-humanized-communication.md
+  - id: audit-lgpd-compliance
+    path: tasks/audit-lgpd-compliance.md
+  - id: build-kpi-report
+    path: tasks/build-kpi-report.md
+
+workflows:
+  - id: wf-active-collection
+    path: workflows/wf-active-collection.yaml
+    description: "Cobrança ativa: intake documental, score de viabilidade, régua extrajudicial humanizada, LGPD e dossiê de judicialização seletiva."
+  - id: wf-passive-defense
+    path: workflows/wf-passive-defense.yaml
+    description: "Defesa passiva: leitura de inicial, risco, documentos, tese defensiva, minuta assistida e validação humana."
+  - id: wf-toi-review
+    path: workflows/wf-toi-review.yaml
+    description: "TOI: validação probatória, cálculo auditável, contraditório administrativo e recomendação de cobrar, sanear, acordar ou arquivar."
+  - id: wf-cut-negativation-safety
+    path: workflows/wf-cut-negativation-safety.yaml
+    description: "Corte e negativação seguros: checagem regulatória, bloqueios preventivos e comunicação humanizada."
+
+templates:
+  - templates/case-routing-plan-tmpl.md
+  - templates/recovery-dossier-tmpl.md
+  - templates/toi-assessment-tmpl.md
+  - templates/defense-strategy-tmpl.md
+  - templates/kpi-executive-report-tmpl.md
+
+checklists:
+  - checklists/human-validation-gate.md
+  - checklists/documentary-completeness-checklist.md
+  - checklists/lgpd-compliance-checklist.md
+
+data:
+  - data/agent-guardrails.yaml
+  - data/kpi-map.yaml
+  - data/document-checklists.yaml
+
+settings:
+  activation:
+    prefix: "jurisenergy-recovery"
+    example: "@jurisenergy-recovery:juris-orchestrator"
+  greeting:
+    show_use_cases: true
+    show_pipeline_status: true
+  language: "pt-BR"
+
+quality_standards:
+  min_score: 8.5
+  smoke_tests:
+    - "Rotear caso de cobrança com débito prescrito e devolver bloqueio com justificativa."
+    - "Gerar score de viabilidade de carteira com rota recomendada e documentos faltantes."
+    - "Analisar petição inicial consumerista e sugerir tese defensiva com risco de dano moral."
+    - "Avaliar TOI sem fotos e sem notificação e recomendar saneamento antes da cobrança."
+    - "Bloquear negativação com contestação administrativa pendente."
+    - "Consolidar KPIs separando dados confirmados, estimados e pendentes."
+
+stats:
+  total_agents: 12
+  total_tasks: 11
+  total_workflows: 4
+  total_checklists: 3
+  total_templates: 5
+  total_data_files: 3

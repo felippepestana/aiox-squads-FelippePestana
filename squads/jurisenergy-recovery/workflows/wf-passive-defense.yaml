@@ -1,0 +1,36 @@
+id: wf-passive-defense
+name: Passive Consumer Defense Pipeline
+trigger: "Ação judicial contra a Energisa (dano moral, cobrança indevida, corte, negativação, dano elétrico)"
+steps:
+  - id: route
+    agent: juris-orchestrator
+    task: route-case
+    gate: QG-JE-001
+  - id: intake
+    agent: document-intake-validator
+    task: validate-document-checklist
+    gate: QG-JE-002
+  - id: theme-validators
+    parallel: true
+    agents: [cortesafe-validator, negativesafe-validator]
+    condition: "case involves disconnection or negativation"
+    description: "Validar regularidade do ato contestado para subsidiar a defesa."
+  - id: defense
+    agent: passive-defense-strategist
+    task: build-passive-defense
+    gate: QG-JE-003
+  - id: thesis
+    agent: legal-thesis-curator
+    description: "Teses e precedentes por tema e comarca para fundamentar a estratégia."
+  - id: lgpd
+    agent: lgpd-compliance-auditor
+    task: audit-lgpd-compliance
+    gate: QG-JE-005
+  - id: human-validation
+    agent: juris-orchestrator
+    gate: QG-JE-004
+    description: "Advogado responsável valida tese, minuta assistida ou acordo mitigador antes do protocolo."
+outputs:
+  - defense-strategy.md
+  - assisted-draft.md
+  - audit-trail.md

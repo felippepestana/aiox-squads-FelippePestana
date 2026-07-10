@@ -1,0 +1,67 @@
+# Document checklists per demand type, used by document-intake-validator.
+# A required document that is missing or unreadable blocks progression
+# and creates an objective pending item for the responsible sector.
+
+demand_types:
+  active-collection:
+    name: "Cobrança ativa / judicialização"
+    min_documentary_score: 80
+    required:
+      - { doc: "Faturas em aberto", sector: "Comercial" }
+      - { doc: "Comprovante de titularidade da UC", sector: "Comercial" }
+      - { doc: "Histórico de pagamentos", sector: "Financeiro" }
+      - { doc: "Notificação de débito", sector: "Cobrança" }
+      - { doc: "Apuração de prescrição (datas de vencimento)", sector: "Jurídico" }
+    optional:
+      - { doc: "Acordos anteriores e status de cumprimento", sector: "Cobrança" }
+      - { doc: "Histórico de consumo", sector: "Técnico" }
+
+  passive-defense:
+    name: "Defesa passiva consumerista"
+    min_documentary_score: 75
+    required:
+      - { doc: "Petição inicial e anexos", sector: "Jurídico" }
+      - { doc: "Histórico da UC (cadastro, consumo, ocorrências)", sector: "Comercial" }
+      - { doc: "Faturas e pagamentos do período discutido", sector: "Financeiro" }
+      - { doc: "Protocolos de atendimento relacionados", sector: "Atendimento" }
+    optional:
+      - { doc: "Decisões anteriores envolvendo a mesma parte", sector: "Jurídico" }
+      - { doc: "Ordens de serviço relacionadas", sector: "Técnico" }
+
+  toi:
+    name: "TOI / recuperação de consumo"
+    min_documentary_score: 85
+    required:
+      - { doc: "TOI com assinatura ou recusa registrada", sector: "Técnico" }
+      - { doc: "Fotos da irregularidade", sector: "Técnico" }
+      - { doc: "Identificação do técnico responsável", sector: "Técnico" }
+      - { doc: "Histórico de consumo (mínimo 12 meses)", sector: "Comercial" }
+      - { doc: "Memória de cálculo da recuperação", sector: "Faturamento" }
+      - { doc: "Notificação ao consumidor", sector: "Cobrança" }
+    optional:
+      - { doc: "Laudo técnico/pericial", sector: "Técnico" }
+      - { doc: "Recurso administrativo e decisão", sector: "Atendimento" }
+
+  disconnection:
+    name: "Corte / suspensão / religação"
+    min_documentary_score: 85
+    required:
+      - { doc: "Débito exigível detalhado", sector: "Financeiro" }
+      - { doc: "Notificação prévia com data e forma de entrega", sector: "Cobrança" }
+      - { doc: "OS de corte com data/hora", sector: "Técnico" }
+      - { doc: "Verificação de pagamento até a data do corte", sector: "Financeiro" }
+    optional:
+      - { doc: "Pedido de religação e protocolos", sector: "Atendimento" }
+      - { doc: "Flag de serviço essencial ou vulnerabilidade", sector: "Comercial" }
+
+  negativation:
+    name: "Negativação / baixa"
+    min_documentary_score: 85
+    required:
+      - { doc: "Comprovante de titularidade (CPF/CNPJ x UC)", sector: "Comercial" }
+      - { doc: "Débito exigível e não prescrito", sector: "Financeiro" }
+      - { doc: "Notificação prévia à inscrição", sector: "Cobrança" }
+      - { doc: "Verificação de pagamento/acordo vigente", sector: "Financeiro" }
+      - { doc: "Verificação de contestação administrativa pendente", sector: "Atendimento" }
+    optional:
+      - { doc: "Data de inscrição e baixa (para negativações ativas)", sector: "Cobrança" }
