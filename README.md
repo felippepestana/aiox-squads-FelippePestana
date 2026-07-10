@@ -169,6 +169,7 @@ Squads publicados pela comunidade neste repositório.
 | [**devops**](squads/devops/) | Squad de engenharia DevOps com 6 agentes — CI/CD pipelines, containerização, IaC, monitoramento e DevSecOps | 🟢 |
 | [**dispatch**](squads/dispatch/) | Motor de execução paralela que decompõe stories/PRDs em subtarefas atômicas, otimiza em ondas (DAG) e roteia para agentes/modelos certos | 🟢 |
 | [**education**](squads/education/) | Design instrucional que transforma expertise em cursos online conformes ao MEC, aplicando 15 frameworks pedagógicos (Bloom, Mayer, UbD, ARCS) | 🟢 |
+| [**jurisenergy-recovery**](squads/jurisenergy-recovery/) | Arquitetura multiagente jurídica para contencioso de energia (Energisa) — orquestrador central + 11 agentes de cobrança ativa, defesa passiva, TOI, corte/negativação segura, DATAJUD, comunicação humanizada, LGPD e KPIs, com validação humana obrigatória em atos sensíveis | 🟢 |
 | [**kaizen**](squads/kaizen/) | Monitora e melhora continuamente todos os squads — analisa estrutura, performance, gargalos, competências e custos | 🟢 |
 | [**seo**](squads/seo/) | Otimiza SEO de sites (score 0-100) — auditoria on-page, técnico, schema, E-E-A-T, Core Web Vitals e visibilidade para IA (GEO) | 🟡 |
 | [**squad-juridico-legal-performance**](squads/squad-juridico-legal-performance/) | Squad jurídico unificado — integra análise processual, CPC, estratégia recursal, perícia técnica judicial e planejamento de frontend jurídico de alta usabilidade | 🟢 |

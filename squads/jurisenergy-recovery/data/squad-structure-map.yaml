@@ -1,0 +1,81 @@
+# Mapping between the 10 macro squads of the JurisEnergy blueprint (Notion)
+# and the agents implemented in this AIOX squad.
+# Source: https://app.notion.com/p/398008359d9e8137b1bdd38220513fa1
+
+orchestrator:
+  name: "Orquestrador Jurídico Central"
+  agent: juris-recovery-chief
+  priority: "Crítica"
+  human_validation: true
+  linked_agents_in_spec: ["Agente Orquestrador", "Agente de Roteamento", "Agente de Auditoria de Decisão"]
+  indicators: ["Tempo de triagem", "Prova documental completa", "Redução de erro de rota", "Redução de risco crítico"]
+
+macro_squads:
+  - name: "Squad Dados, DATAJUD e Inteligência Judicial"
+    agent: datajud-intelligence-analyst
+    priority: "Crítica"
+    linked_agents_in_spec: ["Agente DATAJUD", "Agente TPU", "Agente Classificador de Movimentos", "Agente de Deduplicação"]
+    indicators: ["Precisão estatística", "Taxa de classificação", "Risco por comarca"]
+
+  - name: "Squad Intake e Saneamento Documental"
+    agent: document-intake-analyst
+    priority: "Crítica"
+    linked_agents_in_spec: ["Agente Intake", "Agente OCR", "Agente Checklist", "Agente Pendência Setorial"]
+    indicators: ["Índice de prova documental completa", "Redução de improcedência", "Redução de prazo de defesa"]
+
+  - name: "Squad Cobrança Ativa e Recuperação de Receita"
+    agent: recovery-score-analyst
+    priority: "Crítica"
+    linked_agents_in_spec: ["Agente Recovery Score", "Agente Régua de Cobrança", "Agente Dossiê Inicial", "Agente Prescrição"]
+    indicators: ["Recuperação líquida", "Custo por real recuperado", "Prescrição evitada", "Taxa de acordo cumprido"]
+
+  - name: "Squad TOI, Perdas Não Técnicas e Prova Técnica"
+    agent: toi-legal-builder
+    priority: "Crítica"
+    linked_agents_in_spec: ["Agente TOI Legal Builder", "Agente Cálculo Auditável", "Agente Prova Técnica", "Agente Vulnerabilidade Social"]
+    indicators: ["Redução de improcedência em TOI", "Aumento de recuperação de consumo", "Redução de dano moral"]
+
+  - name: "Squad Corte, Religação e Negativação Segura"
+    agents: [cortesafe-analyst, negativesafe-analyst]
+    priority: "Crítica"
+    linked_agents_in_spec: ["Agente CorteSafe", "Agente NegativeSafe", "Agente Religação SLA", "Agente Feriado Regulatório"]
+    indicators: ["Dano moral por mil cobranças", "Corte indevido", "Negativação indevida", "Reclamações ANEEL/PROCON"]
+
+  - name: "Squad Defesa Passiva Consumerista"
+    agent: passive-defense-strategist
+    priority: "Crítica"
+    linked_agents_in_spec: ["Agente Leitor de Inicial", "Agente Pedido/Risco", "Agente Defesa Temática", "Agente Acordo Mitigador"]
+    indicators: ["Redução de dano moral", "Aumento de improcedência favorável", "Redução de astreintes e passivo"]
+
+  - name: "Squad Jurisprudência, Teses e Qualidade Jurídica"
+    agent: jurisprudence-quality-reviewer
+    priority: "Alta"
+    indicators: ["Qualidade jurídica das saídas", "Atualidade de teses", "Aprendizado por improcedência"]
+
+  - name: "Squad Compliance, LGPD e Auditoria"
+    agent: lgpd-compliance-auditor
+    priority: "Alta"
+    linked_agents_in_spec: ["Agente LGPD", "Agente Auditor de Prompt", "Agente Permissões", "Agente Retenção/Descarte"]
+    indicators: ["Segurança jurídica", "Risco de exposição de dados", "Governança"]
+
+  - name: "Squad Experiência Humanizada e Comunicação"
+    agent: humanized-communication-writer
+    priority: "Alta"
+    linked_agents_in_spec: ["Agente Redator Humanizado", "Agente Tom Institucional", "Agente Clareza e Risco"]
+    indicators: ["Taxa de acordo", "Reclamações", "Satisfação", "Imagem institucional"]
+
+  - name: "Squad Dashboard, KPIs e Conselho"
+    agent: kpi-council-reporter
+    priority: "Alta"
+    linked_agents_in_spec: ["Agente KPI", "Agente Conselho", "Agente ROI", "Agente Tendências"]
+    indicators: ["ROI", "Recuperação líquida", "Taxa de êxito", "Melhoria contínua"]
+
+case_flow:
+  - "1. O caso entra pela plataforma."
+  - "2. O Orquestrador identifica polo da Energisa: ativo, passivo, pré-contencioso ou administrativo."
+  - "3. O Orquestrador identifica tema: cobrança, TOI, corte, negativação, religação, dano elétrico, infraestrutura, ação coletiva."
+  - "4. O caso é enviado ao squad apropriado."
+  - "5. Os agentes extraem dados, validam documentos, calculam score e identificam riscos."
+  - "6. O Orquestrador consolida a recomendação."
+  - "7. O advogado valida, ajusta ou bloqueia."
+  - "8. O resultado alimenta dashboards, KPIs e base de aprendizado."
