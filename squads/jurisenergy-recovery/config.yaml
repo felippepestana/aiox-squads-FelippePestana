@@ -211,6 +211,8 @@ tasks:
     path: tasks/audit-lgpd-compliance.md
   - id: build-kpi-report
     path: tasks/build-kpi-report.md
+  - id: curate-legal-thesis
+    path: tasks/curate-legal-thesis.md
 
 workflows:
   - id: wf-active-collection
@@ -264,7 +266,7 @@ quality_standards:
 
 stats:
   total_agents: 12
-  total_tasks: 11
+  total_tasks: 12
   total_workflows: 4
   total_checklists: 3
   total_templates: 5

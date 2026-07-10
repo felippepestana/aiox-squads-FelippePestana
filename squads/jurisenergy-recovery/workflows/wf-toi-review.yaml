@@ -16,6 +16,7 @@ steps:
     gate: QG-JE-003
   - id: thesis
     agent: legal-thesis-curator
+    task: curate-legal-thesis
     description: "Jurisprudência de TOI na comarca e requisitos probatórios exigidos pelos julgadores."
   - id: collection-route
     agent: recovery-score-analyst

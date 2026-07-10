@@ -21,6 +21,7 @@ steps:
     gate: QG-JE-003
   - id: thesis
     agent: legal-thesis-curator
+    task: curate-legal-thesis
     description: "Teses e precedentes por tema e comarca para fundamentar a estratégia."
   - id: lgpd
     agent: lgpd-compliance-auditor

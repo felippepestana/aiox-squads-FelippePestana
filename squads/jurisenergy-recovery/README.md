@@ -2,7 +2,7 @@
 
 > Squad multiagente para operação jurídica de distribuidora de energia (caso Energisa): orquestrador jurídico central, frentes especializadas e agentes IA com escopo delimitado — sempre com validação humana nos atos jurídicos sensíveis.
 
-**Versão:** 1.0.0 | **Agentes:** 12 | **Tasks:** 11 | **Workflows:** 4 | **Templates:** 5 | **Checklists:** 3
+**Versão:** 1.0.0 | **Agentes:** 12 | **Tasks:** 12 | **Workflows:** 4 | **Templates:** 5 | **Checklists:** 3
 
 Implementação do blueprint Notion **"Arquitetura Multiagente - JurisEnergy Recovery Platform"** (bases "Squads Multiagentes - JurisEnergy" e "Agentes IA - Papéis, Prompts e Guardrails").
 
@@ -137,7 +137,7 @@ Nos fluxos de cobrança extrajudicial e comunicação setorial, a IA adota postu
 ```text
 squads/jurisenergy-recovery/
 ├── agents/          # 12 agentes com persona, voice_dna, heuristics e guardrails
-├── tasks/           # 11 tasks executáveis
+├── tasks/           # 12 tasks executáveis
 ├── templates/       # 5 templates de saída (roteamento, dossiê, TOI, defesa, KPI)
 ├── data/            # guardrails, mapa de KPIs e checklists documentais
 ├── workflows/       # 4 pipelines encadeando tasks e gates
