@@ -1,0 +1,36 @@
+id: wf-active-recovery
+name: Active Recovery Pipeline
+trigger: "Carteira ou caso de cobrança ativa e recuperação de receita"
+steps:
+  - id: triage
+    agent: juris-recovery-chief
+    task: route-and-triage-case
+    gate: QG-JR-001
+  - id: intake
+    agent: document-intake-analyst
+    task: validate-document-checklist
+    gate: QG-JR-002
+  - id: viability
+    agent: recovery-score-analyst
+    task: score-recovery-viability
+    gate: QG-JR-003
+  - id: safety-checks
+    parallel: true
+    agents: [negativesafe-analyst, cortesafe-analyst]
+    tasks: [validate-negativation-safety, validate-disconnection-safety]
+    gate: QG-JR-005
+  - id: communication
+    agent: humanized-communication-writer
+    task: draft-humanized-communication
+    gate: QG-JR-006
+  - id: quality-review
+    agent: jurisprudence-quality-reviewer
+    task: review-legal-quality
+  - id: human-validation
+    type: human_gate
+    gate: QG-JR-004
+    description: "Advogado responsável valida, ajusta ou bloqueia antes de judicialização, negativação ou envio externo sensível."
+outputs:
+  - recovery-dossier.md
+  - communication-drafts.md
+  - audit-trail.md

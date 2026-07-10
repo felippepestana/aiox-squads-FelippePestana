@@ -1,0 +1,103 @@
+# KPI catalog for the JurisEnergy Recovery Platform.
+# Every metric must be classified as confirmed, estimated (labeled) or pending (QG-JR-008).
+
+objectives:
+  - "Aumentar recuperação líquida."
+  - "Reduzir improcedência em cobranças."
+  - "Reduzir dano moral em demandas passivas."
+  - "Aumentar taxa de improcedência favorável à Energisa."
+  - "Reduzir prescrição."
+  - "Melhorar índice de prova documental completa."
+  - "Reduzir falhas em TOI, corte, negativação, atendimento e cálculo."
+  - "Transformar dados judiciais e operacionais em melhoria contínua."
+
+kpis:
+  - id: net-recovery
+    name: "Recuperação líquida"
+    unit: "R$"
+    direction: maximize
+    owner_agent: recovery-score-analyst
+
+  - id: cost-per-recovered-real
+    name: "Custo por real recuperado"
+    unit: "R$/R$"
+    direction: minimize
+    owner_agent: recovery-score-analyst
+
+  - id: collection-dismissal-rate
+    name: "Improcedência em cobranças"
+    unit: "%"
+    direction: minimize
+    owner_agent: jurisprudence-quality-reviewer
+
+  - id: moral-damage-per-thousand
+    name: "Dano moral por mil cobranças"
+    unit: "casos/1000"
+    direction: minimize
+    owner_agent: cortesafe-analyst
+
+  - id: favorable-dismissal-rate
+    name: "Improcedência favorável em demandas passivas"
+    unit: "%"
+    direction: maximize
+    owner_agent: passive-defense-strategist
+
+  - id: prescription-avoided
+    name: "Prescrição evitada"
+    unit: "R$ / casos"
+    direction: maximize
+    owner_agent: recovery-score-analyst
+
+  - id: complete-documentation-index
+    name: "Índice de prova documental completa"
+    unit: "%"
+    direction: maximize
+    owner_agent: document-intake-analyst
+
+  - id: toi-robustness
+    name: "Robustez média de TOI / improcedência em TOI"
+    unit: "score / %"
+    direction: maximize
+    owner_agent: toi-legal-builder
+
+  - id: settlement-compliance-rate
+    name: "Taxa de acordo cumprido"
+    unit: "%"
+    direction: maximize
+    owner_agent: humanized-communication-writer
+
+  - id: undue-disconnection
+    name: "Corte indevido"
+    unit: "casos"
+    direction: minimize
+    owner_agent: cortesafe-analyst
+
+  - id: undue-negativation
+    name: "Negativação indevida"
+    unit: "casos"
+    direction: minimize
+    owner_agent: negativesafe-analyst
+
+  - id: regulatory-complaints
+    name: "Reclamações ANEEL/PROCON"
+    unit: "casos"
+    direction: minimize
+    owner_agent: humanized-communication-writer
+
+  - id: triage-time
+    name: "Tempo de triagem"
+    unit: "horas"
+    direction: minimize
+    owner_agent: juris-recovery-chief
+
+  - id: platform-roi
+    name: "ROI da plataforma"
+    unit: "%"
+    direction: maximize
+    owner_agent: kpi-council-reporter
+
+reporting_rules:
+  - "Todo KPI declara fonte, período e método."
+  - "Estimativas são sempre rotuladas como estimativas."
+  - "Limitações metodológicas declaradas em todo relatório."
+  - "Tendência negativa reportada assim que estatisticamente relevante."

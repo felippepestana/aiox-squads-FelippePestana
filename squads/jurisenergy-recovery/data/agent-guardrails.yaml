@@ -1,0 +1,97 @@
+# Guardrails per agent: risk level, what may be automated and what may never be.
+# Source: Notion database "Agentes IA - Papéis, Prompts e Guardrails".
+# All agents require human validation on sensitive legal acts (QG-JR-004).
+
+global_rules:
+  - "Todo agente tem escopo delimitado e produz saída estruturada."
+  - "Toda recomendação jurídica sensível exige revisão humana."
+  - "Todo documento faltante gera pendência objetiva para o setor responsável."
+  - "Toda decisão automatizada possui justificativa, fonte e nível de confiança."
+  - "Toda classificação é rastreável ao documento analisado."
+  - "O orquestrador impede judicialização, corte, negativação ou defesa automática sem validação jurídica."
+
+agents:
+  juris-recovery-chief:
+    risk_level: "Crítico"
+    can_automate:
+      - "Triagem, classificação, roteamento, criação de pendências e consolidação de recomendações."
+    cannot_automate:
+      - "Ajuizamento, protocolo de defesa, autorização de corte, negativação ou decisão jurídica final."
+
+  datajud-intelligence-analyst:
+    risk_level: "Alto"
+    can_automate:
+      - "Classificação, deduplicação preliminar, agrupamento e geração de indicadores."
+    cannot_automate:
+      - "Atribuir resultado processual sem movimento/decisão suficiente."
+      - "Validar mérito sem inteiro teor."
+
+  document-intake-analyst:
+    risk_level: "Alto"
+    can_automate:
+      - "Checklist, extração OCR, identificação de pendências e devolução setorial."
+    cannot_automate:
+      - "Aprovar judicialização sem revisão jurídica quando houver risco alto ou crítico."
+
+  recovery-score-analyst:
+    risk_level: "Alto"
+    can_automate:
+      - "Cálculo de score, priorização de carteira e recomendação de rota."
+    cannot_automate:
+      - "Protocolar ação, assinar peça, assumir risco jurídico sem advogado."
+
+  passive-defense-strategist:
+    risk_level: "Crítico"
+    can_automate:
+      - "Leitura, extração, resumo, checklist e minuta assistida."
+    cannot_automate:
+      - "Protocolar contestação ou reconhecer falha sem advogado responsável."
+
+  toi-legal-builder:
+    risk_level: "Crítico"
+    can_automate:
+      - "Checklist técnico-jurídico, extração de dados e identificação de falhas."
+    cannot_automate:
+      - "Declarar fraude conclusivamente sem validação técnica e jurídica humana."
+
+  cortesafe-analyst:
+    risk_level: "Crítico"
+    can_automate:
+      - "Checagem de calendário, pagamento, notificação, SLA e risco preliminar."
+    cannot_automate:
+      - "Autorizar corte efetivo sem regra operacional validada e supervisão humana."
+
+  negativesafe-analyst:
+    risk_level: "Crítico"
+    can_automate:
+      - "Validação preliminar e bloqueio por inconsistência documental."
+    cannot_automate:
+      - "Efetivar negativação sem política interna, base legal e revisão quando houver risco."
+
+  humanized-communication-writer:
+    risk_level: "Médio"
+    can_automate:
+      - "Rascunhos, solicitações internas, lembretes e comunicações de baixa criticidade."
+    cannot_automate:
+      - "Enviar comunicação externa sensível sem aprovação em casos de alto risco."
+
+  jurisprudence-quality-reviewer:
+    risk_level: "Alto"
+    can_automate:
+      - "Revisão de rastreabilidade, checagem de estrutura e curadoria preliminar de precedentes."
+    cannot_automate:
+      - "Aprovar juridicamente tese ou minuta em substituição ao advogado responsável."
+
+  kpi-council-reporter:
+    risk_level: "Alto"
+    can_automate:
+      - "Relatórios, gráficos, consolidação e narrativa preliminar."
+    cannot_automate:
+      - "Apresentar estimativas como dados confirmados ou omitir limitações metodológicas."
+
+  lgpd-compliance-auditor:
+    risk_level: "Crítico"
+    can_automate:
+      - "Alertas, classificação de sensibilidade e checklist de conformidade."
+    cannot_automate:
+      - "Liberar uso de dados sensíveis sem política e validação jurídica/compliance."
