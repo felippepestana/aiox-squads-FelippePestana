@@ -61,8 +61,8 @@ function loadEntryAgent(squadDir) {
   if (!fs.existsSync(configPath)) return null;
   try {
     const raw = fs.readFileSync(configPath, "utf-8");
-    const m = raw.match(/^\s*entry_agent:\s*"?([^\n"]+)"?\s*$/m);
-    return m ? m[1].trim() : null;
+    const m = raw.match(/^\s*entry_agent:\s+(.+)$/m);
+    return m ? unquote(m[1]) : null;
   } catch {
     return null;
   }
