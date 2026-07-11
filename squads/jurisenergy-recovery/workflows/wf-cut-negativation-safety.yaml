@@ -5,6 +5,7 @@ steps:
   - id: route
     agent: juris-orchestrator
     task: route-case
+    template: templates/case-routing-plan-tmpl.md
     gate: QG-JE-001
   - id: intake
     agent: document-intake-validator

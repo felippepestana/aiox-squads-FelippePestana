@@ -5,6 +5,7 @@ steps:
   - id: route
     agent: juris-orchestrator
     task: route-case
+    template: templates/case-routing-plan-tmpl.md
     gate: QG-JE-001
   - id: intake
     agent: document-intake-validator
@@ -13,6 +14,7 @@ steps:
   - id: score
     agent: recovery-score-analyst
     task: score-recovery-viability
+    template: templates/recovery-dossier-tmpl.md
     gate: QG-JE-003
   - id: negativation-check
     agent: negativesafe-validator

@@ -5,6 +5,7 @@ steps:
   - id: route
     agent: juris-orchestrator
     task: route-case
+    template: templates/case-routing-plan-tmpl.md
     gate: QG-JE-001
   - id: intake
     agent: document-intake-validator
@@ -18,6 +19,7 @@ steps:
   - id: defense
     agent: passive-defense-strategist
     task: build-passive-defense
+    template: templates/defense-strategy-tmpl.md
     gate: QG-JE-003
   - id: thesis
     agent: legal-thesis-curator
