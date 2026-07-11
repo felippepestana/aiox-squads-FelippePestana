@@ -15,6 +15,7 @@ interface BundledAgent {
 interface BundledSquad {
   id: string;
   meta: SquadMeta;
+  entryAgent?: string | null;
   agents: BundledAgent[];
 }
 
@@ -35,7 +36,8 @@ function tryLoadFromBundle(): Squad[] | null {
           squad: s.id,
           filePath: `bundled:${s.id}/${a.id}`,
           systemPrompt: buildSystemPrompt(a.content, a.name, s.id),
-        }))
+        })),
+        s.entryAgent ?? null
       ),
     }));
     return _bundleCache;
