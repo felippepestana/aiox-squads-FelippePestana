@@ -79,6 +79,16 @@ function getSquadsDir(): string {
   return path.resolve(__dirname, rel);
 }
 
+/** Remove aspas simples/duplas envolvendo um valor YAML capturado por regex. */
+function unquote(value: string): string {
+  const v = value.trim();
+  const quoted =
+    v.length >= 2 &&
+    ((v.startsWith('"') && v.endsWith('"')) ||
+      (v.startsWith("'") && v.endsWith("'")));
+  return quoted ? v.slice(1, -1).trim() : v;
+}
+
 /** Extrai nome/id do agente a partir do bloco YAML no arquivo .md */
 function extractAgentMeta(
   content: string,
@@ -88,8 +98,8 @@ function extractAgentMeta(
   const idMatch = content.match(/^\s*id:\s+(.+)$/m);
   const filename = path.basename(filePath, ".md");
   return {
-    name: nameMatch ? nameMatch[1].trim() : filename,
-    id: idMatch ? idMatch[1].trim() : filename,
+    name: nameMatch ? unquote(nameMatch[1]) : filename,
+    id: idMatch ? unquote(idMatch[1]) : filename,
   };
 }
 
