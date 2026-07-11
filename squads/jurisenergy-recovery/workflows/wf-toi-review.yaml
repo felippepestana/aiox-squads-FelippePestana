@@ -1,0 +1,35 @@
+id: wf-toi-review
+name: TOI Robustness Review Pipeline
+trigger: "TOI ou recuperação de consumo para validação probatória antes de cobrança ou defesa"
+steps:
+  - id: route
+    agent: juris-orchestrator
+    task: route-case
+    template: templates/case-routing-plan-tmpl.md
+    gate: QG-JE-001
+  - id: intake
+    agent: document-intake-validator
+    task: validate-document-checklist
+    gate: QG-JE-002
+  - id: robustness
+    agent: toi-legal-builder
+    task: assess-toi-robustness
+    template: templates/toi-assessment-tmpl.md
+    gate: QG-JE-003
+  - id: thesis
+    agent: legal-thesis-curator
+    task: curate-legal-thesis
+    description: "Jurisprudência de TOI na comarca e requisitos probatórios exigidos pelos julgadores."
+  - id: collection-route
+    agent: recovery-score-analyst
+    task: score-recovery-viability
+    template: templates/recovery-dossier-tmpl.md
+    condition: "robustness recommendation is 'cobrar'"
+  - id: human-validation
+    agent: juris-orchestrator
+    gate: QG-JE-004
+    description: "Validação técnica e jurídica humana obrigatória — o agente nunca declara fraude conclusivamente."
+outputs:
+  - toi-assessment.md
+  - remediation-backlog.md
+  - audit-trail.md
