@@ -1,0 +1,188 @@
+metadata:
+  version: "0.1"
+  created: "2026-07-12"
+  updated: "2026-07-12"
+  squad: "toga-recupera"
+  maturity: "DRAFT"
+
+squad:
+  name: "toga-recupera"
+  display_name: "Toga Recupera"
+  version: "0.1.0"
+  domain: "Educational Debt Collection (LegalTech)"
+  description: |
+    Squad de cobrança de carteiras educacionais da plataforma RÉGUA / Toga Recupera.
+    Opera a camada de agentes IA do planejamento em docs/regua/: classificação de
+    documentação de carteira (define a via processual), cálculo de débito atualizado
+    (engine REPACTUA), simulação de acordos com alçadas, e geração de notificações
+    extrajudiciais — tudo sob validação obrigatória do compliance-guard (prescrição,
+    CDC, LGPD, superendividamento).
+  philosophy: |
+    "Cobrar com autoridade jurídica e sem constrangimento: quem prova o número, recupera."
+  keywords:
+    - cobranca-educacional
+    - inadimplencia
+    - regua-de-cobranca
+    - acordo
+    - repactua
+    - notificacao-extrajudicial
+    - prescricao
+    - lei-9870
+    - cdc
+    - lgpd
+    - superendividamento
+    - brasil
+  entry_agent: chief-recupera
+
+tiers:
+  tier_0:
+    name: "Orquestração"
+    agents: [chief-recupera]
+    purpose: "Classifica a demanda, roteia pelo pipeline e enforça o gate de compliance em toda saída."
+  tier_1:
+    name: "Masters"
+    agents: [negociador-extrajudicial, estrategista-judicial]
+    purpose: "Condução da esteira: negociação/acordos extrajudiciais e estratégia da via judicial."
+  tier_2:
+    name: "Specialists"
+    agents: [classificador-carteira, calculista-repactua]
+    purpose: "Classificação documental (define via processual) e cálculo determinístico de débito/acordos."
+  tier_3:
+    name: "Support / Quality Gate"
+    agents: [compliance-guard]
+    purpose: "Valida toda saída contra prescrição, CDC arts. 42/71, LGPD e superendividamento. Veto power."
+
+agents:
+  chief-recupera:
+    file: agents/chief-recupera.md
+    tier: tier_0
+    icon: "⚖️"
+    focus: "Classificação de demandas de cobrança, roteamento, gate de compliance obrigatório"
+  negociador-extrajudicial:
+    file: agents/negociador-extrajudicial.md
+    tier: tier_1
+    icon: "🤝"
+    focus: "Réguas de cobrança, propostas de acordo por aging dentro de alçadas, minutas de mensagem"
+  estrategista-judicial:
+    file: agents/estrategista-judicial.md
+    tier: tier_1
+    icon: "🏛️"
+    focus: "Via processual (execução/monitória/cobrança/JEC), priorização por recuperabilidade"
+  classificador-carteira:
+    file: agents/classificador-carteira.md
+    tier: tier_2
+    icon: "🗂️"
+    focus: "Classificação da documentação (contrato assinado? 2 testemunhas?) → força executiva"
+  calculista-repactua:
+    file: agents/calculista-repactua.md
+    tier: tier_2
+    icon: "🧮"
+    focus: "Débito atualizado, simulação de acordos, memória de cálculo (Tema 474 STJ)"
+  compliance-guard:
+    file: agents/compliance-guard.md
+    tier: tier_3
+    icon: "🛡️"
+    focus: "Bloqueio de prescrição, linguagem CDC-safe, LGPD, triagem de superendividamento"
+
+handoffs:
+  chief-recupera:
+    routes_to: [classificador-carteira, calculista-repactua, negociador-extrajudicial, estrategista-judicial]
+    final_gate: compliance-guard
+  classificador-carteira:
+    hands_off_to: [estrategista-judicial, calculista-repactua]
+    returns_to: [chief-recupera]
+  calculista-repactua:
+    hands_off_to: [negociador-extrajudicial]
+    returns_to: [chief-recupera]
+  negociador-extrajudicial:
+    receives_from: [calculista-repactua]
+    must_pass: [compliance-guard]
+    returns_to: [chief-recupera]
+  estrategista-judicial:
+    receives_from: [classificador-carteira, calculista-repactua]
+    must_pass: [compliance-guard]
+    delegates_drafting_to: "squads/analista-processual (UC-AP-005)"
+    returns_to: [chief-recupera]
+  compliance-guard:
+    veto: true
+    final: true
+
+pipeline:
+  use_cases:
+    UC-TR-001:
+      name: "Classificação de Documentação de Carteira"
+      trigger_patterns: ["classificar carteira", "documentação", "força executiva", "via processual", "contrato assinado", "testemunhas"]
+      agents: [classificador-carteira]
+    UC-TR-002:
+      name: "Cálculo de Débito Atualizado / Simulação de Acordo"
+      trigger_patterns: ["calcular débito", "atualizar dívida", "simular acordo", "desconto", "parcelamento", "memória de cálculo"]
+      agents: [calculista-repactua, negociador-extrajudicial]
+    UC-TR-003:
+      name: "Notificação Extrajudicial de Mora"
+      trigger_patterns: ["notificação extrajudicial", "notificar devedor", "constituir em mora"]
+      agents: [negociador-extrajudicial]
+      delegates_to: "squads/analista-processual redator-juridico (UC-AP-005)"
+    UC-TR-004:
+      name: "Estratégia Judicial de Cobrança"
+      trigger_patterns: ["judicializar", "execução", "monitória", "ação de cobrança", "JEC", "protesto"]
+      agents: [classificador-carteira, estrategista-judicial]
+    UC-TR-005:
+      name: "Triagem de Compliance / Superendividamento"
+      trigger_patterns: ["prescrição", "prescrita", "superendividamento", "compliance", "posso cobrar", "LGPD"]
+      agents: [compliance-guard]
+
+quality_gates:
+  QG-TR-001:
+    name: "Gate de Compliance (obrigatório em toda saída)"
+    agent: compliance-guard
+    criteria: "Nenhuma parcela prescrita cobrada; linguagem CDC-safe; dados de menores minimizados; superendividamento triado"
+  QG-TR-002:
+    name: "Memória de Cálculo"
+    agent: calculista-repactua
+    criteria: "Cálculo parcela a parcela (principal, correção, juros, multa) com fontes dos índices"
+  QG-TR-003:
+    name: "Via Processual Fundamentada"
+    agent: estrategista-judicial
+    criteria: "Recomendação justificada pela documentação classificada (art. 784, III CPC / art. 700 CPC / JEC)"
+
+tools:
+  Read:
+    used_by: [classificador-carteira, calculista-repactua, chief-recupera]
+    purpose: "Leitura de contratos, planilhas de carteira e documentos"
+  Write:
+    used_by: [negociador-extrajudicial, estrategista-judicial, calculista-repactua]
+    purpose: "Salvar minutas, memórias de cálculo e pareceres em output/"
+  WebSearch:
+    used_by: [estrategista-judicial]
+    purpose: "Jurisprudência e índices de correção atualizados"
+
+settings:
+  activation:
+    prefix: "toga-recupera"
+    example: "@toga-recupera:chief-recupera"
+  language: "pt-BR"
+
+quality_standards:
+  min_score: 7.0
+  smoke_tests:
+    - "Classificar carteira com contrato assinado por 2 testemunhas → recomendar execução"
+    - "Simular acordo de 4 parcelas vencidas há 14 meses com desconto dentro da alçada"
+    - "Bloquear cobrança de parcela vencida há 6 anos (prescrita)"
+    - "Gerar notificação extrajudicial de mora delegando ao analista-processual"
+    - "Detectar relato de superendividamento e escalar para tratamento humano"
+
+references:
+  planning_docs: "docs/regua/"
+  compliance_spec: "docs/regua/05-compliance-e-guardrails.md"
+  related_squads:
+    - "squads/analista-processual (redação de peças e notificações — UC-AP-005)"
+    - "squads/analista-estrategista-processual-civil (fase de execução — UC-AEPC-005)"
+    - "squads/squad-juridico-legal-performance (exemplo: examples/processo-civil-acao-cobranca.md)"
+
+stats:
+  total_agents: 6
+  total_tasks: 3
+  total_workflows: 0
+  total_checklists: 0
+  total_templates: 2
+  total_data_files: 1
