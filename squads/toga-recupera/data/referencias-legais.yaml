@@ -47,7 +47,8 @@ vias_processuais:
     precedentes:
       - "STJ REsp 286.036/MG — contrato educacional como prova hábil"
       - "Súmula 504 STJ — prazo quinquenal"
-      - "Tema 474 STJ — exige memória de cálculo atualizada"
+      - "Tema 474 STJ (REsp repetitivo) — petição inicial da monitória de soma em dinheiro deve vir instruída com demonstrativo de débito atualizado (não confundir com a Súmula 474, que trata de DPVAT)"
+      - "CPC/2015, art. 700, §2º, I — base estatutária vigente da exigência de memória de cálculo"
   cobranca_comum:
     fundamento: "Procedimento comum — controvérsia relevante/documentação frágil"
   jec:

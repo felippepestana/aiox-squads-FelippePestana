@@ -47,7 +47,7 @@ Cada fundamento jurídico do blueprint vira uma **regra de sistema** (bloqueio/v
 | ID | Regra | Verificação |
 |---|---|---|
 | A1 | Desconto acima da alçada configurada nunca aplicado sem aprovação registrada (quem, quando) | Teste de fluxo de aprovação |
-| A2 | Memória de cálculo (Tema 474 STJ) gerada e arquivada para todo valor cobrado judicialmente; engine REPACTUA determinística | Testes unitários da engine; snapshot da memória vinculado à petição |
+| A2 | Memória de cálculo (CPC art. 700, §2º, I; Tema 474 STJ) gerada e arquivada para todo valor cobrado judicialmente; engine REPACTUA determinística | Testes unitários da engine; snapshot da memória vinculado à petição |
 
 ## M — Marketing e prospecção (Provimento 205/2021 CFOAB)
 
