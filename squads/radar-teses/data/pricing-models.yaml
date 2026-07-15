@@ -1,0 +1,37 @@
+# Fee models commonly used and validated in the Brazilian legal market.
+# The squad PRESENTS options; the responsible lawyer DECIDES.
+models:
+  - id: exito-puro
+    label: "Êxito puro (ad exitum)"
+    how: "Percentual sobre o proveito econômico obtido (usual: 20-30%), nada devido sem resultado."
+    pros: ["barreira zero de entrada para o cliente", "alto poder de conversão"]
+    cons: ["fluxo de caixa do escritório", "exige due diligence rigorosa", "atenção à quota litis e tabela da seccional"]
+    fits: ["recuperação de créditos", "públicos sensíveis a desembolso"]
+  - id: fixo-mais-exito
+    label: "Híbrido: fixo (entrada) + êxito reduzido"
+    how: "Parcela inicial fixa na assinatura + percentual menor sobre o êxito (usual: 10-20%)."
+    pros: ["compromisso do cliente", "cobre custo operacional", "modelo mais usado no fechamento pró-ativo"]
+    cons: ["fricção maior que êxito puro"]
+    fits: ["ofertas proativas com parcela inicial — modelo padrão do squad"]
+  - id: fixo-etapas
+    label: "Fixo por etapas (milestones)"
+    how: "Valores fixos por fase processual (protocolo, sentença, trânsito)."
+    pros: ["previsibilidade para ambos"]
+    cons: ["menor alinhamento com resultado"]
+    fits: ["teses consolidadas de execução previsível"]
+  - id: assinatura
+    label: "Assinatura/consultivo recorrente"
+    how: "Mensalidade de monitoramento de oportunidades + condições preferenciais por demanda."
+    pros: ["receita recorrente", "relacionamento contínuo — encaixa com o radar"]
+    cons: ["exige entrega contínua de valor percebido"]
+    fits: ["empresas e produtores com exposição tributária permanente"]
+  - id: percentual-economia
+    label: "Percentual sobre economia recorrente"
+    how: "Percentual sobre a economia mensal gerada (ex.: redução de tributo daqui para frente) por período definido."
+    pros: ["alinha incentivo em teses de desoneração futura"]
+    cons: ["medição exige apuração contábil pactuada"]
+    fits: ["teses com efeito prospectivo"]
+rules:
+  - "Respeitar tabela mínima da seccional da OAB aplicável."
+  - "Sucumbência pertence ao advogado e não se compensa (arts. 22-23, Lei 8.906/94)."
+  - "Contrato sempre explicita: obrigação de meio, sem promessa de resultado."

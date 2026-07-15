@@ -1,0 +1,50 @@
+name: wf-thesis-to-offer
+title: "Da varredura ao fechamento"
+description: >
+  Ciclo completo do radar: varredura STF/STJ e sinais precoces, mapeamento de
+  públicos, due diligence, matriz de resultados, oferta, contrato e procuração.
+trigger: "ciclo semanal do radar-chief ou comando *varrer"
+steps:
+  - id: sweep
+    agent: superior-courts-monitor
+    task: monitor-superior-courts
+    output: "fichas de tese (status: detectada)"
+  - id: scout
+    agent: early-signal-scout
+    task: scout-early-signals
+    parallel_with: sweep
+    output: "fichas de sinal precoce (rotuladas NÃO VINCULANTE)"
+  - id: map
+    agent: audience-mapper
+    task: map-target-audiences
+    input: [sweep, scout]
+    output: "matriz tese × segmentos"
+  - id: dd
+    agent: due-diligence-analyst
+    task: run-thesis-due-diligence
+    input: [map]
+    gate: "VERMELHO bloqueia oferta proativa"
+    output: "parecer VERDE/AMARELO/VERMELHO"
+  - id: outcomes
+    agent: outcome-projector
+    task: project-outcomes
+    input: [dd]
+    output: "matriz de resultados bilíngue (técnica + acessível)"
+  - id: offer
+    agent: offer-architect
+    task: build-irresistible-offer
+    input: [outcomes]
+    output: "deck HTML/PDF + form de qualificação"
+  - id: closing
+    agent: contract-drafter
+    task: draft-contract-and-poa
+    input: [offer]
+    output: "minutas de contrato + procuração ad judicia"
+  - id: compliance
+    agent: oab-compliance-gate
+    task: audit-oab-compliance
+    input: [offer, closing]
+    gate: "reprovação devolve ao agente criador"
+  - id: human-validation
+    type: human_gate
+    description: "Advogado responsável aprova dossiê, oferta e minutas antes de qualquer envio ao cliente."

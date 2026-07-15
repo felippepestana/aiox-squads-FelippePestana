@@ -1,0 +1,126 @@
+name: radar-teses
+version: "1.0.0"
+title: "Radar de Teses — Motor Contínuo de Oportunidades Jurídicas (STF/STJ)"
+description: >
+  Squad multiagente que opera como motor de busca contínuo de oportunidades
+  para a advocacia: mapeia teses fixadas em tribunais superiores (STF e STJ)
+  por súmula, repercussão geral, recursos repetitivos, IRDR e IAC; identifica
+  sinais precoces (cases de sucesso ainda não vinculantes); executa due
+  diligence de segurança jurídica; projeta o rol de resultados (certos,
+  possíveis, viáveis, variáveis e de risco); gera oferta comercial de alta
+  conversão (HTML/PDF), contrato e procuração ad judicia; e produz plano de
+  marketing digital e conteúdo para redes sociais em conformidade com o
+  Provimento OAB 205/2021. Nenhuma peça, oferta ou publicação é liberada sem
+  validação humana do advogado responsável.
+author: "FelippePestana"
+language: pt-BR
+slashPrefix: "radar"
+patternPrefix: "RT"
+
+entry_agent: radar-chief
+
+structural_rules:
+  - "Toda tese reportada cita fonte oficial verificável (STF/STJ, DJe, tema numerado, súmula) e data de verificação."
+  - "Toda oportunidade passa por due diligence antes de virar oferta: trânsito em julgado, modulação de efeitos, prescrição/decadência e escopo subjetivo."
+  - "Sinais precoces (não vinculantes) são sempre rotulados como tal e nunca apresentados como resultado garantido."
+  - "Resultados são classificados em: certo, possível, viável, variável e de risco — em linguagem técnica E acessível."
+  - "Nenhuma oferta, contrato ou conteúdo publicitário é publicado sem validação humana e sem passar pelo gate de compliance OAB/LGPD."
+  - "É vedada promessa de resultado, mercantilização e captação indevida de clientela (Provimento OAB 205/2021 e Código de Ética)."
+
+tiers:
+  tier_0:
+    name: "Chief — Orquestração do Radar"
+    agents: [radar-chief]
+    purpose: "Rotear demandas, manter o ciclo contínuo de varredura, consolidar dossiês e exigir validação humana antes de qualquer entrega externa."
+  tier_1:
+    name: "Masters — Inteligência de Teses e Públicos"
+    agents: [superior-courts-monitor, early-signal-scout, audience-mapper]
+    purpose: "Varredura contínua de STF/STJ (súmulas, temas, IRDR/IAC), detecção de sinais precoces e mapeamento dos públicos beneficiados por cada tese."
+  tier_2:
+    name: "Specialists — Due Diligence, Resultados e Comercial"
+    agents: [due-diligence-analyst, outcome-projector, offer-architect, contract-drafter]
+    purpose: "Segurança jurídica da oportunidade, matriz de resultados, oferta irresistível com precificação validada, contrato e procuração ad judicia prontos para fechamento."
+  tier_3:
+    name: "Support — Marketing, Conteúdo e Compliance"
+    agents: [marketing-planner, social-content-writer, oab-compliance-gate]
+    purpose: "Plano de marketing digital e de conteúdo, peças para redes sociais (escritório e sócios) e quality gate de publicidade OAB + LGPD."
+
+agents:
+  radar-chief:
+    file: agents/radar-chief.md
+    tier: tier_0
+    risk_level: "Crítico"
+    human_validation: true
+    focus: "Orquestrar o ciclo varredura → due diligence → oferta → fechamento → divulgação; consolidar o dossiê da tese e travar entregas sem validação humana."
+  superior-courts-monitor:
+    file: agents/superior-courts-monitor.md
+    tier: tier_1
+    risk_level: "Alto"
+    human_validation: true
+    focus: "Monitorar STF e STJ: súmulas, repercussão geral, recursos repetitivos, IRDR e IAC; extrair a tese fixada com fundamentos e precedentes."
+  early-signal-scout:
+    file: agents/early-signal-scout.md
+    tier: tier_1
+    risk_level: "Alto"
+    human_validation: true
+    focus: "Identificar oportunidades ainda não vinculantes: temas afetados sem julgamento, jurisprudência dominante, cases de sucesso reiterados em turmas e TRFs/TJs."
+  audience-mapper:
+    file: agents/audience-mapper.md
+    tier: tier_1
+    risk_level: "Médio"
+    human_validation: false
+    focus: "Mapear beneficiários de cada tese: empresas de qualquer porte/ramo, indústria, produtor rural, PF, MEI, celetistas, servidores ativos/aposentados de todos os âmbitos."
+  due-diligence-analyst:
+    file: agents/due-diligence-analyst.md
+    tier: tier_2
+    risk_level: "Crítico"
+    human_validation: true
+    focus: "Due diligence da oportunidade: trânsito, modulação de efeitos, prescrição, escopo subjetivo/objetivo, riscos de reversão e requisitos probatórios."
+  outcome-projector:
+    file: agents/outcome-projector.md
+    tier: tier_2
+    risk_level: "Alto"
+    human_validation: true
+    focus: "Projetar rol de resultados (certo/possível/viável/variável/risco) com quantificação jurídico-contábil e tradução em linguagem acessível ao cliente."
+  offer-architect:
+    file: agents/offer-architect.md
+    tier: tier_2
+    risk_level: "Alto"
+    human_validation: true
+    focus: "Construir a oferta irresistível (deck HTML/PDF), forms de qualificação prévia e opções de precificação validadas para decisão do advogado."
+  contract-drafter:
+    file: agents/contract-drafter.md
+    tier: tier_2
+    risk_level: "Crítico"
+    human_validation: true
+    focus: "Minutar contrato de honorários e procuração ad judicia, com fluxo de assinatura e cobrança da parcela inicial, para revisão do advogado."
+  marketing-planner:
+    file: agents/marketing-planner.md
+    tier: tier_3
+    risk_level: "Médio"
+    human_validation: true
+    focus: "Plano de marketing digital e de conteúdo por público e canal de alta conversão, com funil, calendário e KPIs."
+  social-content-writer:
+    file: agents/social-content-writer.md
+    tier: tier_3
+    risk_level: "Médio"
+    human_validation: true
+    focus: "Produzir conteúdo para redes sociais e demais meios, para o escritório e para o nome profissional dos sócios, em tom informativo-educativo."
+  oab-compliance-gate:
+    file: agents/oab-compliance-gate.md
+    tier: tier_3
+    risk_level: "Crítico"
+    human_validation: true
+    focus: "Quality gate final: publicidade conforme Provimento OAB 205/2021, vedação de promessa de resultado, LGPD e rastreabilidade de fontes."
+
+workflows:
+  wf-thesis-to-offer:
+    file: workflows/wf-thesis-to-offer.yaml
+    purpose: "Ciclo completo: varredura → mapeamento de público → due diligence → matriz de resultados → oferta → contrato/procuração."
+  wf-content-engine:
+    file: workflows/wf-content-engine.yaml
+    purpose: "Da tese validada ao conteúdo publicado: plano de marketing → peças por canal → gate OAB/LGPD → aprovação humana."
+
+checklists:
+  - checklists/due-diligence-checklist.md
+  - checklists/oab-publicity-checklist.md

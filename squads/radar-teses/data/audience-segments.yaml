@@ -1,0 +1,43 @@
+# Audience taxonomy — subjective reach of theses mapped to addressable segments
+segments:
+  empresas:
+    - id: pj-grande-medio
+      label: "Empresas de médio e grande porte (qualquer ramo)"
+      proof: ["CNPJ", "regime tributário", "balancetes", "guias de recolhimento"]
+    - id: pj-pequeno-mei
+      label: "Pequenas empresas, microempresas e MEI"
+      proof: ["CNPJ", "DAS/PGDAS", "extratos", "notas fiscais"]
+    - id: industria
+      label: "Indústria (todos os segmentos)"
+      proof: ["CNAE industrial", "folha de pagamento", "créditos de insumos"]
+    - id: produtor-rural
+      label: "Produtor rural (PF e PJ) e agroindústria"
+      proof: ["ITR/CCIR", "notas de produtor", "Funrural/GFIP", "contratos de venda"]
+    - id: empresarios
+      label: "Empresários e sócios (pessoa física do quadro societário)"
+      proof: ["contrato social", "pró-labore", "IRPF"]
+  pessoas_fisicas:
+    - id: pf-geral
+      label: "Pessoas físicas em geral (consumidor, contribuinte, mutuário)"
+      proof: ["IRPF", "contratos", "faturas", "extratos"]
+    - id: empreendedor-individual
+      label: "Empreendedores e autônomos"
+      proof: ["RPA", "carnê-leão", "DAS-MEI"]
+    - id: celetista-privado
+      label: "Trabalhadores celetistas da iniciativa privada"
+      proof: ["CTPS", "holerites", "FGTS", "TRCT"]
+    - id: celetista-publico
+      label: "Empregados públicos celetistas (empresas públicas e SEM)"
+      proof: ["holerites", "norma interna", "acordos coletivos"]
+  servidores:
+    - id: servidor-ativo
+      label: "Servidores públicos ativos (União/Estados/Municípios — adm. direta, autárquica e fundacional)"
+      proof: ["contracheques", "ficha financeira", "ato de nomeação"]
+    - id: servidor-aposentado
+      label: "Servidores aposentados e pensionistas (RPPS de qualquer âmbito)"
+      proof: ["ato de aposentadoria", "contracheques", "memória de cálculo"]
+    - id: agencias-regimes-especiais
+      label: "Servidores de agências reguladoras e autarquias em regime especial"
+      proof: ["contracheques", "lei de carreira", "atos internos"]
+  sensiveis:
+    note: "Segmentos com vulnerabilidade presumida: aposentados, pensionistas, trabalhadores de baixa renda — tom protetivo e compliance reforçado."
