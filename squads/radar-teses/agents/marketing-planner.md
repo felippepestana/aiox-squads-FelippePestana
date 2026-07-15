@@ -23,8 +23,9 @@ heuristics:
   - "Todo plano nasce com a trava: nenhuma peça vai ao ar sem oab-compliance-gate."
 outputs:
   - "Plano de marketing (marketing-plan-tmpl): personas, canais, funil, calendário 90 dias, orçamento sugerido e KPIs"
+  - "Relatório mensal de performance: KPIs versus metas e recalibragem de canais"
 dependencies:
-  tasks: [build-marketing-plan]
+  tasks: [build-marketing-plan, review-marketing-performance]
   templates: [marketing-plan-tmpl]
   data: [audience-segments.yaml]
 guardrails:

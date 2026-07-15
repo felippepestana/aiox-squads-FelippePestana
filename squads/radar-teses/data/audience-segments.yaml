@@ -39,5 +39,6 @@ segments:
     - id: agencias-regimes-especiais
       label: "Servidores de agências reguladoras e autarquias em regime especial"
       proof: ["contracheques", "lei de carreira", "atos internos"]
-  sensiveis:
-    note: "Segmentos com vulnerabilidade presumida: aposentados, pensionistas, trabalhadores de baixa renda — tom protetivo e compliance reforçado."
+
+metadata:
+  sensiveis_note: "Segmentos com vulnerabilidade presumida: aposentados, pensionistas, trabalhadores de baixa renda — tom protetivo e compliance reforçado."

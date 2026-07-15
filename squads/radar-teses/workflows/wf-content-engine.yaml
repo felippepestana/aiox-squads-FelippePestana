@@ -24,5 +24,5 @@ steps:
     description: "Aprovação do advogado responsável; só então as peças entram no calendário de publicação."
   - id: measure
     agent: marketing-planner
-    task: build-marketing-plan
-    mode: "revisão mensal de KPIs e recalibragem de canais"
+    task: review-marketing-performance
+    output: "relatório mensal de KPIs + recalibragem de canais"
