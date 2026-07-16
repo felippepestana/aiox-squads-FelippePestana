@@ -25,6 +25,8 @@ Salvo indicação contrária, toda tabela de domínio possui:
 
 `updated_at`/`version` mantidos por trigger; `UPDATE` com `version` defasado é rejeitado.
 
+**Nota sobre `retention_policy`:** o blueprint (seção 9.1) lista `retention_policy` como campo transversal. No MVP a retenção é definida globalmente em `organizations.settings` (lixeira, snapshots, anexos); um override por item, quando necessário, usa a chave controlada `retention_policy` dentro de `metadata`. Uma coluna dedicada por tabela só se justifica na Fase 2+, se requisitos de residência/retenção por item forem confirmados (decisão nº 8 do blueprint).
+
 ---
 
 ## 2. DIAGRAMA ENTIDADE-RELACIONAMENTO (visão principal)
@@ -129,6 +131,7 @@ erDiagram
 | `color` | text | token de cor |
 | `position` | jsonb `{x,y,order,stack_id}` | posição no bloco (RF-CAN-05) |
 | `owner_id` | uuid FK → users null | responsável |
+| `participants` | uuid[] default '{}' | participantes; base do controle de confidencialidade (RF-PIT-02, RN-PIT-02) |
 | `start_date`, `due_date`, `review_date` | date null | |
 | `objective_id` | uuid FK null | |
 | `initiative_id` | uuid FK null | vínculo pós-conversão (RF-INI-01) |
@@ -186,7 +189,9 @@ erDiagram
 | `workspace_id` | uuid FK | |
 | `title` | text NOT NULL | |
 | `origin_type` | enum `manual\|note\|initiative\|workflow_step` | RF-TSK-01 |
-| `note_id` / `initiative_id` / `workflow_step_id` | uuid FK null | conforme origem |
+| `note_id` | uuid FK → notes null | vínculo com o post-it de origem |
+| `initiative_id` | uuid FK → initiatives null | vínculo com a iniciativa de origem |
+| `workflow_step_id` | uuid FK → workflow_steps null | vínculo com a etapa de workflow de origem |
 | `assignee_id` | uuid FK → users | |
 | `participants` | uuid[] | |
 | `priority` | enum `baixa\|media\|alta` | |
@@ -255,9 +260,9 @@ erDiagram
 
 ### 3.8 Financeiro gerencial e portfólio (planejamento — decisão nº 6 pendente)
 
-**`cost_items`**: `workspace_id`, `note_id null` (post-it de Estrutura de Custo), `category`, `cost_center`, `nature enum fixa|variavel`, `competence date` (mês), `planned_amount numeric(14,2)`, `actual_amount null`, `currency char(3) default 'BRL'`, `recurrence jsonb`.
+**`cost_items`**: `workspace_id`, `note_id null` (post-it de Estrutura de Custo), `category`, `cost_center`, `nature enum fixa|variavel`, `competence date` (mês), `planned_amount numeric(14,2)`, `actual_amount numeric(14,2) null`, `currency char(3) default 'BRL'`, `recurrence jsonb`.
 
-**`revenue_items`**: `workspace_id`, `note_id null`, `modality enum partido|exito|pontual|valor_hora|outra`, `service_id null`, `segment_id null`, `competence`, `planned_amount`, `actual_amount null`, `currency`.
+**`revenue_items`**: `workspace_id`, `note_id null`, `modality enum partido|exito|pontual|valor_hora|outra`, `service_id null`, `segment_id null`, `competence date`, `planned_amount numeric(14,2)`, `actual_amount numeric(14,2) null`, `currency char(3) default 'BRL'`.
 
 **`partners`**, **`services`**, **`client_segments`** — cadastros estruturados vinculáveis a post-its dos módulos correspondentes (`note_id`), com os campos específicos da seção 5 do blueprint em colunas próprias + `module_fields jsonb`. No MVP, esses módulos podem operar somente com `notes.module_fields`; as tabelas dedicadas entram quando houver necessidade relacional (relatórios da Fase 2).
 

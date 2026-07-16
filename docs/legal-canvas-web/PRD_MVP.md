@@ -77,6 +77,8 @@ Convenção de identificação: `RF-<domínio>-<nº>`. Domínios: AUT (autentica
 | Ver logs de auditoria | ✔ | ✔ | — | — | — | — |
 | Exportar | ✔ | ✔ | ✔ | ✔ | ✔ (se permitido) | — |
 
+**RN-AUT-02 — Proteção do Proprietário:** Administradores não podem alterar o papel, suspender ou remover o Proprietário da organização; apenas o Proprietário pode transferir a propriedade (operação auditada, com confirmação explícita).
+
 **CA-AUT:** um usuário sem permissão não lê nem altera o recurso por interface ou API (critério 3 do blueprint, seção 18). Teste automatizado de isolamento entre organizações é obrigatório antes do release.
 
 ### 3.2 CAN — Canvas visual
