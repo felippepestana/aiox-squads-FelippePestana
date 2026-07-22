@@ -15,6 +15,7 @@ interface BundledAgent {
 interface BundledSquad {
   id: string;
   meta: SquadMeta;
+  entryAgent?: string | null;
   agents: BundledAgent[];
 }
 
@@ -35,7 +36,8 @@ function tryLoadFromBundle(): Squad[] | null {
           squad: s.id,
           filePath: `bundled:${s.id}/${a.id}`,
           systemPrompt: buildSystemPrompt(a.content, a.name, s.id),
-        }))
+        })),
+        s.entryAgent ?? null
       ),
     }));
     return _bundleCache;
@@ -137,8 +139,8 @@ function loadEntryAgent(squadDir: string): string | null {
   if (!fs.existsSync(configPath)) return null;
   try {
     const raw = fs.readFileSync(configPath, "utf-8");
-    const m = raw.match(/^\s*entry_agent:\s*"?([^\n"]+)"?\s*$/m);
-    return m ? m[1].trim() : null;
+    const m = raw.match(/^\s*entry_agent:\s+(.+)$/m);
+    return m ? unquote(m[1]) : null;
   } catch {
     return null;
   }

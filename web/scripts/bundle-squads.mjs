@@ -10,13 +10,23 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SQUADS_DIR = path.resolve(__dirname, "../../squads");
 const OUT = path.resolve(__dirname, "../dist/squads-bundle.json");
 
+/** Remove aspas simples/duplas envolvendo um valor YAML capturado por regex. */
+function unquote(value) {
+  const v = value.trim();
+  const quoted =
+    v.length >= 2 &&
+    ((v.startsWith('"') && v.endsWith('"')) ||
+      (v.startsWith("'") && v.endsWith("'")));
+  return quoted ? v.slice(1, -1).trim() : v;
+}
+
 function extractMeta(content, filePath) {
   const nameMatch = content.match(/^\s*name:\s+(.+)$/m);
   const idMatch = content.match(/^\s*id:\s+(.+)$/m);
   const filename = path.basename(filePath, ".md");
   return {
-    name: nameMatch ? nameMatch[1].trim() : filename,
-    id: idMatch ? idMatch[1].trim() : filename,
+    name: nameMatch ? unquote(nameMatch[1]) : filename,
+    id: idMatch ? unquote(idMatch[1]) : filename,
   };
 }
 
@@ -42,6 +52,19 @@ function loadSquadMeta(squadDir, squadId) {
     };
   } catch {
     return fallback;
+  }
+}
+
+/** Lê o entry_agent declarado no config.yaml (se houver). */
+function loadEntryAgent(squadDir) {
+  const configPath = path.join(squadDir, "config.yaml");
+  if (!fs.existsSync(configPath)) return null;
+  try {
+    const raw = fs.readFileSync(configPath, "utf-8");
+    const m = raw.match(/^\s*entry_agent:\s+(.+)$/m);
+    return m ? unquote(m[1]) : null;
+  } catch {
+    return null;
   }
 }
 
@@ -76,6 +99,7 @@ if (fs.existsSync(SQUADS_DIR)) {
     bundle.push({
       id: squadId,
       meta: loadSquadMeta(squadPath, squadId),
+      entryAgent: loadEntryAgent(squadPath),
       agents,
     });
   }
