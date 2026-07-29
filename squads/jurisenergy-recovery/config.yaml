@@ -263,6 +263,24 @@ quality_standards:
     - "Avaliar TOI sem fotos e sem notificação e recomendar saneamento antes da cobrança."
     - "Bloquear negativação com contestação administrativa pendente."
     - "Consolidar KPIs separando dados confirmados, estimados e pendentes."
+  functional_review:
+    path: SMOKE_TESTS.md
+    priority_scenarios:
+      - id: ST-JE-001
+        name: "Cobrança ativa de carteira"
+        expected_use_case: UC-JE-002
+        example: examples/cobranca-carteira-inadimplente.md
+        validates: ["checklist documental", "score decomposto", "bloqueio de prescritos", "régua humanizada", "gate humano"]
+      - id: ST-JE-002
+        name: "Defesa passiva por negativação"
+        expected_use_case: UC-JE-003
+        example: examples/defesa-negativacao-indevida.md
+        validates: ["priorização por liminar", "fato vs hipótese", "tese com precedente", "acordo mitigador", "minuta assistida"]
+      - id: ST-JE-003
+        name: "TOI com contraditório falho"
+        expected_use_case: UC-JE-004
+        example: examples/toi-sem-notificacao.md
+        validates: ["saneamento antes de cobrança", "robustez decomposta", "risco de improcedência", "sem conclusão de fraude"]
 
 stats:
   total_agents: 12
@@ -271,3 +289,4 @@ stats:
   total_checklists: 3
   total_templates: 5
   total_data_files: 3
+  total_examples: 3
