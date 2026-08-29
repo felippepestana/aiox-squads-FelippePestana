@@ -19,7 +19,7 @@ COPY chatbot/src/ ./src/
 RUN npx tsc && npm prune --omit=dev
 
 # Copia squads para o path correto (../../squads a partir de dist/)
-COPY squads/ /app/squads/
+COPY ./squads/ /app/squads/
 
 EXPOSE 3000
 
