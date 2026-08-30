@@ -1,0 +1,30 @@
+{
+  "name": "aios-pestana",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Orquestração do monorepo AIOS Pestana",
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
+  "scripts": {
+    "setup": "npm ci --prefix web && npm ci --prefix chatbot && DATABASE_URL=${DATABASE_URL:-postgresql://postgres:postgres@localhost:5432/aiox} npm ci --prefix analista-processual-web",
+    "dev:web": "npm run dev --prefix web",
+    "dev:chatbot": "npm run dev --prefix chatbot",
+    "dev:analista": "npm run dev --prefix analista-processual-web -- --port 3001",
+    "typecheck": "npm run typecheck:web && npm run typecheck:chatbot && npm run typecheck:analista",
+    "typecheck:web": "cd web && npm exec -- tsc -p tsconfig.server.json --noEmit && npm exec -- tsc -p client/tsconfig.json --noEmit",
+    "typecheck:chatbot": "cd chatbot && npm exec -- tsc --noEmit",
+    "typecheck:analista": "npm run typecheck --prefix analista-processual-web",
+    "build": "npm run build:web && npm run build:chatbot && npm run build:analista",
+    "build:web": "npm run build --prefix web",
+    "build:chatbot": "npm run build --prefix chatbot",
+    "build:analista": "npm run build --prefix analista-processual-web",
+    "test": "npm run test --prefix analista-processual-web -- --runInBand",
+    "validate": "node scripts/validate-repository.mjs",
+    "check": "npm run validate && npm run typecheck && npm test",
+    "docker:build": "docker compose --profile web --profile chatbot build",
+    "docker:up": "docker compose --profile web --profile chatbot up --build",
+    "docker:down": "docker compose down --remove-orphans"
+  }
+}

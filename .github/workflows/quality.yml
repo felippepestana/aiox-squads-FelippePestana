@@ -1,0 +1,53 @@
+name: Repository Quality
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: quality-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  repository:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm run validate
+
+  applications:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - app: web
+            command: npm run build
+          - app: chatbot
+            command: npm run build
+          - app: analista-processual-web
+            command: npm run typecheck && npm test -- --runInBand && npm run build
+    defaults:
+      run:
+        working-directory: ${{ matrix.app }}
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/aiox
+      OPENAI_API_KEY: test-key-for-build-only
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: ${{ matrix.app }}/package-lock.json
+      - run: npm ci
+      - run: ${{ matrix.command }}
