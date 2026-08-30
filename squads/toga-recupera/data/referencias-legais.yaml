@@ -1,0 +1,82 @@
+# Referências legais da cobrança educacional — fonte dos guardrails do squad
+# Espelha docs/regua/05-compliance-e-guardrails.md (fonte canônica de regras de sistema)
+
+lei_mensalidades:
+  norma: "Lei 9.870/1999"
+  pontos:
+    - artigo: "Art. 6º"
+      regra: "Proíbe suspensão de provas, retenção de documentos e penalidades pedagógicas por inadimplemento; sanções do CDC/CC se a inadimplência perdurar por mais de 90 dias"
+    - artigo: "Art. 6º, §1º (MP 2.173-24/2001)"
+      regra: "Desligamento por inadimplência só ao final do ano letivo (ou semestre, no superior semestral)"
+    - artigo: "Art. 6º, §2º"
+      regra: "Documentos de transferência expedidos a qualquer tempo, independentemente de adimplência"
+    - artigo: "Art. 5º"
+      regra: "Direito à renovação de matrícula, salvo inadimplentes — STJ REsp 660.439/RS: exige atraso superior a 90 dias"
+  efeito_estrategico: "A escola não pode pressionar pedagogicamente — a cobrança profissional externa é a via legítima"
+
+cdc_cobranca:
+  norma: "Lei 8.078/1990 (CDC)"
+  pontos:
+    - artigo: "Art. 42"
+      regra: "Vedado expor o consumidor a ridículo, constrangimento ou ameaça; repetição do indébito em dobro por cobrança indevida"
+    - artigo: "Art. 42, parágrafo único — exceção"
+      regra: "Repetição em dobro NÃO se aplica ao FIES"
+    - artigo: "Art. 52, §1º"
+      regra: "Multa de mora limitada a 2%"
+    - artigo: "Art. 71 (CRIME)"
+      regra: "Cobrar com ameaça, coação, constrangimento físico/moral, afirmações falsas ou interferência no trabalho/lazer"
+  boas_praticas:
+    - "Identificação clara do cobrador e da credora"
+    - "Frequência limitada e respeito a horários"
+    - "Sem exposição da dívida a terceiros; cobrança apenas ao responsável financeiro"
+
+prescricao:
+  norma: "CC/2002, art. 206, §5º, I — quinquenal"
+  precedentes:
+    - ref: "STJ 3ª Turma, REsp 2.086.705/SP (Rel. Min. Nancy Andrighi, j. 05/03/2024)"
+      regra: "Anuidade/semestralidade é obrigação única em parcelas — termo inicial no vencimento da última parcela da anuidade; cada anuidade autônoma"
+    - ref: "Confissão de dívida/renegociação"
+      regra: "Reinicia o prazo a partir da última parcela do novo acordo"
+  regra_de_sistema: "Parcela prescrita é BLOQUEADA em régua, simulador, portal, negativação, protesto e petição (P1)"
+
+vias_processuais:
+  execucao:
+    fundamento: "CPC arts. 783/784; art. 784, III — contrato assinado pelo devedor + 2 testemunhas, ou confissão de dívida assinada"
+  monitoria:
+    fundamento: "CPC art. 700 — prova escrita sem eficácia executiva"
+    precedentes:
+      - "STJ REsp 286.036/MG — contrato educacional como prova hábil"
+      - "Súmula 504 STJ — prazo quinquenal"
+      - "Tema 474 STJ (REsp repetitivo) — petição inicial da monitória de soma em dinheiro deve vir instruída com demonstrativo de débito atualizado (não confundir com a Súmula 474, que trata de DPVAT)"
+      - "CPC/2015, art. 700, §2º, I — base estatutária vigente da exigência de memória de cálculo"
+  cobranca_comum:
+    fundamento: "Procedimento comum — controvérsia relevante/documentação frágil"
+  jec:
+    fundamento: "Lei 9.099/1995 — até 40 salários mínimos, sem custas em 1º grau"
+
+negativacao_protesto:
+  negativacao:
+    - "Súmula 359 STJ — notificação prévia obrigatória"
+    - "Registro cai em 5 anos; baixa rápida após pagamento"
+  protesto:
+    - "Lei 9.492/1997 — contrato de serviços educacionais é protestável; emolumentos pagos pelo devedor (tabela IEPTB)"
+    - "Cancelamento pós-pagamento é ônus do devedor — fornecer carta de anuência"
+
+lgpd:
+  norma: "Lei 13.709/2018"
+  pontos:
+    - artigo: "Art. 14 + Enunciado CD/ANPD 1/2023 + Enunciado 684 CJF"
+      regra: "Dados de menores: aplicam-se as bases dos arts. 7º/11, preservado o melhor interesse; minimização obrigatória"
+    - artigo: "Arts. 7º, V e VI"
+      regra: "Bases legais da cobrança: execução de contrato e exercício regular de direitos; legítimo interesse subsidiário"
+    - artigo: "Art. 52"
+      regra: "Multa até 2% do faturamento, limitada a R$ 50 milhões por infração; responsabilidade solidária credor/operador — contrato de operador obrigatório"
+
+superendividamento:
+  norma: "Lei 14.181/2021 + Decreto 11.150/2022 (alterado pelo Decreto 11.567/2023)"
+  regra: "Consumidor de boa-fé impossibilitado de pagar dívidas de consumo sem comprometer o mínimo existencial → repactuação/conciliação, não cobrança agressiva. Dívida educacional (prestação continuada) está abrangida."
+  regra_de_sistema: "Flag de superendividamento retira o devedor da régua automática → fila humana (S1)"
+
+publicidade_advocacia:
+  norma: "Provimento 205/2021 CFOAB"
+  regra: "Publicidade informativa, sóbria e discreta; vedados captação de clientela, promessa de resultado, honorários como isca e divulgação de resultados de casos concretos. Prospecção B2B informativa a instituições é admissível."
