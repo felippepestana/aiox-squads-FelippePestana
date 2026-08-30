@@ -28,6 +28,33 @@
 
 <br/>
 
+## Operação do monorepo
+
+Este fork reúne o catálogo de squads e três aplicações executáveis. Para preparar e verificar tudo com Node.js 22+:
+
+```bash
+cp .env.example .env
+npm run setup
+npm run validate
+npm run typecheck
+npm test
+npm run build
+```
+
+Aplicações principais:
+
+| Aplicação | Comando na raiz | Porta |
+|---|---|---:|
+| Portal de Squads | `npm run dev:web` | 5173 / 8787 |
+| Chatbot | `npm run dev:chatbot` | 3000 |
+| Analista Processual | `npm run dev:analista` | 3001 |
+
+Para execução em contêineres, use `npm run docker:up`. As variáveis e segredos esperados estão documentados em `.env.example`; nunca versione o arquivo `.env`.
+
+> As funções jurídicas e respostas geradas por IA são ferramentas de apoio profissional. Resultados devem ser revisados por pessoa qualificada antes de uso processual ou tomada de decisão.
+
+<br/>
+
 ## O que é AIOX Squads?
 
 # O repositório da comunidade para squads AIOX
