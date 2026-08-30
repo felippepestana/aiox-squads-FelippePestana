@@ -1,0 +1,28 @@
+# Official sources and research guardrails for the radar-teses squad
+sources:
+  stf:
+    - name: "Painel de Repercussão Geral"
+      url: "https://portal.stf.jus.br/repercussaogeral/"
+    - name: "Pesquisa de jurisprudência e súmulas"
+      url: "https://jurisprudencia.stf.jus.br/"
+  stj:
+    - name: "Precedentes Qualificados (repetitivos, IAC, súmulas)"
+      url: "https://processo.stj.jus.br/repetitivos/"
+    - name: "Pesquisa de jurisprudência"
+      url: "https://scon.stj.jus.br/"
+  complementares:
+    - name: "CNJ — Banco Nacional de Demandas Repetitivas e Precedentes"
+      url: "https://www.cnj.jus.br/"
+    - name: "DATAJUD / Painéis CNJ"
+      url: "https://www.cnj.jus.br/sistemas/datajud/"
+
+guardrails:
+  - "Fonte primária obrigatória; notícia jurídica é apenas pista de varredura."
+  - "Toda ficha registra URL oficial + data de verificação."
+  - "Dados de fonte secundária entram como 'PENDENTE DE VERIFICAÇÃO'."
+  - "Enunciados são transcritos literalmente, nunca parafraseados como se fossem literais."
+
+scan_cadence:
+  full_sweep: "semanal"
+  pending_embargos_recheck: "a cada ciclo"
+  affected_themes_watchlist: "diária (informativos e pautas de julgamento)"

@@ -1,0 +1,28 @@
+name: wf-content-engine
+title: "Da tese validada ao conteúdo publicado"
+description: >
+  Motor de conteúdo: plano de marketing por segmento, produção de peças para
+  escritório e sócios, gate OAB/LGPD e aprovação humana antes da publicação.
+trigger: "tese com due diligence VERDE/AMARELO concluída"
+steps:
+  - id: plan
+    agent: marketing-planner
+    task: build-marketing-plan
+    output: "plano de marketing 90 dias + KPIs"
+  - id: content
+    agent: social-content-writer
+    task: produce-social-content
+    input: [plan]
+    output: "kits de conteúdo (linhas: escritório e sócios)"
+  - id: compliance
+    agent: oab-compliance-gate
+    task: audit-oab-compliance
+    input: [plan, content]
+    gate: "reprovação devolve com correções exigidas"
+  - id: human-validation
+    type: human_gate
+    description: "Aprovação do advogado responsável; só então as peças entram no calendário de publicação."
+  - id: measure
+    agent: marketing-planner
+    task: review-marketing-performance
+    output: "relatório mensal de KPIs + recalibragem de canais"
