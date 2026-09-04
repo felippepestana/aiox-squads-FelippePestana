@@ -13,6 +13,9 @@ web/.env.*
 !web/.env.*.example
 web/worker/*.js
 .env
+.env.local
+ai-gateway/node_modules/
+ai-gateway/.env.local
 analista-processual-web/node_modules/
 analista-processual-web/.env*
 analista-processual-web/dist/
