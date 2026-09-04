@@ -1,0 +1,22 @@
+# Dependências
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js
+.next/
+out/
+build/
+next-env.d.ts
+
+# TypeScript incremental build
+*.tsbuildinfo
+
+# Ambiente / segredos
+.env
+.env.local
+.env*.local
+
+# Logs e SO
+*.log
+.DS_Store
