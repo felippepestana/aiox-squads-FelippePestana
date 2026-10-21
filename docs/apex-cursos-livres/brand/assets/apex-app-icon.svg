@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="t">
+  <title id="t">APEX app icon</title>
+  <rect width="128" height="128" rx="28" fill="#4338CA"/>
+  <path d="M26 98 L64 48 L102 98" fill="none" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="64" cy="26" r="10" fill="#FF6B00"/>
+</svg>

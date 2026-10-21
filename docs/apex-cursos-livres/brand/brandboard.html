@@ -1,0 +1,655 @@
+<title>APEX Brandbook</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout concept: a left-aligned manual built on the contour of the symbol (nested peaks); the orange dot appears once per view. */
+:root {
+  --bg: #F6F7FB; --surface: #FFFFFF; --surface-2: #ECEEF6;
+  --fg: #0B1020; --fg-2: #4B5470; --line: #E3E6F0; --line-strong: #C9CFE0;
+  --primary: #4338CA; --on-primary: #FFFFFF; --primary-soft: #EEF0FF;
+  --accent: #FF6B00; --on-accent: #0B1020; --accent-text: #B84700;
+  --ok: #0E7C3A; --ok-bg: #E6F6EC; --warn: #9A5B00; --warn-bg: #FFF4DB;
+  --bad: #C4271B; --bad-bg: #FDECEA; --info: #1D5FD1; --info-bg: #E8F0FD;
+  --focus: #4338CA; --wm-l: #4338CA; --wm-d: #FF6B00;
+  --font-display: 'Sora', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #070A14; --surface: #0F1426; --surface-2: #151B33;
+    --fg: #EDEFF7; --fg-2: #A9B0CC; --line: #232A44; --line-strong: #343C5C;
+    --primary: #9A9CFF; --on-primary: #070A14; --primary-soft: #1B1F45;
+    --accent: #FF7A1A; --on-accent: #070A14; --accent-text: #FFA24D;
+    --ok: #3DD68C; --ok-bg: #0E2A1E; --warn: #FBBF24; --warn-bg: #2B2208;
+    --bad: #FF8A80; --bad-bg: #2E1513; --info: #7FB2FF; --info-bg: #0F1F3A;
+    --focus: #9A9CFF; --wm-l: #FFFFFF; --wm-d: #FF7A1A;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #070A14; --surface: #0F1426; --surface-2: #151B33;
+  --fg: #EDEFF7; --fg-2: #A9B0CC; --line: #232A44; --line-strong: #343C5C;
+  --primary: #9A9CFF; --on-primary: #070A14; --primary-soft: #1B1F45;
+  --accent: #FF7A1A; --on-accent: #070A14; --accent-text: #FFA24D;
+  --ok: #3DD68C; --ok-bg: #0E2A1E; --warn: #FBBF24; --warn-bg: #2B2208;
+  --bad: #FF8A80; --bad-bg: #2E1513; --info: #7FB2FF; --info-bg: #0F1F3A;
+  --focus: #9A9CFF; --wm-l: #FFFFFF; --wm-d: #FF7A1A;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 1rem; line-height: 1.6;
+  padding-block: 0;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1120px; margin-inline: auto; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: 1.75rem; line-height: 1.2; font-weight: 700; }
+h3 { font-size: 1.125rem; line-height: 1.3; font-weight: 600; }
+p { margin: 0; }
+a { color: var(--primary); text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+.over { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-2); font-weight: 500; }
+.mono { font-family: var(--font-mono); }
+.muted { color: var(--fg-2); }
+.small { font-size: 0.875rem; line-height: 1.5; }
+
+/* top bar */
+.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding-block: 20px; }
+.top nav { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 0.875rem; }
+.top nav a { color: var(--fg-2); text-decoration: none; padding: 4px 0; }
+.top nav a:hover { color: var(--fg); text-decoration: underline; }
+.wm-sm { width: 96px; height: auto; display: block; }
+
+/* hero */
+.hero { position: relative; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 32px; align-items: center; padding-block: 40px 56px; }
+.hero h1 { font-size: clamp(2.5rem, 5vw + 1rem, 4rem); line-height: 1.04; font-weight: 700; margin-block: 12px 20px; }
+.hero .lead { font-size: 1.125rem; max-width: 52ch; color: var(--fg-2); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.chip { font-size: 0.75rem; font-weight: 500; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--fg-2); background: var(--surface); }
+.chip.warn { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
+.contour { width: 100%; height: auto; display: block; max-height: 340px; }
+.contour .c { fill: none; stroke: var(--line-strong); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.contour .c.top { stroke: var(--primary); stroke-width: 3; }
+.contour .dot { fill: var(--accent); }
+
+section { padding-block: 56px; border-top: 1px solid var(--line); }
+.sec-head { display: grid; gap: 10px; margin-bottom: 32px; max-width: 70ch; }
+.cols-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 28px; }
+.cols-3 h3 { margin-bottom: 8px; }
+
+/* logo panels */
+.panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.panel { border-radius: 16px; padding: 32px 24px 16px; display: grid; gap: 20px; align-content: space-between; min-height: 190px; border: 1px solid var(--line); }
+.panel svg { width: min(210px, 100%); height: auto; justify-self: center; }
+.panel .cap { font-size: 0.75rem; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.p-light { background: #FFFFFF; color: #4B5470; --wm-l: #4338CA; --wm-d: #FF6B00; }
+.p-ink { background: #0B1020; color: #A9B0CC; --wm-l: #FFFFFF; --wm-d: #FF6B00; border-color: #0B1020; }
+.p-indigo { background: #4338CA; color: #DDE1FF; --wm-l: #FFFFFF; --wm-d: #FFFFFF; border-color: #4338CA; }
+.p-mist { background: #F6F7FB; color: #4B5470; --wm-l: #0B1020; --wm-d: #0B1020; }
+.marks { display: flex; flex-wrap: wrap; gap: 24px 32px; align-items: end; margin-top: 32px; }
+.marks figure { margin: 0; display: grid; gap: 8px; justify-items: start; }
+.marks figcaption { font-size: 0.75rem; color: var(--fg-2); }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; margin-top: 48px; }
+.rule-list { display: grid; gap: 10px; padding: 0; margin: 12px 0 0; list-style: none; }
+.rule-list li { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 10px; align-items: start; }
+.rule-list .k { font-family: var(--font-mono); font-weight: 500; color: var(--fg-2); }
+.space-demo { background: #FFFFFF; border: 1px solid var(--line); border-radius: 16px; padding: 24px; display: grid; justify-items: center; }
+.space-demo svg { width: min(360px, 100%); height: auto; }
+.misuse { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 12px; }
+.misuse figure { margin: 0; display: grid; gap: 8px; }
+.misuse .box { height: 78px; border-radius: 12px; display: grid; place-items: center; overflow: hidden; border: 1px solid var(--line); }
+.misuse .box svg { width: 110px; height: auto; }
+.misuse figcaption { font-size: 0.8125rem; color: var(--fg-2); }
+.misuse figcaption b { color: var(--bad); font-weight: 600; margin-right: 4px; }
+
+/* colour */
+.sw-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px 16px; }
+.sw { all: unset; box-sizing: border-box; cursor: pointer; display: grid; gap: 8px; align-content: start; border-radius: 16px; }
+.sw .chipc { height: 96px; border-radius: 12px; border: 1px solid var(--line-strong); }
+.sw:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.sw .nm { font-family: var(--font-display); font-weight: 600; }
+.sw .hex { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--fg-2); }
+.sw .role { font-size: 0.8125rem; color: var(--fg-2); line-height: 1.4; }
+.scale { display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); margin-top: 24px; border-radius: 12px; overflow: hidden; border: 1px solid var(--line-strong); }
+.scale span { height: 44px; display: block; }
+.scale-lab { display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); font-family: var(--font-mono); font-size: 0.6875rem; color: var(--fg-2); margin-top: 6px; }
+.prop { display: flex; height: 28px; border-radius: 8px; overflow: hidden; border: 1px solid var(--line-strong); margin-top: 12px; }
+.prop span { display: block; }
+.prop-lab { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.8125rem; color: var(--fg-2); margin-top: 10px; }
+.tbl { overflow-x: auto; margin-top: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.875rem; min-width: 560px; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-2); font-weight: 500; background: var(--surface-2); }
+tr:last-child td { border-bottom: 0; }
+td.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pass { color: var(--ok); font-weight: 600; }
+.fail { color: var(--bad); font-weight: 600; }
+.dark-demo { background: #070A14; color: #EDEFF7; border-radius: 16px; padding: 20px; display: grid; gap: 14px; border: 1px solid #232A44; }
+.dark-demo .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.dark-demo .btn1 { background: #9A9CFF; color: #070A14; }
+.dark-demo .btn2 { background: #FF7A1A; color: #070A14; }
+.dark-demo .card { background: #0F1426; border: 1px solid #232A44; border-radius: 12px; padding: 14px; color: #A9B0CC; font-size: 0.875rem; }
+.dark-demo .card b { color: #EDEFF7; font-family: var(--font-display); }
+
+/* type */
+.specimen { display: grid; gap: 28px; }
+.spec { display: grid; grid-template-columns: minmax(0, 200px) minmax(0, 1fr); gap: 8px 32px; align-items: baseline; padding-block: 18px; border-bottom: 1px solid var(--line); }
+.spec:last-child { border-bottom: 0; }
+.spec .tag { font-family: var(--font-mono); font-size: 0.75rem; color: var(--fg-2); line-height: 1.5; }
+.s-display { font-family: var(--font-display); font-weight: 700; font-size: clamp(2.25rem, 4vw + 1rem, 3.5rem); line-height: 1.05; letter-spacing: -0.02em; }
+.s-h2 { font-family: var(--font-display); font-weight: 700; font-size: 1.75rem; line-height: 1.2; }
+.s-body { font-size: 1.0625rem; max-width: 62ch; }
+.s-mono { font-family: var(--font-mono); font-weight: 500; font-size: 1.125rem; font-variant-numeric: tabular-nums; }
+
+/* UI samples */
+.ui-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; align-items: start; }
+.ui-box { display: grid; gap: 14px; align-content: start; }
+.ui-box > .over { margin-bottom: 2px; }
+.btn { font: inherit; font-weight: 600; font-size: 0.9375rem; border-radius: 12px; padding: 11px 18px; border: 1px solid transparent; cursor: pointer; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.btn-primary { background: var(--primary); color: var(--on-primary); }
+.btn-accent { background: var(--accent); color: var(--on-accent); }
+.btn-secondary { background: var(--surface); color: var(--fg); border-color: var(--line-strong); }
+.btn-ghost { background: transparent; color: var(--primary); }
+.btn-danger { background: var(--bad-bg); color: var(--bad); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.field { display: grid; gap: 6px; }
+.field label { font-size: 0.875rem; font-weight: 500; }
+.field input[type=text], .field input[type=email] { font: inherit; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--fg); min-height: 44px; width: 100%; }
+.field input:focus { outline: 2px solid var(--focus); outline-offset: 2px; border-color: transparent; }
+.field .hint { font-size: 0.8125rem; color: var(--fg-2); }
+.badges { display: flex; flex-wrap: wrap; gap: 8px; }
+.badge { font-size: 0.75rem; font-weight: 600; padding: 3px 9px; border-radius: 999px; }
+.b-ok { background: var(--ok-bg); color: var(--ok); }
+.b-warn { background: var(--warn-bg); color: var(--warn); }
+.b-bad { background: var(--bad-bg); color: var(--bad); }
+.b-info { background: var(--info-bg); color: var(--info); }
+.b-brand { background: var(--primary-soft); color: var(--primary); }
+.b-ia { background: var(--surface-2); color: var(--fg); border: 1px solid var(--line-strong); font-family: var(--font-mono); font-weight: 500; }
+
+.course { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; display: grid; }
+.course .cover { position: relative; aspect-ratio: 16 / 9; max-width: 100%; background: #4338CA; display: grid; align-items: end; padding: 14px; overflow: hidden; }
+.course .cover svg.bg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.course .cover .b-brand { position: relative; justify-self: start; background: #FFFFFF; color: #4338CA; }
+.course .body { padding: 16px; display: grid; gap: 10px; }
+.course h3 { font-size: 1.0625rem; }
+.course .meta { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 0.8125rem; color: var(--fg-2); }
+.course .price { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.course .price strong { font-family: var(--font-display); font-size: 1.375rem; font-variant-numeric: tabular-nums; }
+
+.prog { display: grid; gap: 8px; }
+.prog .bar { position: relative; height: 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); }
+.prog .fill { position: absolute; inset: 0 auto 0 0; border-radius: 999px; background: var(--primary); }
+.prog .tip { position: absolute; top: 50%; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 3px solid var(--bg); transform: translate(-50%, -50%); }
+.prog .row { display: flex; justify-content: space-between; gap: 12px; font-size: 0.8125rem; color: var(--fg-2); font-variant-numeric: tabular-nums; }
+
+.chat { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: grid; gap: 14px; }
+.msg { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 10px; }
+.avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--primary-soft); display: grid; place-items: center; }
+.avatar svg { width: 20px; height: 20px; }
+.msg .who { display: flex; align-items: center; gap: 8px; font-size: 0.8125rem; font-weight: 600; margin-bottom: 4px; }
+.msg.user { grid-template-columns: minmax(0, 1fr); justify-items: end; }
+.bubble-u { background: var(--primary); color: var(--on-primary); padding: 10px 14px; border-radius: 14px 14px 4px 14px; max-width: 90%; }
+.cite { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 0.75rem; padding: 3px 9px; border-radius: 8px; background: var(--primary-soft); color: var(--primary); text-decoration: none; margin-top: 8px; }
+.fb { display: flex; gap: 8px; margin-top: 8px; }
+.fb button { font: inherit; font-size: 0.8125rem; color: var(--fg-2); background: transparent; border: 1px solid var(--line-strong); border-radius: 8px; padding: 4px 10px; cursor: pointer; min-height: 32px; }
+
+.checkout { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: grid; gap: 14px; }
+.checkout .line { display: flex; justify-content: space-between; gap: 12px; font-variant-numeric: tabular-nums; }
+.checkout .total { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; padding-top: 12px; border-top: 1px solid var(--line); }
+.pay { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.pay .opt { border: 1px solid var(--line-strong); border-radius: 12px; padding: 10px 6px; text-align: center; font-size: 0.875rem; font-weight: 500; background: var(--surface); color: var(--fg); }
+.pay .opt.on { border: 2px solid var(--primary); background: var(--primary-soft); color: var(--primary); }
+.guar { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; background: var(--ok-bg); color: var(--ok); border-radius: 12px; padding: 12px; font-size: 0.875rem; }
+.check { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; align-items: start; font-size: 0.875rem; }
+.check input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--primary); }
+
+.cert { background: #FFFFFF; color: #0B1020; border-radius: 12px; padding: 22px; border: 1px solid #C9CFE0; display: grid; gap: 14px; position: relative; overflow: hidden; --wm-l: #4338CA; --wm-d: #FF6B00; }
+.cert .frame { position: absolute; inset: 8px; border: 1.5px solid #C3C8FF; border-radius: 8px; pointer-events: none; }
+.cert > * { position: relative; }
+.cert .kind { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.16em; text-transform: uppercase; color: #4B5470; }
+.cert h3 { font-size: 1.25rem; }
+.cert .nm2 { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; color: #4338CA; }
+.cert .free { display: inline-block; font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.12em; border: 1.5px solid #0B1020; padding: 3px 8px; border-radius: 6px; font-weight: 500; }
+.cert .foot { display: grid; grid-template-columns: minmax(0, 1fr) 72px; gap: 14px; align-items: end; font-size: 0.75rem; color: #4B5470; }
+.cert .foot .mono { color: #0B1020; font-size: 0.75rem; }
+.qr { width: 72px; height: 72px; display: grid; grid-template-columns: repeat(15, 1fr); grid-template-rows: repeat(15, 1fr); gap: 0; background: #FFFFFF; border: 1px solid #C9CFE0; padding: 3px; }
+.qr i { display: block; background: transparent; }
+.qr i.k { background: #0B1020; }
+
+/* voice */
+.voice td:first-child { width: 50%; }
+.say { color: var(--ok); font-weight: 600; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+.avoid { color: var(--bad); font-weight: 600; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+.files { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 8px 32px; padding: 0; margin: 0; list-style: none; font-family: var(--font-mono); font-size: 0.8125rem; }
+.files li { padding: 8px 0; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.todo { display: grid; gap: 10px; padding: 0; margin: 12px 0 0; list-style: none; }
+.todo li { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; }
+footer { padding-block: 40px 56px; border-top: 1px solid var(--line); color: var(--fg-2); font-size: 0.875rem; }
+.toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-size: 0.875rem; z-index: 20; box-shadow: 0 8px 24px rgb(11 16 32 / 0.25); }
+
+@media (max-width: 820px) {
+  .hero { grid-template-columns: minmax(0, 1fr); padding-block: 24px 40px; }
+  .contour { max-height: 220px; }
+  .spec { grid-template-columns: minmax(0, 1fr); }
+  .voice td:first-child { width: auto; }
+  section { padding-block: 40px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="apx-wordmark" viewBox="0 -9 178 70">
+      <g style="fill:none;stroke:var(--wm-l);stroke-width:8;stroke-linecap:round;stroke-linejoin:round">
+        <path d="M4 56 L24 12 L44 56"/>
+        <path d="M62 56 V12 H76 A12 12 0 0 1 76 36 H62"/>
+        <path d="M122 12 H104 V56 H122 M104 34 H117"/>
+        <path d="M136 12 L172 56 M172 12 L136 56"/>
+      </g>
+      <circle cx="24" cy="-3" r="5.6" style="fill:var(--wm-d)"/>
+    </symbol>
+    <symbol id="apx-mark" viewBox="0 0 64 64">
+      <path d="M10 56 L32 24 L54 56" style="fill:none;stroke:var(--wm-l);stroke-width:9;stroke-linecap:round;stroke-linejoin:round"/>
+      <circle cx="32" cy="9.5" r="6.5" style="fill:var(--wm-d)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header class="top">
+    <a href="#topo" aria-label="APEX, início do brandbook"><svg class="wm-sm" viewBox="0 0 178 70" role="img" aria-label="APEX"><use href="#apx-wordmark"/></svg></a>
+    <nav aria-label="Seções do brandbook">
+      <a href="#conceito">Conceito</a><a href="#logo">Logotipo</a><a href="#cor">Cor</a><a href="#tipografia">Tipografia</a><a href="#interface">Interface</a><a href="#voz">Voz</a><a href="#uso">Arquivos</a>
+    </nav>
+  </header>
+
+  <div class="hero" id="topo">
+    <div>
+      <p class="over">Manual de identidade · v1.0 · outubro de 2026</p>
+      <h1>Seu ápice começa aqui.</h1>
+      <p class="lead">APEX Plataforma de Cursos Livres. Cursos, e-books, webinars e workshops ao vivo em um só lugar, com tutor de IA, venda automática e operação que se organiza sozinha.</p>
+      <div class="chips" aria-label="Status do documento">
+        <span class="chip">Rascunho para validação</span>
+        <span class="chip warn">Busca de marca no INPI pendente</span>
+        <span class="chip">Família visual ApeX</span>
+      </div>
+    </div>
+    <svg class="contour" viewBox="0 0 600 400" role="img" aria-label="Picos aninhados que partem do símbolo APEX, com um ponto laranja no topo">
+      <path class="c" d="M41 400 L300 40 L559 400"/>
+      <path class="c" d="M73 400 L300 84 L527 400"/>
+      <path class="c" d="M104 400 L300 128 L496 400"/>
+      <path class="c" d="M136 400 L300 172 L464 400"/>
+      <path class="c" d="M168 400 L300 216 L432 400"/>
+      <path class="c" d="M199 400 L300 260 L401 400"/>
+      <path class="c top" d="M231 400 L300 304 L369 400"/>
+      <path class="c" d="M263 400 L300 348 L337 400"/>
+      <circle class="dot" cx="300" cy="14" r="9"/>
+    </svg>
+  </div>
+
+  <section id="conceito">
+    <div class="sec-head">
+      <p class="over">Conceito</p>
+      <h2>O ponto mais alto de quem aprende.</h2>
+      <p class="muted">APEX vem de ápice: o momento em que o esforço vira domínio. O símbolo condensa a ideia em uma forma só.</p>
+    </div>
+    <div class="cols-3">
+      <div><h3>Pico</h3><p class="muted">Um traço ascendente fechado em ponta. É a trajetória de estudo, curta e direta, com um destino claro.</p></div>
+      <div><h3>Pessoa</h3><p class="muted">Com o ponto acima, o mesmo traço lê como alguém de braços erguidos. A plataforma existe para a pessoa chegar lá.</p></div>
+      <div><h3>Conquista</h3><p class="muted">O laranja é o ápice. Aparece uma vez por tela: a conclusão, o certificado, o botão de compra. Nunca como textura.</p></div>
+    </div>
+  </section>
+
+  <section id="logo">
+    <div class="sec-head">
+      <p class="over">Logotipo</p>
+      <h2>Um logotipo, quatro fundos.</h2>
+      <p class="muted">A letra A é o próprio pico, com o ponto no topo. As letras P, E e X usam o mesmo traço de espessura 8 e terminais arredondados. Os arquivos são vetoriais e não dependem de fonte instalada.</p>
+    </div>
+    <div class="panels">
+      <div class="panel p-light"><svg viewBox="0 0 178 70" role="img" aria-label="Logotipo colorido sobre fundo claro"><use href="#apx-wordmark"/></svg><div class="cap"><span>Principal, fundo claro</span><span class="mono">apex-logo.svg</span></div></div>
+      <div class="panel p-ink"><svg viewBox="0 0 178 70" role="img" aria-label="Logotipo reverso sobre fundo escuro"><use href="#apx-wordmark"/></svg><div class="cap"><span>Reverso, fundo escuro</span><span class="mono">apex-logo-reverse.svg</span></div></div>
+      <div class="panel p-indigo"><svg viewBox="0 0 178 70" role="img" aria-label="Logotipo branco sobre índigo"><use href="#apx-wordmark"/></svg><div class="cap"><span>Monocromático branco</span><span class="mono">apex-logo-mono-white.svg</span></div></div>
+      <div class="panel p-mist"><svg viewBox="0 0 178 70" role="img" aria-label="Logotipo monocromático em tinta"><use href="#apx-wordmark"/></svg><div class="cap"><span>Monocromático Ink</span><span class="mono">apex-logo-mono-ink.svg</span></div></div>
+    </div>
+
+    <div class="marks">
+      <figure><div class="p-light" style="padding:18px;border-radius:16px;border:1px solid var(--line)"><svg width="72" height="72" viewBox="0 0 64 64" role="img" aria-label="Símbolo"><use href="#apx-mark"/></svg></div><figcaption>Símbolo · apex-symbol.svg</figcaption></figure>
+      <figure><div class="p-ink" style="padding:18px;border-radius:16px"><svg width="72" height="72" viewBox="0 0 64 64" role="img" aria-label="Símbolo reverso"><use href="#apx-mark"/></svg></div><figcaption>Reverso · apex-symbol-reverse.svg</figcaption></figure>
+      <figure>
+        <svg width="96" height="96" viewBox="0 0 128 128" role="img" aria-label="Ícone do aplicativo"><rect width="128" height="128" rx="28" fill="#4338CA"/><path d="M26 98 L64 48 L102 98" fill="none" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/><circle cx="64" cy="26" r="10" fill="#FF6B00"/></svg>
+        <figcaption>Ícone do app · apex-app-icon.svg</figcaption>
+      </figure>
+      <figure>
+        <div style="display:flex;gap:14px;align-items:end">
+          <svg width="32" height="32" viewBox="0 0 32 32" role="img" aria-label="Favicon 32 pixels"><rect width="32" height="32" rx="7" fill="#4338CA"/><path d="M8 26 L16 14 L24 26" fill="none" stroke="#FFFFFF" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="6.5" r="3.4" fill="#FF6B00"/></svg>
+          <svg width="16" height="16" viewBox="0 0 32 32" role="img" aria-label="Favicon 16 pixels"><rect width="32" height="32" rx="7" fill="#4338CA"/><path d="M8 26 L16 14 L24 26" fill="none" stroke="#FFFFFF" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="6.5" r="3.4" fill="#FF6B00"/></svg>
+        </div>
+        <figcaption>Favicon 32 e 16 px · apex-favicon.svg</figcaption>
+      </figure>
+    </div>
+
+    <div class="two">
+      <div>
+        <h3>Área de respiro e tamanho mínimo</h3>
+        <p class="muted" style="margin-top:8px">Mantenha livre, em todos os lados, uma margem de <b style="color:var(--fg)">x</b>, igual ao diâmetro do ponto laranja.</p>
+        <ul class="rule-list">
+          <li><span class="k">›</span><span>Logotipo horizontal: no mínimo <b>72 px</b> de largura na tela, ou <b>20 mm</b> impresso.</span></li>
+          <li><span class="k">›</span><span>Símbolo isolado: no mínimo <b>16 px</b>. Abaixo disso, use o favicon, que tem traço mais grosso.</span></li>
+          <li><span class="k">›</span><span>Sobre fotos, aplique a versão monocromática sobre uma área sem ruído visual.</span></li>
+          <li><span class="k">›</span><span>Sempre use os arquivos oficiais. Nunca redesenhe nem redigite o logotipo.</span></li>
+        </ul>
+      </div>
+      <div class="space-demo p-light">
+        <svg viewBox="-26 -30 228 112" role="img" aria-label="Logotipo com a área de respiro tracejada e a medida x igual ao diâmetro do ponto">
+          <rect x="-11.2" y="-19.8" width="198.4" height="91" rx="6" fill="none" stroke="#8A93B2" stroke-width="1" stroke-dasharray="4 3"/>
+          <use href="#apx-wordmark" x="0" y="-9" width="178" height="70"/>
+          <g fill="none" stroke="#B84700" stroke-width="1">
+            <circle cx="-5.6" cy="26" r="5.6"/>
+            <circle cx="88" cy="-14.2" r="5.6"/>
+          </g>
+          <g font-family="JetBrains Mono, monospace" font-size="9" fill="#4B5470">
+            <text x="-23" y="29">x</text>
+            <text x="97" y="-11">x</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <h3 style="margin-top:48px">O que não fazer</h3>
+    <div class="misuse">
+      <figure><div class="box p-light"><svg viewBox="0 0 178 70" style="--wm-l:#FF6B00;--wm-d:#FF6B00" aria-hidden="true"><use href="#apx-wordmark"/></svg></div><figcaption><b>Não</b>Letras em laranja. O laranja é só o ponto.</figcaption></figure>
+      <figure><div class="box p-light"><svg viewBox="0 0 178 70" style="transform:scaleX(1.45);transform-origin:center" aria-hidden="true"><use href="#apx-wordmark"/></svg></div><figcaption><b>Não</b>Esticar ou comprimir.</figcaption></figure>
+      <figure><div class="box p-light"><svg viewBox="0 0 178 70" aria-hidden="true"><use href="#apx-wordmark"/><path d="M12 50 H36" stroke="#4338CA" stroke-width="8" stroke-linecap="round"/></svg></div><figcaption><b>Não</b>Acrescentar a barra do A.</figcaption></figure>
+      <figure><div class="box p-indigo"><svg viewBox="0 0 178 70" style="--wm-l:#4338CA;--wm-d:#FF6B00" aria-hidden="true"><use href="#apx-wordmark"/></svg></div><figcaption><b>Não</b>Versão colorida sobre índigo: contraste baixo.</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="cor">
+    <div class="sec-head">
+      <p class="over">Cor</p>
+      <h2>Índigo para agir. Laranja para celebrar.</h2>
+      <p class="muted">O índigo conduz a interface. O laranja é o mesmo da família ApeX e marca o ápice. Toque em uma amostra para copiar o código.</p>
+    </div>
+    <div class="sw-grid" id="swatches">
+      <button class="sw" type="button" data-hex="#4338CA" aria-label="Copiar #4338CA"><span class="chipc" style="background:#4338CA;display:block"></span><span class="nm">Índigo Cume</span><span class="hex">#4338CA</span><span class="role">Ação principal, links, logotipo. Texto branco sobre ele: 7,90:1.</span></button>
+      <button class="sw" type="button" data-hex="#FF6B00" aria-label="Copiar #FF6B00"><span class="chipc" style="background:#FF6B00;display:block"></span><span class="nm">Laranja Ápice</span><span class="hex">#FF6B00</span><span class="role">Ponto do símbolo, conclusão, botão de compra. Sempre com texto Ink (6,63:1). Nunca como texto.</span></button>
+      <button class="sw" type="button" data-hex="#0B1020" aria-label="Copiar #0B1020"><span class="chipc" style="background:#0B1020;display:block"></span><span class="nm">Ink</span><span class="hex">#0B1020</span><span class="role">Texto principal e fundo escuro. 18,93:1 sobre branco.</span></button>
+      <button class="sw" type="button" data-hex="#F6F7FB" aria-label="Copiar #F6F7FB"><span class="chipc" style="background:#F6F7FB;display:block"></span><span class="nm">Névoa</span><span class="hex">#F6F7FB</span><span class="role">Fundo de página. Neutro com leve viés azul, para combinar com o índigo.</span></button>
+      <button class="sw" type="button" data-hex="#B84700" aria-label="Copiar #B84700"><span class="chipc" style="background:#B84700;display:block"></span><span class="nm">Laranja 700</span><span class="hex">#B84700</span><span class="role">Único laranja permitido para texto sobre claro (5,33:1).</span></button>
+      <button class="sw" type="button" data-hex="#9A9CFF" aria-label="Copiar #9A9CFF"><span class="chipc" style="background:#9A9CFF;display:block"></span><span class="nm">Índigo claro</span><span class="hex">#9A9CFF</span><span class="role">Ação e links no tema escuro (8,07:1 sobre o fundo noite).</span></button>
+    </div>
+
+    <div class="scale" role="img" aria-label="Escala do índigo, de 50 a 950">
+      <span style="background:#EEF0FF"></span><span style="background:#DDE1FF"></span><span style="background:#C3C8FF"></span><span style="background:#9A9CFF"></span><span style="background:#7C7BF7"></span><span style="background:#6360EC"></span><span style="background:#5149DD"></span><span style="background:#4338CA"></span><span style="background:#362FA3"></span><span style="background:#2A2680"></span><span style="background:#1B1950"></span>
+    </div>
+    <div class="scale-lab" aria-hidden="true"><span>50</span><span>100</span><span>200</span><span>300</span><span>400</span><span>500</span><span>600</span><span>700</span><span>800</span><span>900</span><span>950</span></div>
+
+    <div class="two">
+      <div>
+        <h3>Proporção de uso (proposta)</h3>
+        <div class="prop" role="img" aria-label="Neutros 70 por cento, índigo 20, laranja 5, semânticas 5">
+          <span style="width:70%;background:var(--line-strong)"></span><span style="width:20%;background:#4338CA"></span><span style="width:5%;background:#FF6B00"></span><span style="width:5%;background:#0E7C3A"></span>
+        </div>
+        <div class="prop-lab"><span>Neutros 70%</span><span>Índigo 20%</span><span>Laranja até 5%</span><span>Semânticas 5%</span></div>
+        <ul class="rule-list" style="margin-top:20px">
+          <li><span class="k">1</span><span>Um laranja por tela: o ponto, o botão de compra ou o selo de conclusão.</span></li>
+          <li><span class="k">2</span><span>Laranja nunca vira texto sobre claro. Para texto, use Laranja 700.</span></li>
+          <li><span class="k">3</span><span>Estado é sempre cor mais texto ou ícone, nunca só cor.</span></li>
+          <li><span class="k">4</span><span>Sem degradês de marca. As cores entram chapadas.</span></li>
+        </ul>
+      </div>
+      <div class="dark-demo" aria-label="Amostra do tema escuro">
+        <p class="over" style="color:#A9B0CC">Tema escuro</p>
+        <div class="card"><b>Trilha de Excel</b><br>62% concluída. Faltam 3 aulas.</div>
+        <div class="row"><span class="badge btn1" style="padding:8px 14px;border-radius:12px;font-weight:600">Continuar</span><span class="badge btn2" style="padding:8px 14px;border-radius:12px;font-weight:600">Comprar</span></div>
+        <p class="small" style="color:#A9B0CC">Fundo noite #070A14, superfície #0F1426. Índigo sobe de tom (#9A9CFF) e o laranja fica #FF7A1A.</p>
+      </div>
+    </div>
+
+    <h3 style="margin-top:48px">Contraste verificado (WCAG 2.2)</h3>
+    <p class="muted small" style="margin-top:6px">Todos os pares de texto e fundo dos tokens passam em AA (mínimo 4,5:1). O menor valor é 4,73:1. O laranja sobre branco reprova e por isso não é usado como texto.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Par</th><th>Tema</th><th>Razão</th><th>Resultado</th></tr></thead>
+      <tbody>
+        <tr><td>Ink sobre branco</td><td>claro</td><td class="num">18,93:1</td><td class="pass">AA</td></tr>
+        <tr><td>Texto secundário #4B5470 sobre branco</td><td>claro</td><td class="num">7,50:1</td><td class="pass">AA</td></tr>
+        <tr><td>Índigo #4338CA sobre branco</td><td>claro</td><td class="num">7,90:1</td><td class="pass">AA</td></tr>
+        <tr><td>Branco sobre índigo (botão)</td><td>claro</td><td class="num">7,90:1</td><td class="pass">AA</td></tr>
+        <tr><td>Ink sobre laranja (botão de compra)</td><td>claro</td><td class="num">6,63:1</td><td class="pass">AA</td></tr>
+        <tr><td>Laranja #FF6B00 sobre branco, como texto</td><td>claro</td><td class="num">2,86:1</td><td class="fail">Reprova, não usar</td></tr>
+        <tr><td>Branco sobre laranja</td><td>claro</td><td class="num">2,86:1</td><td class="fail">Reprova, não usar</td></tr>
+        <tr><td>Laranja 700 #B84700 sobre branco</td><td>claro</td><td class="num">5,33:1</td><td class="pass">AA</td></tr>
+        <tr><td>Sucesso, alerta, erro e informação sobre o próprio fundo suave</td><td>claro</td><td class="num">4,73 a 5,07:1</td><td class="pass">AA</td></tr>
+        <tr><td>Texto #EDEFF7 sobre noite #070A14</td><td>escuro</td><td class="num">17,21:1</td><td class="pass">AA</td></tr>
+        <tr><td>Índigo claro #9A9CFF sobre noite</td><td>escuro</td><td class="num">8,07:1</td><td class="pass">AA</td></tr>
+        <tr><td>Noite sobre laranja #FF7A1A (botão)</td><td>escuro</td><td class="num">7,58:1</td><td class="pass">AA</td></tr>
+        <tr><td>Sucesso, alerta, erro e informação sobre o próprio fundo suave</td><td>escuro</td><td class="num">7,46 a 9,42:1</td><td class="pass">AA</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="tipografia">
+    <div class="sec-head">
+      <p class="over">Tipografia</p>
+      <h2>Sora para títulos, Inter para ler, JetBrains Mono para dados.</h2>
+      <p class="muted">Inter e JetBrains Mono são as mesmas da família ApeX, o que mantém os produtos aparentados. Sora dá aos títulos uma geometria aberta, próxima da do logotipo. As três são de licença livre (SIL OFL), com carregamento pelo Google Fonts.</p>
+    </div>
+    <div class="specimen">
+      <div class="spec"><div class="tag">Display · Sora 700<br>40–64 px · linha 1,05</div><div class="s-display">Aprenda no seu ritmo.</div></div>
+      <div class="spec"><div class="tag">Título 2 · Sora 700<br>28 px · linha 1,2</div><div class="s-h2">Excel para Rotinas Administrativas</div></div>
+      <div class="spec"><div class="tag">Corpo · Inter 400<br>16–18 px · linha 1,6</div><div class="s-body">Você aprende com aulas curtas, exercícios práticos e um tutor que responde com base no conteúdo do curso, sempre indicando em qual aula está a resposta.</div></div>
+      <div class="spec"><div class="tag">Dados · JetBrains Mono 500<br>12–18 px · números tabulares</div><div class="s-mono">APX-2026-0001 &nbsp;·&nbsp; 62% &nbsp;·&nbsp; 08h00min &nbsp;·&nbsp; R$ 99,00</div></div>
+      <div class="spec"><div class="tag">Sobretítulo · JetBrains Mono 500<br>12 px · espaçamento 0,14em</div><div class="over">Módulo 2 · Aula 3 de 8</div></div>
+    </div>
+  </section>
+
+  <section id="interface">
+    <div class="sec-head">
+      <p class="over">Interface</p>
+      <h2>Componentes que carregam a marca.</h2>
+      <p class="muted">Exemplos com dados fictícios. Raio de 12 px nos controles e 16 px nas superfícies, alvos de toque de 44 px, foco visível em índigo e tema escuro desde o início.</p>
+    </div>
+
+    <div class="ui-grid">
+      <div class="ui-box">
+        <p class="over">Cartão de curso</p>
+        <article class="course">
+          <div class="cover">
+            <svg class="bg" viewBox="0 0 320 180" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><g fill="none" stroke="#FFFFFF" stroke-opacity="0.28" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 180 L160 30 L310 180"/><path d="M42 180 L160 62 L278 180"/><path d="M74 180 L160 94 L246 180"/><path d="M106 180 L160 126 L214 180"/></g><circle cx="160" cy="16" r="6" fill="#FF6B00"/></svg>
+            <span class="badge b-brand">Curso livre</span>
+          </div>
+          <div class="body">
+            <h3>Excel para Rotinas Administrativas</h3>
+            <div class="meta"><span>8 h de carga horária</span><span>Iniciante</span><span>Certificado de conclusão</span></div>
+            <div class="price"><strong>R$ 99,00</strong><span class="small muted">Pix ou cartão em até 12x</span></div>
+            <button class="btn btn-accent" type="button">Quero este curso</button>
+          </div>
+        </article>
+      </div>
+
+      <div class="ui-box">
+        <p class="over">Progresso e botões</p>
+        <div class="prog" aria-label="Progresso do curso">
+          <div class="row"><strong style="color:var(--fg)">Trilha de Excel</strong><span>62%</span></div>
+          <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62" aria-label="62% concluído"><div class="fill" style="width:62%"></div><div class="tip" style="left:62%"></div></div>
+          <div class="row"><span>5 de 8 aulas</span><span>Faltam 3</span></div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" type="button">Continuar aula</button>
+          <button class="btn btn-accent" type="button">Comprar</button>
+          <button class="btn btn-secondary" type="button">Ver programa</button>
+          <button class="btn btn-ghost" type="button">Cancelar</button>
+          <button class="btn btn-danger" type="button">Pedir reembolso</button>
+          <button class="btn btn-primary" type="button" disabled>Indisponível</button>
+        </div>
+        <div class="badges">
+          <span class="badge b-ok">Concluído</span><span class="badge b-warn">Em revisão</span><span class="badge b-bad">Pagamento recusado</span><span class="badge b-info">Ao vivo hoje</span><span class="badge b-brand">Novo</span><span class="badge b-ia">IA</span>
+        </div>
+        <div class="field">
+          <label for="f-email">E-mail</label>
+          <input id="f-email" type="email" placeholder="voce@exemplo.com.br" autocomplete="email">
+          <span class="hint">Enviamos o acesso e o recibo para este endereço.</span>
+        </div>
+      </div>
+
+      <div class="ui-box">
+        <p class="over">APEX Tutor</p>
+        <div class="chat" aria-label="Exemplo de conversa com o tutor">
+          <div class="msg user"><div class="bubble-u">Quando uso PROCV e quando uso ÍNDICE com CORRESP?</div></div>
+          <div class="msg">
+            <div class="avatar"><svg viewBox="0 0 64 64" aria-hidden="true" style="--wm-l:var(--primary);--wm-d:var(--accent)"><use href="#apx-mark"/></svg></div>
+            <div>
+              <div class="who">APEX Tutor <span class="badge b-ia">IA</span></div>
+              <p>Antes de eu responder, pense em uma coisa: a coluna que você procura fica à esquerda ou à direita da coluna que você quer devolver?</p>
+              <a class="cite" href="#interface" aria-label="Aula 3, aos 12 minutos e 40 segundos">Aula 3 · 12:40</a>
+              <div class="fb"><button type="button">Ajudou</button><button type="button">Não ajudou</button><button type="button">Quero a resposta direta</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ui-box">
+        <p class="over">Resumo de compra</p>
+        <div class="checkout" aria-label="Exemplo de resumo de compra">
+          <div class="line"><span>Excel para Rotinas Administrativas</span><span>R$ 99,00</span></div>
+          <div class="line muted small"><span>Cupom BEMVINDO</span><span>− R$ 10,00</span></div>
+          <div class="pay" role="radiogroup" aria-label="Forma de pagamento">
+            <div class="opt on" role="radio" aria-checked="true">Pix</div><div class="opt" role="radio" aria-checked="false">Cartão</div><div class="opt" role="radio" aria-checked="false">Boleto</div>
+          </div>
+          <div class="guar"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.4 8-8 9-4.6-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg><span><b>Garantia de 7 dias.</b> Se não for para você, peça o reembolso no painel e receba o valor de volta.</span></div>
+          <label class="check" for="c-terms"><input id="c-terms" type="checkbox"><span>Li e aceito os Termos de Uso e a Política de Privacidade.</span></label>
+          <div class="line total"><span>Total</span><span>R$ 89,00</span></div>
+          <button class="btn btn-accent" type="button">Pagar com Pix</button>
+        </div>
+      </div>
+
+      <div class="ui-box">
+        <p class="over">Certificado (modelo)</p>
+        <div class="cert" aria-label="Modelo de certificado de conclusão">
+          <div class="frame"></div>
+          <svg viewBox="0 0 178 70" width="92" role="img" aria-label="APEX"><use href="#apx-wordmark"/></svg>
+          <div class="kind">Certificado de conclusão</div>
+          <span class="free">CURSO LIVRE</span>
+          <div class="nm2">Nome da Pessoa</div>
+          <p class="small">concluiu o curso <b>Excel para Rotinas Administrativas</b>, com carga horária de <b>8 horas</b>, em 21 de outubro de 2026.</p>
+          <div class="foot">
+            <div>Este é um certificado de curso livre e não equivale a ensino regulamentado. Verifique a autenticidade pelo código:<br><span class="mono">APX-2026-0001-XXXX</span></div>
+            <div class="qr" id="qr" aria-label="QR Code de verificação (ilustrativo)"></div>
+          </div>
+        </div>
+        <p class="small muted">O modelo cumpre as regras do Guardião de Compliance: declara "curso livre", informa a carga horária, não usa símbolos do governo e não sugere equivalência com graduação, pós ou técnico.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="voz">
+    <div class="sec-head">
+      <p class="over">Voz</p>
+      <h2>Direta, calorosa e sem exagero.</h2>
+      <p class="muted">Português do Brasil, tratamento por "você". Dizemos o que acontece e o que fazer. Não prometemos resultado, não pressionamos e não fingimos que o certificado vale mais do que vale.</p>
+    </div>
+    <div class="tbl voice"><table>
+      <thead><tr><th>Diga</th><th>Evite</th></tr></thead>
+      <tbody>
+        <tr><td><span class="say">Diga</span>Você assistiu 62% do curso. Faltam 3 aulas.</td><td><span class="avoid">Evite</span>Parabéns, campeão! Não pare agora!!!</td></tr>
+        <tr><td><span class="say">Diga</span>Reembolso em até 7 dias, direto no painel.</td><td><span class="avoid">Evite</span>Garantia total de sucesso ou seu dinheiro de volta.</td></tr>
+        <tr><td><span class="say">Diga</span>Curso livre com certificado de conclusão.</td><td><span class="avoid">Evite</span>Certificado reconhecido pelo MEC.</td></tr>
+        <tr><td><span class="say">Diga</span>Não encontrei isso no curso. Quer falar com a equipe?</td><td><span class="avoid">Evite</span>Desculpe, não entendi.</td></tr>
+        <tr><td><span class="say">Diga</span>O Pix expirou. Gere um novo código para continuar.</td><td><span class="avoid">Evite</span>Erro 504: falha na transação.</td></tr>
+        <tr><td><span class="say">Diga</span>Faltam 12 vagas para esta turma.</td><td><span class="avoid">Evite</span>Últimas vagas! Corra, acaba hoje! (quando não é verdade)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="uso">
+    <div class="sec-head">
+      <p class="over">Arquivos e pendências</p>
+      <h2>O que está pronto e o que falta decidir.</h2>
+    </div>
+    <div class="two" style="margin-top:0">
+      <div>
+        <h3>Pasta brand/ no repositório</h3>
+        <ul class="files" style="margin-top:12px">
+          <li>assets/apex-logo.svg</li><li>assets/apex-logo-reverse.svg</li><li>assets/apex-logo-mono-ink.svg</li><li>assets/apex-logo-mono-white.svg</li><li>assets/apex-symbol.svg</li><li>assets/apex-symbol-reverse.svg</li><li>assets/apex-app-icon.svg</li><li>assets/apex-favicon.svg</li><li>tokens.css</li><li>tokens.json</li><li>brandboard.html</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Pendências antes de usar a marca</h3>
+        <ul class="todo">
+          <li><span class="k mono">1</span><span><b>Busca de anterioridade no INPI</b> nas classes 9, 35, 41 e 42. "Apex" é um nome muito usado, inclusive em software, e há a marca ApeX já existente neste projeto.</span></li>
+          <li><span class="k mono">2</span><span><b>Domínio e perfis</b>: nenhuma disponibilidade foi verificada.</span></li>
+          <li><span class="k mono">3</span><span><b>Decisão de família</b>: manter o laranja e as fontes da ApeX, ou separar totalmente a marca.</span></li>
+          <li><span class="k mono">4</span><span><b>Revisão de um designer</b> sobre o desenho das letras, antes de registrar o logotipo.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>APEX Plataforma de Cursos Livres · Brandbook v1.0 · Rascunho para validação. Exemplos de interface usam dados fictícios.</footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function () {
+  // QR-like block: deterministic, illustrative only (not a real code).
+  var qr = document.getElementById('qr');
+  if (qr) {
+    var n = 15, seed = 11, cells = [];
+    function finder(r, c) {                       // 5x5 finder: ring on, inner ring off, centre on
+      var boxes = [[0, 0], [0, n - 5], [n - 5, 0]];
+      for (var i = 0; i < boxes.length; i++) {
+        var rr = r - boxes[i][0], cc = c - boxes[i][1];
+        if (rr >= 0 && rr < 5 && cc >= 0 && cc < 5) {
+          var edge = rr === 0 || rr === 4 || cc === 0 || cc === 4;
+          return edge || (rr === 2 && cc === 2) ? 1 : 0;
+        }
+      }
+      return -1;
+    }
+    for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) {
+      var f = finder(r, c), on;
+      if (f >= 0) { on = f === 1; }
+      else {
+        var nearFinder = (r < 6 && c < 6) || (r < 6 && c > n - 7) || (r > n - 7 && c < 6);
+        seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+        on = !nearFinder && ((seed >> 9) % 2 === 0);
+      }
+      cells.push('<i' + (on ? ' class="k"' : '') + '></i>');
+    }
+    qr.innerHTML = cells.join('');
+  }
+
+  var toast = document.getElementById('toast'), timer;
+  function say(msg) {
+    toast.textContent = msg; toast.hidden = false;
+    clearTimeout(timer); timer = setTimeout(function () { toast.hidden = true; }, 1800);
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta); return ok;
+  }
+  document.querySelectorAll('.sw').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var hex = b.getAttribute('data-hex');
+      var done = function (ok) { say(ok ? hex + ' copiado' : 'Selecione e copie: ' + hex); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(hex).then(function () { done(true); }, function () { done(fallbackCopy(hex)); });
+      } else { done(fallbackCopy(hex)); }
+    });
+  });
+})();
+</script>
