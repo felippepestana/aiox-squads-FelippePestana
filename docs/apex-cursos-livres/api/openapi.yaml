@@ -1,0 +1,2037 @@
+openapi: 3.1.0
+info:
+  title: APEX Plataforma de Cursos Livres - API (draft v0.1)
+  version: 0.1.0
+  summary: Reference contract for the public/BFF API of the APEX platform.
+  description: |
+    Draft contract used to align web, mobile, partners and automation. It covers the
+    Phase 1-2 surface (identity, catalog, checkout, learning, certificates, live events,
+    tutor AI, leads, approvals) plus the outbound webhook envelope.
+
+    Conventions
+    * JSON over HTTPS, UTF-8. Money is an integer in cents plus an ISO 4217 currency.
+    * Errors follow RFC 9457 (`application/problem+json`).
+    * Unsafe operations that create money movements accept an `Idempotency-Key` header.
+    * Pagination is cursor based (`limit`, `cursor`).
+    * Every request is scoped to a tenant (resolved from the host or the API key).
+  license:
+    name: Proprietary - internal draft
+    identifier: LicenseRef-APEX-Internal
+servers:
+  - url: https://api.apex.invalid/v1
+    description: Placeholder host (replace when the domain is defined)
+tags:
+  - name: Auth
+    description: Registration, login and session management.
+  - name: Me
+    description: The authenticated person - profile, consents and data-subject rights.
+  - name: Catalog
+    description: Products, offers and public product pages.
+  - name: Compliance
+    description: Compliance Guardian checks on texts and products.
+  - name: Checkout
+    description: Checkout sessions, orders, refunds and subscriptions.
+  - name: Learning
+    description: Enrollments, progress, assessments and certificates.
+  - name: Media
+    description: Protected playback of lesson media.
+  - name: Live
+    description: Webinars, workshops and registrations.
+  - name: AI
+    description: Tutor AI conversations and agent governance.
+  - name: Growth
+    description: Lead capture and affiliates.
+  - name: Admin
+    description: Back-office approvals and workflows.
+  - name: Webhooks
+    description: Inbound provider webhooks and outbound webhook endpoints.
+security:
+  - bearerAuth: []
+paths:
+  /auth/register:
+    post:
+      tags: [Auth]
+      operationId: registerUser
+      summary: Create an account
+      description: Creates a user. Terms and privacy consents are mandatory and recorded with proof.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Account created; a verification e-mail is sent.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSession'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /auth/login:
+    post:
+      tags: [Auth]
+      operationId: login
+      summary: Sign in with e-mail and password
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Session issued (or an MFA challenge is returned).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthSession'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /auth/logout:
+    post:
+      tags: [Auth]
+      operationId: logout
+      summary: Revoke the current session
+      responses:
+        '204':
+          description: Session revoked.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /me:
+    get:
+      tags: [Me]
+      operationId: getMe
+      summary: Current person
+      responses:
+        '200':
+          description: Profile of the authenticated person.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      tags: [Me]
+      operationId: updateMe
+      summary: Update profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeUpdate'
+      responses:
+        '200':
+          description: Updated profile.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /me/consents:
+    get:
+      tags: [Me]
+      operationId: listMyConsents
+      summary: Consents granted or revoked by the person
+      responses:
+        '200':
+          description: Consent history.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Consent'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags: [Me]
+      operationId: recordConsent
+      summary: Grant or revoke a consent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsentChange'
+      responses:
+        '201':
+          description: Consent recorded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Consent'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /me/data-requests:
+    post:
+      tags: [Me]
+      operationId: createDataRequest
+      summary: Open a data-subject request (LGPD)
+      description: Access, correction, anonymization, deletion, portability or consent revocation. The legal deadline is tracked.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataRequestCreate'
+      responses:
+        '202':
+          description: Request registered with a due date.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /products:
+    get:
+      tags: [Catalog]
+      operationId: listProducts
+      summary: List published products
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+        - name: type
+          in: query
+          schema:
+            $ref: '#/components/schemas/ProductType'
+        - name: q
+          in: query
+          description: Free text search (typo tolerant).
+          schema:
+            type: string
+            maxLength: 120
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: level
+          in: query
+          schema:
+            type: string
+            enum: [beginner, intermediate, advanced, all]
+      responses:
+        '200':
+          description: Page of products.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    post:
+      tags: [Catalog]
+      operationId: createProduct
+      summary: Create a draft product (instructor or content staff)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCreate'
+      responses:
+        '201':
+          description: Draft created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /products/{productId}:
+    parameters:
+      - $ref: '#/components/parameters/ProductId'
+    get:
+      tags: [Catalog]
+      operationId: getProduct
+      summary: Product page data (id or slug)
+      security: []
+      responses:
+        '200':
+          description: Product with active offers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      tags: [Catalog]
+      operationId: updateProduct
+      summary: Update a draft or published product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductUpdate'
+      responses:
+        '200':
+          description: Updated product.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /products/{productId}/publish:
+    post:
+      tags: [Catalog]
+      operationId: requestProductPublication
+      summary: Ask to publish (runs the Compliance Guardian first)
+      description: |
+        Publication is blocked when the Guardian finds forbidden terms (for example
+        "MBA", "pos-graduacao", "reconhecido pelo MEC") or result promises. The response
+        explains each finding.
+      parameters:
+        - $ref: '#/components/parameters/ProductId'
+      responses:
+        '202':
+          description: Accepted; the product moves to review or is scheduled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          description: Blocked by the Compliance Guardian.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ComplianceProblem'
+  /compliance/scan:
+    post:
+      tags: [Compliance]
+      operationId: scanText
+      summary: Check a text against the Guardian rules
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScanRequest'
+      responses:
+        '200':
+          description: Findings (empty when compliant).
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [findings]
+                properties:
+                  findings:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ComplianceFinding'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /checkout/sessions:
+    post:
+      tags: [Checkout]
+      operationId: createCheckoutSession
+      summary: Start a checkout
+      description: Prices are always recomputed on the server; the client never sends amounts.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutSessionCreate'
+      responses:
+        '201':
+          description: Session created with the priced summary.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckoutSession'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /checkout/sessions/{sessionId}/orders:
+    post:
+      tags: [Checkout]
+      operationId: placeOrder
+      summary: Place the order and create the charge
+      description: |
+        Records the acceptance of the terms (version, time, IP) and creates the payment at the PSP.
+        Pix returns a QR code; card returns the authorization result; boleto returns the slip.
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - $ref: '#/components/parameters/IdempotencyKey'
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlaceOrderRequest'
+      responses:
+        '201':
+          description: Order created; follow `payment` for the next action.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '402':
+          description: Payment refused.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /orders:
+    get:
+      tags: [Checkout]
+      operationId: listMyOrders
+      summary: My orders
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: Page of orders.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderPage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /orders/{orderId}:
+    get:
+      tags: [Checkout]
+      operationId: getOrder
+      summary: Order detail with payment status and fiscal document
+      parameters:
+        - $ref: '#/components/parameters/OrderId'
+      responses:
+        '200':
+          description: The order.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /orders/{orderId}/refund-requests:
+    post:
+      tags: [Checkout]
+      operationId: requestRefund
+      summary: Ask for a refund
+      description: |
+        Inside the 7-day withdrawal period (CDC art. 49) the refund is approved automatically,
+        regardless of how much content was consumed. Outside it, the request goes to a person.
+      parameters:
+        - $ref: '#/components/parameters/OrderId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+                  maxLength: 500
+      responses:
+        '202':
+          description: Refund registered.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Refund'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /subscriptions/{subscriptionId}/cancel:
+    post:
+      tags: [Checkout]
+      operationId: cancelSubscription
+      summary: Cancel a subscription (self-service, at most two interactions)
+      parameters:
+        - name: subscriptionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Cancellation scheduled for the end of the paid period.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /me/enrollments:
+    get:
+      tags: [Learning]
+      operationId: listMyEnrollments
+      summary: My enrollments with progress
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+      responses:
+        '200':
+          description: Page of enrollments.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnrollmentPage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /enrollments/{enrollmentId}/lessons/{lessonId}/progress:
+    put:
+      tags: [Learning]
+      operationId: saveLessonProgress
+      summary: Save playback position / completion
+      description: Idempotent upsert; clients may batch and debounce.
+      parameters:
+        - $ref: '#/components/parameters/EnrollmentId'
+        - $ref: '#/components/parameters/LessonId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProgressUpdate'
+      responses:
+        '200':
+          description: Stored progress.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LessonProgress'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /enrollments/{enrollmentId}/assessments/{assessmentId}/attempts:
+    post:
+      tags: [Learning]
+      operationId: startAttempt
+      summary: Start an assessment attempt
+      parameters:
+        - $ref: '#/components/parameters/EnrollmentId'
+        - name: assessmentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '201':
+          description: Attempt created with the questions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attempt'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /me/certificates:
+    get:
+      tags: [Learning]
+      operationId: listMyCertificates
+      summary: My certificates
+      responses:
+        '200':
+          description: Certificates issued to the person.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Certificate'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /certificates/verify/{code}:
+    get:
+      tags: [Learning]
+      operationId: verifyCertificate
+      summary: Public certificate verification
+      description: Returns validity and the minimum data needed to verify authenticity.
+      security: []
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 64
+      responses:
+        '200':
+          description: Verification result (valid or revoked).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CertificateVerification'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /lessons/{lessonId}/playback:
+    get:
+      tags: [Media]
+      operationId: getPlaybackToken
+      summary: Short-lived signed playback URL
+      description: Requires an active entitlement. The URL is bound to the viewer and domain; a dynamic watermark may be applied.
+      parameters:
+        - $ref: '#/components/parameters/LessonId'
+      responses:
+        '200':
+          description: Signed playback data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Playback'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /events:
+    get:
+      tags: [Live]
+      operationId: listEvents
+      summary: Upcoming live events
+      security: []
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+        - name: kind
+          in: query
+          schema:
+            type: string
+            enum: [webinar, workshop, class, mentoring_group, summit]
+      responses:
+        '200':
+          description: Page of events.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+  /events/{eventId}/registrations:
+    post:
+      tags: [Live]
+      operationId: registerForEvent
+      summary: Register for a free event or redeem a ticket
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventRegistrationCreate'
+      responses:
+        '201':
+          description: Registered; confirmation and reminders scheduled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventRegistration'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          description: Event is full; the person was put on the waitlist or is already registered.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /ai/tutor/threads:
+    post:
+      tags: [AI]
+      operationId: createTutorThread
+      summary: Open a tutor conversation tied to a lesson
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [productId]
+              properties:
+                productId:
+                  type: string
+                  format: uuid
+                lessonId:
+                  type: string
+                  format: uuid
+                mode:
+                  type: string
+                  enum: [socratic, direct, review, quiz, study_plan]
+                  default: socratic
+      responses:
+        '201':
+          description: Thread created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TutorThread'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /ai/tutor/threads/{threadId}/messages:
+    post:
+      tags: [AI]
+      operationId: sendTutorMessage
+      summary: Ask the tutor (streamed)
+      description: |
+        Answers are grounded in the content the person is entitled to and carry citations
+        (lesson and timestamp). Without evidence the tutor says it did not find the answer
+        and offers a human. The response streams as server-sent events.
+      parameters:
+        - name: threadId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [content]
+              properties:
+                content:
+                  type: string
+                  minLength: 1
+                  maxLength: 4000
+      responses:
+        '200':
+          description: Server-sent events with the answer and its citations.
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /ai/messages/{messageId}/feedback:
+    post:
+      tags: [AI]
+      operationId: rateTutorMessage
+      summary: Thumbs up/down on an answer
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [value]
+              properties:
+                value:
+                  type: integer
+                  enum: [-1, 1]
+                reason:
+                  type: string
+                  maxLength: 500
+      responses:
+        '204':
+          description: Feedback stored.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /admin/ai/agents/{agentId}/kill-switch:
+    put:
+      tags: [AI]
+      operationId: setAgentKillSwitch
+      summary: Turn an agent off (or back on) immediately
+      parameters:
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [enabled]
+              properties:
+                enabled:
+                  type: boolean
+                reason:
+                  type: string
+      responses:
+        '200':
+          description: State applied and audited.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [agentId, killSwitch]
+                properties:
+                  agentId:
+                    type: string
+                    format: uuid
+                  killSwitch:
+                    type: boolean
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /leads:
+    post:
+      tags: [Growth]
+      operationId: captureLead
+      summary: Capture a lead with consent
+      description: Used by landing pages, quizzes and event sign-ups. Marketing consent is explicit and per channel.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeadCreate'
+      responses:
+        '202':
+          description: Lead accepted.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [contactId]
+                properties:
+                  contactId:
+                    type: string
+                    format: uuid
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /affiliates/applications:
+    post:
+      tags: [Growth]
+      operationId: applyAsAffiliate
+      summary: Apply to the affiliate program
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [acceptedTermsVersion]
+              properties:
+                acceptedTermsVersion:
+                  type: string
+                channelDescription:
+                  type: string
+                  maxLength: 1000
+      responses:
+        '202':
+          description: Application received; approval is manual at first.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /admin/approvals:
+    get:
+      tags: [Admin]
+      operationId: listApprovals
+      summary: Approval inbox (humans in the loop)
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Cursor'
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, approved, rejected, expired]
+            default: pending
+      responses:
+        '200':
+          description: Page of approvals.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalPage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /admin/approvals/{approvalId}/decision:
+    post:
+      tags: [Admin]
+      operationId: decideApproval
+      summary: Approve or reject
+      parameters:
+        - name: approvalId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [decision]
+              properties:
+                decision:
+                  type: string
+                  enum: [approve, reject]
+                note:
+                  type: string
+                  maxLength: 1000
+      responses:
+        '200':
+          description: Decision recorded; the pending action proceeds or is canceled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Approval'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /webhooks/psp/{provider}:
+    post:
+      tags: [Webhooks]
+      operationId: receivePspWebhook
+      summary: Inbound payment-provider webhook
+      description: |
+        Verifies the provider signature, stores the raw payload, answers 2xx quickly and
+        processes asynchronously. Duplicates are ignored through the provider reference.
+      security: []
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[a-z0-9_-]{2,32}$'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '202':
+          description: Accepted for processing.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /webhook-endpoints:
+    get:
+      tags: [Webhooks]
+      operationId: listWebhookEndpoints
+      summary: Outbound webhook endpoints
+      responses:
+        '200':
+          description: Registered endpoints.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WebhookEndpoint'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags: [Webhooks]
+      operationId: createWebhookEndpoint
+      summary: Register an outbound endpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url, events]
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  pattern: '^https://'
+                events:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Created. The signing secret is returned once.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookEndpointCreated'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+webhooks:
+  domainEvent:
+    post:
+      tags: [Webhooks]
+      operationId: deliverDomainEvent
+      summary: Outbound domain event delivery
+      description: |
+        Sent to registered endpoints with `X-Apex-Signature: t=<unix>,v1=<hmac-sha256 of "t.body">`.
+        Delivery is at-least-once with exponential back-off; consumers must deduplicate by `id`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventEnvelope'
+      responses:
+        '2XX':
+          description: Acknowledged.
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Session access token issued by /auth/login.
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+      description: Server-to-server key with scopes (Phase 3+).
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 25
+    Cursor:
+      name: cursor
+      in: query
+      description: Opaque cursor returned by the previous page.
+      schema:
+        type: string
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: Client generated unique key; retries with the same key return the original result.
+      schema:
+        type: string
+        minLength: 8
+        maxLength: 100
+    ProductId:
+      name: productId
+      in: path
+      required: true
+      description: Product id (uuid) or slug.
+      schema:
+        type: string
+    OrderId:
+      name: orderId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    EnrollmentId:
+      name: enrollmentId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    LessonId:
+      name: lessonId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    BadRequest:
+      description: Invalid request.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Unauthorized:
+      description: Missing or invalid credentials.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Forbidden:
+      description: Authenticated but not allowed (role, entitlement or tenant).
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    NotFound:
+      description: Resource not found.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Conflict:
+      description: State conflict (duplicate, capacity, invalid transition).
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    TooManyRequests:
+      description: Rate limit exceeded.
+      headers:
+        Retry-After:
+          description: Seconds to wait before retrying.
+          schema:
+            type: integer
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+  schemas:
+    Problem:
+      type: object
+      description: RFC 9457 problem details.
+      required: [type, title, status]
+      properties:
+        type:
+          type: string
+          format: uri-reference
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+        code:
+          type: string
+          description: Stable machine-readable error code.
+        errors:
+          type: array
+          items:
+            type: object
+            required: [field, message]
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+    ComplianceProblem:
+      allOf:
+        - $ref: '#/components/schemas/Problem'
+        - type: object
+          required: [findings]
+          properties:
+            findings:
+              type: array
+              items:
+                $ref: '#/components/schemas/ComplianceFinding'
+    ComplianceFinding:
+      type: object
+      required: [layer, severity, excerpt]
+      properties:
+        layer:
+          type: string
+          enum: [L1, L2, L3, L4, L5, L6, L7]
+        category:
+          type: string
+          enum: [regulated_education_equivalence, government_recognition, result_promise, regulated_profession, false_scarcity, personal_data, copyright, other]
+        severity:
+          type: string
+          enum: [block, review, warn]
+        excerpt:
+          type: string
+        suggestion:
+          type: string
+    ScanRequest:
+      type: object
+      required: [text]
+      properties:
+        text:
+          type: string
+          maxLength: 20000
+        targetType:
+          type: string
+          enum: [product, landing_page, message, certificate_template]
+    Money:
+      type: object
+      required: [amountCents, currency]
+      properties:
+        amountCents:
+          type: integer
+          minimum: 0
+        currency:
+          type: string
+          pattern: '^[A-Z]{3}$'
+          default: BRL
+    RegisterRequest:
+      type: object
+      required: [email, password, fullName, acceptedTermsVersion, acceptedPrivacyVersion, adultDeclaration]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 10
+          maxLength: 128
+          writeOnly: true
+        fullName:
+          type: string
+          maxLength: 200
+        acceptedTermsVersion:
+          type: string
+        acceptedPrivacyVersion:
+          type: string
+        adultDeclaration:
+          type: boolean
+          description: Declares the person is 18 or older (launch audience). Minors require the guardian flow.
+        marketingConsents:
+          type: array
+          items:
+            type: string
+            enum: [marketing_email, marketing_whatsapp, marketing_sms]
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          writeOnly: true
+    AuthSession:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+          enum: [authenticated, mfa_required, email_verification_required]
+        accessToken:
+          type: string
+        expiresIn:
+          type: integer
+        mfaChallengeId:
+          type: string
+    Me:
+      type: object
+      required: [id, email]
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        fullName:
+          type: string
+        displayName:
+          type: string
+        locale:
+          type: string
+          default: pt-BR
+        timezone:
+          type: string
+          default: America/Sao_Paulo
+        roles:
+          type: array
+          items:
+            type: string
+    MeUpdate:
+      type: object
+      properties:
+        fullName:
+          type: string
+          maxLength: 200
+        displayName:
+          type: string
+          maxLength: 80
+        phone:
+          type: string
+          pattern: '^\+[1-9][0-9]{7,14}$'
+        locale:
+          type: string
+        timezone:
+          type: string
+    Consent:
+      type: object
+      required: [kind, version, granted, at]
+      properties:
+        kind:
+          type: string
+          enum: [terms, privacy, cookies, refund_policy, marketing_email, marketing_whatsapp, marketing_sms, ai_memory, recording, affiliate_terms]
+        version:
+          type: string
+        granted:
+          type: boolean
+        at:
+          type: string
+          format: date-time
+    ConsentChange:
+      type: object
+      required: [kind, granted]
+      properties:
+        kind:
+          type: string
+          enum: [cookies, marketing_email, marketing_whatsapp, marketing_sms, ai_memory, recording]
+        granted:
+          type: boolean
+    DataRequestCreate:
+      type: object
+      required: [kind]
+      properties:
+        kind:
+          type: string
+          enum: [access, correction, anonymization, deletion, portability, consent_revocation, information]
+        details:
+          type: string
+          maxLength: 2000
+    DataRequest:
+      type: object
+      required: [id, kind, status, dueAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        kind:
+          type: string
+        status:
+          type: string
+          enum: [received, identity_verification, in_progress, completed, denied_with_reason]
+        dueAt:
+          type: string
+          format: date-time
+    ProductType:
+      type: string
+      enum: [course, track, ebook, webinar, workshop, mentoring, subscription, event, exam, bundle, digital_resource, gift_card, corporate_license]
+    Offer:
+      type: object
+      required: [id, name, kind, price]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        kind:
+          type: string
+          enum: [one_time, installments, subscription, free]
+        price:
+          $ref: '#/components/schemas/Money'
+        installmentsMax:
+          type: integer
+        billingInterval:
+          type: string
+          enum: [month, quarter, year]
+        guaranteeDays:
+          type: integer
+          minimum: 7
+        validTo:
+          type: string
+          format: date-time
+    Product:
+      type: object
+      required: [id, type, slug, title, status]
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          $ref: '#/components/schemas/ProductType'
+        slug:
+          type: string
+        title:
+          type: string
+        summary:
+          type: string
+        description:
+          type: string
+        level:
+          type: string
+          enum: [beginner, intermediate, advanced, all]
+        workloadMinutes:
+          type: integer
+        status:
+          type: string
+          enum: [draft, in_review, scheduled, published, paused, archived]
+        complianceStatus:
+          type: string
+          enum: [pending, approved, blocked, needs_legal_review]
+        rating:
+          type: number
+          minimum: 1
+          maximum: 5
+        offers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Offer'
+    ProductCreate:
+      type: object
+      required: [type, title]
+      properties:
+        type:
+          $ref: '#/components/schemas/ProductType'
+        title:
+          type: string
+          maxLength: 200
+        summary:
+          type: string
+          maxLength: 500
+        level:
+          type: string
+          enum: [beginner, intermediate, advanced, all]
+    ProductUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 200
+        summary:
+          type: string
+          maxLength: 500
+        description:
+          type: string
+        level:
+          type: string
+          enum: [beginner, intermediate, advanced, all]
+        workloadMinutes:
+          type: integer
+          minimum: 1
+    ProductPage:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        nextCursor:
+          type: string
+    CheckoutSessionCreate:
+      type: object
+      required: [offerIds]
+      properties:
+        offerIds:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            format: uuid
+        couponCode:
+          type: string
+        utm:
+          type: object
+          additionalProperties:
+            type: string
+        affiliateCode:
+          type: string
+    CheckoutSession:
+      type: object
+      required: [id, items, subtotal, discount, total, expiresAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        items:
+          type: array
+          items:
+            type: object
+            required: [offerId, productId, title, total]
+            properties:
+              offerId:
+                type: string
+                format: uuid
+              productId:
+                type: string
+                format: uuid
+              title:
+                type: string
+              total:
+                $ref: '#/components/schemas/Money'
+        subtotal:
+          $ref: '#/components/schemas/Money'
+        discount:
+          $ref: '#/components/schemas/Money'
+        total:
+          $ref: '#/components/schemas/Money'
+        guaranteeDays:
+          type: integer
+          minimum: 7
+        expiresAt:
+          type: string
+          format: date-time
+    PlaceOrderRequest:
+      type: object
+      required: [buyer, paymentMethod, acceptedTermsVersion]
+      properties:
+        buyer:
+          type: object
+          required: [email, fullName, document]
+          properties:
+            email:
+              type: string
+              format: email
+            fullName:
+              type: string
+            document:
+              type: string
+              description: CPF or CNPJ (digits only).
+            phone:
+              type: string
+        paymentMethod:
+          type: string
+          enum: [pix, card, boleto]
+        card:
+          type: object
+          description: Token produced by the PSP hosted fields. Raw card data never reaches APEX.
+          required: [token]
+          properties:
+            token:
+              type: string
+            installments:
+              type: integer
+              minimum: 1
+              maximum: 24
+        acceptedTermsVersion:
+          type: string
+        marketingConsents:
+          type: array
+          items:
+            type: string
+            enum: [marketing_email, marketing_whatsapp]
+    Payment:
+      type: object
+      required: [id, method, status]
+      properties:
+        id:
+          type: string
+          format: uuid
+        method:
+          type: string
+          enum: [pix, card, boleto, wallet, store_credit]
+        status:
+          type: string
+          enum: [pending, authorized, paid, failed, canceled, refunded, expired]
+        pix:
+          type: object
+          properties:
+            qrCode:
+              type: string
+            copyPaste:
+              type: string
+            expiresAt:
+              type: string
+              format: date-time
+        boleto:
+          type: object
+          properties:
+            barcode:
+              type: string
+            url:
+              type: string
+              format: uri
+            dueDate:
+              type: string
+              format: date
+    Order:
+      type: object
+      required: [id, number, status, total]
+      properties:
+        id:
+          type: string
+          format: uuid
+        number:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum: [created, pending, paid, delivered, partially_refunded, refunded, canceled, disputed]
+        total:
+          $ref: '#/components/schemas/Money'
+        payment:
+          $ref: '#/components/schemas/Payment'
+        fiscalDocumentUrl:
+          type: string
+          format: uri
+        withdrawalPeriodEndsAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+    OrderPage:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+        nextCursor:
+          type: string
+    Refund:
+      type: object
+      required: [id, status, autoApproved]
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [requested, approved, denied, processing, completed, failed]
+        autoApproved:
+          type: boolean
+        withinWithdrawalPeriod:
+          type: boolean
+    Subscription:
+      type: object
+      required: [id, status]
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [trialing, active, past_due, paused, canceled, expired]
+        currentPeriodEnd:
+          type: string
+          format: date-time
+        cancelAtPeriodEnd:
+          type: boolean
+    Enrollment:
+      type: object
+      required: [id, productId, status, progress]
+      properties:
+        id:
+          type: string
+          format: uuid
+        productId:
+          type: string
+          format: uuid
+        title:
+          type: string
+        status:
+          type: string
+          enum: [active, completed, suspended, revoked, expired]
+        progress:
+          type: number
+          minimum: 0
+          maximum: 1
+        nextLessonId:
+          type: string
+          format: uuid
+        endsAt:
+          type: string
+          format: date-time
+    EnrollmentPage:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Enrollment'
+        nextCursor:
+          type: string
+    ProgressUpdate:
+      type: object
+      required: [positionSeconds]
+      properties:
+        positionSeconds:
+          type: integer
+          minimum: 0
+        watchedSeconds:
+          type: integer
+          minimum: 0
+        completed:
+          type: boolean
+    LessonProgress:
+      type: object
+      required: [lessonId, status]
+      properties:
+        lessonId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [in_progress, completed]
+        positionSeconds:
+          type: integer
+        completedAt:
+          type: string
+          format: date-time
+    Attempt:
+      type: object
+      required: [id, status]
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [in_progress, submitted, graded, void]
+        attemptNo:
+          type: integer
+        timeLimitSeconds:
+          type: integer
+        questions:
+          type: array
+          items:
+            type: object
+            required: [id, kind, prompt]
+            properties:
+              id:
+                type: string
+                format: uuid
+              kind:
+                type: string
+              prompt:
+                type: string
+              options:
+                type: array
+                items:
+                  type: string
+    Certificate:
+      type: object
+      required: [code, kind, status, issuedAt]
+      properties:
+        code:
+          type: string
+        kind:
+          type: string
+          enum: [completion, participation, track, certification]
+        productTitle:
+          type: string
+        workloadMinutes:
+          type: integer
+        status:
+          type: string
+          enum: [valid, revoked]
+        issuedAt:
+          type: string
+          format: date-time
+        pdfUrl:
+          type: string
+          format: uri
+    CertificateVerification:
+      type: object
+      required: [code, status]
+      properties:
+        code:
+          type: string
+        status:
+          type: string
+          enum: [valid, revoked]
+        holderName:
+          type: string
+        productTitle:
+          type: string
+        workloadMinutes:
+          type: integer
+        issuedAt:
+          type: string
+          format: date-time
+        notice:
+          type: string
+          description: Standard statement that this is a free (non-regulated) course certificate.
+    Playback:
+      type: object
+      required: [url, expiresAt]
+      properties:
+        url:
+          type: string
+          format: uri
+        expiresAt:
+          type: string
+          format: date-time
+        captions:
+          type: array
+          items:
+            type: object
+            properties:
+              language:
+                type: string
+              url:
+                type: string
+                format: uri
+        resumeAtSeconds:
+          type: integer
+    Event:
+      type: object
+      required: [id, kind, title, startsAt, endsAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        kind:
+          type: string
+        title:
+          type: string
+        mode:
+          type: string
+          enum: [live, evergreen]
+        startsAt:
+          type: string
+          format: date-time
+        endsAt:
+          type: string
+          format: date-time
+        seatsLeft:
+          type: integer
+    EventPage:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+        nextCursor:
+          type: string
+    EventRegistrationCreate:
+      type: object
+      required: [email, fullName]
+      properties:
+        email:
+          type: string
+          format: email
+        fullName:
+          type: string
+        marketingConsents:
+          type: array
+          items:
+            type: string
+            enum: [marketing_email, marketing_whatsapp]
+        utm:
+          type: object
+          additionalProperties:
+            type: string
+    EventRegistration:
+      type: object
+      required: [id, status, ticketCode]
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [registered, waitlist, attended, no_show, canceled]
+        ticketCode:
+          type: string
+        calendarUrl:
+          type: string
+          format: uri
+    TutorThread:
+      type: object
+      required: [id, mode]
+      properties:
+        id:
+          type: string
+          format: uuid
+        mode:
+          type: string
+          enum: [socratic, direct, review, quiz, study_plan]
+        disclosure:
+          type: string
+          description: Message shown to the user stating that this is an AI assistant.
+    LeadCreate:
+      type: object
+      required: [email, source]
+      properties:
+        email:
+          type: string
+          format: email
+        fullName:
+          type: string
+        phone:
+          type: string
+          pattern: '^\+[1-9][0-9]{7,14}$'
+        source:
+          type: string
+          description: Landing page, quiz or lead magnet key.
+        consents:
+          type: array
+          items:
+            type: string
+            enum: [marketing_email, marketing_whatsapp, marketing_sms]
+        utm:
+          type: object
+          additionalProperties:
+            type: string
+    Approval:
+      type: object
+      required: [id, kind, status]
+      properties:
+        id:
+          type: string
+          format: uuid
+        kind:
+          type: string
+        requester:
+          type: string
+        status:
+          type: string
+          enum: [pending, approved, rejected, expired]
+        payload:
+          type: object
+          additionalProperties: true
+        createdAt:
+          type: string
+          format: date-time
+    ApprovalPage:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Approval'
+        nextCursor:
+          type: string
+    WebhookEndpoint:
+      type: object
+      required: [id, url, events, active]
+      properties:
+        id:
+          type: string
+          format: uuid
+        url:
+          type: string
+          format: uri
+        events:
+          type: array
+          items:
+            type: string
+        active:
+          type: boolean
+    WebhookEndpointCreated:
+      allOf:
+        - $ref: '#/components/schemas/WebhookEndpoint'
+        - type: object
+          required: [signingSecret]
+          properties:
+            signingSecret:
+              type: string
+              description: Shown only once.
+    EventEnvelope:
+      type: object
+      description: Envelope shared by all outbound domain events.
+      required: [id, type, version, tenantId, occurredAt, data]
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique event id; use for deduplication.
+        type:
+          type: string
+          description: '`<aggregate>.<past-tense fact>`, e.g. order.paid.'
+          examples: [order.paid, enrollment.created, certificate.issued]
+        version:
+          type: integer
+          minimum: 1
+        tenantId:
+          type: string
+          format: uuid
+        occurredAt:
+          type: string
+          format: date-time
+        data:
+          type: object
+          additionalProperties: true

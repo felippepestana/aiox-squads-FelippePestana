@@ -1,0 +1,64 @@
+id,epic,title,requirements,size,core
+US-001,EP-01,"Cadastro, login por e-mail e senha, verificação de e-mail, recuperação segura e proteção contra força bruta",RF-IAM-001;RF-IAM-004;RF-IAM-018,M,Y
+US-002,EP-01,Login social com Google,RF-IAM-002,S,N
+US-003,EP-01,"2FA (TOTP e passkeys), obrigatório para equipe e instrutores",RF-IAM-005,M,Y
+US-004,EP-01,Perfil da pessoa com CPF validado e preferências de comunicação (descadastro em 1 clique),RF-IAM-007;RF-IAM-009,M,Y
+US-005,EP-01,"Consentimentos versionados com prova (versão, data/hora, IP)",RF-IAM-008,M,Y
+US-006,EP-01,"RBAC por tenant, papéis padrão e convite de equipe",RF-IAM-010;RF-IAM-013,M,Y
+US-007,EP-01,Gestão de sessões e dispositivos com limite de sessões,RF-IAM-006,S,N
+US-008,EP-01,Declaração de maioridade e bloqueio de menor sem responsável,RF-IAM-014,S,Y
+US-009,EP-01,Auditoria de autenticação e autorização,RF-IAM-017,S,Y
+US-010,EP-01,"Autoatendimento do titular (exportar, corrigir, revogar consentimento, solicitar exclusão)",RF-IAM-019,M,Y
+US-011,EP-02,"Produto polimórfico: tipos, ciclo de vida, versionamento e metadados",RF-CAT-001;RF-CAT-002;RF-CAT-003,L,Y
+US-012,EP-02,"Ofertas, regras de acesso (vitalício/prazo) e cupons por produto",RF-CAT-005;RF-CAT-017;RF-CAT-020,M,Y
+US-013,EP-02,"Mídia de vitrine, categorias e coleções",RF-CAT-004;RF-CAT-009,S,Y
+US-014,EP-02,Busca e filtros do catálogo,RF-CAT-010,M,N
+US-015,EP-02,"Página pública de produto com SSR, dados estruturados, sitemap e imagens OG",RF-CAT-011;RF-CAT-012,M,Y
+US-016,EP-02,"Guardião de Compliance v1 (termos proibidos, checklist de curso livre, fila de revisão e portão de publicação)",RF-CAT-021;RF-AIX-024,L,Y
+US-017,EP-02,Política de reembolso por produto e conteúdo gratuito com captura,RF-CAT-018;RF-CAT-019,S,Y
+US-018,EP-02,Página do instrutor e FAQ por produto,RF-CAT-014;RF-CAT-015,S,N
+US-019,EP-03,"Estrutura curso, módulos e aulas com editor",RF-LMS-001;RF-LMS-002,L,Y
+US-020,EP-03,"Progresso, retomada do ponto exato e conclusão",RF-LMS-003,M,Y
+US-021,EP-03,"Liberação gradual (drip) por data, dias ou conclusão",RF-LMS-004,S,N
+US-022,EP-03,"Quizzes: banco de questões, tipos, nota mínima e correção automática",RF-LMS-008;RF-LMS-009,L,Y
+US-023,EP-03,"Certificado: regras, layout, PDF, código e QR, verificação pública e revogação",RF-LMS-013;RF-LMS-015;RF-LMS-016;RF-LMS-017,L,Y
+US-024,EP-03,"Matrícula automática e manual, prazo de acesso, suspensão e cancelamento",RF-LMS-023;RF-LMS-024;RF-LMS-025,M,Y
+US-025,EP-03,"Painel do aluno (continuar, próximos passos, certificados, pedidos)",RF-LMS-027,M,Y
+US-026,EP-03,Comentários e dúvidas por aula,RF-LMS-020,S,N
+US-027,EP-03,Materiais complementares e downloads com controle de acesso,RF-LMS-021,S,N
+US-028,EP-03,Portão de acessibilidade: publicação de vídeo exige legenda e transcrição,RF-LMS-035,S,Y
+US-029,EP-03,"Upload retomável, transcodificação adaptativa e player responsivo",RF-MED-001;RF-MED-002;RF-MED-003,L,Y
+US-030,EP-03,"Proteção de reprodução (URL assinada, restrição de domínio) e limite de streams",RF-MED-004;RF-MED-007,M,Y
+US-031,EP-03,"Legendas automáticas, transcrição pesquisável e capítulos",RF-MED-008;RF-MED-009,M,Y
+US-032,EP-03,Leitor de e-book na web e PDF baixável com marca d'água,RF-MED-011,M,N
+US-033,EP-03,"Biblioteca de ativos, política de retenção e CDN com failover",RF-MED-012;RF-MED-019;RF-MED-014,S,Y
+US-034,EP-03,Central de notificações (in-app e e-mail) com preferências e limites,RF-ENG-008,M,Y
+US-035,EP-04,"Checkout em 1 página, sessão de checkout, preço calculado no servidor e resumo pré-contratual",RF-PAY-001;RF-PAY-002;RF-PAY-012,L,Y
+US-036,EP-04,"Pagamento por Pix (QR, copia-e-cola, expiração e confirmação em tempo real)",RF-PAY-003,L,Y
+US-037,EP-04,"Pagamento por cartão com tokenização, 3DS e parcelamento",RF-PAY-004;RF-PAY-025,L,Y
+US-038,EP-04,Pagamento por boleto,RF-PAY-005,M,N
+US-039,EP-04,"Pedido, máquina de estados, idempotência e webhooks do PSP",RF-PAY-014;RF-PAY-015,L,Y
+US-040,EP-04,"Entrega automática, mensagens transacionais e página de agradecimento",RF-PAY-016;RF-PAY-017;RF-PAY-018,M,Y
+US-041,EP-04,Cupons no checkout,RF-PAY-007,S,N
+US-042,EP-04,Registro de aceite dos termos e antifraude básico,RF-PAY-011;RF-PAY-013,M,Y
+US-043,EP-04,Reembolso de 7 dias automático com estorno e revogação de acesso,RF-PAY-010;RF-PAY-022,L,Y
+US-044,EP-04,Ledger de dupla entrada,RF-PAY-040,L,Y
+US-045,EP-04,"E-mail transacional e higiene de entrega (SPF, DKIM, DMARC, supressão)",RF-MKT-007,M,Y
+US-046,EP-04,Banner e gestão de consentimento de cookies,RF-MKT-019,S,Y
+US-047,EP-06,"Gateway de IA com orçamento, logs com redação de PII e kill switch",RF-AIX-001;RF-AIX-002;RF-AIX-003;RF-AIX-015,L,N
+US-048,EP-06,"Prompts versionados, avaliações (evals) e guardrails",RF-AIX-004;RF-AIX-005;RF-AIX-006,L,N
+US-049,EP-06,"RAG: ingestão, indexação incremental e controle de acesso por direito",RF-AIX-009;RF-AIX-010,L,N
+US-050,EP-06,"RAG: recuperação híbrida, citações e verificação de ancoragem",RF-AIX-011,L,N
+US-051,EP-06,"APEX Tutor v1: modos, encaminhamento a humano, rótulo de IA e privacidade",RF-AIX-016;RF-AIX-018;RF-AIX-007;RF-AIX-008,L,N
+US-052,EP-05,"Motor de fluxos interno: eventos, execução durável e idempotência",RF-OPS-001;RF-OPS-002,L,Y
+US-053,EP-05,"NFS-e automática, cancelamento e regras fiscais por produto",RF-OPS-009;RF-OPS-010,L,Y
+US-054,EP-05,DSAR automatizado,RF-OPS-029,M,Y
+US-055,EP-05,Retenção e guarda de logs; ficha acadêmica do aluno,RF-OPS-032;RF-OPS-022,M,Y
+US-056,EP-05,"Painel administrativo mínimo, configurações e feature flags",RF-OPS-035;RF-PLT-011,L,Y
+US-057,EP-05,Esquema de eventos de produto e coleta com consentimento,RF-DAT-001,S,Y
+US-058,EP-05,Multi-tenant com RLS e migrações sem indisponibilidade,RF-PLT-001;RF-PLT-014,L,Y
+US-059,EP-05,Catálogo de eventos de domínio e outbox,RF-PLT-004,M,Y
+US-060,EP-05,"Observabilidade, backups com restauração testada e CI/CD",RF-PLT-012;RF-PLT-013,L,Y
+US-061,EP-00,Design system v1: tokens e componentes da Fase 1,,L,Y
+US-062,EP-00,"Shell do aplicativo (aluno, painéis) e PWA básico",,L,Y
+US-063,EP-00,"Testes ponta a ponta, carga, teste de invasão e auditoria de acessibilidade (portão de lançamento)",,L,Y

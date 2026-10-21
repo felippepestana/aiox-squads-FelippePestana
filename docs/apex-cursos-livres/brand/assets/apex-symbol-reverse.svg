@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="t">
+  <title id="t">APEX</title>
+  <path d="M10 56 L32 24 L54 56" fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="32" cy="9.5" r="6.5" fill="#FF6B00"/>
+</svg>
